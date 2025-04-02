@@ -1,68 +1,33 @@
-name: Update Google Merchant Feed
+name: Update product feed
 
 on:
   schedule:
-    - cron: "0 10 * * *"  # каждый день в 10:00 утра по UTC
-  workflow_dispatch:      # запуск вручную по кнопке
+    - cron: '0 0 * * *' # каждый день в 00:00
+  workflow_dispatch:     # возможность запустить вручную
 
 jobs:
-  build:
+  update-feed:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout репозиторий
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Установка Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-      - name: Установка зависимостей
-        run: pip install requests
+    - name: Install dependencies
+      run: pip install requests
 
-      - name: Запуск скрипта генерации фида
-        env:
-          MOZELLO_API_KEY: ${{ secrets.MOZELLO_API_KEY }}
-        run: |
-          python <<EOF
-import requests
-import xml.etree.ElementTree as ET
+    - name: Run feed generator
+      run: python generate_feed.py
 
-API_KEY = "${{ secrets.MOZELLO_API_KEY }}"
-API_URL = "https://api.mozello.com/v1/store/products"
-headers = {"Authorization": f"Bearer {API_KEY}"}
-response = requests.get(API_URL, headers=headers)
-products = response.json().get("products", [])
-
-rss = ET.Element("rss", {"version": "2.0", "xmlns:g": "http://base.google.com/ns/1.0"})
-channel = ET.SubElement(rss, "channel")
-ET.SubElement(channel, "title").text = "MarMar Candles"
-ET.SubElement(channel, "link").text = "https://www.marmarcandles.com"
-ET.SubElement(channel, "description").text = "Handmade candles"
-
-for product in products:
-    item = ET.SubElement(channel, "item")
-    ET.SubElement(item, "g:id").text = str(product.get("id", ""))
-    ET.SubElement(item, "title").text = product.get("title", {}).get("lv", "")[:150]
-    ET.SubElement(item, "description").text = product.get("description", {}).get("lv", "")[:5000]
-    ET.SubElement(item, "link").text = product.get("url", "")
-    ET.SubElement(item, "g:image_link").text = product.get("imageUrl", "")
-    ET.SubElement(item, "g:price").text = f"{product.get('price', '0.00')} EUR"
-    ET.SubElement(item, "g:availability").text = "in stock"
-    ET.SubElement(item, "g:condition").text = "new"
-    ET.SubElement(item, "g:brand").text = "MarMar Candles"
-    ET.SubElement(item, "g:product_type").text = "Handmade > Candles"
-    ET.SubElement(item, "g:google_product_category").text = "Home & Garden > Decor > Candles"
-
-tree = ET.ElementTree(rss)
-tree.write("products.xml", encoding="utf-8", xml_declaration=True)
-EOF
-
-      - name: Commit и Push
-        run: |
-          git config --global user.name "Auto Bot"
-          git config --global user.email "bot@example.com"
-          git add products.xml
-          git commit -m "Автообновление XML-фида" || echo "Ничего не изменилось"
-          git push
+    - name: Commit and push feed
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        git add marmar_feed.xml
+        git commit -m "Автообновление XML фида"
+        git push
