@@ -1,8 +1,6 @@
 name: Update Google Merchant Feed
 
 on:
-  schedule:
-    - cron: '0 10 * * *'  # Каждый день в 10:00 UTC (13:00 по Риге)
   workflow_dispatch:
 
 jobs:
@@ -10,55 +8,48 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: '3.11'
 
       - name: Install dependencies
         run: pip install requests
 
-      - name: Download and convert Facebook XML to Google Merchant XML
+      - name: Download and convert Facebook XML
         run: |
-          import requests
           import xml.etree.ElementTree as ET
+          import requests
 
           url = "https://www.marmarcandles.com/facebook.xml"
-          r = requests.get(url)
-          r.raise_for_status()
+          response = requests.get(url)
+          response.raise_for_status()
 
-          ns = {"g": "http://base.google.com/ns/1.0"}
-          ET.register_namespace("g", ns["g"])
-          root = ET.fromstring(r.content)
+          fb_tree = ET.fromstring(response.content)
 
-          for item in root.findall("./channel/item"):
-              if item.find("g:brand", ns) is None:
-                  ET.SubElement(item, "{http://base.google.com/ns/1.0}brand").text = "MarMar Candles"
-              else:
-                  item.find("g:brand", ns).text = "MarMar Candles"
+          ns = {'g': 'http://base.google.com/ns/1.0'}
+          rss = ET.Element("rss", version="2.0", attrib={"xmlns:g": "http://base.google.com/ns/1.0"})
+          channel = ET.SubElement(rss, "channel")
+          ET.SubElement(channel, "title").text = "MarMar Candles"
 
-              if item.find("g:google_product_category", ns) is None:
-                  ET.SubElement(item, "{http://base.google.com/ns/1.0}google_product_category").text = "Home & Garden > Decor > Candles"
+          for item in fb_tree.findall(".//item"):
+              new_item = ET.SubElement(channel, "item")
+              for tag in ["id", "title", "description", "link", "image_link", "price", "availability"]:
+                  el = item.find(f"{{http://base.google.com/ns/1.0}}{tag}")
+                  if el is not None and el.text:
+                      ET.SubElement(new_item, f"g:{tag}").text = el.text
+              ET.SubElement(new_item, "g:brand").text = "MarMar Candles"
 
-              if item.find("g:product_type", ns) is None:
-                  ET.SubElement(item, "{http://base.google.com/ns/1.0}product_type").text = "Handmade > Candles"
+          tree = ET.ElementTree(rss)
+          tree.write("products.xml", encoding="utf-8", xml_declaration=True)
 
-              if item.find("g:condition", ns) is None:
-                  ET.SubElement(item, "{http://base.google.com/ns/1.0}condition").text = "new"
-
-              if item.find("g:identifier_exists", ns) is None:
-                  ET.SubElement(item, "{http://base.google.com/ns/1.0}identifier_exists").text = "false"
-
-          tree = ET.ElementTree(root)
-          tree.write("products_google_optimized.xml", encoding="utf-8", xml_declaration=True)
-
-      - name: Commit and push
+      - name: Commit and push updated feed
         run: |
-          git config --global user.name "Auto Bot"
-          git config --global user.email "bot@marcandles.lv"
-          git add products_google_optimized.xml
-          git commit -m "Автообновление XML-фида Google Merchant" || echo "No changes"
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add products.xml
+          git commit -m "Update Google Merchant feed"
           git push
