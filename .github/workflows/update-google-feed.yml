@@ -21,30 +21,32 @@ jobs:
 
       - name: Download and convert Facebook XML
         run: |
-          import xml.etree.ElementTree as ET
-          import requests
+          echo "import xml.etree.ElementTree as ET
+import requests
 
-          url = "https://www.marmarcandles.com/facebook.xml"
-          response = requests.get(url)
-          response.raise_for_status()
+url = 'https://www.marmarcandles.com/facebook.xml'
+response = requests.get(url)
+response.raise_for_status()
 
-          fb_tree = ET.fromstring(response.content)
+fb_tree = ET.fromstring(response.content)
 
-          ns = {'g': 'http://base.google.com/ns/1.0'}
-          rss = ET.Element("rss", version="2.0", attrib={"xmlns:g": "http://base.google.com/ns/1.0"})
-          channel = ET.SubElement(rss, "channel")
-          ET.SubElement(channel, "title").text = "MarMar Candles"
+rss = ET.Element('rss', version='2.0', attrib={'xmlns:g': 'http://base.google.com/ns/1.0'})
+channel = ET.SubElement(rss, 'channel')
+ET.SubElement(channel, 'title').text = 'MarMar Candles'
 
-          for item in fb_tree.findall(".//item"):
-              new_item = ET.SubElement(channel, "item")
-              for tag in ["id", "title", "description", "link", "image_link", "price", "availability"]:
-                  el = item.find(f"{{http://base.google.com/ns/1.0}}{tag}")
-                  if el is not None and el.text:
-                      ET.SubElement(new_item, f"g:{tag}").text = el.text
-              ET.SubElement(new_item, "g:brand").text = "MarMar Candles"
+for item in fb_tree.findall('.//item'):
+    new_item = ET.SubElement(channel, 'item')
+    for tag in ['id', 'title', 'description', 'link', 'image_link', 'price', 'availability']:
+        el = item.find(f'{{http://base.google.com/ns/1.0}}{tag}')
+        if el is not None and el.text:
+            ET.SubElement(new_item, f'g:{tag}').text = el.text
+    ET.SubElement(new_item, 'g:brand').text = 'MarMar Candles'
 
-          tree = ET.ElementTree(rss)
-          tree.write("products.xml", encoding="utf-8", xml_declaration=True)
+tree = ET.ElementTree(rss)
+tree.write('products.xml', encoding='utf-8', xml_declaration=True)
+" > generate_feed.py
+
+          python generate_feed.py
 
       - name: Commit and push updated feed
         run: |
