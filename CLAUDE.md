@@ -70,6 +70,10 @@
 - Claude — SEO-советник Алины по инструментам Google. Формат работы: **план на месяц** (`seo/plan-YYYY-MM.md`).
 - Время Алины на SEO: **8 ч в неделю**. Только **бесплатный трафик** (Google Ads не используем).
 - **Доступ Claude к API Google:** ключ сервисного аккаунта `claude-seo@fiery-bonbon-468821-t1.iam.gserviceaccount.com` лежит в переменной окружения `GOOGLE_SERVICE_ACCOUNT_JSON` (только чтение: Search Console, GA4, Merchant Center). Проверка: `pip install -q google-auth requests && python3 tools/google_check.py`. Ключ никогда не выводить и не коммитить. Google Business Profile через API недоступен.
+- ID: GSC `sc-domain:marmarcandles.com`, GA4 `properties/336408410`, Merchant Center `accounts/5495474688`. Доступ проверен 31.10.2026: всё работает.
+- **Срез 31.10.2026:** GSC за авг–окт: 446 кликов, 6145 показов, ср. позиция 8,7 (~140–165 кликов/мес, 98 % Латвия). Рождественских запросов почти нет. Одни и те же страницы индексируются в 3 вариантах (`/lv/…`, без `/lv/`, `www.`) — дубли.
+- GA4 авг–окт: органический поиск — главный источник покупок (11 покупок, 233 €). GA4 видит не все заказы (26 `purchase` против ~31 в WooCommerce).
+- **Merchant Center: всего 4 товара** (автофид Google со сканирования сайта, язык помечен `ru`). Фид из этого репозитория **не подключён и устарел**: ссылки старого формата `/veikals/item/…`, многие отдают 404. В WooCommerce **251 товар**, публично доступен через Store API (`/wp-json/wc/store/v1/products`).
 - Подключено: Search Console (доменный ресурс `marmarcandles.com`), GA4 через **Site Kit** (`GT-PHP7RJ2`), Merchant Center, Google Business Profile. Tag Manager: неизвестно.
 - SEO-плагин: **Rank Math** (установлен, Алина об этом не знала; нужна настройка).
 - Языки: lv основной, en через GPTranslate (Google en почти не индексирует: canonical на lv). Цель: lv, en, lt, et (+ ru по желанию). Рекомендация: TranslatePress, переезд после рождественского пика.
