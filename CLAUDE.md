@@ -66,6 +66,24 @@
 - Мультиязычность: сейчас стоит **GPTranslate** — Алине он не нравится, нужна замена (варианты: Polylang, WPML, TranslatePress).
 - Текущий язык контента сайта и фида — **латышский**.
 
+### SEO и инструменты Google (состояние на 31.10.2026)
+- Claude — SEO-советник Алины по инструментам Google. Формат работы: **план на месяц** (`seo/plan-YYYY-MM.md`).
+- Время Алины на SEO: **8 ч в неделю**. Только **бесплатный трафик** (Google Ads не используем).
+- **Доступ Claude к API Google:** ключ сервисного аккаунта `claude-seo@fiery-bonbon-468821-t1.iam.gserviceaccount.com` лежит в переменной окружения `GOOGLE_SERVICE_ACCOUNT_JSON` (только чтение: Search Console, GA4, Merchant Center). Проверка: `pip install -q google-auth requests && python3 tools/google_check.py`. Ключ никогда не выводить и не коммитить. Google Business Profile через API недоступен.
+- ID: GSC `sc-domain:marmarcandles.com`, GA4 `properties/336408410`, Merchant Center `accounts/5495474688`. Доступ проверен 31.10.2026: всё работает.
+- **Срез 31.10.2026:** GSC за авг–окт: 446 кликов, 6145 показов, ср. позиция 8,7 (~140–165 кликов/мес, 98 % Латвия). Рождественских запросов почти нет. Одни и те же страницы индексируются в 3 вариантах (`/lv/…`, без `/lv/`, `www.`) — дубли.
+- GA4 авг–окт: органический поиск — главный источник покупок (11 покупок, 233 €). GA4 видит не все заказы (26 `purchase` против ~31 в WooCommerce).
+- **Merchant Center: всего 4 товара** (автофид Google со сканирования сайта, язык помечен `ru`). Фид из этого репозитория **не подключён и устарел**: ссылки старого формата `/veikals/item/…`, многие отдают 404. В WooCommerce **251 товар**, публично доступен через Store API (`/wp-json/wc/store/v1/products`).
+- Подключено: Search Console (доменный ресурс `marmarcandles.com`), GA4 через **Site Kit** (`GT-PHP7RJ2`), Merchant Center, Google Business Profile. Tag Manager: неизвестно.
+- SEO-плагин: **Rank Math** (установлен, Алина об этом не знала; нужна настройка).
+- Языки: lv основной, en через GPTranslate (Google en почти не индексирует: canonical на lv). Цель: lv, en, lt, et (+ ru по желанию). Рекомендация: TranslatePress, переезд после рождественского пика.
+- Блог есть (~21 статья), Алина готова к новым статьям. Есть каннибализация (свадебные статьи, статьи про цифры).
+- Приоритеты продвижения: **свадебные свечи** и **сезонные коллекции** (Рождество/Новый год).
+- Свадебные заказы приходят через Instagram, не через сайт.
+- Доставка в LT/EE возможна уже сейчас.
+- Мастерская с самовывозом: Iļģuciems (Rīga).
+- Заказы июль–окт. 2026: 42 заказа (~10/мес), средний чек ~18 €, 100 % Латвия, 3 повторных клиента из 39.
+
 ## Цели
 1. **Главная цель — получать заказы через Google** (SEO, Google Merchant Center / товарный фид).
 2. **Полностью автоматизировать Instagram** и переложить ведение на Claude — сама публиковать не хочу (контент-план, тексты, визуалы, расписание публикаций).
@@ -73,9 +91,10 @@
 4. Сделать **английскую версию сайта**.
 
 ## Этот репозиторий (`marmar-candles-feed`)
-- Товарный фид в формате Google Merchant / Facebook (RSS, namespace `g:`).
-- Основной файл: `products_google_final_checked.xml` (~183 товара).
-- GitHub Actions для обновления фида: `.github/workflows/update-feed.yml`, `.github/workflows/update-google-feed.yml`.
+- **Актуальный фид:** `feed/google-lv.xml`. Его собирает `tools/build_feed.py` из WooCommerce Store API (~235 товаров, ссылки `/lv/product/…`, язык lv). Обновляется каждую ночь workflow `.github/workflows/build-feed.yml` (работает после слияния в `master`).
+- Публичная ссылка для Merchant Center: `https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/feed/google-lv.xml`.
+- `products_google_final_checked.xml` — **старый фид, устарел** (ссылки `/veikals/item/…`, много 404). Не использовать.
+- Ограничение v1: у 73 вариативных товаров в фид идёт минимальная цена (варианты отдельно не выгружаются).
 
 ## Как со мной работать
 - Предлагать решения, которые можно автоматизировать, а не делать вручную.

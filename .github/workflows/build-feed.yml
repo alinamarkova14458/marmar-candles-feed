@@ -1,0 +1,38 @@
+name: Build Google feed from WooCommerce
+
+on:
+  schedule:
+    - cron: "17 2 * * *"   # every night, 02:17 UTC (04:17/05:17 in Riga)
+  workflow_dispatch:        # manual run from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-feed
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build feed
+        run: python3 tools/build_feed.py feed/google-lv.xml
+
+      - name: Commit feed if it changed
+        run: |
+          if git diff --quiet -- feed/google-lv.xml; then
+            echo "Feed unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add feed/google-lv.xml
+          git commit -m "Update Google feed from WooCommerce"
+          git push
