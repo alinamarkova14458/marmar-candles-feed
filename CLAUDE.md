@@ -103,6 +103,8 @@
 - Pinterest: **Jalina Art Studio** (`pinterest.com/jalinaart`), ~2.9k подписчиков, состоит в больших групповых досках (Etsy & CF Digital Items, Digital Files Group Board). В профиле ссылка на **jalina.art** — домен не резолвится, по RDAP свободен. Рекомендация: вернуть jalina.art и сделать блог на нём (Алина проверяет). Запасные свободные .com: craftfika, makerfika, fontdaydream, typeandbloom, thecraftpantry, fontsoiree.
 - Ниша: шрифты и клипарт (можно шире). Google Trends US 2021→2026: «canva fonts» растёт ×8 (лидер), «procreate brushes» стабильно, «svg files» падает вдвое, «sublimation designs» обвал. Сезон: «christmas clipart» пик нояб–дек, «easter clipart» март, «valentines clipart» янв–фев.
 - У Алины свои магазины на Creative Fabrica и Creative Market (продаж почти нет) — продвигать в блоге вместе с рефералами. Своя Etsy-графика закрыта. Партнёрка Creative Market (по FlexOffers, янв. 2025, проверить): 16 % новые клиенты, 8 % повторные, 24 % membership.
+- **Реферальный ID Creative Fabrica: `2331482`.** Формат ссылки: любой URL Creative Fabrica + `/ref/2331482/` (например `https://www.creativefabrica.com/ref/2331482/`). Перед постановкой пина проверять, что в каждой ссылке есть код.
+- Pinterest к Metricool подключает Алина сама (в Metricool пока только бренд marmar.candles). Визуал блога и пинов — с нуля: Алина готова менять лого, цвета, стиль; решения обосновывать исследованием (что кликают и покупают, психология цвета, ЦА).
 - Схема: Claude пишет статьи и пины (Canva), ставит пины через Metricool; Алина утверждает раз в неделю. Нужна пометка о партнёрских ссылках.
 
 ## Как со мной работать
