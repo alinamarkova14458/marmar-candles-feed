@@ -1,0 +1,622 @@
+priority,confidence,source,destination,reason,current_chain
+A,средняя,/blog-2/params/post/4808828/how-to-choose-the-best-mold-for-making-bento-candles,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,англ. статья → ближайшая латышская тема,301 → 404
+A,средняя,/blog-2/params/post/4808816/crafting-unique-bento-candles-with-high-quality-artificial-stone-molds-from,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,англ. статья → ближайшая латышская тема,301 → 404
+A,средняя,/shop/params/category/426117/item/4170786,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+A,средняя,/blog-2/params/post/5218857/best-birthday-candles-for-cake,/lv/ka-izveleties-sveces-kukai/,англ. статья → ближайшая латышская тема,301 → 404
+A,средняя,/blog-2/params/post/4808831/the-magic-of-birthday-candles-a-timeless-tradition,/lv/ka-izveleties-sveces-kukai/,англ. статья → ближайшая латышская тема,301 → 404
+A,средняя,/shop/item/candle-making-supplies/candle-molds/4170786,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+A,средняя,/blog-2/params/post/5218946/types-of-birthday-cake-candles-a-complete-guide,/lv/ka-izveleties-sveces-kukai/,англ. статья → ближайшая латышская тема,301 → 404
+A,средняя,/shop/item/candle-making-supplies/candle-molds/bento-canles-making-mold,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+A,средняя,/blog-2/params/post/4809361/how-to-choose-the-best-candles-for-your-cake,/lv/ka-izveleties-sveces-kukai/,англ. статья → ближайшая латышская тема,301 → 404
+A,средняя,/blog-2/params/post/4813951/how-to-choose-the-best-birthday-candles-for-your-cake,/lv/ka-izveleties-sveces-kukai/,англ. статья → ближайшая латышская тема,301 → 404
+A,средняя,/blog-2/params/post/4809361/best-birthday-candles-for-cake,/lv/ka-izveleties-sveces-kukai/,англ. статья → ближайшая латышская тема,301 → 404
+A,высокая,/veikals/category/svecites-tortem-un-kukam,/lv/product-category/tortes-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/home-2,/lv/,страница,301 → 301 → 200 (через area.lv)
+A,высокая,/veikals/category/tortes-un-kucinu-toperi,/lv/product-category/kuku-toperi/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/veikals/params/category/all,/lv/home/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/veikals/category/ciparu-svecites,/lv/product-category/tortes-sveces/ciparu-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/kazu-sveces-viesiem,/lv/kazu-sveces/,страница,301 → 301 → 200 (через area.lv)
+A,высокая,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-kuku-svece-spiralveida-1-gab-1,/lv/product/spiralveida-bisu-vaska-kuku-svece/,товар похож (0.99): bisu-vaska-kuku-svece-spiralveida-1-gab,301 → 301 → 404
+A,высокая,/blog/params/post/5209503/kazu-davanas-viesiem-ko-izveleties-2026-gada,/lv/product-category/kazu-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/veikals/category/materiali-svecu-liesanai/svecu-veidnes,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,категория,301 → 404
+A,высокая,/veikals/category/stavsveces/galda-sveces,/lv/product-category/interjera-sveces/galda-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/veikals/category/kazu-sveces,/lv/product-category/kazu-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/veikals/category/apmacibas-un-meistarklases,/lv/home/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/sveces/tortes-sveces,/lv/product-category/tortes-sveces/ciparu-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/blog/params/post/4414482/palo-santo-kocini-cels-uz-harmoniju-un-attirisanos,/lv/product/palo-santo-kocini-50g/,ручная проверка: статья → товар palo santo,301 → 404
+A,высокая,/veikals/category/stavsveces/dizaina-sveces,/lv/product-category/interjera-sveces/dizaina-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/shop/category/candle-making-supplies/candle-molds,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,категория,301 → 404
+A,высокая,/blog,/lv/blogs/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/veikals/item/apmacibas-un-meistarklases/individuala-bento-svecu-gatavosanas-apmaciba,/lv/home/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/shop/category/birthday-cake-candles,/lv/product-category/tortes-sveces/,категория,301 → 404
+A,высокая,/blog/params/post/4441625/lieliskas-davanas-kazu-viesiem-mini-sveces-burcina-palo-santo-nujinas-un-ar,/lv/product-category/kazu-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/veikals/category/svecu-komplekti,/lv/product-category/davanas/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/veikals/item/svecu-komplekti/serkocini-stikla-burcina,/lv/product/serkocini-stikla-burcina/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/sveces/dzimsanas-dienas-sveces,/lv/product/earth-wine-kukas-svecites/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+A,высокая,/veikals/params/category/featured,/lv/shop/,весь магазин,301 → 404
+A,высокая,/blog/params/post/4809380/5-popularakas-tortes-dekoresanas-tendences-2024-gada,/lv/5-popularakas-tortes-dekoresanas-tendences-2026-gada/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+A,высокая,/sveces,/lv/product-category/tortes-sveces/,страница,301 → 301 → 200 (через area.lv)
+B,низкая,/blog/params/post/4294160/sojas-vaska-svecu-prieksrocibas-dabiska-un-videi-draudziga-izvele,/lv/product-category/interjera-sveces/,статьи нет → категория по теме,301 → 404
+B,низкая,/blog/params/post/5099754/page,/lv/blogs/,статьи нет → блог,301 → 404
+B,низкая,/veikals/category/vannas-bumbas,/lv/shop/,категория не найдена → магазин,301 → 404
+B,низкая,/blog/params/post/4294168/sojas-vaska-sveces-meditacijai-un-garigam-praksem-svetas-telpas-radisana,/lv/product-category/interjera-sveces/,статьи нет → категория по теме,301 → 404
+B,низкая,/veikals/category/sveces-burcinas,/lv/shop/,категория не найдена → магазин,301 → 404
+B,низкая,/blog/params/post/4290790,/lv/blogs/,статьи нет → блог,301 → 404
+B,низкая,/shop/params/category/425949/item/4168813,/lv/shop/,товар не найден → магазин,301 → 404
+B,низкая,/shop/category/taper-candles/table-candles,/lv/shop/,категория не найдена → магазин,301 → 404
+B,низкая,/blog/params/post/4294160,/lv/blogs/,статьи нет → блог,301 → 404
+B,низкая,/blog/params/post/4664102/jauna-bento-svecu-forma-lielisks-akcents-jusu-kukam,/lv/blogs/,статьи нет → блог,301 → 404
+B,низкая,/veikals/item/peonijas-ziedlapinas-vannai,/lv/shop/,товар не найден → магазин,301 → 404
+B,низкая,/blog/params/post/4809365/kuras-sveces-izveleties-bernu-tortei,/lv/blogs/,статьи нет → блог,301 → 404
+B,низкая,/shop/params/category/472220/item/5011635,/lv/shop/,товар не найден → магазин,301 → 404
+B,низкая,/blog/params/post/4387145/sveces-ka-eleganta-davana-viriesiem-individualitate-katra-liesma,/lv/product-category/davanas/,статьи нет → категория по теме,301 → 404
+B,низкая,/shop/item/pillar-candles/table-candles/5043956,/lv/shop/,товар не найден → магазин,301 → 404
+B,низкая,/veikals/item/svecu-komplekti/svecu-komplekts-zodiaka-zimes,/lv/shop/,товар не найден → магазин,301 → 301 → 404
+B,низкая,/shop/params/category/355144/item/3319598,/lv/shop/,товар не найден → магазин,301 → 404
+B,низкая,/blog/params/post/4664094/ziemassvetku-korporativas-davanas-ar-rokam-darinatas-sveces-kas-parsteigs,/lv/product-category/ziemassvetku-sveces/,статьи нет → категория по теме,301 → 404
+B,низкая,/blog/params/post/4445303/dzimsanas-dienas-sveces-lieliska-davana-kurai-ir-liela-nozime,/lv/product-category/davanas/,статьи нет → категория по теме,301 → 404
+B,низкая,/blog/params/post/5153852/izcelieties-sajos-ziemassvetkos-ekskluzivas-korporativas-davanas-kas-atstas,/lv/product-category/ziemassvetku-sveces/,статьи нет → категория по теме,301 → 404
+B,низкая,/shop/item/the-novice-witchs-starter-pack,/lv/shop/,товар не найден → магазин,301 → 404
+B,средняя,/shop/item/candle-making-supplies/candle-molds/bento-candles-making-mold-for-20-candles,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/candle-making-supplies/candle-molds/bento-canles-making-mold-for-20-candles,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/candle-sets--gifts/5026453,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/apmacibas-un-meistarklases/individuala-konsultacija-hobijs-vai-bizness-tiessaiste-115-h,/lv/product-category/%f0%9f%8e%93apmacibas-un-meistarklases/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/shop/item/birthday-cake-candles/4191895,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/birthday-candles-zig-zag-for-cakes-and-cupcakes-with-glitters-10cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/blog-2/params/post/4813951/best-birthday-candles-for-cake,/lv/ka-izveleties-sveces-kukai/,англ. статья → ближайшая латышская тема,301 → 404
+B,средняя,/blog-2/params/post/4809369/which-candles-to-choose-for-a-childs-birthday-cake,/lv/ka-izveleties-sveces-kukai/,англ. статья → ближайшая латышская тема,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/pearl-birthday-cake-candles-milk-blush-10pcs,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/3957233,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/params/category/0/item/4162727,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/ready-to-ship/birthday-cake-topper-lego-robot,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/number-candles/3674303,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/candle-sets--gifts/bubble-candle-gift-set-gold-detail,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/materiali-svecu-liesanai/vasks/sojas-vasks-konteinersvecem-kerasoy-container-4130-1-kg,/lv/product-category/materiali-svecu-izgatavosanai/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/veikals/item/jaunas-raganas-pamatkomplekts--ezoteriskas-davanas,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/3957224,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/candle-making-supplies/candle-molds/4412472,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/candle-sets--gifts/5026166,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/wedding-candles/3870570,/lv/product-category/kazu-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/4859417,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/number-candles/beeswax-number-candle-3-for-cakes-and-cupcakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/4169110,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/for-home--wellbeing/natural-stones/3993574,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/tortes-un-kucinu-toperi/svecite-toperis-zvaigzne,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/shop/item/birthday-cake-candles/3957139,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/ready-to-ship/3409451,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/svecu-komplekti/dekorativas-formas-svecu-komplekts-lavandas,/lv/product/dekorativas-formas-sojas-vaska-svecu-komplekts-lavandas/,товар похож (0.80): dekorativas-formas-sojas-vaska-svecu-komplekts-lavandas,301 → 301 → 404
+B,средняя,/shop/item/birthday-cake-candles/3957292,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/birthday-candles-pearls-for-cakes-and-cupcakes-peach-11cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/number-candles/3973606,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/number-candles/4858392,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/sojas-vaska-svece-piparkuku-virins-davanu-kastite,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/stavsveces/dizaina-sveces/svece-ar-zelta-foliju,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/shop/item/number-candles/4004333,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/ready-to-ship/5078791,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+B,средняя,/shop/params/category/412770/item/3845494,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/aromatiska-sojas-vaska-svece-ar-ziedlapinam-un-kristaliem,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/sojas-vaska-svece-briedis-davanu-kastite,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/stavsveces/dizaina-sveces/4825074,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/veikals/item/stavsveces/dizaina-sveces/dabiga-vaska-stavsvece-melna,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/veikals/item/stavsveces/dizaina-sveces/svece-bibble-ar-foliju,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/shop/item/cake-toppers/3738378,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/sojas-vaska-svecu-ziemassvetku-komplekts-bubble-3-gab,/lv/product-category/ziemassvetku-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/stavsveces/dizaina-sveces/stavsvece-elegants-interjera-akcents,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/veikals/item/svecites-tortem-un-kukam/3957151,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/veikals/item/svecites-tortem-un-kukam/3957282,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/veikals/item/ziemassvetku-svece-eglisu-bumbas-forma-sarkans-zelta-foliju,/lv/product-category/ziemassvetku-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/4169176,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/pink-zig-zag-birthday-cake-candles-10cm-10pcs,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/ready-to-ship/wavy-birthday-cake-candles-decorative-cake-candles--10-pc,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/candle-making-supplies/candle-wax/4169260,/lv/product-category/materiali-svecu-izgatavosanai/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/wavy-texture-beeswax-cake-candle-11cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/birthday-cake-candles/3957279,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/veikals/item/tortes-un-kucinu-toperi/bernu-dzimsanas-dienas-kukas-svecites-tortei-sirds-un-laca-komplekts,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 301 → 404
+B,средняя,/shop/item/birthday-cake-candles/beeswax-bubble-candles-cakes,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/cake-toppers/cloud-shaped-cake-candles--set-of-4,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+B,средняя,/shop/item/ready-to-ship/beeswax-number-2-candle-for-cakes-cupcakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+B,средняя,/blog/params/post/4809358/ka-izveleties-svecites-tortei,/lv/ka-izveleties-sveces-kukai/,статья похожа: ka-izveleties-sveces-kukai,301 → 404
+B,средняя,/shop/item/pillar-candles/designer-candles/decorative-bubble-candle-minimalist,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+B,высокая,/kalkulators,/lv/,страница,301 → 404
+B,высокая,/sveces/ciparu-sveces,/lv/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+B,высокая,/veikals/category/kazam/sveces-kazam,/lv/product-category/kazu-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+B,высокая,/shop/category/container-candles,/lv/product-category/interjera-sveces/,категория,301 → 404
+B,высокая,/blog/params/post/4899103/kazu-sveces-ka-davana-viesiem-simboliska-praktiska-un-stiliga-izvele,/lv/kazu-davanas-viesiem-ko-izveleties-2026-gada/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+B,высокая,/veikals/category/stavsveces,/lv/product-category/interjera-sveces/galda-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+B,высокая,/blog/params/post/4366955/sveces-ka-davana-kazu-viesiem-gaiss-milestibas-simbols,/lv/product-category/kazu-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+B,высокая,/veikals,/lv/shop/,весь магазин,301 → 404
+B,высокая,/sveces/dizaina-sveces,/lv/product-category/interjera-sveces/dizaina-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+B,высокая,/veikals/category/ziemassvetku-sveces/svecites-tortem-un-kukam,/lv/product-category/ziemassvetku-sveces/,категория,301 → 404
+B,высокая,/course,/lv/product-category/%f0%9f%8e%93apmacibas-un-meistarklases/,страница,301 → 404
+B,высокая,/veikals/item/stavsveces/dizaina-sveces/dabiga-vaksa-svece-peonija,/lv/product/dabiga-vaska-peonijas-svece-dekorativa-zieda-formas-svece/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+B,высокая,/veikals/category/materiali-svecu-liesanai/vasks,/lv/product-category/materiali-svecu-izgatavosanai/,категория,301 → 404
+B,высокая,/veikals/item/materiali-svecu-liesanai/svecu-veidnes/aluminija-bento-svecu-veidne-10-svecem,/lv/product/bento-svecu-veidne-10-svecem/,товар похож (0.84): bento-svecu-veidne-10-svecem,301 → 301 → 404
+B,высокая,/veikals/item/pieejams-uzreiz/vilnotas-kukas-svecites-krasainas-dzimsanas-dienas-sveces--10-gab,/lv/product/vilnotas-kukas-svecites-krasainas-dzimsanas-dienas-sveces--10-gab/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+B,высокая,/blog-2,/lv/blogs/,блог,301 → 404
+B,высокая,/shop/item/cake-toppers/cloud-moon-birthday-cake-candles,/lv/product/makonisu-un-meness-kukas-svecites/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+B,высокая,/veikals/item/palo-santo-kocini-50g-1,/lv/product/palo-santo-kocini-50g/,товар похож (0.88): palo-santo-kocini-50g,301 → 404
+B,высокая,/contact-us-1,/lv/kontakti/,страница,301 → 404
+B,высокая,/shop/category/candle-making-supplies/candle-wax,/lv/product-category/materiali-svecu-izgatavosanai/,категория,301 → 404
+B,высокая,/veikals/item/materiali-svecu-liesanai/svecu-veidnes/bento-svecu-veidne-10-svecem,/lv/product/bento-svecu-veidne-10-svecem/,товар найден по адресу,301 → 301 → 404
+B,высокая,/faq,/lv/biezak-uzdotie-jautajumi/,страница,301 → 404
+B,высокая,/sveces/galda-sveces,/lv/product-category/interjera-sveces/galda-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+B,высокая,/shop/category/christmas-candles/birthday-cake-candles,/lv/product-category/ziemassvetku-sveces/,категория,301 → 404
+B,высокая,/shop/category/candle-making-materials/candle-molds,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,категория,301 → 404
+B,высокая,/blog/params/post/4813957/ka-izveleties-sveces-tortei,/lv/5-popularakas-tortes-dekoresanas-tendences-2026-gada/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+B,высокая,/cooperation,/lv/sadarbibas-partneriem/,страница,301 → 404
+B,высокая,/sveces/sveces-davanai,/lv/product-category/davanas/sveces-davanai/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+B,высокая,/veikals/category/pieejams-uzreiz,/lv/product-category/sveces-pieejamas-uzreiz/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+B,высокая,/blog/params/post/5209294/kazu-sveces-viesiem-ka-izveleties,/lv/product-category/kazu-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+B,высокая,/blog/params/post/5209317/ciparu-dzimsanas-dienas-svecites-ka-izveleties-pareizo-skaitli,/lv/product-category/tortes-sveces/ciparu-sveces/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+B,высокая,/veikals/category/apmacibas-un-meistarklases/kazu-sveces,/lv/product-category/kazu-sveces/,категория,301 → 404
+B,высокая,/veikals/category/materiali-svecu-liesanai,/lv/product-category/materiali-svecu-izgatavosanai/,категория,301 → 404
+B,высокая,/veikals/item/pieejams-uzreiz/neitralu-tonu-kukas-svecites-tievas-dzimsanas-dienas-sveces,/lv/product/neitralu-tonu-kukas-svecites-tievas-dzimsanas-dienas-sveces/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+B,высокая,/veikals/item/stavsveces/galda-sveces/dabiga-vaska-galda-spiralveida-svece-18-cm,/lv/product/kremkrasas-spiralveida-galda-svece/,товар похож (0.90): dabiga-vaska-galda-spiralveida-svece-krema-18-cm,301 → 301 → 404
+B,высокая,/lt,/lv/,страница,301 → 404
+B,высокая,/veikals/item/kazu-sveces/personalizetas-kazu-sveces-viesiem-ar-melnu-lentiti-un-uzlimi,/lv/product/personalizetas-kazu-sveces-viesiem-ar-melnu-lentiti-un-uzlimi/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+B,высокая,/veikals/item/pieejams-uzreiz/skaistumkopsanas-davanu-komplekts-ar-bubble-sveci,/lv/product/skaistumkopsanas-davanu-komplekts-ar-bubble-sveci-2/,товар похож (1.00): skaistumkopsanas-davanu-komplekts-ar-bubble-sveci,301 → 301 → 404
+B,высокая,/veikals/item/svecu-komplekti/davanu-karte-50-eur-vertiba,/lv/product/davanu-karte-50-eur-vertiba/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+B,высокая,/veikals/category/apmacibas-un-meistarklases/ciparu-svecites,/lv/product-category/tortes-sveces/ciparu-sveces/,категория,301 → 404
+B,высокая,/veikals/item/pieejams-uzreiz/svecite-toperis-cipars--1-gab,/lv/product/svecite-toperis-cipars--1-gab/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+B,высокая,/shop/category/for-home--wellbeing/bath-bombs,/lv/product-category/interjera-sveces/,категория,301 → 404
+B,высокая,/shop/params/category/all,/lv/shop/,весь магазин,301 → 404
+B,высокая,/shop/category/candle-making-supplies/decor,/lv/product-category/materiali-svecu-izgatavosanai/,категория,301 → 404
+B,высокая,/shop/params/category/featured,/lv/shop/,весь магазин,301 → 404
+B,высокая,/shop/category/425949/wedding-candles,/lv/product-category/kazu-sveces/,категория,301 → 404
+B,высокая,/veikals/item/tortes-un-kucinu-toperi/bernu-kukas-svecites-toperi-uz-kocina-dzivnieku-komplekts-4-gab,/lv/product/dzivnieku-kukas-svecites-berniem/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+B,высокая,/veikals/item/tortes-un-kucinu-toperi/bernu-dzimsanas-dienas-kukas-svecites--makonisu-un-meness-komplekts--3-gab,/lv/product/makonisu-un-meness-kukas-svecites/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+B,высокая,/shop/category/ready-to-ship,/lv/product-category/sveces-pieejamas-uzreiz/,категория,301 → 404
+C,низкая,/shop/params/category/472220,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/shop/params/category/425949,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/shop/params/category/426117,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/veikals/category/dabigie-akmeni,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/blog/params/post/4441597/jautri-rotajumi-ar-svecem-ciparu-forma-bernu-dzimsanas-diena-kas-dekoreta-a,/lv/product-category/tortes-sveces/ciparu-sveces/,статьи нет → категория по теме,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/natural-wax-pillar-candle-long-burning-navy-blue,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/4180864,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/4196752,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/category/ready-to-shop,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/5043958,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/412770/item/3642811,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/veikals/item/indijas-viraks-pure-rose-10-gab-stikla-megene-ar-korki-1,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/4180861,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/4208484,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/425949/item/4839061,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/category/taper-candles/designer-candles,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/4180862,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/4208486,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/veikals/category/sveces-traucinos,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/access,/lv/,не найдено → главная,301 → 404
+C,низкая,/blog/params/post/5153882/sirsniga-pateiciba-ziemassvetkos-svecu-davanu-komplekti-skolotajiem-un-audz,/lv/product-category/ziemassvetku-sveces/,статьи нет → категория по теме,301 → 404
+C,низкая,/shop/category/pillar-candles/table-candles,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/shop/item/crystal-look-candle-with-gel-and-wax,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/4824974,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/4181261,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/5043965,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/355144/item/3929965,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/472220/item/5011630,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/4825035,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/4825304,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/5043966,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/veikals/item/svecu-komplekti/komplekts-bubble-mini-4-gab,/lv/shop/,товар не найден → магазин,301 → 301 → 404
+C,низкая,/product/krasainas-bumbinu-sveces,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/blog/params/post/4290806/kapec-izveleties-ar-rokam-darinatas-sojas-vaska-sveces,/lv/product-category/interjera-sveces/,статьи нет → категория по теме,301 → 404
+C,низкая,/blog/params/post/4296150,/lv/blogs/,статьи нет → блог,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/3319598,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/414626/item/4180861,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/414626/item/4181261,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/414626/item/4208486,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/dizaina-sveces,/lv/product-category/interjera-sveces/dizaina-sveces/,по теме адреса,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/4825001,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/3996409,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/4934742,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/5043960,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/ready-to-shop/5012000,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/ready-to-shop/5012002,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/396526/item/3738441,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/414626/item/4211331,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/472220/item/5012025,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/472220/item/5012034,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/472220/item/5012062,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/veikals/category/dabigie-akmeni/vannas-bumbas,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/veikals/item/dabigs-ametista-kristals-neapstradats-1-gab,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/blog-2/params/post/4899117,/lv/blogs/,англ. статья → блог,301 → 404
+C,низкая,/blog/params/post/4529335/vannas-bumbas-ar-dazadam-smarzam,/lv/blogs/,статьи нет → блог,301 → 404
+C,низкая,/blog/params/post/5153860/padariet-klientu-davanas-neaizmirstamas-speks-slepjas-personalizacija,/lv/product-category/davanas/,статьи нет → категория по теме,301 → 404
+C,низкая,/ciparu-sveces,/lv/product-category/tortes-sveces/ciparu-sveces/,по теме адреса,301 → 404
+C,низкая,/shop/item/462367/crystal-look-candle-with-gel-and-wax,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/3261761,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/3283211,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/3283229,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/3285058,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/3929965,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/4723218,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/4724940,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/4724985,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/4824989,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/designer-candles/4825015,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/pillar-candles/table-candles/4934746,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/ready-to-shop/5011630,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/ready-to-shop/5012024,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/ready-to-shop/5012038,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/item/the-novice-witchs-starter-pack-3,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/396526,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/shop/params/category/459357/item/4838527,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/462367/item/4924943,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/472220/item/5012001,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/472220/item/5012024,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/472220/item/5012052,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/472220/item/5012069,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/shop/params/category/472220/item/5012072,/lv/shop/,товар не найден → магазин,301 → 404
+C,низкая,/veikals/category/viraki-un-kvepeklisi,/lv/shop/,категория не найдена → магазин,301 → 404
+C,низкая,/veikals/item/kristalveida-dekorativa-svece-bez-trauka-ar-zelta-akcentu,/lv/shop/,товар не найден → магазин,301 → 404
+C,средняя,/shop/item/ready-to-ship/5011595,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4169200,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/bubble-candle-gift-set-gold-3pcs,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/beeswax-number-candle-5-for-cakes-and-cupcakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/cake-toppers/eart-teddy-bear-birthday-cake-candles,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/3738433,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3782771,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/pastel-birthday-cake-candles,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/pastel-bubble-ball-birthday-cake-candles-cake-decoration-set,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/stavsveces/dizaina-sveces/ilgi-degosa-stavsvece-40-stundas,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/shop/item/number-candles/3642813,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/4162743,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/3966913,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5011613,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/peach-wavy-cake-candles-with-gold,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-making-supplies/candle-molds/bento-canles-making-mold-square-for-10-candles,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/beeswax-cake-candles-sand-color,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-making-supplies/candle-molds/4818022,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-making-supplies/candle-molds/4818024,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-making-supplies/candle-molds/bento-canles-making-mold-1,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/beeswax-number-candle-7-for-cakes-and-cupcakes-1,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5011609,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/pieejams-uzreiz/krasainas-kukas-svecites-dzimsanas-dienas-sveces-tortei,/lv/product/vilnotas-kukas-svecites-krasainas-dzimsanas-dienas-sveces-10-gab/,товар похож (0.67): vilnotas-kukas-svecites-krasainas-dzimsanas-dienas-sveces-10-gab,301 → 301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3737199,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4730322,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-making-supplies/candle-molds/candle-making-mould-for-20-candles,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/3427349,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/natural-wax-number-candle-with-oat-flakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/kvadratveida-garas-kuku-sveces--roku-darbs-,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/blog-2/params/post/4899117/handmade-wedding-candles-as-guest-gifts,/lv/ka-izveleties-sveces-kukai/,англ. статья → ближайшая латышская тема,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/beeswax-cake-candle-with-match-8cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/square-long-cake-candles--handmade,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-making-supplies/candle-molds/bento-canles-making-mold-for-10-candles,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/beeswax-birthday-cake-number-candles---set-of-10-numbers-0-9-color-mix,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/4162678,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/4225755,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/tortes-un-kucinu-toperi/sirds-formas-kukas-svecites-romantiskas-dzimsanas-dienas-un-valentindienas-,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/shop/item/birthday-cake-candles/birthday-candles-pearls-for-cakes-and-cupcakes-pastel-color-mix-11cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/cobaltblue-cake-candles-with-gold-foil-10cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/3845494,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/4224204,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/neutral-tone-birthday-cake-candles,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/product/bisu-vaska-ciparu-svece-tortem-un-kukam-cipars-2,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3738332,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4829143,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/pink-birthday-cake-candles,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/beeswax-number-candle-4-for-cakes-and-cupcakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5011599,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/birthday-candle-set-10cm-10pcs-color-mix-glitter,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/natural-beeswax-number-candle-for-birthday-cakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/white-cake-candles-with-gold-decoration,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/4162709,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3849162,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3957151,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3957282,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/cake-toppers/3737199,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/cake-toppers/animal-birthday-cake-candles-set,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/3973610,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5011596,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/3973632,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/4162670,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/426012/item/4169260,/lv/product-category/materiali-svecu-izgatavosanai/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/3957192,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3957259,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4829119,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/cake-toppers/3667866,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/cake-toppers/heart-shaped-birthday--valentine-cake-candles--3-pc,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/3226243,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/peony-candle-gift-set-bath-bomb-palo-santo,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/the-novice-witchs-starter-pack-1,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/beeswax-number-candle-8-for-cakes-and-cupcakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/birthday-cake-topper-lego,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/colorful-bubble-ball-birthday-cake-candles,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/pink-thin-birthday-cake-candles,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/4211852,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/4924943,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/472220/item/5012787,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/stavsveces/dizaina-sveces/dabiga-vaska-stavsvece-tumsi-zil,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/dzimsanas-dienas-svecites-zig-zag-kukam-un-tortem-10cm,/lv/product/dzimsanas-dienas-svecite-vilnota-kukam-un-tortem-10cm/,товар похож (0.72): dzimsanas-dienas-svecite-vilnota-kukam-un-tortem-10cm,301 → 301 → 404
+C,средняя,/product/krasainas-dzimsanas-dienas-sveces-kukai,/lv/product-category/tortes-sveces/dzimsanas-dienas-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3957192,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/pearls-birthday-cake-candles-pink,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/wavy-beeswax-cake-candle-11cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-making-supplies/decor/3294574,/lv/product-category/materiali-svecu-izgatavosanai/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/3261642,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/3966906,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/pastel-bubble-cake-candles,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/svecites-kukam-un-tortem-8cm-white--gold,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3699175,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3642817,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3642846,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3642928,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3957270,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4168661,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4830216,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/decorative-birthday-cake-candle-set-with-hearts-and-teddy-bear,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/natural-wax-cake-candles-with-cornflower-petals-10-cm-10-pcs,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/strawberry-cake-candles-set-4,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/cake-toppers/heart-and-teddy-bear-birthday-cake-candles--3-pc,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-making-supplies/candle-molds/birthday-candle-making-mould-8-cm,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/3302222,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/3738437,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/3920758,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/beeswax-number-candle-9-for-cakes-and-cupcakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5011617,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5011621,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/lavender-silver-foil-number-4-cake-topper-candle,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/4162699,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/materiali-svecu-liesanai/svecu-veidnes/veidne-kuku-svecu-veidosanai,/lv/product/veidne-kuku-svecu-veidosanai-20-svecem/,товар похож (0.76): veidne-kuku-svecu-veidosanai-20-svecem,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/bernu-dzimsanas-dienas-svecites-tortei-sirds-un-laca-komplekts-1,/lv/product-category/tortes-sveces/dzimsanas-dienas-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-bumbinu-sveces-kukam,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-svecites-kukam-puderroza,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-svecites-kukam-smilsu,/lv/product/bisu-vaska-svecites-kukam-un-tortem-smilsu-krasa-10-cm/,товар похож (0.62): bisu-vaska-svecites-kukam-un-tortem-smilsu-krasa-10-cm,301 → 301 → 404
+C,средняя,/product/bisu-vaska-ciparu-svece-tortem-un-kukam-cipars-0,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3674310,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3782737,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3957205,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4829107,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4830213,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/4838509,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/3973618,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5013101,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/beauty-gift-set-bubble-candle-bath-bomb,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/cake-candles-with-dried-cornflower-petals,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/colorful-birthday-cake-candles,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/light-pink-beeswax-number-candle-for-cakes-with-glitter,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/pastel-cake-candles-with-gold,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/4912311,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/361175/item/3427349,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/412770/item/3642813,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/472220/item/5011595,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/ciparu-svecites/4224209,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/ciparu-svecites/4224231,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/ciparu-svecites/sojas-vaska-sveces-ciparu-forma-ar-foliju,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/pieejams-uzreiz/kukas-svecites-ar-kaltetam-rudzupukem-dabigs-tortes-dekors,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/stavsveces/dizaina-sveces/dabiga-vaska-svece-ar-rievotu-dizainu-ilgi-degosa-estetiska-un-eleganta,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/stavsveces/dizaina-sveces/lavandas-krasas-svece,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/3957233,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/3957270,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/zemenu-formas-kukas-sveces-no-dabiga-vaska-4-gab,/lv/product/zemenu-formas-kuku-sveces-4-gab/,товар похож (0.63): zemenu-formas-kuku-sveces-4-gab,301 → 301 → 404
+C,средняя,/veikals/item/svecu-komplekti/dekorativas-formas-svecu-komplekts,/lv/product/dekorativas-formas-sojas-vaska-svecu-komplekts/,товар похож (0.76): dekorativas-formas-sojas-vaska-svecu-komplekts,301 → 301 → 404
+C,средняя,/product/sojas-vaska-svecu-ziemassvetku-komplekts-davanu-kastite-4-gab,/lv/product-category/ziemassvetku-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3674276,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3957238,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/3957303,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4177617,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4829122,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/5013102,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/beeswax-birthday-cake-candle-11-cm---yellow,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/beeswax-cake-candles-powder-shades,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/beeswax-matchstick-style-cake-candles-10cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/birthday-candle-pearls-for-cakes-and-cupcakes-ice-blue-11cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/birthday-candle-ribbon-for-cakes-and-cupcakes-with-glitters-10cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/3285082,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/4838516,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/container-candles/3712976,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/3973614,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/3973629,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/4837183,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/4858233,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5011610,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5012787,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5116579,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/beeswax-number-3-candle-for-cakes-cupcakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/beeswax-number-4-candle-for-cakes-cupcakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/beeswax-number-8-candle-for-cakes-cupcakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/number-cake-topper-candle,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/wedding-candles/5017683,/lv/product-category/kazu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/3929844,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/361175/item/3920758,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/412770/item/3674303,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/412770/item/4004333,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/472220/item/5011617,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/472220/item/5011627,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/ciparu-svecites/bisu-vaska-ciparu-svece-5-tortem-un-kukam-1,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/ciparu-svecites/bisu-vaska-ciparu-svece-7-tortem-un-kukam-1,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/materiali-svecu-liesanai/derokesanai/peonijas-ziedlapinas-vannai,/lv/product-category/materiali-svecu-izgatavosanai/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/materiali-svecu-liesanai/svecu-veidnes/bento-svecu-veidne,/lv/product/bento-svecu-veidne-20-svecem/,товар похож (0.69): bento-svecu-veidne-20-svecem,301 → 301 → 404
+C,средняя,/veikals/item/pieejams-uzreiz/bisu-vaska-ciparu-svece-tortem-un-kukam--cipars-8,/lv/product/dabiga-vaska-ciparu-svece-8-tortem/,товар похож (0.76): dabiga-vaska-ciparu-svece-8-tortem-un-kukam,301 → 301 → 404
+C,средняя,/veikals/item/pieejams-uzreiz/krasainas-bumbinu-kukas-svecites-dzimsanas-dienas-sveces-tortei--ar-spidumi,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/stavsveces/dizaina-sveces/dabiga-vaska-stavsvece-tumsi-zala,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/stavsveces/galda-sveces/galda-svecu-komplekts-3-gab-18-cm-rievotas-ar-zeltu,/lv/product-category/interjera-sveces/galda-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/3957292,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-svecites-kukam-pudertoni,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-zilu-foliju-8cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/svecites-kukam-un-tortem-8cm,/lv/product/bisu-vaska-svecites-kukam-un-tortem-8cm-bruns/,товар похож (0.70): bisu-vaska-svecites-kukam-un-tortem-8cm-bruns,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/tortes-svece-ar-serkocinu-8cm,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecu-komplekti/3920758,/lv/product-category/davanas/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4045479,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4830217,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/4995265,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/5026485,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/beeswax-bubble-candles-for-cakes-11-cm-light-pink,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/birthday-cake-candles/cloud-shaped-cake-candles--set-of-4,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/cake-toppers/3674276,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/cake-toppers/star-shaped-cake-candles--set-of-4,/lv/product-category/kuku-toperi/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/3290257,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/4838514,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/candle-sets--gifts/4838518,/lv/product-category/davanas/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/for-home--wellbeing/natural-stones/3738475,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/3973598,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/4004327,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/4004334,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/4858380,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/4858413,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/number-candles/4858431,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5011627,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/5078679,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/beeswax-number-5-candle-for-cakes-cupcakes,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/birthday-candle-set-10cm-10pcs-light-green-glitter,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/birthday-candle-set-8cm-10pcs-natural-beeswax,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/birthday-candles-8cm-10pcs-pastel-mix,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/pink-bubble-cake-candles,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-ship/soft-color-birthday-cake-candles,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-shop/5011595,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-shop/5012787,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/ready-to-shop/5013101,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/wedding-candles/5017688,/lv/product-category/kazu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/wedding-candles/5017691,/lv/product-category/kazu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/item/wedding-candles/5017695,/lv/product-category/kazu-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/3712976,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/0/item/3993574,/lv/product-category/interjera-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/472220/item/5011599,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/shop/params/category/472220/item/5011621,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/bisu-vaska-svecites-kukam-un-tortem-10-cm-ziemassvetku-palete,/lv/product-category/ziemassvetku-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/ciparu-svecites/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-0-1,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/kazu-sveces/sojas-vasks-svece-burcina-ar-kastiti---davana-kazu-viesiem,/lv/product-category/kazu-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/materiali-svecu-liesanai/svecu-veidnes/bento-svecu-veidne-20-svecem-61020,/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/pieejams-uzreiz/bisu-vaska-ciparu-svece-tortem-un-kukam--cipars-0,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/pieejams-uzreiz/bisu-vaska-ciparu-svece-tortem-un-kukam--cipars-2,/lv/product-category/tortes-sveces/ciparu-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/pieejams-uzreiz/bisu-vaska-ciparu-svece-tortem-un-kukam--cipars-5,/lv/product/dabiga-vaska-ciparu-svece-5-tortem/,товар похож (0.76): dabiga-vaska-ciparu-svece-5-tortem-un-kukam,301 → 301 → 404
+C,средняя,/veikals/item/pieejams-uzreiz/dabiga-sojas-vaska-svece-ar-baby-powder-aromatu,/lv/product-category/sveces-pieejamas-uzreiz/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/sojas-vaska-svecu-ziemassvetku-komplekts-davanu-kastite-4-gab,/lv/product-category/ziemassvetku-sveces/,товар не найден → его категория,301 → 404
+C,средняя,/veikals/item/stavsveces/dizaina-sveces/rievota-dizaina-svece-no-dabiga-vaska-ilgi-degosa-svece-majai-un-davanai,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/stavsveces/dizaina-sveces/sojas-vaska-svece-bubble-korallu,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/stavsveces/dizaina-sveces/svece-bubble-1,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/stavsveces/dizaina-sveces/svece-bubble-love-ar-zelta-foliju,/lv/product/sojas-vaska-svece-bubble-love-ar-zelta-foliju/,товар похож (0.80): sojas-vaska-svece-bubble-love-ar-zelta-foliju,301 → 301 → 404
+C,средняя,/veikals/item/stavsveces/dizaina-sveces/svece-buble-ar-sudraba-foliju,/lv/product-category/interjera-sveces/dizaina-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/3957205,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/3957224,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/3957238,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/3957303,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-svecites-kukam-aprikozu,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-svecites-kukam-puteklaina-roze,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecites-tortem-un-kukam/dabiga-bisu-vaska-kuku-sveces-11cm-10gab,/lv/product-category/tortes-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecu-komplekti/dabiga-vaska-galda-svecu-komplekts-23-cm-2-gab-ar-zelta-foliju,/lv/product-category/interjera-sveces/galda-sveces/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecu-komplekti/davanau-komplekts-peoniju-svece-vannas-bumba-palo-santo,/lv/product-category/davanas/,товар не найден → его категория,301 → 301 → 404
+C,средняя,/veikals/item/svecu-komplekti/jaunas-raganas-pamatkomplekts--ezoteriskas-davanas-1,/lv/product-category/davanas/,товар не найден → его категория,301 → 301 → 404
+C,высокая,/privacy-policy,/lv/privatuma-politika/,страница,301 → 404
+C,высокая,/workbook,/lv/product-category/%f0%9f%8e%93apmacibas-un-meistarklases/,страница,301 → 404
+C,высокая,/regulations,/lv/noteikumi/,страница,301 → 404
+C,высокая,/blog/params/post/5209305/dzimsanas-dienas-svecites-ka-izveleties-piemerotako-variantu,/lv/dzimsanas-dienas-svecites-ka-izveleties-piemerotako-variantu/,статья найдена,301 → 404
+C,высокая,/shop/category/candle-sets--gifts,/lv/product-category/davanas/,категория,301 → 404
+C,высокая,/shop/category/number-candles,/lv/product-category/tortes-sveces/ciparu-sveces/,категория,301 → 404
+C,высокая,/shop/category/womens-day-gifts,/lv/product-category/davanas/,категория,301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/bumbinu-kukas-svecites-roza-dzimsanas-dienas-sveces-tortei,/lv/product/bisu-vaska-svecites-perlites-kukam-un-tortem-gaisi-roza-11cm/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/shop/category/candle-making-supplies,/lv/product-category/materiali-svecu-izgatavosanai/,категория,301 → 404
+C,высокая,/ai-reference,/lv/ai-atsauces-lapa-lielajiem-valodas-modeliem-llm/,страница,301 → 404
+C,высокая,/shop/category/wedding-candles,/lv/product-category/kazu-sveces/,категория,301 → 404
+C,высокая,/delivery,/lv/piegade/,страница,301 → 404
+C,высокая,/veikals/category/stavsveces-1/stavsveces,/lv/product-category/interjera-sveces/dizaina-sveces/,категория,301 → 404
+C,высокая,/blog/params/post/5209311/personalizetas-dzimsanas-dienas-svecites-unikals-akcents-svetkiem,/lv/personalizetas-dzimsanas-dienas-svecites-unikals-akcents-svetkiem/,статья найдена,301 → 404
+C,высокая,/free-workshop,/lv/product-category/%f0%9f%8e%93apmacibas-un-meistarklases/,страница,301 → 404
+C,высокая,/veikals/item/stavsveces/dizaina-sveces/dabiga-vaska-stavsvece-burgundy-krasa,/lv/product/dabiga-vaska-stavsvece-burgundy-krasa/,товар найден по адресу,301 → 301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/dzimsanas-dienas-svecite-vilnota-kukam-un-tortem-10cm,/lv/product/dzimsanas-dienas-svecite-vilnota-kukam-un-tortem-10cm/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/roza-kukas-svecites-ar-spidumiem-dzimsanas-dienas-sveces-tortei,/lv/product/roza-kukas-svecites-ar-spidumiem/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/svecites-kukam-un-tortem-serkocins-10cm,/lv/product/svecites-kukam-un-tortem-serkocins-10-cm/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/tortes-un-kucinu-toperi/makonu-formas-kuku-sveces--4-gab-komplekts,/lv/product/makonu-formas-kuku-sveces--4-gab-komplekts/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/category/stavsveces-1/dizaina-sveces,/lv/product-category/interjera-sveces/dizaina-sveces/,категория,301 → 404
+C,высокая,/veikals/item/materiali-svecu-liesanai/svecu-veidnes/bento-svecu-veidne-vilnis-10-svecem,/lv/product/bento-svecu-veidne-vilnis-10-svecem/,товар найден по адресу,301 → 301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-kuku-svece-spiralveida-1-gab,/lv/product/spiralveida-bisu-vaska-kuku-svece/,товар похож (1.00): bisu-vaska-kuku-svece-spiralveida-1-gab,301 → 301 → 404
+C,высокая,/shop/category/cake-toppers,/lv/product-category/kuku-toperi/,категория,301 → 404
+C,высокая,/veikals/category/davanu-kartes,/lv/product-category/davanas/,категория,301 → 404
+C,высокая,/veikals/item/pieejams-uzreiz/maigu-tonu-kukas-svecites-tievas-dzimsanas-dienas-sveces,/lv/product/maigu-tonu-kukas-svecites-tievas-dzimsanas-dienas-sveces/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/buj,/lv/biezak-uzdotie-jautajumi/,страница,301 → 404
+C,высокая,/dabigas-sveces,/lv/product-category/interjera-sveces/,страница,301 → 404
+C,высокая,/shop/category/candle-making-materials/decor,/lv/product-category/materiali-svecu-izgatavosanai/,категория,301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-zalu-foliju-8cm,/lv/product/melnas-dabiga-vaska-kuku-svecites-zalu-foliju/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/shop/category/candle-making-materials/candle-wax,/lv/product-category/materiali-svecu-izgatavosanai/,категория,301 → 404
+C,высокая,/korporativie-kazu-sveces,/lv/sadarbibas-partneriem/,страница,301 → 404
+C,высокая,/shop/category/for-home--wellbeing/incense-and-burners,/lv/product-category/interjera-sveces/,категория,301 → 404
+C,высокая,/veikals/item/ciparu-svecites/pirma-gada-ciparu-sveces-111-menesi--1-gads,/lv/product/pirma-gada-ciparu-sveces/,товар похож (1.00): pirma-gada-ciparu-sveces-111-menesi-1-gads,301 → 301 → 404
+C,высокая,/veikals/item/pieejams-uzreiz/persiku-krasas-vilnotas-kukas-svecites-ar-zelta-dekoru,/lv/product/persiku-krasas-vilnotas-kukas-svecites-ar-zelta-dekoru/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/pieejams-uzreiz/roza-kukas-svecites-tievas-dzimsanas-dienas-sveces-tortei,/lv/product/roza-kukas-svecites/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-svecites-kukam-un-tortem-8cm-pasteltonu-mix,/lv/product/bisu-vaska-svecites-kukam-un-tortem-8cm-pasteltonu-mix/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/dzimsanas-dienas-sveces-zig-zag-tortem-un-keksiniem-ar-spidumiem-10cm,/lv/product/dzimsanas-dienas-sveces-zig-zag-tortem-un-keksiniem-10cm/,товар похож (0.86): dzimsanas-dienas-sveces-zig-zag-tortem-un-keksiniem-10cm,301 → 301 → 404
+C,высокая,/veikals/item/ciparu-svecites/bisu-vaska-ciparu-svece-6-tortem-un-kukam,/lv/product/dabiga-vaska-ciparu-svece-6-tortem/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/materiali-svecu-liesanai/svecu-veidnes/bento-svecu-veidne-20-svecem-1,/lv/product/bento-svecu-veidne-20-svecem/,товар похож (0.90): bento-svecu-veidne-20-svecem,301 → 301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-melnas-ar-zelta-foliju,/lv/product/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-melnas-ar-zelta-foliju/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-sarkanu-foliju-8cm,/lv/product/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-sarkanu-foliju-8cm/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/svecites-kukam-un-tortem-8cm-sarkanas,/lv/product/bisu-vaska-svecites-kukam-un-tortem-8cm-sarkanas/,товар похож (0.81): bisu-vaska-svecites-kukam-un-tortem-8cm-sarkanas,301 → 301 → 404
+C,высокая,/veikals/item/tortes-un-kucinu-toperi/latvija-razota-bisu-vaska-svecite-toperis-lego-cilvecins-1-gab,/lv/product/latvija-razota-bisu-vaska-svecite-toperis-lego-cilvecins-1-gab/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/bisu-vaska-ciparu-svece-0-tortem-un-kukam,/lv/product/bisu-vaska-ciparu-svece-0-tortem/,товар похож (0.85): dabiga-vaska-ciparu-svece-0-tortem-un-kukam,301 → 301 → 404
+C,высокая,/veikals/item/ciparu-svecites/dabiga-vaska-ciparu-svece-6-tortem-un-kukam,/lv/product/dabiga-vaska-ciparu-svece-6-tortem-un-kukam/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-0,/lv/product/cipara-0-svece-kukai-bisu-vasks/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/sojas-vaska-svece-ciparu-forma-ar-sausiem-ziediem,/lv/product/bisu-vaska-svece-ciparu-forma-ar-sausiem-ziediem/,товар похож (0.85): bisu-vaska-svece-ciparu-forma-ar-sausiem-ziediem,301 → 301 → 404
+C,высокая,/veikals/item/davanu-kartes/davanu-karte-50-eur-vertiba-1,/lv/product/davanu-karte-50-eur-vertiba/,товар похож (0.90): davanu-karte-50-eur-vertiba,301 → 301 → 404
+C,высокая,/veikals/item/pieejams-uzreiz/dzimsanas-dienas-svecisu-komplekts--8-cm--10-gab--krasu-mix-2,/lv/product/dzimsanas-dienas-svecisu-komplekts--8-cm--10-gab--krasu-mix-2/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/pieejams-uzreiz/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-persiku,/lv/product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-persiku-ar-spidumiem/,товар похож (0.85): dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-persiku-ar-spidumiem,301 → 301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-lilla-foliju-8cm,/lv/product/melnas-dabiga-vaska-kuku-svecites-lilla-foliju/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/pasteltonu-bumbinu-kukas-svecites-dzimsanas-dienas-sveces-tortei,/lv/product/pasteltonu-bumbinu-kukas-svecites-dzimsanas-dienas-sveces-tortei/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/svecites-kukam-un-tortem-13cm-ar-foliju,/lv/product/svecites-kukam-un-tortem-13cm/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/tortes-un-kucinu-toperi/dabiga-vaska-kuku-svecisu-komplekts-zvaigznes-4gab,/lv/product/dabiga-vaska-kuku-svecisu-komplekts-zvaigznes-4-gab/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+C,высокая,/veikals/item/tortes-un-kucinu-toperi/latvija-razota-bisu-vaska-svecite-kuku-toperis-gaisa-balons-1-gab,/lv/product/latvija-razota-bisu-vaska-svecite-kuku-toperis-gaisa-balons-1-gab/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/tortes-un-kucinu-toperi/latvija-razota-bisu-vaska-svecite-toperis-lego-figurina-1-gab,/lv/product/latvija-razota-bisu-vaska-svecite-toperis-lego-figurina-1-gab/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+C,высокая,/veikals/item/tortes-un-kucinu-toperi/latvija-razota-bisu-vaska-svecite-toperis-pukite-1-gab,/lv/product/latvija-razota-bisu-vaska-svecite-toperis-pukite-1-gab/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/shop/category/for-home--wellbeing/434982,/lv/product-category/interjera-sveces/,категория,301 → 404
+C,высокая,/veikals/item/ciparu-svecites/bisu-vaska-ciparu-svece-4-tortem-un-kukam,/lv/product/dabiga-vaska-ciparu-svece-4-tortem/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/bisu-vaska-ciparu-svece-9-tortem-un-kukam,/lv/product/dabiga-vaska-ciparu-svece-9-tortem/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/dabiga-vaska-ciparu-svece-4-tortem-un-kukam,/lv/product/dabiga-vaska-ciparu-svece-4-tortem-un-kukam/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/dabiga-vaska-ciparu-svece-8-tortem-un-kukam,/lv/product/dabiga-vaska-ciparu-svece-8-tortem-un-kukam/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-9,/lv/product/dabiga-vaska-kuku-svecite-cipars-9/,товар похож (1.00): dabiga-vaska-kuku-toperis-svecite-ar-ciparu-9,301 → 301 → 404
+C,высокая,/veikals/item/ciparu-svecites/dabiga-vaska-svece-ciparu-forma-ar-auzu-parslam,/lv/product/dabiga-vaska-svece-ciparu-forma-ar-auzu-parslam/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/mazula-menessvetku-ciparu-svecu-komplekts-111--1-gads,/lv/product/mazula-menessvetku-ciparu-svecu-komplekts-2/,товар похож (0.91): mazula-menessvetku-ciparu-svecu-komplekts-111-menesi-1-gads,301 → 301 → 404
+C,высокая,/veikals/item/kazu-sveces/personalizeta-kazu-svece-burcina-kastite-ar-sarkanu-lentiti,/lv/product/personalizeta-kazu-svece-burcina-kastite-ar-sarkanu-lentiti/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/materiali-svecu-liesanai/svecu-veidnes/bento-svecu-veidne-kvadrats-10-svecem,/lv/product/bento-svecu-veidne-kvadrats-10-svecem/,товар найден по адресу,301 → 301 → 404
+C,высокая,/veikals/item/pieejams-uzreiz/dzimsanas-dienas-svecisu-komplekts--8-cm--10-gab--krasu-mix-4,/lv/product/dzimsanas-dienas-svecisu-komplekts--8-cm--10-gab--krasu-mix-4/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/pieejams-uzreiz/dzimsanas-dienas-svecisu-komplekts-kantainas--11cm--10-gab--krasu-mix,/lv/product/dzimsanas-dienas-svecisu-komplekts-kantainas-formas-11cm-10-gab-krasu-mix-ar-spidumiem/,товар похож (0.82): dzimsanas-dienas-svecisu-komplekts-kantainas-formas-11cm-10-gab-krasu-mix-ar-spidumiem,301 → 301 → 404
+C,высокая,/veikals/item/pieejams-uzreiz/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-gaisi-zals-ar-spidumiem,/lv/product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-gaisi-zals-ar-zelta-spidumiem/,товар похож (0.94): dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-gaisi-zals-ar-zelta-spidumiem,301 → 301 → 404
+C,высокая,/veikals/item/pieejams-uzreiz/pasteltonu-kukas-svecites-ar-zelta-dekoru-dzimsanas-dienas-sveces,/lv/product/pasteltonu-kukas-svecites-ar-zelta-dekoru-dzimsanas-dienas-sveces/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/pieejams-uzreiz/svecite-toperis-lego-figurina-1-gab,/lv/product/latvija-razota-bisu-vaska-svecite-toperis-lego-figurina-1-gab/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/stavsveces/galda-sveces/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-foliju,/lv/product/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-foliju/,товар найден по адресу,301 → 301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-melnas,/lv/product/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-melnas/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-svecites-kukam-un-tortem-8cm-fuksija,/lv/product/bisu-vaska-svecites-kukam-un-tortem-8cm-fuksija/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/dabiga-vaska-tortes-sveces-ar-rudzupuku-ziedlapinam-10-cm-10-gab,/lv/product/kukas-sveces-ar-rudzupukem/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/dzimsanas-dienas-svecite-kukam-un-tortem-ar-spidumeim-10cm,/lv/product/dzimsanas-dienas-svecite-kukam-un-tortem-ar-spidumiem-10cm/,товар похож (0.89): dzimsanas-dienas-svecite-kukam-un-tortem-ar-spidumiem-10cm,301 → 301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/kobaltzilas-kukas-svecites-ar-zelta-dekoru-dzimsanas-dienas-sveces-tortei,/lv/product/kobaltzilas-kukas-svecites/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/tortes-un-kucinu-toperi/latvija-razota-bisu-vaska-svecite-toperis-unicorn-1-gab,/lv/product/latvija-razota-bisu-vaska-svecite-toperis-unicorn-1-gab/,цепочка через area.lv → один редирект,301 → 301 → 200 (через area.lv)
+C,высокая,/veikals/item/tortes-un-kucinu-toperi/sirds-un-laca-kukas-svecites-dzimsanas-dienas-sveces-tortei--3-gab,/lv/product/sirds-un-laca-kukas-svecites/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/product/bisu-vaska-sveces-ciparu-forma-balts-ar-foliju-1-gab,/lv/product/balta-dabiga-vaska-ciparu-svece-ar-zelta-foliju/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/product/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-zalu-foliju-8cm,/lv/product/melnas-dabiga-vaska-kuku-svecites-zalu-foliju/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/product/sojas-vaska-svece-piparkuku-virins-davanu-kastite,/lv/product/piparkuku-cilvecina-formas-svece/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/free-workshop-signup,/lv/product-category/%f0%9f%8e%93apmacibas-un-meistarklases/,страница,301 → 404
+C,высокая,/shop/category/425949/number-candles,/lv/product-category/tortes-sveces/ciparu-sveces/,категория,301 → 404
+C,высокая,/shop/category/candle-making-materials,/lv/product-category/materiali-svecu-izgatavosanai/,категория,301 → 404
+C,высокая,/shop/category/christmas-candles,/lv/product-category/ziemassvetku-sveces/,категория,301 → 404
+C,высокая,/shop/item/pillar-candles/designer-candles/natural-wax-peony-candle,/lv/product/dabiga-vaska-peonijas-svece-dekorativa-zieda-formas-svece/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/category/dabigie-akmeni/majas-aromati,/lv/product-category/interjera-sveces/,категория,301 → 404
+C,высокая,/veikals/category/galda-sveces,/lv/product-category/interjera-sveces/galda-sveces/,категория,301 → 404
+C,высокая,/veikals/item/ciparu-svecites/bisu-vaska-ciparu-svece-1-tortem-un-kukam-ar-apsveikuma-kartiti,/lv/product/bisu-vaska-ciparu-svece-1-tortem-un-kukam-davanu-komplekts-ar-apsveikuma-kartiti/,товар похож (0.86): bisu-vaska-ciparu-svece-1-tortem-un-kukam-davanu-komplekts-ar-apsveikuma-kartiti,301 → 301 → 404
+C,высокая,/veikals/item/ciparu-svecites/bisu-vaska-ciparu-svece-1-tortem-un-kukam,/lv/product/dabiga-vaska-ciparu-svece-1/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/bisu-vaska-ciparu-svece-5-tortem-un-kukam-ar-apsveikuma-kartiti,/lv/product/bisu-vaska-ciparu-svece-5-tortem-un-kukam-ar-apsveikuma-kartiti/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/bisu-vaska-ciparu-svece-8-tortem-un-kukam-davanu-komplekts-ar-apsveikuma-ka,/lv/product/bisu-vaska-ciparu-svece-8-tortem-un-kukam-davanu-komplekts-ar-apsveikuma-kartiti/,товар похож (0.91): bisu-vaska-ciparu-svece-8-tortem-un-kukam-davanu-komplekts-ar-apsveikuma-kartiti,301 → 301 → 404
+C,высокая,/veikals/item/ciparu-svecites/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-3,/lv/product/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-3-2/,товар похож (1.00): dabiga-vaska-kuku-toperis-svecite-ar-ciparu-3,301 → 301 → 404
+C,высокая,/veikals/item/ciparu-svecites/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-4,/lv/product/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-4/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/ciparu-svecites/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-8,/lv/product/dabiga-vaska-kuku-svecite-cipars-8/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/kazu-sveces/personalizeta-kazu-svece-stikla-burcina-viesiem-ar-violetu-lentiti,/lv/product/personalizeta-kazu-svece-stikla-burcina-viesiem-ar-violetu-lentiti/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/kazu-sveces/personalizeta-kazu-svece-viesiem-ar-ruda-lentiti-rudens-dizains,/lv/product/personalizeta-kazu-svece-viesiem-ar-ruda-lentiti-rudens-dizains/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/kazu-sveces/personalizeta-kazu-svece-viesiem-ar-zalu-lentiti-un-eikalipta-dizaina-uzlim,/lv/product/personalizeta-kazu-svece-viesiem-ar-zalu-lentiti-un-eikalipta-dizaina-uzlimi/,товар похож (0.91): personalizeta-kazu-svece-viesiem-ar-zalu-lentiti-un-eikalipta-dizaina-uzlimi,301 → 301 → 404
+C,высокая,/veikals/item/materiali-svecu-liesanai/svecu-veidnes/bento-svecu-veidne-20-svecem,/lv/product/bento-svecu-veidne-20-svecem/,товар найден по адресу,301 → 301 → 404
+C,высокая,/veikals/item/pieejams-uzreiz/bisu-vaska-ciparu-svece-tortem-un-kukam--cipars-3,/lv/product/bisu-vaska-ciparu-svece-tortem-un-kukam--cipars-3/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/pieejams-uzreiz/bisu-vaska-ciparu-svece-tortem-un-kukam--gaisi-peleks--bez-spidumiem,/lv/product/bisu-vaska-ciparu-svece-tortem-un-kukam--gaisi-peleks--bez-spidumiem/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/pieejams-uzreiz/bisu-vaska-ciparu-svece-tortem-un-kukam--gaisi-roza--ar-spidumiem,/lv/product/bisu-vaska-ciparu-svece-tortem-un-kukam--gaisi-roza--ar-spidumiem/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/pieejams-uzreiz/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-gaisi-roza,/lv/product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-gaisi-roza-ar-spidumiem/,товар похож (0.86): dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-gaisi-roza-ar-spidumiem,301 → 301 → 404
+C,высокая,/veikals/item/pieejams-uzreiz/pasteltonu-kukas-svecites-krasainas-dzimsanas-dienas-sveces-tortei,/lv/product/pasteltonu-kukas-svecites/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/pieejams-uzreiz/svecite-toperis-lego-cilvecins-1-gab,/lv/product/svecite-toperis-lego-cilvecins-1-gab/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/stavsveces/galda-sveces/dabiga-vaska-galda-spiralveida-svece--gaisi-roza--18-cm,/lv/product/gaisi-roza-spiralveida-galda-svece/,товар похож (1.00): dabiga-vaska-galda-spiralveida-svece-gaisi-roza-18-cm,301 → 301 → 404
+C,высокая,/veikals/item/stavsveces/galda-sveces/dabiga-vaska-galda-svece-18-cm-rievota-balts-ar-zeltu,/lv/product/dabiga-vaska-galda-svece-18-cm-rievota-balts-ar-zeltu/,товар найден по адресу,301 → 301 → 404
+C,высокая,/veikals/item/stavsveces/galda-sveces/dabiga-vaska-galda-svece-18-cm-rievota-gaizi-roza-ar-zeltu,/lv/product/dabiga-vaska-galda-svece-18-cm-rievota-gaisi-roza-ar-zeltu/,товар похож (0.91): dabiga-vaska-galda-svece-18-cm-rievota-gaisi-roza-ar-zeltu,301 → 301 → 404
+C,высокая,/veikals/item/stavsveces/galda-sveces/dabiga-vaska-galda-svece-18-cm-rievota-lavandas-ar-zeltu,/lv/product/dabiga-vaska-galda-svece-18-cm-rievota-lavandas-ar-zeltu/,товар найден по адресу,301 → 301 → 404
+C,высокая,/veikals/item/stavsveces/galda-sveces/dabiga-vaska-galda-svece-18-cm-rievota,/lv/product/dabiga-vaska-galda-svece-18-cm/,товар похож (0.87): dabiga-vaska-galda-svece-18-cm,301 → 301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-kuku-svecite-vilnis-11cm,/lv/product/bisu-vaska-kuku-svecite-vilnis-11cm/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-svecites-kukam-un-tortem-10cm-ar-spidumiem,/lv/product/bisu-vaska-svecites-kukam-un-tortem-10cm-ar-spidumiem/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-svecites-kuku-un-torsu-dekoresanai-8cm-ice-blue-zils,/lv/product/bisu-vaska-svecites-kuku-un-torsu-dekoresanai-8cm-ice-blue-zils/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/bisu-vaska-svecites-perlites-kukam-un-tortem-pasteltonu-mix-11cm,/lv/product/bisu-vaska-svecites-perlites-kukam-un-tortem-pasteltonu-mix-11-cm/,товар похож (0.87): bisu-vaska-svecites-perlites-kukam-un-tortem-pasteltonu-mix-11-cm,301 → 301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/dabiga-vaska-tortes-un-kuku-sveces--10-cm--butter-yellow,/lv/product/dabiga-vaska-tortes-sveces-10-gab/,цепочка → один редирект на ту же страницу,301 → 301 → 301 → 200
+C,высокая,/veikals/item/svecites-tortem-un-kukam/dzimsanas-dienas-svecite-perlites-kukam-un-tortem-ice-blue-zila-11cm,/lv/product/dzimsanas-dienas-svecite-perlites-kukam-un-tortem-ice-blue-zils-11cm/,товар похож (0.91): dzimsanas-dienas-svecite-perlites-kukam-un-tortem-ice-blue-zils-11cm,301 → 301 → 404
+C,высокая,/veikals/item/svecites-tortem-un-kukam/dzimsanas-dienas-svecite-perlites-kukam-un-tortem-krasu-palete-milk--blush-,/lv/product/dzimsanas-dienas-svecite-perlites-kukam-un-tortem-krasu-palete-milk-blush-11cm/,товар похож (0.94): dzimsanas-dienas-svecite-perlites-kukam-un-tortem-krasu-palete-milk-blush-11cm,301 → 301 → 404
+C,высокая,/veikals/item/svecu-komplekti/davanu-karte-100-eur-vertiba,/lv/product/davanu-karte-100-eur-vertiba/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecu-komplekti/davanu-karte-40-eur-vertiba,/lv/product/davanu-karte-40-eur-vertiba/,цепочка → один редирект на ту же страницу,301 → 301 → 200
+C,высокая,/veikals/item/svecu-komplekti/vannas-bumba-ar-kokosrieksta-aromatu-1-gab,/lv/product/vannas-bumba-ar-kokosrieksta-aromatu-1-gab/,цепочка → один редирект на ту же страницу,301 → 301 → 200
