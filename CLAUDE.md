@@ -91,9 +91,10 @@
 4. Сделать **английскую версию сайта**.
 
 ## Этот репозиторий (`marmar-candles-feed`)
-- Товарный фид в формате Google Merchant / Facebook (RSS, namespace `g:`).
-- Основной файл: `products_google_final_checked.xml` (~183 товара).
-- GitHub Actions для обновления фида: `.github/workflows/update-feed.yml`, `.github/workflows/update-google-feed.yml`.
+- **Актуальный фид:** `feed/google-lv.xml`. Его собирает `tools/build_feed.py` из WooCommerce Store API (~235 товаров, ссылки `/lv/product/…`, язык lv). Обновляется каждую ночь workflow `.github/workflows/build-feed.yml` (работает после слияния в `master`).
+- Публичная ссылка для Merchant Center: `https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/feed/google-lv.xml`.
+- `products_google_final_checked.xml` — **старый фид, устарел** (ссылки `/veikals/item/…`, много 404). Не использовать.
+- Ограничение v1: у 73 вариативных товаров в фид идёт минимальная цена (варианты отдельно не выгружаются).
 
 ## Как со мной работать
 - Предлагать решения, которые можно автоматизировать, а не делать вручную.
