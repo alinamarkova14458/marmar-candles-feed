@@ -33,8 +33,13 @@ SKIP = re.compile(
 LINK_RE = re.compile(r'(?:href|src)\s*=\s*["\']([^"\'#]+)["\']', re.I)
 
 
+def ascii_url(url):
+    """Percent-encode non-ASCII characters (e.g. Cyrillic image names) so urllib can request them."""
+    return urllib.parse.quote(url, safe=":/?&=%#+,;@!$'()*~[]")
+
+
 def get(url, method="GET"):
-    req = urllib.request.Request(url, method=method, headers={"User-Agent": UA})
+    req = urllib.request.Request(ascii_url(url), method=method, headers={"User-Agent": UA})
     for attempt in range(3):
         try:
             with urllib.request.urlopen(req, timeout=30) as r:
@@ -119,12 +124,20 @@ def main(report_path="link-report.md"):
         for u, st in ex.map(check, todo):
             status[u] = st
 
-    broken = {u: st for u, st in status.items() if st != 200}
+    # WordPress shortlinks (/?p=123) live only in <link rel="shortlink"> and all fail the same way:
+    # report them as one line instead of hundreds of rows.
+    shortlinks = {u for u, st in status.items() if st != 200 and re.search(r"/\?p=\d+$", u)}
+    broken = {u: st for u, st in status.items() if st != 200 and u not in shortlinks}
     lines = [
         "# Проверка ссылок marmarcandles.com",
         f"Страниц в карте сайта: {len(pages)}. Проверено ссылок и картинок: {len(status)}. "
         f"**Битых: {len(broken)}.**\n",
     ]
+    if shortlinks:
+        lines.append(
+            f"> Отдельно: {len(shortlinks)} коротких ссылок WordPress вида `/?p=123` отвечают 404. "
+            "Посетители их не видят (они только в коде страницы), но Google может на них натыкаться.\n"
+        )
     if broken:
         lines.append("| Ссылка | Ответ | Где встречается |\n|---|---|---|")
         for u, st in sorted(broken.items(), key=lambda kv: (str(kv[1]), kv[0])):
