@@ -1,0 +1,51 @@
+name: Check broken links
+
+on:
+  schedule:
+    - cron: "41 3 * * 0"   # every Sunday, 03:41 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check links
+        id: links
+        run: |
+          set +e
+          python3 tools/check_links.py link-report.md
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the issue when links are broken
+        if: steps.links.outputs.code == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create broken-links --color d73a4a --description "Битые ссылки на сайте" 2>/dev/null || true
+          num=$(gh issue list --label broken-links --state open --json number --jq '.[0].number')
+          if [ -n "$num" ]; then
+            gh issue edit "$num" --body-file link-report.md
+            gh issue comment "$num" --body "Проверка $(date -u +%Y-%m-%d): список обновлён."
+          else
+            gh issue create --title "Битые ссылки на сайте" --label broken-links --body-file link-report.md
+          fi
+
+      - name: Close the issue when everything is fine
+        if: steps.links.outputs.code == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for num in $(gh issue list --label broken-links --state open --json number --jq '.[].number'); do
+            gh issue close "$num" --comment "Проверка $(date -u +%Y-%m-%d): битых ссылок нет ✅"
+          done
