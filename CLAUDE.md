@@ -93,6 +93,7 @@
 ## Этот репозиторий (`marmar-candles-feed`)
 - **Актуальный фид:** `feed/google-lv.xml`. Его собирает `tools/build_feed.py` из WooCommerce Store API (~235 товаров, ссылки `/lv/product/…`, язык lv). Обновляется каждую ночь workflow `.github/workflows/build-feed.yml` (работает после слияния в `master`).
 - Публичная ссылка для Merchant Center: `https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/feed/google-lv.xml`.
+- **Merchant Center, источник данных** `accounts/5495474688/dataSources/10790139142` («MarMar WooCommerce feed (LV, ru label)»): забирает фид ежедневно в 06:00 по Риге. Создан 31.10.2026, первая загрузка: 235 из 235 товаров. Язык помечен `ru`, потому что Merchant Center пока не поддерживает латышский (`lv` отклоняется). Следить за отклонениями из-за языка. Когда новые товары одобрят, отключить старый автофид (`dataSources/10459376589`, 4 товара), чтобы не было дублей. В январе сделать английский фид.
 - `products_google_final_checked.xml` — **старый фид, устарел** (ссылки `/veikals/item/…`, много 404). Не использовать.
 - Ограничение v1: у 73 вариативных товаров в фид идёт минимальная цена (варианты отдельно не выгружаются).
 
