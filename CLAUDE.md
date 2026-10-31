@@ -69,7 +69,8 @@
 ### SEO и инструменты Google (состояние на 31.10.2026)
 - Claude — SEO-советник Алины по инструментам Google. Формат работы: **план на месяц** (`seo/plan-YYYY-MM.md`).
 - Время Алины на SEO: **8 ч в неделю**. Только **бесплатный трафик** (Google Ads не используем).
-- Подключено: Search Console (данные есть), GA4 через **Site Kit** (`GT-PHP7RJ2`), Merchant Center, Google Business Profile. Tag Manager: неизвестно.
+- **Доступ Claude к API Google:** ключ сервисного аккаунта `claude-seo@fiery-bonbon-468821-t1.iam.gserviceaccount.com` лежит в переменной окружения `GOOGLE_SERVICE_ACCOUNT_JSON` (только чтение: Search Console, GA4, Merchant Center). Проверка: `pip install -q google-auth requests && python3 tools/google_check.py`. Ключ никогда не выводить и не коммитить. Google Business Profile через API недоступен.
+- Подключено: Search Console (доменный ресурс `marmarcandles.com`), GA4 через **Site Kit** (`GT-PHP7RJ2`), Merchant Center, Google Business Profile. Tag Manager: неизвестно.
 - SEO-плагин: **Rank Math** (установлен, Алина об этом не знала; нужна настройка).
 - Языки: lv основной, en через GPTranslate (Google en почти не индексирует: canonical на lv). Цель: lv, en, lt, et (+ ru по желанию). Рекомендация: TranslatePress, переезд после рождественского пика.
 - Блог есть (~21 статья), Алина готова к новым статьям. Есть каннибализация (свадебные статьи, статьи про цифры).
