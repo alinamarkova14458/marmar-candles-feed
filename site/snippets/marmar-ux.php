@@ -16,6 +16,7 @@
  *  7. Короткие названия на карточках каталога (сами названия товаров не меняются).
  *  8. Компактные карточки на телефоне, компактное окно cookies.
  * 10. Мобильное меню: светлый фон, 4 плитки с фото, доставка и ссылки внизу.
+ * 11. Компактная палитра: >8 вариантов без подписей, >14 — 2 ряда и «Rādīt visas krāsas».
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -108,6 +109,22 @@ add_action( 'wp_footer', function () {
 				t = t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
 				$('<span class="mm-lbl" aria-hidden="true"></span>').text(t).appendTo($li);
 			});
+			// Компактная палитра: >8 вариантов — без подписей; >14 — 2 ряда и кнопка «Rādīt visas…»
+			$form.find('.woo-variation-items-wrapper').each(function () {
+				var $w = $(this), $items = $w.find('li.variable-item'), n = $items.length;
+				if (n <= 8) { return; }
+				$w.addClass('mm-many');
+				if (n <= 14) { return; }
+				$w.addClass('mm-collapsed');
+				var label = ($w.closest('tr').find('th.label label, .label label').first().text() || '').toLowerCase();
+				var txt = label.indexOf('krās') > -1 ? 'Rādīt visas krāsas (' + n + ') ▾' : 'Rādīt visus variantus (' + n + ') ▾';
+				var $b = $('<button type="button" class="mm-more"></button>').text(txt).appendTo($w);
+				$b.on('click', function () { $w.removeClass('mm-collapsed'); $b.remove(); });
+				// если выбран скрытый вариант — сразу раскрываем
+				$form.on('woocommerce_variation_select_change show_variation', function () {
+					if ($w.find('li.variable-item.selected').index() >= 14) { $w.removeClass('mm-collapsed'); $b.remove(); }
+				});
+			});
 		});
 	})(window.jQuery);
 	</script>
@@ -176,7 +193,12 @@ add_action( 'wp_footer', function () {
 		$html .= '<a class="mmn-tile" href="' . esc_url( $base . $t[2] ) . '"><img src="' . esc_url( $u . $t[1] ) . '" alt="" loading="lazy" width="300" height="300"><span>' . esc_html( $t[0] ) . '</span></a>';
 	}
 	$html .= '</div>';
-	$foot  = '<div class="mmn-foot">📦 <b>Piegāde visā Latvijā</b> no 2&nbsp;€ · bez maksas no 50&nbsp;€<br>🕯️ Izgatavojam 5–7 darba dienās · steidzami +5&nbsp;€<div class="lnk">'
+	$foot  = '<div class="mmn-foot"><ul class="mmn-facts">'
+		. '<li><i>📦</i><span>Piegāde visā Latvijā — <b>no 2&nbsp;€</b></span></li>'
+		. '<li><i>🎁</i><span>Bezmaksas piegāde <b>no 50&nbsp;€</b></span></li>'
+		. '<li><i>🕯️</i><span>Izgatavojam <b>5–7 darba dienās</b></span></li>'
+		. '<li><i>⚡</i><span>Steidzami — 2 darba dienās, <b>+5&nbsp;€</b></span></li>'
+		. '</ul><div class="lnk">'
 		. '<a href="' . esc_url( $base . 'piegade/' ) . '">Piegāde</a><a href="' . esc_url( $base . 'apmaksa/' ) . '">Apmaksa</a>'
 		. '<a href="' . esc_url( $base . 'biezak-uzdotie-jautajumi/' ) . '">BUJ</a><a href="' . esc_url( $base . 'kontakti/' ) . '">Kontakti</a></div></div>';
 	?>
@@ -226,6 +248,12 @@ add_action( 'wp_head', function () {
 	.woo-variation-items-wrapper ul.variable-items-wrapper{align-items:flex-start;column-gap:34px!important;row-gap:2px!important;padding-left:18px!important}
 	body .woo-variation-items-wrapper ul.variable-items-wrapper li.variable-item{position:relative;overflow:visible!important;margin-bottom:34px!important}
 	.woo-variation-items-wrapper li.variable-item .mm-lbl{white-space:normal;position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);width:68px;font-size:11px;line-height:1.2;text-align:center;color:#6b5a5e;pointer-events:none}
+	/* 3c. Компактная палитра */
+	.woo-variation-items-wrapper.mm-many ul.variable-items-wrapper{display:grid!important;grid-template-columns:repeat(7,1fr)!important;gap:10px!important;padding-left:0!important;max-width:360px}
+	body .woo-variation-items-wrapper.mm-many ul.variable-items-wrapper li.variable-item{margin:0!important;width:38px!important;height:38px!important}
+	.woo-variation-items-wrapper.mm-many li.variable-item .mm-lbl{display:none!important}
+	.woo-variation-items-wrapper.mm-collapsed li.variable-item:nth-child(n+15){display:none!important}
+	.mm-more{display:inline-block;margin-top:10px;font:600 13px Montserrat,sans-serif;color:#b0606d;background:none;border:1px solid #e8c9cd;border-radius:999px;padding:6px 14px;cursor:pointer}
 	/* 4. SKU */
 	.product_meta .sku_wrapper{display:none!important}
 	/* 5b. Cookies — компактная полоска на телефоне */
@@ -270,10 +298,14 @@ add_action( 'wp_head', function () {
 	#offcanvas .mobile-menu .sub-menu a.ct-menu-link{font-size:15px!important;color:#6b5a5e!important;padding:8px 0!important;font-weight:400!important}
 	#offcanvas .mobile-menu .sub-menu li:before{display:none!important}
 	#offcanvas .mobile-menu .ct-toggle-dropdown-mobile, #offcanvas .mobile-menu .ct-toggle-dropdown-mobile svg{color:#b0606d!important;fill:#b0606d!important}
-	.mmn-foot{margin-top:18px;padding:14px;border-radius:12px;background:#fff;border:1px solid #f0dfe2;font:400 13.5px/1.5 Montserrat,sans-serif;color:#3a3134}
-	.mmn-foot b{color:#7a4a5a}
-	.mmn-foot .lnk{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap}
-	.mmn-foot .lnk a{color:#b0606d!important;text-decoration:underline;font-size:13px}
+	.mmn-foot{margin-top:18px;padding:12px 14px 14px;border-radius:12px;background:#fff;border:1px solid #f0dfe2;font:400 14px/1.4 Montserrat,sans-serif;color:#3a3134}
+	.mmn-facts{list-style:none;margin:0;padding:0}
+	.mmn-facts li{display:flex;align-items:center;gap:10px;padding:7px 0;margin:0}
+	.mmn-facts li+li{border-top:1px solid #f5e8ea}
+	.mmn-facts i{width:22px;flex:none;text-align:center;font-size:16px;font-style:normal}
+	.mmn-foot b{color:#7a4a5a;font-weight:600;white-space:nowrap}
+	.mmn-foot .lnk{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+	.mmn-foot .lnk a{display:block;text-align:center;padding:7px 4px;border:1px solid #e8c9cd;border-radius:999px;color:#b0606d!important;text-decoration:none!important;font-size:12.5px;font-weight:500}
 	#offcanvas .ct-header-socials{margin-top:14px!important}
 	#offcanvas .ct-header-socials svg{fill:#7a4a5a!important}
 	</style>
