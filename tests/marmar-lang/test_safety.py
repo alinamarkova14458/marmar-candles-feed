@@ -10,6 +10,7 @@ REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
 def normalize(html):
     html = re.sub(r'<link rel="alternate" hreflang=[^>]+>\n?', "", html)
+    html = re.sub(r'<script>document\.cookie="mm_lang=[^<]*</script>\n?', "", html)
     html = re.sub(r'<li class="menu-item mm-switch-item">.*?</li>', "", html, flags=re.S)
     html = re.sub(r'(nonce["\']?\s*[:=]\s*["\']?|_wpnonce=|"nonce":")[0-9a-f]{10}', r"\1N", html)
     html = re.sub(r'[0-9a-f]{10}(?=["\'&])', "N", html)

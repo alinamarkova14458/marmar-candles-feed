@@ -48,6 +48,6 @@ def test_hidden_mode(option):
 
 def test_cookie_set():
     r = get("/en/product/ciparu-svece-5/", allow_redirects=False)
-    assert "mm_lang=en" in r.headers.get("Set-Cookie", "")
+    assert 'document.cookie="mm_lang=en;' in r.text
     r = get("/product/ciparu-svece-5/", allow_redirects=False)
-    assert "mm_lang=lv" in r.headers.get("Set-Cookie", "")
+    assert 'document.cookie="mm_lang=lv;' in r.text

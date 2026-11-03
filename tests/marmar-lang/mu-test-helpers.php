@@ -19,3 +19,11 @@ if ( isset( $_GET['mm_pp'] ) ) {
 	add_filter( 'loop_shop_per_page', fn() => max( 1, (int) $_GET['mm_pp'] ), 999 );
 	add_filter( 'blocksy:woocommerce:products-per-page', fn() => max( 1, (int) $_GET['mm_pp'] ), 999 );
 }
+
+// [mm_count] — returns how many times it has been rendered in this request (detects double the_content runs).
+add_shortcode( 'mm_count', function () { static $n = 0; $n++; return 'MMCOUNT' . $n; } );
+
+// ?mm_cc=1 — appends a counter at the end of the_content (detects the pipeline running twice).
+if ( isset( $_GET['mm_cc'] ) ) {
+	add_filter( 'the_content', function ( $c ) { static $n = 0; $n++; return $c . ' MMFILTER' . $n; }, 99 );
+}

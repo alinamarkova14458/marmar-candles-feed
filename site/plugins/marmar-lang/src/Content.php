@@ -30,6 +30,64 @@ final class Content {
 		add_filter( 'woocommerce_variation_option_name', array( __CLASS__, 'option_name' ), 5, 3 );
 		add_filter( 'wp_nav_menu_objects', array( __CLASS__, 'menu' ), 5 );
 		add_action( 'template_redirect', array( __CLASS__, 'redirect_untranslated' ), 1 );
+		add_action( 'pre_get_posts', array( __CLASS__, 'only_translated' ) );
+		add_filter( 'woocommerce_shortcode_products_query', array( __CLASS__, 'only_translated_args' ) );
+		add_filter( 'woocommerce_related_products', array( __CLASS__, 'only_translated_ids' ) );
+		add_filter( 'woocommerce_product_get_upsell_ids', array( __CLASS__, 'only_translated_ids' ) );
+		add_filter( 'woocommerce_product_get_cross_sell_ids', array( __CLASS__, 'only_translated_ids' ) );
+		add_filter( 'rank_math/json_ld', array( __CLASS__, 'json_ld' ), 99 );
+	}
+
+	private static function translated_meta_clause(): array {
+		return array( 'key' => Store::key( self::lang(), 'title' ), 'value' => '', 'compare' => '!=' );
+	}
+
+	/** Listings (shop, categories, search) in a non-default language show only translated items. */
+	public static function only_translated( $q ): void {
+		if ( ! $q instanceof \WP_Query || $q->is_singular() || ( is_admin() && ! wp_doing_ajax() ) ) {
+			return;
+		}
+		$types   = (array) $q->get( 'post_type' );
+		$product = in_array( 'product', $types, true ) || $q->is_post_type_archive( 'product' ) || $q->is_tax( get_object_taxonomies( 'product' ) );
+		if ( ! $product && ! $q->is_search() && ! array_intersect( $types, array( 'post', 'page' ) ) ) {
+			return;
+		}
+		if ( 'nav_menu_item' === $q->get( 'post_type' ) ) {
+			return;
+		}
+		$meta   = (array) $q->get( 'meta_query' );
+		$meta[] = self::translated_meta_clause();
+		$q->set( 'meta_query', $meta );
+	}
+
+	public static function only_translated_args( $args ) {
+		$args['meta_query']   = isset( $args['meta_query'] ) ? (array) $args['meta_query'] : array();
+		$args['meta_query'][] = self::translated_meta_clause();
+		return $args;
+	}
+
+	public static function only_translated_ids( $ids ) {
+		return is_array( $ids ) ? array_values( array_filter( $ids, fn( $id ) => Store::has( 'post', (int) $id, self::lang() ) ) ) : $ids;
+	}
+
+	/** Rank Math schema: translated product name/description. */
+	public static function json_ld( $data ) {
+		if ( ! is_array( $data ) || ! is_singular( 'product' ) ) {
+			return $data;
+		}
+		$id   = (int) get_queried_object_id();
+		$name = self::tr( 'post', $id, 'title' );
+		$desc = self::tr( 'post', $id, 'excerpt' ) ?? self::tr( 'post', $id, 'content' );
+		foreach ( $data as $k => $entity ) {
+			$type = is_array( $entity ) ? (array) ( $entity['@type'] ?? array() ) : array();
+			if ( in_array( 'Product', $type, true ) ) {
+				if ( null !== $name ) {
+					$data[ $k ]['name'] = $name;
+				}
+				$data[ $k ]['description'] = null !== $desc ? wp_trim_words( wp_strip_all_tags( $desc ), 40, '…' ) : '';
+			}
+		}
+		return $data;
 	}
 
 	private static function lang(): string {
@@ -53,10 +111,7 @@ final class Content {
 		if ( $id && in_array( get_post_type( $id ), Store::POST_TYPES, true ) ) {
 			$t = self::tr( 'post', $id, 'content' );
 			if ( null !== $t ) {
-				remove_filter( 'the_content', array( __CLASS__, 'content' ), 5 );
-				$t = apply_filters( 'the_content', $t );
-				add_filter( 'the_content', array( __CLASS__, 'content' ), 5 );
-				return $t;
+				return $t; // priority 5: core filters (blocks, shortcodes, wpautop) run after us once
 			}
 		}
 		return $content;
@@ -155,6 +210,11 @@ final class Content {
 		if ( is_singular( Store::POST_TYPES ) ) {
 			$id = (int) get_queried_object_id();
 			if ( self::is_shop_system_page( $id ) || Store::has( 'post', $id, self::lang() ) ) {
+				return;
+			}
+		} elseif ( function_exists( 'is_shop' ) && is_shop() ) {
+			$id = (int) wc_get_page_id( 'shop' );
+			if ( $id <= 0 || Store::has( 'post', $id, self::lang() ) ) {
 				return;
 			}
 		} elseif ( is_tax() || is_category() ) {

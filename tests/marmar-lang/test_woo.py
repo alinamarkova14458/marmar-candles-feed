@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import requests
 
@@ -9,9 +10,18 @@ ADDR = {"first_name": "Anna", "last_name": "Test", "address_1": "Brīvības iela
         "postcode": "LV-1010", "country": "LV", "email": "anna@example.com", "phone": "+37120000000"}
 
 
+def visit(s, path):
+    """GET a page like a browser: run the inline script that sets the mm_lang cookie."""
+    r = s.get(SITE + path, timeout=60)
+    m = re.search(r'document\.cookie="mm_lang=([a-z]{2});', r.text)
+    if m:
+        s.cookies.set("mm_lang", m.group(1), path="/")
+    return r
+
+
 def shopper(lang_path):
     s = requests.Session()
-    s.get(SITE + lang_path, timeout=60)  # sets mm_lang cookie
+    visit(s, lang_path)
     r = s.get(SITE + "/wp-json/wc/store/v1/cart", timeout=60)
     s.headers["Nonce"] = r.headers.get("Nonce", "")
     return s
@@ -43,7 +53,7 @@ def test_store_api_cart_language(ids):
     s = shopper("/en/product/ciparu-svece-5/")
     cart = add_item(s, ids["simple"])
     assert cart["items"][0]["name"] == "Number candle “5”"
-    s.get(SITE + "/product/ciparu-svece-5/", timeout=60)  # back to Latvian
+    visit(s, "/product/ciparu-svece-5/")  # back to Latvian
     cart = s.get(SITE + "/wp-json/wc/store/v1/cart", timeout=60).json()
     assert cart["items"][0]["name"] == "Ciparu svece “5”"
 

@@ -14,7 +14,10 @@ final class Links {
 		if ( Router::current() === Languages::DEFAULT ) {
 			return;
 		}
-		foreach ( array( 'post_link', 'page_link', 'post_type_link', 'term_link', 'paginate_links', 'get_pagenum_link', 'attachment_link' ) as $f ) {
+		foreach ( array( 'post_link', 'page_link', 'post_type_link', 'term_link' ) as $f ) {
+			add_filter( $f, array( __CLASS__, 'current' ), 20, 2 );
+		}
+		foreach ( array( 'paginate_links', 'get_pagenum_link', 'attachment_link' ) as $f ) {
 			add_filter( $f, array( __CLASS__, 'current' ), 20 );
 		}
 		add_filter( 'home_url', array( __CLASS__, 'home_url' ), 20, 2 );
@@ -42,8 +45,23 @@ final class Links {
 		return $atts;
 	}
 
-	public static function current( $url ) {
-		return is_string( $url ) ? self::to_lang( $url, Router::current() ) : $url;
+	public static function current( $url, $obj = null ) {
+		if ( ! is_string( $url ) ) {
+			return $url;
+		}
+		// Links to items without a translation lead to their Latvian page.
+		$post_id = $obj instanceof \WP_Post ? (int) $obj->ID : ( is_numeric( $obj ) ? (int) $obj : 0 );
+		if ( $post_id && in_array( get_post_type( $post_id ), Store::POST_TYPES, true ) && ! self::is_system_page( $post_id ) && ! Store::has( 'post', $post_id, Router::current() ) ) {
+			return self::to_lang( $url, Languages::DEFAULT );
+		}
+		if ( $obj instanceof \WP_Term && Store::is_translatable_taxonomy( $obj->taxonomy ) && ! Store::has( 'term', (int) $obj->term_id, Router::current() ) ) {
+			return self::to_lang( $url, Languages::DEFAULT );
+		}
+		return self::to_lang( $url, Router::current() );
+	}
+
+	private static function is_system_page( int $id ): bool {
+		return function_exists( 'wc_get_page_id' ) && in_array( $id, array( wc_get_page_id( 'cart' ), wc_get_page_id( 'checkout' ), wc_get_page_id( 'myaccount' ), wc_get_page_id( 'shop' ) ), true );
 	}
 
 	public static function home_url( $url, $path ) {

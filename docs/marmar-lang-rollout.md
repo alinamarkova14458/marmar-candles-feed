@@ -11,12 +11,13 @@
 | # | Шаг | Кто |
 |---|---|---|
 | 1 | Резервная копия: UpdraftPlus → Backup Now | Алина |
+| 1a | Informācijas panelis → Atjauninājumi / Iestatījumi → Vispārīgi: установить английский (UK) — языковые пакеты en_GB для WordPress, WooCommerce, Blocksy, Rank Math (без них письма и кнопки на /en/ останутся латышскими) | Алина (Claude проверит список языков) |
 | 2 | Spraudņi → Pievienot jaunu → Augšupielādēt → `marmar-lang-0.1.0.zip` → Aktivizēt. Плагин сразу в **скрытом режиме**: покупатели ничего не видят | Алина |
 | 3 | Записать переводы через REST (поля `_mm_tr_en_*`) | Claude |
 | 4 | Проверить `/en/` как администратор: главная, категории, товары, корзина, оформление, письмо о заказе | Claude + Алина |
-| 5 | Выключить GPTranslate (Spraudņi → Deaktivizēt) | Алина |
+| 5 | Выключить GPTranslate (Spraudņi → Deaktivizēt). До «Publiski redzams» старые адреса /lv/ обслуживает GPTranslate, плагин их не перенаправляет | Алина |
 | 6 | Iestatījumi → MarMar Lang → «Publiski redzams» → Saglabāt | Алина |
-| 7 | LiteSpeed Cache → Purge All | Алина |
+| 7 | LiteSpeed Cache → Purge All. Проверить: страницы кэшируются (заголовок x-litespeed-cache: hit), корзина/оформление не кэшируются, /en/ → корзина на английском, возврат на lv → корзина на латышском | Алина + Claude |
 | 8 | Проверить, что `www.` → 301 на адрес без `www.` (уровень хостинга; если нет — правило в `.htaccess`) | Claude проверяет, Алина добавляет при необходимости |
 | 9 | Search Console → Sitemaps → добавить `https://marmarcandles.com/mm-sitemap-en.xml` | Claude/Алина |
 | 10 | Проверка позиций `/en/` и `/lv/`‑редиректов через 7 и 30 дней (Search Console) | Claude |
@@ -28,3 +29,5 @@ Spraudņi → MarMar Lang → Deaktivizēt (и снова включить GPTra
 - Адреса товаров на английском остаются с латышскими «хвостами» (`/en/product/ciparu-svece-5/`).
 - Подписи картинок (alt) не переводятся — показываются латышские.
 - Письмо «заметка покупателю» (customer note) уходит на языке сайта.
+- Ссылки внутри писем ведут на латышские страницы.
+- Мини‑корзина может на секунду показать названия на прежнем языке после переключения (кэш фрагментов WooCommerce).
