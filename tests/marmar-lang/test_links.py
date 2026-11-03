@@ -6,6 +6,7 @@ SERVICE = re.compile(r"/(wp-content|wp-json|wp-admin|wp-includes)/|/wp-login\.ph
 
 
 def site_urls(html):
+    html = re.sub(r'<link rel="alternate" hreflang=[^>]+>', "", html)  # hreflang points to other languages by design
     urls = re.findall(r'(?:href|src|action)=["\'](%s[^"\']*)["\']' % re.escape(SITE), html)
     return [u[len(SITE):] for u in urls]
 

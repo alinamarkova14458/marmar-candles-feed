@@ -60,6 +60,9 @@ $WP option update woocommerce_default_country LV
 $WP option update woocommerce_currency EUR
 $WP option update woocommerce_enable_guest_checkout yes
 $WP option update woocommerce_cod_settings '{"enabled":"yes","title":"Skaidrā naudā"}' --format=json
+$WP option update rank_math_is_configured 1
+$WP option update rank_math_registration_skip 1
+$WP option update rank_math_wizard_completed 1
 $WP plugin activate marmar-lang || true
 $WP eval-file "$HERE/fixtures.php"
 $WP rewrite flush --hard
