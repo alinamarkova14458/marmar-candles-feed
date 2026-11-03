@@ -36,6 +36,11 @@ final class Store {
 		}
 	}
 
+	/** Cheap check used on every get_term call. */
+	public static function is_translatable_taxonomy( string $tax ): bool {
+		return 'product_cat' === $tax || str_starts_with( $tax, 'pa_' );
+	}
+
 	/** product_cat + all WooCommerce attribute taxonomies (pa_*). */
 	public static function taxonomies(): array {
 		$taxes = array( 'product_cat' );

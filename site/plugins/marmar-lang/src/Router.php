@@ -22,7 +22,11 @@ final class Router {
 		}
 		$uri = $_SERVER['REQUEST_URI'] ?? '/';
 		if ( self::is_service( $uri ) ) {
-			self::$lang = self::from_cookie();
+			// Only the shop front (Store API / wc-ajax) follows the visitor's language;
+			// wp-admin and the editor REST API always stay in the default language.
+			if ( self::is_storefront_service( $uri ) ) {
+				self::$lang = self::from_cookie();
+			}
 		} elseif ( ! is_admin() ) {
 			self::route( $uri );
 		}
@@ -42,6 +46,12 @@ final class Router {
 		}
 		$q = (string) parse_url( $uri, PHP_URL_QUERY );
 		return str_contains( $q, 'wc-ajax=' ) || str_contains( $q, 'rest_route=' );
+	}
+
+	public static function is_storefront_service( string $uri ): bool {
+		$path = (string) parse_url( $uri, PHP_URL_PATH );
+		$q    = (string) parse_url( $uri, PHP_URL_QUERY );
+		return (bool) preg_match( '#^/wp-json/wc/store(/|$)#', $path ) || str_contains( $q, 'wc-ajax=' ) || str_contains( $q, 'rest_route=/wc/store' ) || str_contains( $q, 'rest_route=%2Fwc%2Fstore' );
 	}
 
 	private static function from_cookie(): string {
