@@ -111,6 +111,14 @@ $locations = get_theme_mod( 'nav_menu_locations', array() );
 foreach ( array( 'menu_1', 'menu_2', 'menu_mobile' ) as $loc ) { $locations[ $loc ] = $menu; }
 set_theme_mod( 'nav_menu_locations', $locations );
 
+// Shipping zone Latvia, flat rate 2 € (checkout needs a shipping method).
+$zone = new WC_Shipping_Zone();
+$zone->set_zone_name( 'Latvija' );
+$zone->add_location( 'LV', 'country' );
+$zone->save();
+$iid = $zone->add_shipping_method( 'flat_rate' );
+update_option( 'woocommerce_flat_rate_' . $iid . '_settings', array( 'title' => 'Pakomāts', 'cost' => '2', 'tax_status' => 'none' ) );
+
 update_option( 'mm_lang_public', true );
 update_option( 'mm_lang_enabled', array( 'en' ) );
 

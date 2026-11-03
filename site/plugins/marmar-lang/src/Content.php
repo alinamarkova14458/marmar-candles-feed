@@ -7,10 +7,14 @@ final class Content {
 		add_action( 'init', array( __CLASS__, 'hooks' ), 0 );
 	}
 
-	public static function hooks(): void {
-		if ( Router::current() === Languages::DEFAULT || ( is_admin() && ! wp_doing_ajax() ) ) {
+	private static bool $hooked = false;
+
+	/** Registers filters once; also called when an email switches to the order's language. */
+	public static function hooks( bool $force = false ): void {
+		if ( self::$hooked || Router::current() === Languages::DEFAULT || ( ! $force && is_admin() && ! wp_doing_ajax() ) ) {
 			return;
 		}
+		self::$hooked = true;
 		add_filter( 'the_title', array( __CLASS__, 'title' ), 5, 2 );
 		add_filter( 'the_content', array( __CLASS__, 'content' ), 5 );
 		add_filter( 'get_the_excerpt', array( __CLASS__, 'excerpt' ), 5, 2 );

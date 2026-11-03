@@ -12,8 +12,15 @@ final class Router {
 	/** Prefix found but language not enabled → 404. */
 	private static bool $disabled = false;
 
+	/** Temporary language for work outside the visitor's request (e.g. an email in the order's language). */
+	private static ?string $override = null;
+
 	public static function current(): string {
-		return self::$lang;
+		return self::$override ?? self::$lang;
+	}
+
+	public static function override( ?string $lang ): void {
+		self::$override = $lang;
 	}
 
 	public static function boot(): void {
