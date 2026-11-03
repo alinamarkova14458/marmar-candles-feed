@@ -1,0 +1,7 @@
+@font-face{font-family:S;src:url(file:///home/user/jalina-blog/public/fonts/DMSerifDisplay-400-latin.woff2)}
+@font-face{font-family:H;src:url(file:///home/user/jalina-blog/public/fonts/Caveat-700-latin.woff2)}
+@font-face{font-family:M;src:url(file:///home/user/jalina-blog/public/fonts/Manrope-400-latin.woff2)}
+*{box-sizing:border-box;margin:0}
+body{width:1000px;height:1500px;overflow:hidden;font-family:M;color:#2B1418;position:relative}
+.foot{position:absolute;bottom:0;left:0;right:0;height:88px;display:flex;align-items:center;justify-content:center;font-family:S;font-size:38px}
+.btn{display:inline-block;background:#9E1B32;color:#FFF7F3;font-weight:800;font-size:30px;letter-spacing:3px;text-transform:uppercase;padding:18px 38px;border-radius:999px}
