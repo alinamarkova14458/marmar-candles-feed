@@ -110,9 +110,10 @@ add_action( 'wp_footer', function () {
 				$('<span class="mm-lbl" aria-hidden="true"></span>').text(t).appendTo($li);
 			});
 			// Палитра-список: >8 вариантов — поле «Izvēlies krāsu · 27 krāsas ▾», по нажатию — список с названиями
-			$form.find('.woo-variation-items-wrapper').each(function () {
-				var $w = $(this), $items = $w.find('li.variable-item'), n = $items.length;
-				if (n <= 8) { return; }
+			// Ищем сами списки (класс обёртки плагин добавляет позже, чем срабатывает этот код)
+			$form.find('ul.variable-items-wrapper').each(function () {
+				var $ul = $(this), $w = $ul.parent(), $items = $ul.find('li.variable-item'), n = $items.length;
+				if (n <= 8 || $w.hasClass('mm-dd')) { return; }
 				$w.addClass('mm-dd');
 				var label = ($w.closest('tr').find('th.label label, .label label').first().text() || '').toLowerCase();
 				var isColor = label.indexOf('krās') > -1;
@@ -265,12 +266,12 @@ add_action( 'wp_head', function () {
 	body .woo-variation-items-wrapper ul.variable-items-wrapper li.variable-item{position:relative;overflow:visible!important;margin-bottom:34px!important}
 	.woo-variation-items-wrapper li.variable-item .mm-lbl{white-space:normal;position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);width:68px;font-size:11px;line-height:1.2;text-align:center;color:#6b5a5e;pointer-events:none}
 	/* 3c. Палитра-список */
-	.woo-variation-items-wrapper.mm-dd ul.variable-items-wrapper{display:none!important}
-	.woo-variation-items-wrapper.mm-dd.mm-open ul.variable-items-wrapper{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:2px 10px!important;padding:8px!important;margin:6px 0 0!important;background:#fff;border:1px solid #efd9dc;border-radius:12px;max-height:340px;overflow:auto}
-	body .woo-variation-items-wrapper.mm-dd ul.variable-items-wrapper li.variable-item{width:auto!important;height:auto!important;margin:0!important;display:flex!important;align-items:center;justify-content:flex-start!important;gap:10px;padding:7px 8px!important;border:0!important;box-shadow:none!important;border-radius:8px;background:none!important}
-	.woo-variation-items-wrapper.mm-dd li.variable-item.selected{background:#fbf0f1!important}
-	.woo-variation-items-wrapper.mm-dd li.variable-item .variable-item-contents{width:24px!important;height:24px!important;flex:none;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
-	.woo-variation-items-wrapper.mm-dd li.variable-item .mm-lbl{display:none!important}
+	.mm-dd > ul.variable-items-wrapper{display:none!important}
+	.mm-dd.mm-open > ul.variable-items-wrapper{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:2px 10px!important;padding:8px!important;margin:6px 0 0!important;background:#fff;border:1px solid #efd9dc;border-radius:12px;max-height:340px;overflow:auto}
+	body .mm-dd ul.variable-items-wrapper li.variable-item{width:auto!important;height:auto!important;margin:0!important;display:flex!important;align-items:center;justify-content:flex-start!important;gap:10px;padding:7px 8px!important;border:0!important;box-shadow:none!important;border-radius:8px;background:none!important}
+	.mm-dd li.variable-item.selected{background:#fbf0f1!important}
+	.mm-dd li.variable-item .variable-item-contents{width:24px!important;height:24px!important;flex:none;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+	.mm-dd li.variable-item .mm-lbl{display:none!important}
 	.mm-dd-name{font:400 14px/1.2 Montserrat,sans-serif;color:#3a3134;text-align:left}
 	.mm-dd-field{display:flex;align-items:center;gap:10px;width:100%;box-sizing:border-box;padding:11px 14px;background:#fff!important;border:1px solid #e3c9cd!important;border-radius:10px!important;font:500 15px Montserrat,sans-serif!important;color:#3a3134!important;text-transform:none!important;letter-spacing:0!important;cursor:pointer;min-height:0!important}
 	.mm-dd-field i{width:22px;height:22px;border-radius:50%;background:#eee;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
