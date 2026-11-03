@@ -1,3 +1,5 @@
 reports/
 link-report.md
 __pycache__/
+dist/
+.superpowers/
