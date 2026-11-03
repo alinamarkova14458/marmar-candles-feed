@@ -15,7 +15,6 @@
  *  6. Уменьшает кнопку AI-чата на телефоне и прячет её в корзине и оформлении заказа.
  *  7. Короткие названия на карточках каталога (сами названия товаров не меняются).
  *  8. Компактные карточки на телефоне, компактное окно cookies.
- *  9. Акцент цветом на пункте меню «Ziemassvētkiem».
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -214,8 +213,6 @@ add_action( 'wp_head', function () {
 		.cookie-notification .ct-button-group{flex:none;flex-direction:column!important;gap:6px!important}
 		.cookie-notification .ct-button{min-height:30px!important;padding:4px 12px!important;font-size:12px!important}
 	}
-	/* 9. Меню: «Ziemassvētkiem» — акцентным цветом */
-	.menu-item-24895 > a{color:#b0313f!important}
 	</style>
 	<?php
 } );
