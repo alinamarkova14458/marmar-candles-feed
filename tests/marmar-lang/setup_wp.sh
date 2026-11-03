@@ -52,8 +52,8 @@ $WP core install --url="$URL" --title="MarMar Test" --admin_user=admin --admin_p
 $WP rewrite structure '/%postname%/' --hard
 $WP plugin activate woocommerce seo-by-rank-math blocksy-companion
 $WP theme activate blocksy
-$WP option update WPLANG lv
-$WP language core install lv en_GB || true
+$WP language core install lv en_GB
+$WP site switch-language lv
 $WP language plugin install woocommerce lv en_GB || true
 $WP option update woocommerce_coming_soon no
 $WP option update woocommerce_default_country LV

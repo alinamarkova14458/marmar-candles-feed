@@ -41,7 +41,7 @@ function mm_lang_locale( string $lang ): string {
 
 /** Language of the current request. */
 function mm_lang_current(): string {
-	return class_exists( 'MarMarLang\\Router', false ) ? MarMarLang\Router::current() : mm_lang_default();
+	return MarMarLang\Router::current();
 }
 
 /** Same URL in another language. */
@@ -59,6 +59,6 @@ function mm_tr_has( string $kind, int $id, string $lang ): bool {
 	return MarMarLang\Store::has( $kind, $id, $lang );
 }
 
-foreach ( array( 'Store' ) as $mod ) {
+foreach ( array( 'Store', 'Router' ) as $mod ) {
 	call_user_func( array( 'MarMarLang\\' . $mod, 'boot' ) );
 }
