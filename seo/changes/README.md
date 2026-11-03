@@ -15,3 +15,4 @@
 | 03.11.2026 | Главная: значок «Izgatavojam ar rokām Rīgā» → «Ražots ar rokām Rīgā» | REST API, по просьбе Алины | `2026-11-03-page-452-home-before-razots.html` |
 | — | Сниппет `marmar-ux.php` v3: мобильное меню (плитки, светлый фон, доставка внизу), тексты «Izgatavojam / izsūtām / Mēs izmantojam», без ягодного цвета в меню | Алина заменяет код в WPCode | вернуть прежний код из истории git |
 | 03.11.2026 | Главная: блок «Kāpēc izvēlēties» на телефоне — ровная сетка 4 колонки по центру (был сдвиг влево) | REST API, по просьбе Алины | `2026-11-03-page-452-home-before-benefits-grid.html` |
+| 03.11.2026 | Главная: значок → «Roku darbs» | REST API, по просьбе Алины | `2026-11-03-page-452-home-before-roku-darbs.html` |
