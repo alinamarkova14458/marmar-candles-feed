@@ -1,0 +1,94 @@
+{
+ "menu": [
+  {
+   "id": 24895,
+   "old": "🎄 ZIEMASSVĒTKIEM 🎄",
+   "new": "Ziemassvētkiem",
+   "status": 200
+  },
+  {
+   "id": 23855,
+   "old": "🔥PIEEJAMS UZREIZ🔥",
+   "new": "Pieejams uzreiz",
+   "status": 200
+  },
+  {
+   "id": 23213,
+   "old": "🎂Dzimšanas dienas sveces",
+   "new": "Dzimšanas dienas sveces",
+   "status": 200
+  },
+  {
+   "id": 22992,
+   "old": "🔢Ciparu svecītes",
+   "new": "Ciparu svecītes",
+   "status": 200
+  }
+ ],
+ "cats": [
+  {
+   "id": 23,
+   "slug": "kuku-toperi",
+   "old": "🍭Kūku toperi",
+   "new": "Kūku toperi",
+   "status": 200,
+   "via": "wp/v2/product_cat"
+  },
+  {
+   "id": 122,
+   "slug": "davanas",
+   "old": "🎁Dāvanas",
+   "new": "Dāvanas",
+   "status": 200,
+   "via": "wp/v2/product_cat"
+  },
+  {
+   "id": 24,
+   "slug": "dzimsanas-dienas-sveces",
+   "old": "🎂Dzimšanas dienas sveces",
+   "new": "Dzimšanas dienas sveces",
+   "status": 200,
+   "via": "wp/v2/product_cat"
+  },
+  {
+   "id": 107,
+   "slug": "%f0%9f%8e%93apmacibas-un-meistarklases",
+   "old": "🎓Apmācības un Meistarklases",
+   "new": "Apmācības un Meistarklases",
+   "status": 200,
+   "via": "wp/v2/product_cat"
+  },
+  {
+   "id": 20,
+   "slug": "kazu-sveces",
+   "old": "💍Kāzu sveces",
+   "new": "Kāzu sveces",
+   "status": 200,
+   "via": "wp/v2/product_cat"
+  },
+  {
+   "id": 19,
+   "slug": "sveces-davanai",
+   "old": "💝Sveces dāvanai",
+   "new": "Sveces dāvanai",
+   "status": 200,
+   "via": "wp/v2/product_cat"
+  },
+  {
+   "id": 22,
+   "slug": "ciparu-sveces",
+   "old": "🔢Ciparu sveces",
+   "new": "Ciparu sveces",
+   "status": 200,
+   "via": "wp/v2/product_cat"
+  },
+  {
+   "id": 21,
+   "slug": "sveces-pieejamas-uzreiz",
+   "old": "🔥PIEEJAMS UZREIZ🔥",
+   "new": "Pieejams uzreiz",
+   "status": 200,
+   "via": "wp/v2/product_cat"
+  }
+ ]
+}

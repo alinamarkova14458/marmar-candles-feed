@@ -1,6 +1,6 @@
 <?php
 /**
- * MarMar UX — пачка 1 (03.11.2026)
+ * MarMar UX — пачки 1–2 (03.11.2026). Заменяет прежний сниппет «MarMar UX — пачка 1».
  *
  * Куда: WPCode → Add Snippet → "Add Your Custom Code" → тип "PHP Snippet",
  *       Location: "Run Everywhere" → Active → Save.
@@ -13,6 +13,9 @@
  *  4. Прячет «SKU: nav pieejams».
  *  5. Переводит баннер cookies на латышский и делает его компактным на телефоне.
  *  6. Уменьшает кнопку AI-чата на телефоне и прячет её в корзине и оформлении заказа.
+ *  7. Короткие названия на карточках каталога (сами названия товаров не меняются).
+ *  8. Компактные карточки на телефоне, компактное окно cookies.
+ *  9. Акцент цветом на пункте меню «Ziemassvētkiem».
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -111,6 +114,52 @@ add_action( 'wp_footer', function () {
 	<?php
 }, 99 );
 
+/* 7. Короткие названия на карточках (каталог, главная, похожие товары).
+      Название товара в базе, на странице товара, в корзине, в фиде и в Google не меняется. */
+function marmar_short_name( $name ) {
+	$name = trim( preg_replace( '/\s+/u', ' ', html_entity_decode( $name, ENT_QUOTES, 'UTF-8' ) ) );
+	$parts = array_map( 'trim', preg_split( '/\s*\|\s*/u', $name ) );
+	$main  = rtrim( array_shift( $parts ), ', ' );
+	$keep  = array();
+	foreach ( $parts as $p ) {
+		$p = trim( $p, ', ' );
+		if ( '' === $p ) { continue; }
+		// SEO-хвосты без новой информации
+		if ( preg_match( '/^(dzimšanas dienas (sveces|svecītes)( tortei| tortēm)?|(dekoratīvās|romantiskas|tievās) (kūkas |kūku )?(sveces|svecītes)( tortei| tortēm)?|sveces tortei|dzimšanas dienas tortei)$/iu', $p ) ) { continue; }
+		// ВЕРХНИЙ РЕГИСТР (цвет) → обычный
+		if ( mb_strtoupper( $p, 'UTF-8' ) === $p && preg_match( '/\p{L}/u', $p ) ) {
+			$p = mb_strtoupper( mb_substr( $p, 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_strtolower( mb_substr( $p, 1, null, 'UTF-8' ), 'UTF-8' );
+		}
+		$keep[] = $p;
+	}
+	// лишние слова в основной части
+	$main = preg_replace( '/\s+(tortēm un kūkām|kūkām un tortēm)\b/iu', '', $main );
+	$main = preg_replace( '/\s+no dabīgā vaska\b/iu', '', $main );
+	$main = preg_replace( '/\s+[–-]\s+(tievās\s+)?dzimšanas dienas (sveces|svecītes)( tortei| tortēm)?$/iu', '', $main );
+	$main = preg_replace( '/^Dabīgā vaska\s+/iu', '', $main );
+	$main = preg_replace( '/,\s*$/u', '', trim( $main ) );
+	$main = mb_strtoupper( mb_substr( $main, 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $main, 1, null, 'UTF-8' );
+	$out = $main;
+	foreach ( $keep as $k ) {
+		if ( mb_strlen( $out . ' · ' . $k, 'UTF-8' ) > 70 ) { break; }
+		$out .= ' · ' . $k;
+	}
+	return $out;
+}
+
+add_filter( 'the_title', function ( $title, $id = 0 ) {
+	if ( is_admin() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || is_feed() || ! $id || 'product' !== get_post_type( $id ) ) {
+		return $title;
+	}
+	if ( function_exists( 'is_product' ) && is_product() && (int) $id === (int) get_queried_object_id() ) {
+		return $title; // сам товар на своей странице — полное название
+	}
+	if ( doing_action( 'wp_head' ) || doing_filter( 'document_title_parts' ) || doing_filter( 'wp_title' ) ) {
+		return $title;
+	}
+	return esc_html( marmar_short_name( $title ) );
+}, 20, 2 );
+
 /* 5a. Баннер cookies (Blocksy) по-латышски — работает, если текст в теме не менялся вручную */
 add_filter( 'gettext', function ( $translation, $text, $domain ) {
 	if ( 'blocksy-companion' !== $domain && 'blocksy' !== $domain ) {
@@ -153,6 +202,20 @@ add_action( 'wp_head', function () {
 		.marmar-ai-launch{transform:scale(.78);transform-origin:bottom right}
 	}
 	.woocommerce-cart .marmar-ai-root,.woocommerce-checkout .marmar-ai-root{display:none!important}
+	/* 7–8. Карточки каталога на телефоне */
+	@media (max-width:689px){
+		ul.products li.product .woocommerce-loop-product__title{font-size:14px!important;line-height:1.28!important}
+		ul.products li.product .button{padding:8px 10px!important;min-height:0!important;font-size:12px!important}
+	}
+	/* 8. Cookies — одна строка: текст слева, кнопки справа */
+	@media (max-width:689px){
+		.cookie-notification .container{padding:6px 0!important;flex-direction:row!important;align-items:center!important;gap:10px!important}
+		.cookie-notification .ct-cookies-content{flex:1;text-align:left!important;margin:0!important;font-size:12px!important}
+		.cookie-notification .ct-button-group{flex:none;flex-direction:column!important;gap:6px!important}
+		.cookie-notification .ct-button{min-height:30px!important;padding:4px 12px!important;font-size:12px!important}
+	}
+	/* 9. Меню: «Ziemassvētkiem» — акцентным цветом */
+	.menu-item-24895 > a{color:#b0313f!important}
 	</style>
 	<?php
 } );
