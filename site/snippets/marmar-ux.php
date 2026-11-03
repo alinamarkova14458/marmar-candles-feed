@@ -1,6 +1,6 @@
 <?php
 /**
- * MarMar UX — пачки 1–2 (03.11.2026). Заменяет прежний сниппет «MarMar UX — пачка 1».
+ * MarMar UX — пачки 1–2 + мобильное меню (03.11.2026). Заменяет прежний сниппет «MarMar UX — пачка 1».
  *
  * Куда: WPCode → Add Snippet → "Add Your Custom Code" → тип "PHP Snippet",
  *       Location: "Run Everywhere" → Active → Save.
@@ -15,6 +15,7 @@
  *  6. Уменьшает кнопку AI-чата на телефоне и прячет её в корзине и оформлении заказа.
  *  7. Короткие названия на карточках каталога (сами названия товаров не меняются).
  *  8. Компактные карточки на телефоне, компактное окно cookies.
+ * 10. Мобильное меню: светлый фон, 4 плитки с фото, доставка и ссылки внизу.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -57,8 +58,8 @@ add_action( 'woocommerce_after_add_to_cart_form', function () {
 		return;
 	}
 	$make = ( 'ready' === $mode )
-		? '<b>Jau gatava</b> — izsūtu 1–2 darba dienās pēc apmaksas'
-		: '<b>Izgatavoju ar rokām 5–7 darba dienās</b><br>Steidzami? +5 € — gatavs 2 darba dienās';
+		? '<b>Jau gatava</b> — izsūtām 1–2 darba dienās pēc apmaksas'
+		: '<b>Izgatavojam ar rokām 5–7 darba dienās</b><br>Steidzami? +5 € — gatavs 2 darba dienās';
 	?>
 	<div class="mm-info" role="note">
 		<div><span class="mm-ic" aria-hidden="true">🕯️</span><span><?php echo wp_kses_post( $make ); ?></span></div>
@@ -159,13 +160,51 @@ add_filter( 'the_title', function ( $title, $id = 0 ) {
 	return esc_html( marmar_short_name( $title ) );
 }, 20, 2 );
 
+/* 10. Мобильное меню: плитки с фото сверху, доставка и ссылки внизу.
+       Плитки меняются здесь (название, картинка, адрес категории). */
+add_action( 'wp_footer', function () {
+	$u     = content_url( 'uploads/' );
+	$tiles = array(
+		array( 'Ziemassvētki', '2026/08/sarkanas-bordo-ziemassvetku-sveces-300x300.png', 'product-category/ziemassvetku-sveces/' ),
+		array( 'Ciparu sveces', '2026/04/dabiga-vaska-ciparu-svece-roza-cipars-9-300x300.webp', 'product-category/tortes-sveces/ciparu-sveces/' ),
+		array( 'Kūku toperi', '2026/04/kuku-toperi-putninas-uz-tortes-300x300.webp', 'product-category/kuku-toperi/' ),
+		array( 'Kāzām', '2026/04/Generated20Image20January202720202620-202_01PM-663822c3-300x300.jpg', 'product-category/kazu-sveces/' ),
+	);
+	$base  = home_url( '/lv/' );
+	$html  = '<div class="mmn-tiles">';
+	foreach ( $tiles as $t ) {
+		$html .= '<a class="mmn-tile" href="' . esc_url( $base . $t[2] ) . '"><img src="' . esc_url( $u . $t[1] ) . '" alt="" loading="lazy" width="300" height="300"><span>' . esc_html( $t[0] ) . '</span></a>';
+	}
+	$html .= '</div>';
+	$foot  = '<div class="mmn-foot">📦 <b>Piegāde visā Latvijā</b> no 2&nbsp;€ · bez maksas no 50&nbsp;€<br>🕯️ Izgatavojam 5–7 darba dienās · steidzami +5&nbsp;€<div class="lnk">'
+		. '<a href="' . esc_url( $base . 'piegade/' ) . '">Piegāde</a><a href="' . esc_url( $base . 'apmaksa/' ) . '">Apmaksa</a>'
+		. '<a href="' . esc_url( $base . 'biezak-uzdotie-jautajumi/' ) . '">BUJ</a><a href="' . esc_url( $base . 'kontakti/' ) . '">Kontakti</a></div></div>';
+	?>
+	<script>
+	(function () {
+		var TILES = <?php echo wp_json_encode( $html ); ?>, FOOT = <?php echo wp_json_encode( $foot ); ?>;
+		function build() {
+			var nav = document.querySelector('#offcanvas .mobile-menu');
+			if (!nav || document.querySelector('#offcanvas .mmn-tiles')) { return; }
+			nav.insertAdjacentHTML('beforebegin', TILES);
+			nav.insertAdjacentHTML('afterend', FOOT);
+			var h = document.querySelector('#offcanvas .ct-panel-heading');
+			if (h) { h.textContent = 'MarMar Candles'; }
+		}
+		if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', build); } else { build(); }
+		document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.ct-header-trigger')) { setTimeout(build, 50); } });
+	})();
+	</script>
+	<?php
+}, 100 );
+
 /* 5a. Баннер cookies (Blocksy) по-латышски — работает, если текст в теме не менялся вручную */
 add_filter( 'gettext', function ( $translation, $text, $domain ) {
 	if ( 'blocksy-companion' !== $domain && 'blocksy' !== $domain ) {
 		return $translation;
 	}
 	$map = array(
-		'We use cookies to ensure that we give you the best experience on our website.' => 'Es izmantoju sīkdatnes, lai vietne darbotos ērti un tu vieglāk atrastu savu sveci.',
+		'We use cookies to ensure that we give you the best experience on our website.' => 'Mēs izmantojam sīkdatnes, lai vietne darbotos ērti un tu vieglāk atrastu savu sveci.',
 		'Accept'  => 'Piekrītu',
 		'Decline' => 'Atteikties',
 	);
@@ -213,6 +252,30 @@ add_action( 'wp_head', function () {
 		.cookie-notification .ct-button-group{flex:none;flex-direction:column!important;gap:6px!important}
 		.cookie-notification .ct-button{min-height:30px!important;padding:4px 12px!important;font-size:12px!important}
 	}
+	/* 10. Мобильное меню */
+	#offcanvas .ct-panel-inner{background:#fdf7f5!important;margin:0!important;inset:0!important;width:100%!important;max-width:100%!important;height:100%!important;max-height:none!important;border-radius:0!important;box-shadow:none!important}
+	#offcanvas .ct-panel-actions{padding:14px 18px 6px!important}
+	#offcanvas .ct-panel-heading{color:#7a4a5a!important;font-family:'Cormorant Garamond',serif;font-size:22px!important;font-weight:600;text-transform:none!important;letter-spacing:0!important}
+	#offcanvas .ct-toggle-close{color:#7a4a5a!important}
+	#offcanvas .ct-toggle-close svg{fill:#7a4a5a!important}
+	#offcanvas .ct-panel-content-inner{padding:0 18px 24px!important}
+	.mmn-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 18px}
+	.mmn-tile{position:relative;display:block;border-radius:14px;overflow:hidden;aspect-ratio:1.7;text-decoration:none!important}
+	.mmn-tile img{width:100%;height:100%;object-fit:cover;display:block}
+	.mmn-tile span{position:absolute;left:0;right:0;bottom:0;padding:18px 10px 8px;background:linear-gradient(transparent,rgba(58,30,40,.72));color:#fff;font:600 14px Montserrat,sans-serif}
+	#offcanvas .mobile-menu > ul > li{border-bottom:1px solid #f0dfe2!important;margin:0!important}
+	#offcanvas .mobile-menu a.ct-menu-link{color:#3a3134!important;font-size:16px!important;font-weight:500!important;padding:13px 0!important;text-transform:none!important;letter-spacing:0!important}
+	#offcanvas .mobile-menu .current-menu-item > a{color:#b0606d!important}
+	#offcanvas .mobile-menu .sub-menu{padding:0 0 8px 14px!important}
+	#offcanvas .mobile-menu .sub-menu a.ct-menu-link{font-size:15px!important;color:#6b5a5e!important;padding:8px 0!important;font-weight:400!important}
+	#offcanvas .mobile-menu .sub-menu li:before{display:none!important}
+	#offcanvas .mobile-menu .ct-toggle-dropdown-mobile, #offcanvas .mobile-menu .ct-toggle-dropdown-mobile svg{color:#b0606d!important;fill:#b0606d!important}
+	.mmn-foot{margin-top:18px;padding:14px;border-radius:12px;background:#fff;border:1px solid #f0dfe2;font:400 13.5px/1.5 Montserrat,sans-serif;color:#3a3134}
+	.mmn-foot b{color:#7a4a5a}
+	.mmn-foot .lnk{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap}
+	.mmn-foot .lnk a{color:#b0606d!important;text-decoration:underline;font-size:13px}
+	#offcanvas .ct-header-socials{margin-top:14px!important}
+	#offcanvas .ct-header-socials svg{fill:#7a4a5a!important}
 	</style>
 	<?php
 } );
