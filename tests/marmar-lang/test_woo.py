@@ -95,5 +95,6 @@ def test_admin_status_change_email_keeps_order_language(ids, wpcli):
     wpcli("eval", f'wc_get_order({oid})->update_status("completed");')
     new = [m for m in mails()[before:] if "anna@example.com" in str(m["to"])]
     assert new, "no completed email"
-    assert "complete" in new[0]["subject"].lower()
+    assert new[0]["subject"].startswith("Your ")  # English template (exact wording varies by WooCommerce version)
+    assert "pasūtījums" not in new[0]["subject"]
     assert "Number candle" in new[0]["message"]

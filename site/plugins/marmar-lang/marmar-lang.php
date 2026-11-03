@@ -59,6 +59,6 @@ function mm_tr_has( string $kind, int $id, string $lang ): bool {
 	return MarMarLang\Store::has( $kind, $id, $lang );
 }
 
-foreach ( array( 'Store', 'Router', 'Links', 'Content', 'Seo', 'Sitemap', 'Woo' ) as $mod ) {
+foreach ( array( 'Store', 'Router', 'Links', 'Content', 'Seo', 'Sitemap', 'Woo', 'Admin' ) as $mod ) {
 	call_user_func( array( 'MarMarLang\\' . $mod, 'boot' ) );
 }
