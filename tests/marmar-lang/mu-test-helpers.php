@@ -13,3 +13,9 @@ add_filter( 'pre_wp_mail', function ( $null, $atts ) {
 	}
 	return true;
 }, 10, 2 );
+
+// ?mm_pp=N — fewer products per page so pagination appears with few fixtures.
+if ( isset( $_GET['mm_pp'] ) ) {
+	add_filter( 'loop_shop_per_page', fn() => max( 1, (int) $_GET['mm_pp'] ), 999 );
+	add_filter( 'blocksy:woocommerce:products-per-page', fn() => max( 1, (int) $_GET['mm_pp'] ), 999 );
+}

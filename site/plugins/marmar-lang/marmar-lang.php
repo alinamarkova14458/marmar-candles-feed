@@ -46,7 +46,7 @@ function mm_lang_current(): string {
 
 /** Same URL in another language. */
 function mm_lang_url( string $url, string $lang ): string {
-	return class_exists( 'MarMarLang\\Links' ) ? MarMarLang\Links::to_lang( $url, $lang ) : $url;
+	return MarMarLang\Links::to_lang( $url, $lang );
 }
 
 /** Translation of one field, or null when empty/missing. $kind = 'post' | 'term'. */
@@ -59,6 +59,6 @@ function mm_tr_has( string $kind, int $id, string $lang ): bool {
 	return MarMarLang\Store::has( $kind, $id, $lang );
 }
 
-foreach ( array( 'Store', 'Router' ) as $mod ) {
+foreach ( array( 'Store', 'Router', 'Links' ) as $mod ) {
 	call_user_func( array( 'MarMarLang\\' . $mod, 'boot' ) );
 }

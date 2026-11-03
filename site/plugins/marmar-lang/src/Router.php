@@ -85,7 +85,7 @@ final class Router {
 			self::$lang = Languages::DEFAULT;
 			return;
 		}
-		wp_safe_redirect( home_url( $_SERVER['REQUEST_URI'] ?? '/' ), 302 );
+		wp_redirect( home_url_early( $_SERVER['REQUEST_URI'] ?? '/' ), 302 );
 		exit;
 	}
 
