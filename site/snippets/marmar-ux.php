@@ -16,7 +16,7 @@
  *  7. Короткие названия на карточках каталога (сами названия товаров не меняются).
  *  8. Компактные карточки на телефоне, компактное окно cookies.
  * 10. Мобильное меню: светлый фон, 4 плитки с фото, доставка и ссылки внизу.
- * 11. Компактная палитра: >8 вариантов без подписей, >14 — 2 ряда и «Rādīt visas krāsas».
+ * 11. Палитра-список: >8 вариантов — поле с выбранным цветом и выпадающий список с названиями.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -109,21 +109,37 @@ add_action( 'wp_footer', function () {
 				t = t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
 				$('<span class="mm-lbl" aria-hidden="true"></span>').text(t).appendTo($li);
 			});
-			// Компактная палитра: >8 вариантов — без подписей; >14 — 2 ряда и кнопка «Rādīt visas…»
+			// Палитра-список: >8 вариантов — поле «Izvēlies krāsu · 27 krāsas ▾», по нажатию — список с названиями
 			$form.find('.woo-variation-items-wrapper').each(function () {
 				var $w = $(this), $items = $w.find('li.variable-item'), n = $items.length;
 				if (n <= 8) { return; }
-				$w.addClass('mm-many');
-				if (n <= 14) { return; }
-				$w.addClass('mm-collapsed');
+				$w.addClass('mm-dd');
 				var label = ($w.closest('tr').find('th.label label, .label label').first().text() || '').toLowerCase();
-				var txt = label.indexOf('krās') > -1 ? 'Rādīt visas krāsas (' + n + ') ▾' : 'Rādīt visus variantus (' + n + ') ▾';
-				var $b = $('<button type="button" class="mm-more"></button>').text(txt).appendTo($w);
-				$b.on('click', function () { $w.removeClass('mm-collapsed'); $b.remove(); });
-				// если выбран скрытый вариант — сразу раскрываем
-				$form.on('woocommerce_variation_select_change show_variation', function () {
-					if ($w.find('li.variable-item.selected').index() >= 14) { $w.removeClass('mm-collapsed'); $b.remove(); }
+				var isColor = label.indexOf('krās') > -1;
+				var ph = isColor ? 'Izvēlies krāsu' : 'Izvēlies variantu';
+				var cnt = n + (isColor ? ' krāsas' : ' varianti') + ' ▾';
+				var $f = $('<button type="button" class="mm-dd-field" aria-expanded="false"><i></i><span></span><b></b></button>');
+				$f.find('b').text(cnt);
+				$w.prepend($f);
+				$items.each(function () {
+					var $li = $(this);
+					if (!$li.find('.mm-dd-name').length) { $('<span class="mm-dd-name"></span>').text($li.attr('title') || $li.data('title') || '').appendTo($li); }
 				});
+				function sync() {
+					var $sel = $items.filter('.selected').first();
+					if ($sel.length) {
+						$f.find('span').text($sel.attr('title') || '');
+						$f.find('i').css('background', $sel.find('.variable-item-span').css('background-color') || '').addClass('on');
+					} else {
+						$f.find('span').text(ph);
+						$f.find('i').css('background', '').removeClass('on');
+					}
+				}
+				function toggle(open) { $w.toggleClass('mm-open', open); $f.attr('aria-expanded', open ? 'true' : 'false'); }
+				$f.on('click', function () { toggle(!$w.hasClass('mm-open')); });
+				$items.on('click', function () { setTimeout(function () { sync(); toggle(false); }, 30); });
+				$form.on('woocommerce_variation_select_change reset_data show_variation', function () { setTimeout(sync, 30); });
+				sync();
 			});
 		});
 	})(window.jQuery);
@@ -248,12 +264,17 @@ add_action( 'wp_head', function () {
 	.woo-variation-items-wrapper ul.variable-items-wrapper{align-items:flex-start;column-gap:34px!important;row-gap:2px!important;padding-left:18px!important}
 	body .woo-variation-items-wrapper ul.variable-items-wrapper li.variable-item{position:relative;overflow:visible!important;margin-bottom:34px!important}
 	.woo-variation-items-wrapper li.variable-item .mm-lbl{white-space:normal;position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);width:68px;font-size:11px;line-height:1.2;text-align:center;color:#6b5a5e;pointer-events:none}
-	/* 3c. Компактная палитра */
-	.woo-variation-items-wrapper.mm-many ul.variable-items-wrapper{display:grid!important;grid-template-columns:repeat(7,1fr)!important;gap:10px!important;padding-left:0!important;max-width:360px}
-	body .woo-variation-items-wrapper.mm-many ul.variable-items-wrapper li.variable-item{margin:0!important;width:38px!important;height:38px!important}
-	.woo-variation-items-wrapper.mm-many li.variable-item .mm-lbl{display:none!important}
-	.woo-variation-items-wrapper.mm-collapsed li.variable-item:nth-child(n+15){display:none!important}
-	.mm-more{display:inline-block;margin-top:10px;font:600 13px Montserrat,sans-serif;color:#b0606d;background:none;border:1px solid #e8c9cd;border-radius:999px;padding:6px 14px;cursor:pointer}
+	/* 3c. Палитра-список */
+	.woo-variation-items-wrapper.mm-dd ul.variable-items-wrapper{display:none!important}
+	.woo-variation-items-wrapper.mm-dd.mm-open ul.variable-items-wrapper{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:2px 10px!important;padding:8px!important;margin:6px 0 0!important;background:#fff;border:1px solid #efd9dc;border-radius:12px;max-height:340px;overflow:auto}
+	body .woo-variation-items-wrapper.mm-dd ul.variable-items-wrapper li.variable-item{width:auto!important;height:auto!important;margin:0!important;display:flex!important;align-items:center;justify-content:flex-start!important;gap:10px;padding:7px 8px!important;border:0!important;box-shadow:none!important;border-radius:8px;background:none!important}
+	.woo-variation-items-wrapper.mm-dd li.variable-item.selected{background:#fbf0f1!important}
+	.woo-variation-items-wrapper.mm-dd li.variable-item .variable-item-contents{width:24px!important;height:24px!important;flex:none;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+	.woo-variation-items-wrapper.mm-dd li.variable-item .mm-lbl{display:none!important}
+	.mm-dd-name{font:400 14px/1.2 Montserrat,sans-serif;color:#3a3134;text-align:left}
+	.mm-dd-field{display:flex;align-items:center;gap:10px;width:100%;box-sizing:border-box;padding:11px 14px;background:#fff!important;border:1px solid #e3c9cd!important;border-radius:10px!important;font:500 15px Montserrat,sans-serif!important;color:#3a3134!important;text-transform:none!important;letter-spacing:0!important;cursor:pointer;min-height:0!important}
+	.mm-dd-field i{width:22px;height:22px;border-radius:50%;background:#eee;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+	.mm-dd-field b{margin-left:auto;color:#b0606d;font-weight:400;white-space:nowrap}
 	/* 4. SKU */
 	.product_meta .sku_wrapper{display:none!important}
 	/* 5b. Cookies — компактная полоска на телефоне */
