@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Filters
  * Description:       Фильтры на страницах магазина и категорий: подкатегория, цена, «Pieejams uzreiz», дизайн, цвет. Колонка слева на компьютере, кнопка «Filtri» на телефоне. Страницы с фильтрами закрыты от индексации.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Filters {
 
-	const VERSION   = '1.0.0';
+	const VERSION   = '1.0.1';
 	const READY_CAT = 'sveces-pieejamas-uzreiz';
 
 	/** Атрибуты-фильтры: slug без pa_ => заголовок. */
@@ -253,7 +253,7 @@ final class MarMar_Filters {
 		$on  = ! empty( $_GET['mm_ready'] ); // phpcs:ignore WordPress.Security.NonceVerification
 		$url = $on ? remove_query_arg( 'mm_ready', self::base_url() ) : add_query_arg( 'mm_ready', 1, self::base_url() );
 		echo '<section class="mm-group"><h3 class="mm-group__title">Pieejamība</h3><ul class="mm-list mm-list--check">';
-		echo '<li' . ( $on ? ' class="is-active"' : '' ) . '><a href="' . esc_url( $url ) . '" rel="nofollow">Pieejams uzreiz <small>(bez gaidīšanas)</small></a></li>';
+		echo '<li' . ( $on ? ' class="is-active"' : '' ) . '><a href="' . esc_url( $url ) . '" rel="nofollow">Pieejams uzreiz</a></li>';
 		echo '</ul></section>';
 	}
 
