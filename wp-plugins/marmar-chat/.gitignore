@@ -1,0 +1,4 @@
+dist/
+vendor/
+vendor-prefixed/
+composer.lock
