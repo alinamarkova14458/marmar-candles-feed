@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Filters
  * Description:       Фильтры на страницах магазина и категорий: подкатегория, цена, «Pieejams uzreiz», дизайн, цвет. Колонка слева на компьютере, кнопка «Filtri» на телефоне. Страницы с фильтрами закрыты от индексации.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Filters {
 
-	const VERSION   = '1.0.1';
+	const VERSION   = '1.0.2';
 	const READY_CAT = 'sveces-pieejamas-uzreiz';
 
 	/** Атрибуты-фильтры: slug без pa_ => заголовок. */
