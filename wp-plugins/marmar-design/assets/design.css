@@ -272,3 +272,8 @@ body.mmd { overflow-x: clip; }
 .mmh-badge .mmh-flame { width: 11px; height: 14px; background: var(--mmd-btn); }
 .mmh-ready [data-products] .ct-media-container { background: #FFFFFF; }
 .mmh-ready .mmh-all-wrap { margin-top: 22px; }
+
+/* Bloki, kas citādi saplūst ar krēmkrāsas fonu */
+.mmh-wed { background: #FFFFFF; border: 1px solid var(--mmd-line); box-shadow: 0 10px 30px rgba(80, 60, 64, .08); }
+.mmh-steps > div { padding: 22px 18px; background: #FFFFFF; border: 1px solid var(--mmd-line); border-radius: 20px; box-shadow: 0 8px 22px rgba(80, 60, 64, .06); }
+@media (max-width: 767px) { .mmh-steps { gap: 12px; } .mmh-steps > div { padding: 18px 16px; } }
