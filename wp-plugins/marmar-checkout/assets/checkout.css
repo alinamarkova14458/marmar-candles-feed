@@ -42,3 +42,11 @@
 .mmco-eta small { color: var(--mmco-muted); }
 .mmco-trust { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 12px 0 0; font-size: 13px; color: var(--mmco-muted); text-align: center; }
 .mmco-dot { opacity: .6; }
+
+/* Срочный заказ на оформлении */
+.mmco-fast { display: flex; gap: 12px; align-items: flex-start; margin: 0 0 14px; padding: 12px 14px; background: #fff; border: 1.5px solid var(--mmco-line, #eee3e1); border-radius: 12px; cursor: pointer; font-size: 14px; --mmco-accent: #c88a85; --mmco-soft: #f8f2f1; --mmco-muted: #8a7f83; }
+.mmco-fast input { accent-color: var(--mmco-accent); width: 20px; height: 20px; margin: 2px 0 0; flex: 0 0 auto; }
+.mmco-fast-text { display: grid; gap: 2px; }
+.mmco-fast small { color: var(--mmco-muted); }
+.mmco-fast.is-on { border-color: var(--mmco-accent); background: var(--mmco-soft); }
+.mmco-fast.is-busy { opacity: .6; pointer-events: none; }

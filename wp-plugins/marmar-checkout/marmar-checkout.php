@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.1.1
+ * Version:           1.2.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.1.1';
+	const VERSION = '1.2.0';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -21,8 +21,8 @@ final class MarMar_Checkout {
 			array(
 				'free_shipping_from' => 50,
 				'min_order'          => 5,   // должен совпадать со сниппетом «Minimum Order 5 EUR»
-				'make_days'          => array( 5, 7 ),  // обычное изготовление, рабочие дни
-				'make_days_express'  => array( 1, 2 ),  // срочное
+				'make_days'          => array( 5, 7 ),  // изготовление, КАЛЕНДАРНЫЕ дни (мастерская работает и в выходные)
+				'make_days_express'  => array( 1, 2 ),  // срочное изготовление, календарные дни
 				'ship_days'          => array( 1, 2 ),  // доставка в пакомат
 				'express_fee_name'   => 'Steidzams pasūtījums',
 			)
@@ -37,10 +37,32 @@ final class MarMar_Checkout {
 		// Минимальный заказ (заменяет сниппет WPCode «Minimum Order 5 EUR»).
 		add_action( 'woocommerce_check_cart_items', array( __CLASS__, 'check_minimum' ) );
 		add_action( 'woocommerce_checkout_process', array( __CLASS__, 'check_minimum' ) );
+		// Переключатель срочного заказа на оформлении: обновление корзины без перезагрузки (Store API).
+		add_action( 'woocommerce_blocks_loaded', array( __CLASS__, 'register_express_update' ) );
 	}
 
 	private static function on_cart_or_checkout() {
 		return function_exists( 'is_cart' ) && ( is_cart() || ( is_checkout() && ! is_order_received_page() ) );
+	}
+
+	/**
+	 * Флаг срочного заказа хранится в сессии под тем же ключом, что использует сниппет «+5eur»
+	 * (он и добавляет плату 5 € при пересчёте корзины).
+	 */
+	public static function register_express_update() {
+		if ( ! function_exists( 'woocommerce_store_api_register_update_callback' ) ) {
+			return;
+		}
+		woocommerce_store_api_register_update_callback(
+			array(
+				'namespace' => 'marmar-express',
+				'callback'  => function ( $data ) {
+					if ( WC()->session ) {
+						WC()->session->set( 'marmar_express_order', ! empty( $data['express'] ) );
+					}
+				},
+			)
+		);
 	}
 
 	/** Сумма товаров с НДС, без доставки и доплат. */
@@ -101,8 +123,9 @@ final class MarMar_Checkout {
 		$c    = self::cfg();
 		$make = $express ? $c['make_days_express'] : $c['make_days'];
 		$now  = new DateTimeImmutable( 'now', wp_timezone() );
-		$from = self::add_workdays( $now, $make[0] + $c['ship_days'][0] );
-		$to   = self::add_workdays( $now, $make[1] + $c['ship_days'][1] );
+		// Изготовление — календарные дни, доставка в пакомат — рабочие.
+		$from = self::add_workdays( $now->modify( '+' . (int) $make[0] . ' days' ), $c['ship_days'][0] );
+		$to   = self::add_workdays( $now->modify( '+' . (int) $make[1] . ' days' ), $c['ship_days'][1] );
 		return array( 'from' => $from->format( 'Y-m-d' ), 'to' => $to->format( 'Y-m-d' ), 'express' => (bool) $express );
 	}
 
@@ -124,7 +147,7 @@ final class MarMar_Checkout {
 		?>
 		<div class="mmco-info">
 			<div class="mmco-chips">
-				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">🕯️</span><span><strong>Gatavs <?php echo esc_html( $c['make_days'][0] . '–' . $c['make_days'][1] ); ?> darba dienās</strong><br><small>Steidzami — <?php echo esc_html( $c['make_days_express'][1] ); ?> d.d. (+5 €)</small></span></div>
+				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">🕯️</span><span><strong>Gatavs <?php echo esc_html( $c['make_days'][0] . '–' . $c['make_days'][1] ); ?> dienās</strong><br><small>Steidzami — <?php echo esc_html( $c['make_days_express'][0] . '–' . $c['make_days_express'][1] ); ?> dienās (+5 €)</small></span></div>
 				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">📦</span><span><strong>Pakomātā no 2 €</strong><br><small>Bez maksas no <?php echo esc_html( $c['free_shipping_from'] ); ?> €</small></span></div>
 				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">🛒</span><span><strong>Minimālais pasūtījums <?php echo esc_html( $c['min_order'] ); ?> €</strong><br><small>bez piegādes</small></span></div>
 				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">📍</span><span><strong>Saņemšana Rīgā</strong><br><small>Iļģuciemā, saskaņojot laiku</small></span></div>
@@ -135,7 +158,7 @@ final class MarMar_Checkout {
 					<li>Minimālā pasūtījuma summa — 5 € (bez piegādes).</li>
 					<li>Piegāde uz Omniva, DPD, Venipak un Unisend pakomātiem visā Latvijā: 2,00–4,50 €, no <?php echo esc_html( $c['free_shipping_from'] ); ?> € — bez maksas.</li>
 					<li>Saņemšana Rīgā, Iļģuciemā (Jaunsaules iela 7a), iepriekš saskaņojot laiku.</li>
-					<li>Izgatavošana: <?php echo esc_html( $c['make_days'][0] . '–' . $c['make_days'][1] ); ?> darba dienas pēc apmaksas. Steidzams pasūtījums: +5 €, līdz <?php echo esc_html( $c['make_days_express'][1] ); ?> darba dienām.</li>
+					<li>Izgatavošana: <?php echo esc_html( $c['make_days'][0] . '–' . $c['make_days'][1] ); ?> dienas pēc apmaksas (strādājam arī brīvdienās). Steidzams pasūtījums: +5 €, <?php echo esc_html( $c['make_days_express'][0] . '–' . $c['make_days_express'][1] ); ?> dienas. Piegāde uz pakomātu — 1–2 darba dienas.</li>
 					<li>Sūtījuma izsekošanas saiti atsūtīsim e-pastā, kad pasūtījums būs ceļā.</li>
 				</ul>
 			</details>
@@ -177,6 +200,8 @@ final class MarMar_Checkout {
 					'etaNote'   => 'pēc apmaksas saņemšanas',
 					'handmade'  => 'Roku darbs Latvijā',
 					'invoice'   => 'Apmaksa ar rēķinu',
+					'express'   => 'Steidzams pasūtījums — +5 €',
+					'expressSub'=> 'Izgatavošana 1–2 dienās — saņemsiet ~%s',
 				),
 			)
 		);

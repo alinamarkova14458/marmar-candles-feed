@@ -59,6 +59,26 @@
 		var range = n && n.express ? C.estimateFast : C.estimate;
 		eta.innerHTML = '<span aria-hidden="true">🚚</span> <span><strong>' + C.i18n.eta.replace('%s', range) + '</strong> <small>' + C.i18n.etaNote + '</small></span>';
 	}
+	// Срочный заказ на оформлении (в корзине он уже есть через шорткод).
+	var fast = el('label', 'mmco-fast', '<input type="checkbox" class="mmco-fast-input"><span class="mmco-fast-text"><strong></strong><small></small></span>');
+	var fastInput = fast.querySelector('input');
+	var fastBusy = false;
+	fastInput.addEventListener('change', function () {
+		var api = window.wc && wc.blocksCheckout && wc.blocksCheckout.extensionCartUpdate;
+		if (!api || fastBusy) return;
+		fastBusy = true; fast.classList.add('is-busy');
+		Promise.resolve(api({ namespace: 'marmar-express', data: { express: fastInput.checked } }))
+			.catch(function () { fastInput.checked = !fastInput.checked; })
+			.then(function () { fastBusy = false; fast.classList.remove('is-busy'); refresh(); });
+	});
+	function updateFast() {
+		var n = cartNumbers();
+		if (n && !fastBusy) fastInput.checked = n.express;
+		fast.querySelector('strong').textContent = C.i18n.express;
+		fast.querySelector('small').textContent = C.i18n.expressSub.replace('%s', C.estimateFast);
+		fast.classList.toggle('is-on', fastInput.checked);
+	}
+
 	var parts = [];
 	if (C.rating) parts.push('<span>★ ' + C.rating.score + ' Google (' + C.rating.count + ')</span>');
 	parts.push('<span>' + C.i18n.handmade + '</span>', '<span>' + C.i18n.invoice + '</span>');
@@ -81,7 +101,9 @@
 			if (actions) {
 				document.querySelectorAll('.mmco-eta').forEach(function (n) { if (n !== eta) n.remove(); });
 				document.querySelectorAll('.mmco-trust').forEach(function (n) { if (n !== trust) n.remove(); });
-				if (actions.previousElementSibling !== eta) actions.parentNode.insertBefore(eta, actions);
+				document.querySelectorAll('.mmco-fast').forEach(function (n) { if (n !== fast) n.remove(); });
+				if (actions.previousElementSibling !== fast) actions.parentNode.insertBefore(fast, actions);
+				if (fast.previousElementSibling !== eta) actions.parentNode.insertBefore(eta, fast);
 				if (actions.nextElementSibling !== trust) actions.parentNode.insertBefore(trust, actions.nextSibling);
 			}
 		}
@@ -95,7 +117,7 @@
 
 	// Наш код никогда не должен ронять корзину WooCommerce: любые ошибки гасим здесь.
 	function safe(fn) { try { fn(); } catch (err) { if (window.console) console.warn('MarMar Checkout:', err); } }
-	function refresh() { safe(updateBar); safe(updateEta); }
+	function refresh() { safe(updateBar); safe(updateEta); if (C.page === 'checkout') safe(updateFast); }
 	if (window.wp && wp.data && wp.data.subscribe) wp.data.subscribe(refresh);
 	safe(place); refresh();
 })();
