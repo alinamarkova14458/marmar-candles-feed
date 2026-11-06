@@ -1,0 +1,87 @@
+/* MarMar Checkout — улучшения блочной корзины и оформления без пересборки блоков WooCommerce. */
+(function () {
+	'use strict';
+	var C = window.MarMarCheckout;
+	if (!C) return;
+
+	function el(tag, cls, html) { var n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; }
+	function money(v) { return v.toFixed(2).replace('.', ',') + ' €'; }
+	function store() { return window.wp && wp.data && wp.data.select && wp.data.select('wc/store/cart'); }
+
+	function cartNumbers() {
+		var s = store(); if (!s) return null;
+		var t = s.getCartTotals && s.getCartTotals();
+		var d = s.getCartData && s.getCartData();
+		if (!t || t.total_items === undefined) return null;
+		var div = Math.pow(10, t.currency_minor_unit || 2);
+		var fees = (d && d.fees) || [];
+		return {
+			items: (parseInt(t.total_items, 10) + parseInt(t.total_items_tax || 0, 10)) / div,
+			express: fees.some(function (f) { return (f.name || '').indexOf(C.feeName) !== -1; })
+		};
+	}
+
+	/* ---------- Полоска до бесплатной доставки ---------- */
+	var bar = el('div', 'mmco-free', '<div class="mmco-free-text"></div><div class="mmco-free-track"><span></span></div>');
+	function updateBar() {
+		var n = cartNumbers(); if (!n) return;
+		var left = Math.max(0, C.freeFrom - n.items);
+		bar.querySelector('.mmco-free-text').textContent = left > 0 ? C.i18n.left.replace('%s', money(left)) : C.i18n.free;
+		bar.querySelector('.mmco-free-track span').style.width = Math.min(100, n.items / C.freeFrom * 100) + '%';
+		bar.classList.toggle('is-done', left <= 0);
+	}
+
+	/* ---------- Срочный заказ (шорткод [marmar_express]) — переносим к итогу ---------- */
+	var expressBox = null;
+	var expressInput = document.getElementById('marmar_express_order');
+	if (expressInput) {
+		expressBox = expressInput.closest('div');
+		expressBox.classList.add('mmco-express');
+	}
+
+	/* ---------- Оформление: срок получения и строка доверия ---------- */
+	var eta = el('div', 'mmco-eta');
+	var trust = el('div', 'mmco-trust');
+	function updateEta() {
+		var n = cartNumbers();
+		var range = n && n.express ? C.estimateFast : C.estimate;
+		eta.innerHTML = '<span aria-hidden="true">🚚</span> <span><strong>' + C.i18n.eta.replace('%s', range) + '</strong> <small>' + C.i18n.etaNote + '</small></span>';
+	}
+	var parts = [];
+	if (C.rating) parts.push('<span>★ ' + C.rating.score + ' Google (' + C.rating.count + ')</span>');
+	parts.push('<span>' + C.i18n.handmade + '</span>', '<span>' + C.i18n.invoice + '</span>');
+	trust.innerHTML = parts.join('<span class="mmco-dot" aria-hidden="true">·</span>');
+
+	/* ---------- Размещение (React-блоки перерисовываются — проверяем при каждом изменении DOM) ---------- */
+	function place() {
+		if (C.page === 'cart') {
+			var totals = document.querySelector('.wp-block-woocommerce-cart-totals-block');
+			var submit = document.querySelector('.wc-block-cart__submit, .wp-block-woocommerce-proceed-to-checkout-block');
+			if (totals && submit && submit.parentNode) {
+				// React при перерисовке может оставить копии — оставляем только наши живые узлы.
+				document.querySelectorAll('.mmco-free').forEach(function (n) { if (n !== bar) n.remove(); });
+				document.querySelectorAll('.mmco-express').forEach(function (n) { if (n !== expressBox) n.remove(); });
+				if (totals.firstElementChild !== bar) totals.insertBefore(bar, totals.firstChild);
+				if (expressBox && expressBox.nextElementSibling !== submit) submit.parentNode.insertBefore(expressBox, submit);
+			}
+		} else {
+			var actions = document.querySelector('.wc-block-checkout__actions');
+			if (actions) {
+				document.querySelectorAll('.mmco-eta').forEach(function (n) { if (n !== eta) n.remove(); });
+				document.querySelectorAll('.mmco-trust').forEach(function (n) { if (n !== trust) n.remove(); });
+				if (actions.previousElementSibling !== eta) actions.parentNode.insertBefore(eta, actions);
+				if (actions.nextElementSibling !== trust) actions.parentNode.insertBefore(trust, actions.nextSibling);
+			}
+		}
+	}
+
+	var scheduled = false;
+	new MutationObserver(function () {
+		if (scheduled) return; scheduled = true;
+		requestAnimationFrame(function () { scheduled = false; place(); refresh(); });
+	}).observe(document.body, { childList: true, subtree: true });
+
+	function refresh() { updateBar(); updateEta(); }
+	if (window.wp && wp.data && wp.data.subscribe) wp.data.subscribe(refresh);
+	place(); refresh();
+})();

@@ -1,0 +1,206 @@
+<?php
+/**
+ * Plugin Name:       MarMar Checkout
+ * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
+ * Version:           1.0.0
+ * Author:            MarMar CANDLES
+ * Requires PHP:      7.4
+ * WC requires at least: 8.0
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+final class MarMar_Checkout {
+
+	const VERSION = '1.0.0';
+
+	/** Настройки (позже можно вынести в админку). */
+	public static function cfg() {
+		return apply_filters(
+			'marmar_checkout_config',
+			array(
+				'free_shipping_from' => 50,
+				'make_days'          => array( 5, 7 ),  // обычное изготовление, рабочие дни
+				'make_days_express'  => array( 1, 2 ),  // срочное
+				'ship_days'          => array( 1, 2 ),  // доставка в пакомат
+				'express_fee_name'   => 'Steidzams pasūtījums',
+			)
+		);
+	}
+
+	public static function init() {
+		add_shortcode( 'marmar_cart_info', array( __CLASS__, 'cart_info' ) );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 30 );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'i18n' ), 5 );
+		add_filter( 'gettext_woocommerce', array( __CLASS__, 'gettext' ), 10, 2 );
+	}
+
+	private static function on_cart_or_checkout() {
+		return function_exists( 'is_cart' ) && ( is_cart() || ( is_checkout() && ! is_order_received_page() ) );
+	}
+
+	/* ---------------- Даты ---------------- */
+
+	/** Латвийские праздники, когда мастерская и пакоматы не работают как обычно. */
+	private static function holidays( $year ) {
+		$fixed = array( '01-01', '05-01', '05-04', '06-23', '06-24', '11-18', '12-24', '12-25', '12-26', '12-31' );
+		$out   = array();
+		foreach ( $fixed as $md ) {
+			$out[] = $year . '-' . $md;
+		}
+		// Пасха (Великая пятница и понедельник).
+		$easter = easter_date_safe( $year );
+		$out[]  = gmdate( 'Y-m-d', $easter - 2 * DAY_IN_SECONDS );
+		$out[]  = gmdate( 'Y-m-d', $easter + DAY_IN_SECONDS );
+		return $out;
+	}
+
+	private static function add_workdays( DateTimeImmutable $d, $n ) {
+		$h = array_merge( self::holidays( (int) $d->format( 'Y' ) ), self::holidays( (int) $d->format( 'Y' ) + 1 ) );
+		while ( $n > 0 ) {
+			$d = $d->modify( '+1 day' );
+			if ( (int) $d->format( 'N' ) < 6 && ! in_array( $d->format( 'Y-m-d' ), $h, true ) ) {
+				$n--;
+			}
+		}
+		return $d;
+	}
+
+	/** @return array{from:string,to:string,express:bool} */
+	public static function estimate( $express ) {
+		$c    = self::cfg();
+		$make = $express ? $c['make_days_express'] : $c['make_days'];
+		$now  = new DateTimeImmutable( 'now', wp_timezone() );
+		$from = self::add_workdays( $now, $make[0] + $c['ship_days'][0] );
+		$to   = self::add_workdays( $now, $make[1] + $c['ship_days'][1] );
+		return array( 'from' => $from->format( 'Y-m-d' ), 'to' => $to->format( 'Y-m-d' ), 'express' => (bool) $express );
+	}
+
+	private static function lv_range( $from, $to ) {
+		$m  = array( 1 => 'janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī', 'oktobrī', 'novembrī', 'decembrī' );
+		$f  = new DateTimeImmutable( $from );
+		$t  = new DateTimeImmutable( $to );
+		if ( $f->format( 'm' ) === $t->format( 'm' ) ) {
+			return $f->format( 'j' ) . '.–' . $t->format( 'j' ) . '. ' . $m[ (int) $t->format( 'n' ) ];
+		}
+		return $f->format( 'j' ) . '. ' . $m[ (int) $f->format( 'n' ) ] . ' – ' . $t->format( 'j' ) . '. ' . $m[ (int) $t->format( 'n' ) ];
+	}
+
+	/* ---------------- Шорткод условий в корзине ---------------- */
+
+	public static function cart_info() {
+		$c = self::cfg();
+		ob_start();
+		?>
+		<div class="mmco-info">
+			<div class="mmco-chips">
+				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">🕯️</span><span><strong>Gatavs <?php echo esc_html( $c['make_days'][0] . '–' . $c['make_days'][1] ); ?> darba dienās</strong><br><small>Steidzami — <?php echo esc_html( $c['make_days_express'][1] ); ?> d.d. (+5 €)</small></span></div>
+				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">📦</span><span><strong>Pakomātā no 2 €</strong><br><small>Bez maksas no <?php echo esc_html( $c['free_shipping_from'] ); ?> €</small></span></div>
+				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">📍</span><span><strong>Saņemšana Rīgā</strong><br><small>Iļģuciemā, saskaņojot laiku</small></span></div>
+			</div>
+			<details class="mmco-details">
+				<summary>Visi piegādes un pasūtījuma noteikumi</summary>
+				<ul>
+					<li>Minimālā pasūtījuma summa — 5 € (bez piegādes).</li>
+					<li>Piegāde uz Omniva, DPD, Venipak un Unisend pakomātiem visā Latvijā: 2,00–4,50 €, no <?php echo esc_html( $c['free_shipping_from'] ); ?> € — bez maksas.</li>
+					<li>Saņemšana Rīgā, Iļģuciemā (Jaunsaules iela 7a), iepriekš saskaņojot laiku.</li>
+					<li>Izgatavošana: <?php echo esc_html( $c['make_days'][0] . '–' . $c['make_days'][1] ); ?> darba dienas pēc apmaksas. Steidzams pasūtījums: +5 €, līdz <?php echo esc_html( $c['make_days_express'][1] ); ?> darba dienām.</li>
+					<li>Sūtījuma izsekošanas saiti atsūtīsim e-pastā, kad pasūtījums būs ceļā.</li>
+				</ul>
+			</details>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/* ---------------- Скрипты ---------------- */
+
+	public static function assets() {
+		if ( ! self::on_cart_or_checkout() ) {
+			return;
+		}
+		$url = plugin_dir_url( __FILE__ );
+		wp_enqueue_style( 'marmar-checkout', $url . 'assets/checkout.css', array(), self::VERSION );
+		wp_enqueue_script( 'marmar-checkout', $url . 'assets/checkout.js', array( 'wp-data' ), self::VERSION, array( 'in_footer' => true ) );
+
+		$rating = class_exists( 'MarMar_Reviews_Badge' ) ? MarMar_Reviews_Badge::data() : null;
+		$normal = self::estimate( false );
+		$fast   = self::estimate( true );
+		$c      = self::cfg();
+		wp_localize_script(
+			'marmar-checkout',
+			'MarMarCheckout',
+			array(
+				'page'        => is_cart() ? 'cart' : 'checkout',
+				'freeFrom'    => (float) $c['free_shipping_from'],
+				'feeName'     => $c['express_fee_name'],
+				'estimate'    => self::lv_range( $normal['from'], $normal['to'] ),
+				'estimateFast'=> self::lv_range( $fast['from'], $fast['to'] ),
+				'rating'      => $rating ? array( 'score' => number_format( round( $rating['rating'], 1 ), 1, ',', '' ), 'count' => (int) $rating['count'] ) : null,
+				'i18n'        => array(
+					'left'      => 'Vēl %s līdz bezmaksas piegādei',
+					'free'      => 'Piegāde pakomātā — bez maksas! 🎉',
+					'eta'       => 'Saņemsiet ~%s',
+					'etaNote'   => 'pēc apmaksas saņemšanas',
+					'handmade'  => 'Roku darbs Latvijā',
+					'invoice'   => 'Apmaksa ar rēķinu',
+				),
+			)
+		);
+	}
+
+	/** Те же недостающие переводы для строк, которые WooCommerce формирует на сервере (подписи полей адреса). */
+	public static function gettext( $translation, $text ) {
+		static $map = array(
+			'%s (optional)'                                      => '%s (nav obligāts)',
+			'Select a %s'                                        => 'Izvēlieties: %s',
+			'Enter a shipping address to view shipping options.' => 'Ievadiet piegādes adresi, lai redzētu piegādes iespējas.',
+		);
+		return ( $translation === $text && isset( $map[ $text ] ) ) ? $map[ $text ] : $translation;
+	}
+
+	/**
+	 * Недостающие латышские переводы строк блочной корзины/оформления (JS-строки WooCommerce).
+	 */
+	public static function i18n() {
+		if ( ! self::on_cart_or_checkout() ) {
+			return;
+		}
+		$t = array(
+			'Enter a shipping address to view shipping options.' => array( 'Ievadiet piegādes adresi, lai redzētu piegādes iespējas.' ),
+			'Enter address to calculate'                         => array( 'Ievadiet adresi, lai aprēķinātu' ),
+			'Select a %s'                                        => array( 'Izvēlieties: %s' ),
+			'%s (optional)'                                      => array( '%s (nav obligāts)' ),
+			'%d item'                                            => array( '%d prece', '%d preces', '%d preču' ),
+			'Total price for %1$d %2$s item: %3$s'               => array( 'Kopējā cena par %1$d × %2$s: %3$s', 'Kopējā cena par %1$d × %2$s: %3$s', 'Kopējā cena par %1$d × %2$s: %3$s' ),
+			'Remove item'                                        => array( 'Noņemt preci' ),
+			'Free'                                               => array( 'Bez maksas' ),
+		);
+		$data = array( '' => array( 'domain' => 'woocommerce', 'lang' => 'lv', 'plural-forms' => 'nplurals=3; plural=(n%10==0 || (n%100>=11 && n%100<=19) ? 2 : (n%10==1 && n%100!=11 ? 0 : 1));' ) );
+		foreach ( $t as $k => $v ) {
+			$data[ $k ] = $v;
+		}
+		// Дополняем (не заменяем) уже загруженные переводы домена woocommerce.
+		wp_add_inline_script( 'wp-i18n', 'wp.i18n.setLocaleData(' . wp_json_encode( $data ) . ', "woocommerce");', 'after' );
+	}
+}
+
+if ( ! function_exists( 'easter_date_safe' ) ) {
+	/** easter_date() есть не везде (нужно расширение calendar). */
+	function easter_date_safe( $year ) {
+		if ( function_exists( 'easter_date' ) ) {
+			return easter_date( $year );
+		}
+		$a = $year % 19; $b = intdiv( $year, 100 ); $c = $year % 100; $d = intdiv( $b, 4 ); $e = $b % 4;
+		$f = intdiv( $b + 8, 25 ); $g = intdiv( $b - $f + 1, 3 ); $h = ( 19 * $a + $b - $d - $g + 15 ) % 30;
+		$i = intdiv( $c, 4 ); $k = $c % 4; $l = ( 32 + 2 * $e + 2 * $i - $h - $k ) % 7; $m = intdiv( $a + 11 * $h + 22 * $l, 451 );
+		$month = intdiv( $h + $l - 7 * $m + 114, 31 ); $day = ( ( $h + $l - 7 * $m + 114 ) % 31 ) + 1;
+		return gmmktime( 12, 0, 0, $month, $day, $year );
+	}
+}
+
+add_action( 'plugins_loaded', function () {
+	if ( class_exists( 'WooCommerce' ) ) {
+		MarMar_Checkout::init();
+	}
+} );
