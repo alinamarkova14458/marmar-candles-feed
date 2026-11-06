@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.9.0
+ * Version:           1.9.4
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.9.0';
+	const VER = '1.9.4';
 
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 99 );
@@ -143,7 +143,7 @@ final class MarMar_Design {
 			if ( ! $p || ! $p->is_purchasable() || ! $p->is_visible() ) {
 				continue;
 			}
-			$img  = $p->get_image( 'woocommerce_gallery_thumbnail', array( 'class' => 'mmd-tg-img', 'loading' => 'lazy' ) );
+			$img  = $p->get_image( 'woocommerce_thumbnail', array( 'class' => 'mmd-tg-img', 'loading' => 'lazy' ) );
 			$link = get_permalink( $id );
 			if ( $p->is_type( 'simple' ) && $p->is_in_stock() ) {
 				$btn = '<a href="' . esc_url( $p->add_to_cart_url() ) . '" data-quantity="1" data-product_id="' . esc_attr( $id ) . '" class="mmd-tg-add add_to_cart_button ajax_add_to_cart" aria-label="' . esc_attr( 'Ielikt grozā: ' . $p->get_name() ) . '" rel="nofollow">+</a>';

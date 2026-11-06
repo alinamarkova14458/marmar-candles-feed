@@ -341,3 +341,20 @@ body.mmd .woocommerce-tabs.mmd-acc-on > article:empty { display: none; }
 .mmd-list li { margin: 0 !important; }
 .mmd-more a { color: var(--mmd-btn); font-weight: 500; }
 .mmd-warn { margin: 6px 0 14px; padding: 12px 14px; border-radius: 14px; background: #FFF4E5; border: 1.5px solid #F0C27B; color: #6E4A00; }
+
+/* “Bieži pērk kopā” — konteinera platumā; datorā kā kartītes */
+.mmd-together { box-sizing: border-box; width: 100%; max-width: 1290px; margin: 40px auto 10px; padding: 0 16px; }
+@media (min-width: 1000px) {
+	.mmd-together { padding: 0 40px; }
+	.mmd-tg-list { grid-template-columns: repeat(3, minmax(0, 260px)); justify-content: center; gap: 24px; max-width: none; }
+	.mmd-tg-row { flex-direction: column; align-items: stretch; gap: 10px; padding: 12px; text-align: left; }
+	.mmd-tg-pic { flex: none; }
+	.mmd-tg-img { width: 100% !important; height: auto !important; aspect-ratio: 1; }
+	.mmd-tg-info { font-size: 15px; }
+	.mmd-tg-add { flex: none; width: 100%; height: 44px; font-size: 20px; display: flex; align-items: center; justify-content: center; margin-top: auto; }
+	.mmd-tg-row { height: 100%; }
+	.mmd-tg-info { flex: 1; align-content: start; }
+	.mmd-tg-add.ajax_add_to_cart::after { content: ' Ielikt grozā'; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; margin-left: 6px; }
+}
+/* Lapu virsraksti (grozs, noformēšana u.c.) — ne pārāk lieli telefonā */
+body.mmd .hero-section h1, body.mmd h1.page-title, body.mmd .entry-header .page-title { --theme-font-size: clamp(26px, 3.4vw, 40px) !important; --theme-line-height: 1.25 !important; overflow-wrap: break-word; hyphens: manual; }
