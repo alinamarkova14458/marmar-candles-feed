@@ -12,20 +12,21 @@ Search Console (запросы из Латвии), заказы WooCommerce, с�
 | 08.11.2026 09:00 ⏰ | [Korporatīvās Ziemassvētku dāvanas](https://marmarcandles.com/lv/korporativas-ziemassvetku-davanas-sveces/) | korporatīvās dāvanas, dāvanas darbiniekiem/klientiem | Sadarbības partneriem, Ziemassvētku sveces | ~05.12.2026 |
 | 09.11.2026 09:00 ⏰ | [Ziemassvētku torte: kā to izrotāt ar svecēm](https://marmarcandles.com/lv/ziemassvetku-torte-sveces/) | ziemassvētku torte, sveces tortei | Tortes sveces | ~05.12.2026 |
 | 10.11.2026 09:00 ⏰ | [Jaunā gada torte ar ciparu svecēm “2027”](https://marmarcandles.com/lv/jauna-gada-torte-ciparu-sveces-2027/) | ciparu sveces, jaunā gada torte | Ciparu sveces | ~10.12.2026 |
+| 11.11.2026 09:00 ⏰ | [Ziemassvētku dāvanas skolotājām un audzinātājām](https://marmarcandles.com/lv/ziemassvetku-davanas-skolotajam/) | dāvanas skolotājām, dāvana audzinātājai | Ziemassvētku sveces, Dāvanas | ~10.12.2026 |
+| 12.11.2026 09:00 ⏰ | [Slepenā Santas dāvanas līdz 5 € un 10 €](https://marmarcandles.com/lv/slepena-santas-davanas/) | slepenais santa, dāvanas līdz 10 eiro | Ziemassvētku sveces | ~10.12.2026 |
+| 13.11.2026 09:00 ⏰ | [Ziemassvētku dekorācijas mājai ar svecēm](https://marmarcandles.com/lv/ziemassvetku-dekoracijas-majai-sveces/) | ziemassvētku/svētku dekorācijas | Ziemassvētku sveces, Interjera sveces | ~10.12.2026 |
+| 14.11.2026 09:00 ⏰ | [Bērnu Ziemassvētku ballīte: dekors, torte un mazas dāvaniņas](https://marmarcandles.com/lv/bernu-ziemassvetku-ballite/) | bērnu ziemassvētku ballīte, dzimšanas dienas tortes bērniem | Kūku toperi, Tortes sveces | ~10.12.2026 |
 
 Публикация: исходник статьи — `blog/posts/<дата>-<тема>.py` (разметка через `blog/lib.py`), затем
 `python3 tools/blog_publish.py blog/posts/<файл>.py` — проверяет ссылки, ставит отложенную публикацию (date_gmt), пишет SEO-поля Rank Math.
 Режим (решение Алины 06.11.2026): **отложенная публикация пачками по 3–4 статьи, 1 статья в день в 9:00**. До праздников — только Рождество/Новый год, после — другие темы.
 Сроки заказа к Рождеству (подтверждены Алиной): обычный — до 8.12, срочный (+5 €) — до 15.12.
+**Факты только из описаний товаров.** «Без аромата» прямо указано только у lodveida svece (24921) и sojas svece bez aromāta 200 ml (24911) — про остальные так не писать. Галда-свеча 21 см горит ~1 ч, диаметр ~2 см.
 
 ## Очередь
 
 | # | Тема | Данные (GSC LV авг–нояб 2026, заказы) | Когда |
 |---|---|---|---|
-| 5 | Dāvanas skolotājām un audzinātājām Ziemassvētkos | отдельный частый запрос | 11.11 |
-| 6 | Slepenā Santas dāvanas līdz 5 € un 10 € | обмен подарками в офисе/классе | 12.11 |
-| 7 | Ziemassvētku dekorācijas mājai ar svecēm | «svētku dekorācijas» поз. 4,7, 0 кликов | 13.11 |
-| 8 | Bērnu Ziemassvētku ballīte: dekors un mazas dāvaniņas | фигурные свечи по 5 € | 14.11 |
 | 9 | Jaungada galda dekors: zelts, melns un balts | новогодний стол | 15.11 |
 | 10 | Bišu vaska, sojas vai parafīna svece — kuru dāvināt? | информационный | 16.11 |
 | 11 | Kā droši dedzināt sveces svētkos un cik ilgi tās deg | безопасность, круглый год | 17.11 |
