@@ -337,3 +337,7 @@ body.mmd .woocommerce-tabs.mmd-acc-on > article:empty { display: none; }
 .mmd-acc > summary:hover { color: var(--mmd-btn); }
 .mmd-acc > .wc-tab { display: block !important; padding: 2px 4px 22px; }
 .mmd-acc > .wc-tab > h2:first-child { display: none; }
+.mmd-list { margin: 4px 0 12px; padding-left: 20px; display: grid; gap: 8px; }
+.mmd-list li { margin: 0 !important; }
+.mmd-more a { color: var(--mmd-btn); font-weight: 500; }
+.mmd-warn { margin: 6px 0 14px; padding: 12px 14px; border-radius: 14px; background: #FFF4E5; border: 1.5px solid #F0C27B; color: #6E4A00; }

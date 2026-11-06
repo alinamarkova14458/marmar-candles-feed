@@ -71,7 +71,6 @@
 				var d = document.createElement('details');
 				d.className = 'mmd-acc';
 				d.id = 'mmd-' + id;
-				if (i === 0) d.open = true;
 				var sm = document.createElement('summary');
 				sm.textContent = a.textContent.trim();
 				d.appendChild(sm);

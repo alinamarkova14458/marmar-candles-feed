@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.8.1
+ * Version:           1.9.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.8.1';
+	const VER = '1.9.0';
 
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 99 );
@@ -26,6 +26,7 @@ final class MarMar_Design {
 		add_action( 'woocommerce_before_add_to_cart_button', array( __CLASS__, 'express_checkbox' ), 30 );
 		add_action( 'woocommerce_add_to_cart', array( __CLASS__, 'express_on_add' ), 10, 0 );
 		add_action( 'woocommerce_after_single_product_summary', array( __CLASS__, 'together' ), 12 );
+		add_filter( 'woocommerce_product_tabs', array( __CLASS__, 'tabs' ), 98 );
 	}
 
 	/**
@@ -154,6 +155,39 @@ final class MarMar_Design {
 		if ( $rows ) {
 			echo '<section class="mmd-together"><h2 class="has-text-align-center mmd-star">Bieži pērk kopā</h2><div class="mmd-tg-list">' . $rows . '</div></section>'; // phpcs:ignore WordPress.Security.EscapeOutput
 		}
+	}
+
+	/** Cilnes: Apraksts · Piegāde un termiņi · Drošība (bez “Papildu informācija” un atsauksmēm). */
+	public static function tabs( $tabs ) {
+		unset( $tabs['additional_information'], $tabs['reviews'] );
+		$tabs['mmd_delivery'] = array( 'title' => 'Piegāde un termiņi', 'priority' => 20, 'callback' => array( __CLASS__, 'tab_delivery' ) );
+		$tabs['mmd_safety']   = array( 'title' => 'Drošība', 'priority' => 30, 'callback' => array( __CLASS__, 'tab_safety' ) );
+		return $tabs;
+	}
+
+	public static function tab_delivery() {
+		echo '<ul class="mmd-list">'
+			. '<li><strong>Izgatavošana — 5–7 dienas</strong> pēc apmaksas. Katru sveci darinām ar rokām.</li>'
+			. '<li><strong>Steidzams pasūtījums — 1–2 dienās</strong>, +5 €. Atzīmējiet to virs pogas “Pievienot grozam” vai grozā.</li>'
+			. '<li><strong>Piegāde uz pakomātiem visā Latvijā</strong> — Omniva, DPD, Venipak, Unisend: no 2,00 € līdz 4,50 €, parasti 1–2 darba dienās.</li>'
+			. '<li><strong>Bezmaksas piegāde</strong>, ja pasūtījums ir no 50 €.</li>'
+			. '<li><strong>Saņemšana Rīgā, Iļģuciemā</strong> — saskaņojot laiku.</li>'
+			. '<li><strong>Minimālais pasūtījums — 5 €</strong> (bez piegādes).</li>'
+			. '<li><strong>Apmaksa</strong> — ar pārskaitījumu pēc rēķina.</li>'
+			. '</ul><p class="mmd-more"><a href="' . esc_url( home_url( '/lv/piegade/' ) ) . '">Visi piegādes noteikumi →</a></p>';
+	}
+
+	public static function tab_safety() {
+		echo '<div class="mmd-warn"><strong>Nekad neatstājiet degošu sveci bez uzraudzības.</strong></div>'
+			. '<ul class="mmd-list">'
+			. '<li>Turiet bērniem un mājdzīvniekiem nepieejamā vietā.</li>'
+			. '<li>Novietojiet uz stabilas, karstumizturīgas virsmas — prom no aizkariem, papīra, eglītes zariem un citiem viegli uzliesmojošiem priekšmetiem, kā arī no caurvēja.</li>'
+			. '<li><strong>Kūkas sveces</strong> aizdedziet tieši pirms svinībām un nopūtiet pēc 1–2 minūtēm, lai vasks nenotek uz kūkas. Pirms kūkas griešanas sveces noņemiet.</li>'
+			. '<li>Dekoratīvās un figūru sveces dedziniet tikai uz paliktņa; nededziniet ilgāk par 2–3 stundām pēc kārtas.</li>'
+			. '<li>Pirms katras aizdedzināšanas apgrieziet degli līdz ~5 mm. Ja liesma kļūst pārāk liela vai svece kūp — nodzēsiet.</li>'
+			. '<li>Neaizdedziniet sveci tuvāk par 10 cm no citām degošām svecēm.</li>'
+			. '<li>Sveces nav ēdamas.</li>'
+			. '</ul>';
 	}
 
 	public static function trust_row() {
