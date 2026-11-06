@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Reviews Badge
  * Description:       Компактная строка «★★★★★ 5,0 · N atsauksmes Google» под ценой на странице товара. Рейтинг и число отзывов берутся из Trustindex (уже скачанные отзывы Google), без внешних скриптов. Можно задать вручную.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -107,20 +107,33 @@ final class MarMar_Reviews_Badge {
 		echo self::html(); // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 
+	private static $css_done = false;
+
 	public static function shortcode() {
-		return self::html();
+		$html = self::html();
+		if ( '' !== $html && ! self::$css_done ) {
+			self::$css_done = true;
+			$html = self::style() . $html; // шорткод на обычной странице — стили вместе с ним
+		}
+		return $html;
 	}
 
 	public static function css() {
 		if ( ! function_exists( 'is_product' ) || ! is_product() ) {
 			return;
 		}
-		echo '<style id="marmar-reviews-badge">'
+		self::$css_done = true;
+		echo self::style(); // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+
+	private static function style() {
+		return '<style id="marmar-reviews-badge">'
 			. '.mmrb{display:inline-flex;align-items:center;gap:6px;margin:6px 0 14px;font-size:14px;color:inherit;text-decoration:none;line-height:1}'
 			. 'a.mmrb:hover .mmrb-count{text-decoration:underline}'
 			. '.mmrb-stars{position:relative;display:inline-block;color:#e3d6d4;letter-spacing:1px;font-size:15px}'
 			. '.mmrb-stars-fill{position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap;color:#e7a93c}'
 			. '.mmrb-score{font-weight:600}.mmrb-sep{opacity:.5}.mmrb-count{opacity:.85}.mmrb-g{font-weight:600}'
+			. '.has-text-align-center .mmrb,.wp-block-shortcode .mmrb{display:flex;justify-content:center}'
 			. '</style>';
 	}
 
