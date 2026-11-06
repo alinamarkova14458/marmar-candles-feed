@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.1.0
+ * Version:           1.2.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.1.0';
+	const VER = '1.2.1';
 
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 99 );
@@ -21,6 +21,34 @@ final class MarMar_Design {
 		// trust_row nav vajadzīga: produkta lapā jau ir MarMar UX informācijas bloks.
 		add_action( 'wp_footer', array( __CLASS__, 'sticky_bar' ), 20 );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
+		add_filter( 'theme_mod_header_placements', array( __CLASS__, 'one_logo' ), 20 );
+	}
+
+	/**
+	 * Telefonā un planšetē — tas pats pilnais logo “MARMAR CANDLES” (agrāk melns aplis ar “M”).
+	 * Mainām tikai izvadi; Blocksy iestatījumi datubāzē paliek, izslēdzot spraudni viss atgriežas.
+	 */
+	public static function one_logo( $v ) {
+		if ( ! is_array( $v ) || is_admin() || is_customize_preview() ) {
+			return $v;
+		}
+		$walk = function ( &$node ) use ( &$walk ) {
+			if ( ! is_array( $node ) ) {
+				return;
+			}
+			if ( isset( $node['id'] ) && 'logo' === $node['id'] && isset( $node['values']['custom_logo'] ) && is_array( $node['values']['custom_logo'] ) ) {
+				$l = $node['values']['custom_logo'];
+				if ( ! empty( $l['desktop'] ) ) {
+					$node['values']['custom_logo']['tablet'] = $l['desktop'];
+					$node['values']['custom_logo']['mobile'] = $l['desktop'];
+				}
+			}
+			foreach ( $node as &$child ) {
+				$walk( $child );
+			}
+		};
+		$walk( $v );
+		return $v;
 	}
 
 	public static function body_class( $c ) {
