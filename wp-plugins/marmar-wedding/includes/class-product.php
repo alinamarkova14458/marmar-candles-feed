@@ -14,6 +14,7 @@ class MarMar_Wedding_Product {
 		add_filter( 'woocommerce_product_add_to_cart_url', array( __CLASS__, 'loop_button_url' ), 20, 2 );
 		add_filter( 'woocommerce_loop_add_to_cart_args', array( __CLASS__, 'loop_button_args' ), 20, 2 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ) );
+		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 	}
 
 	private static function current() {
@@ -52,6 +53,13 @@ class MarMar_Wedding_Product {
 				),
 			)
 		);
+	}
+
+	public static function body_class( $classes ) {
+		if ( self::current() ) {
+			$classes[] = 'mmw-product';
+		}
+		return $classes;
 	}
 
 	public static function quantity_args( $args, $product ) {

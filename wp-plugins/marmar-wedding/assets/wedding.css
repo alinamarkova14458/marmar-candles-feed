@@ -3,7 +3,7 @@
 	margin: 0 0 24px; display: grid; gap: 22px; width: 100%; }
 .mmw-intro, .mmw-after { margin: 0; color: var(--mmw-muted); font-size: 14px; }
 .mmw-step { border: 0; margin: 0; padding: 0; min-width: 0; }
-.mmw-step legend { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; margin-bottom: 10px; padding: 0; }
+.mmw .mmw-step legend { float: none; width: 100%; margin: 0 0 10px; padding: 0; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; margin-bottom: 10px; padding: 0; }
 .mmw-n { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--mmw-accent); color: #fff; font-size: 13px; }
 
 .mmw-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
@@ -45,3 +45,6 @@
 .mmw-summary-unit { color: var(--mmw-muted); font-size: 14px; }
 .mmw-summary-total { font-size: 18px; color: var(--mmw-dark); }
 .mmw-unit { font-size: .8em; opacity: .75; }
+
+/* Общий блок сроков/минимального заказа под кнопкой (сниппет MarMar UX) не относится к свадебным заказам */
+.mmw-product .mm-info { display: none !important; }
