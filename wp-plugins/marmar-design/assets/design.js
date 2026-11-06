@@ -92,4 +92,14 @@
 			}
 		}
 	} catch (e) { /* nav kritiski */ }
+
+	// --- Liesmiņa šūpojas, kamēr lapa tiek ritināta ---
+	try {
+		var sT = 0, root2 = document.documentElement;
+		window.addEventListener('scroll', function () {
+			if (!root2.classList.contains('mmd-scrolling')) root2.classList.add('mmd-scrolling');
+			clearTimeout(sT);
+			sT = setTimeout(function () { root2.classList.remove('mmd-scrolling'); }, 450);
+		}, { passive: true });
+	} catch (e) { /* nav kritiski */ }
 })();

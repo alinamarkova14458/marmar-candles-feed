@@ -358,3 +358,24 @@ body.mmd .woocommerce-tabs.mmd-acc-on > article:empty { display: none; }
 }
 /* Lapu virsraksti (grozs, noformēšana u.c.) — ne pārāk lieli telefonā */
 body.mmd .hero-section h1, body.mmd h1.page-title, body.mmd .entry-header .page-title { --theme-font-size: clamp(26px, 3.4vw, 40px) !important; --theme-line-height: 1.25 !important; overflow-wrap: break-word; hyphens: manual; }
+
+/* Liesmiņa: lielāka; ritinot — šūpojas kā īsta liesma */
+body.mmd .entry-content h2.has-text-align-center::before,
+body.mmd .entry-content h2.mmd-star::before,
+body.mmd .woocommerce-products-header__title::before,
+body.mmd .mmd-together h2::before { width: 17px; height: 22px; margin-bottom: 10px; transform-origin: 50% 100%; }
+@media (min-width: 768px) {
+	body.mmd .entry-content h2.has-text-align-center::before,
+	body.mmd .entry-content h2.mmd-star::before,
+	body.mmd .woocommerce-products-header__title::before,
+	body.mmd .mmd-together h2::before { width: 22px; height: 29px; }
+	.mmh-flame { width: 20px; height: 26px; }
+}
+.mmh-flame, .mmk-flame { transform-origin: 50% 100%; }
+@keyframes mmdSway { 0% { transform: rotate(-9deg) scaleY(1.06) skewX(3deg); } 50% { transform: rotate(4deg) scaleY(.94) skewX(-2deg); } 100% { transform: rotate(9deg) scaleY(1.05) skewX(-3deg); } }
+html.mmd-scrolling body.mmd .entry-content h2::before,
+html.mmd-scrolling body.mmd .woocommerce-products-header__title::before,
+html.mmd-scrolling body.mmd .mmd-together h2::before,
+html.mmd-scrolling .mmh-flame,
+html.mmd-scrolling .mmk-flame { animation: mmdSway .45s ease-in-out infinite alternate !important; }
+@media (prefers-reduced-motion: reduce) { html.mmd-scrolling body.mmd .entry-content h2::before, html.mmd-scrolling .mmh-flame, html.mmd-scrolling .mmk-flame { animation: none !important; } }
