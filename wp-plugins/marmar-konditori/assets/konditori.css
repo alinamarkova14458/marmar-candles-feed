@@ -57,3 +57,11 @@
 	.mmk-card, .mmk-join, .mmk-star { animation: none !important; }
 	.mmk-card .mmk-img { transition: none; }
 }
+
+/* Форма не шире экрана на телефоне */
+.mmk-form { grid-template-columns: minmax(0, 1fr); box-sizing: border-box; }
+.mmk-field, .mmk-consent, .mmk-checks { min-width: 0; }
+.mmk-field input, .mmk-field select, .mmk-field textarea { max-width: 100%; }
+.mmk-field input[type=file] { width: 100%; font-size: 14px; }
+.mmk-consent span { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 480px) { .mmk-form { padding: 18px 16px; } .mmk-checks { flex-direction: column; gap: 4px; } }

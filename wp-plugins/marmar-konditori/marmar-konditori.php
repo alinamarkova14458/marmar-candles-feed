@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditori
  * Description:       Bezmaksas konditoru katalogs: pieteikuma forma ([marmar_konditori_forma]), moderācija administrācijā un katalogs ar filtriem ([marmar_konditori]).
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditori
@@ -14,7 +14,7 @@ final class MarMar_Konditori {
 
 	const CPT    = 'mm_konditors';
 	const OPTION = 'marmar_konditori';
-	const VER    = '1.0.0';
+	const VER    = '1.0.1';
 	const MAX_MB = 5;
 
 	public static function cities() {
