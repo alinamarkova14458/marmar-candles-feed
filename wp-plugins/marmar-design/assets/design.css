@@ -1,0 +1,148 @@
+/* ==========================================================
+   MarMar Design 1.0 — virs Blocksy. Krāsas no pašreizējās vietnes,
+   pogas #B9605F, virsraksti Marcellus (lielie burti), teksts Figtree (Jost nepareizi rāda latviešu burtus ā, ē, ī).
+   ========================================================== */
+:root {
+	--mmd-btn: #B9605F;
+	--mmd-pink: #D68684;
+	--mmd-plum: #735360;
+	--mmd-ink: #504E4A;
+	--mmd-muted: #6B5A5E;
+	--mmd-cream: #FAF3F0;
+	--mmd-blush: #F5E8EA;
+	--mmd-soft: #EFD9DC;
+	--mmd-line: #EFE3E0;
+	--mmd-head: 'Marcellus', Georgia, serif;
+	--mmd-body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+body.mmd {
+	--theme-palette-color-1: #B9605F;
+	--theme-palette-color-2: #735360;
+	--theme-palette-color-3: #504E4A;
+	--theme-palette-color-4: #735360;
+	--theme-palette-color-6: #FAF3F0;
+	--theme-font-family: var(--mmd-body);
+	--theme-button-font-family: var(--mmd-body);
+	--theme-button-font-weight: 500;
+	--theme-button-letter-spacing: .12em;
+	--theme-button-text-initial-color: #FFFFFF;
+	--theme-button-text-hover-color: #FFFFFF;
+	--theme-button-background-initial-color: var(--mmd-btn);
+	--theme-button-background-hover-color: #A24F4E;
+	--theme-button-border-radius: 12px;
+	--theme-border-radius: 12px;
+	font-family: var(--mmd-body);
+}
+
+/* ---------- Virsraksti ---------- */
+body.mmd h1, body.mmd h2, body.mmd h3 {
+	--theme-font-family: var(--mmd-head);
+	--theme-font-weight: 400;
+	--theme-letter-spacing: .08em;
+	text-transform: uppercase;
+	color: var(--mmd-ink);
+}
+body.mmd h1 { --theme-font-size: clamp(26px, 3.4vw, 40px); --theme-line-height: 1.22; }
+body.mmd h2 { --theme-font-size: clamp(21px, 2.6vw, 30px); --theme-line-height: 1.25; }
+body.mmd h3 { --theme-font-size: clamp(17px, 1.9vw, 22px); --theme-line-height: 1.3; }
+body.mmd h4, body.mmd h5, body.mmd h6 { --theme-font-family: var(--mmd-body); --theme-font-weight: 500; }
+/* Garie virsraksti — bez lielajiem burtiem */
+body.mmd.single-product h1.product_title,
+body.mmd.single-post h1,
+body.mmd .entry-content h3,
+body.mmd .woocommerce-loop-product__title,
+body.mmd [data-products] h2 {
+	text-transform: none;
+	--theme-letter-spacing: .01em;
+}
+body.mmd.single-product h1.product_title { --theme-font-size: clamp(23px, 2.6vw, 32px); }
+/* Zvaigznīte virs centrētiem sadaļu virsrakstiem */
+body.mmd .entry-content h2.has-text-align-center::before,
+body.mmd .entry-content h2.mmd-star::before,
+body.mmd .woocommerce-products-header__title::before {
+	content: '✦';
+	display: block;
+	margin: 0 auto 6px;
+	color: var(--mmd-pink);
+	font-size: .62em;
+	letter-spacing: 0;
+	animation: mmdTw 2.6s ease-in-out infinite;
+}
+@keyframes mmdTw { 0%, 100% { opacity: .4; transform: scale(.85); } 50% { opacity: 1; transform: scale(1); } }
+
+/* ---------- Augšējā josla ---------- */
+.mmd-topbar {
+	display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 10px;
+	padding: 9px 12px; background: var(--mmd-btn); color: #FFFFFF;
+	font-family: var(--mmd-body); font-size: 11.5px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; line-height: 1.4; text-align: center;
+}
+.mmd-topbar .mmd-sep { opacity: .85; }
+@media (max-width: 689px) { .mmd-topbar { flex-wrap: nowrap; gap: 6px; font-size: 10.5px; letter-spacing: .08em; padding: 8px 10px; white-space: nowrap; } .mmd-topbar .mmd-d { display: none; } }
+
+/* ---------- Produktu kartītes ---------- */
+body.mmd [data-products] .ct-media-container { border-radius: 20px; overflow: hidden; background: var(--mmd-cream); }
+body.mmd [data-products] .woocommerce-loop-product__title { --theme-font-family: var(--mmd-body); --theme-font-weight: 400; --theme-font-size: 15px; --theme-line-height: 1.35; }
+body.mmd [data-products] .price { --theme-font-family: var(--mmd-body); --theme-font-weight: 500; --theme-font-size: 16px; --theme-text-color: var(--mmd-ink); }
+/* “Ielikt grozā” vienmēr redzama (agrāk parādījās tikai uzbraucot ar peli) */
+body.mmd [data-products] .ct-woo-card-actions { opacity: 1 !important; visibility: visible !important; transform: none !important; position: static !important; margin-top: auto; padding-top: 10px; }
+body.mmd [data-products] .product { display: flex; flex-direction: column; }
+body.mmd [data-products] .ct-woo-card-actions .button {
+	display: flex !important; align-items: center; justify-content: center; gap: 8px; width: 100%;
+	min-height: 46px; padding: 0 12px; border: 0; border-radius: 12px !important;
+	background: var(--mmd-btn) !important; color: #FFFFFF !important;
+	font-family: var(--mmd-body); font-size: 12.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+	box-shadow: 0 6px 16px rgba(185, 96, 95, .25); transition: background .2s, transform .15s;
+}
+body.mmd [data-products] .ct-woo-card-actions .button::before {
+	content: ''; width: 17px; height: 17px; flex: 0 0 auto; background: currentColor;
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z'/%3E%3Cpath d='M9 8V6a3 3 0 0 1 6 0v2'/%3E%3C/svg%3E") center / contain no-repeat;
+	        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z'/%3E%3Cpath d='M9 8V6a3 3 0 0 1 6 0v2'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+body.mmd [data-products] .ct-woo-card-actions .button:hover { background: #A24F4E !important; }
+body.mmd [data-products] .ct-woo-card-actions .button:active { transform: scale(.97); }
+body.mmd [data-products] .ct-woo-card-actions .added_to_cart { font-size: 13px; margin-top: 6px; }
+/* Kartītes parādās, ritinot (tikai CSS) */
+@supports (animation-timeline: view()) {
+	body.mmd [data-products] > .product { animation: mmdIn .6s ease both; animation-timeline: view(); animation-range: entry 0% entry 35%; }
+}
+@keyframes mmdIn { from { opacity: 0; transform: translate3d(0, 60px, 0); } to { opacity: 1; transform: none; } }
+
+/* ---------- Produkta lapa ---------- */
+body.mmd.single-product .woocommerce-product-gallery img,
+body.mmd.single-product .woocommerce-product-gallery .ct-media-container { border-radius: 20px; }
+body.mmd.single-product .flexy-pills img, body.mmd.single-product .flexy-pills .ct-media-container { border-radius: 12px; }
+body.mmd.single-product .product .price { --theme-font-family: var(--mmd-body); --theme-font-weight: 500; }
+body.mmd .single_add_to_cart_button {
+	min-height: 52px; border-radius: 12px !important; background: var(--mmd-btn) !important; color: #FFFFFF !important;
+	font-weight: 600; letter-spacing: .12em; text-transform: uppercase; box-shadow: 0 6px 16px rgba(185, 96, 95, .28);
+}
+body.mmd .single_add_to_cart_button:hover { background: #A24F4E !important; }
+body.mmd form.cart .quantity input, body.mmd form.cart .quantity { border-radius: 12px; }
+.mmd-eta { display: flex; gap: 12px; align-items: flex-start; margin: 4px 0 18px; padding: 14px 16px; border-radius: 16px; background: var(--mmd-cream); color: var(--mmd-ink); font-size: 15px; line-height: 1.45; }
+.mmd-eta small { color: var(--mmd-muted); font-size: 13.5px; }
+.mmd-eta-ico { flex: 0 0 auto; color: var(--mmd-btn); font-weight: 700; font-size: 17px; line-height: 1.3; }
+.mmd-trust { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 14px 0 6px; font-size: 13px; color: var(--mmd-muted); }
+
+/* Lipīgā josla (tikai telefonā/planšetē) */
+.mmd-sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 9990; display: flex; align-items: center; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: #FFFFFF; border-top: 1px solid var(--mmd-line); box-shadow: 0 -6px 18px rgba(80, 60, 64, .1); font-family: var(--mmd-body); }
+.mmd-sticky[hidden] { display: none; }
+.mmd-sticky-info { display: grid; line-height: 1.25; }
+.mmd-sticky-price { font-weight: 500; color: var(--mmd-ink); }
+.mmd-sticky-price del { opacity: .6; font-size: .85em; }
+.mmd-sticky-info small { font-size: 12px; color: var(--mmd-muted); }
+.mmd-sticky-btn { flex: 1; min-height: 48px; border: 0; border-radius: 12px; background: var(--mmd-btn); color: #FFFFFF; font: 600 13px/1 var(--mmd-body); letter-spacing: .12em; text-transform: uppercase; box-shadow: 0 6px 16px rgba(185, 96, 95, .28); cursor: pointer; }
+@media (min-width: 1000px) { .mmd-sticky { display: none !important; } }
+body.mmd-has-sticky .marmar-ai-launch { bottom: 84px !important; }
+
+/* ---------- Grozs un noformēšana (MarMar Checkout krāsas) ---------- */
+body.mmd .mmco-info, body.mmd .mmco-free, body.mmd .mmco-express, body.mmd .mmco-eta, body.mmd .mmco-trust, body.mmd .mmco-fast { --mmco-accent: #B9605F; --mmco-dark: #735360; --mmco-soft: #FAF3F0; --mmco-line: #EFE3E0; --mmco-muted: #6B5A5E; }
+body.mmd .wc-block-cart__submit-button,
+body.mmd .wc-block-components-checkout-place-order-button {
+	min-height: 52px; border-radius: 12px !important; background: var(--mmd-btn) !important; color: #FFFFFF !important;
+	font-family: var(--mmd-body); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; box-shadow: 0 6px 16px rgba(185, 96, 95, .28);
+}
+
+/* ---------- Kustības samazināšana ---------- */
+@media (prefers-reduced-motion: reduce) {
+	body.mmd [data-products] > .product, body.mmd .entry-content h2::before, body.mmd .woocommerce-products-header__title::before { animation: none !important; }
+}

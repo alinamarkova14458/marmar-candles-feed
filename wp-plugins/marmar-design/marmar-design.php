@@ -1,0 +1,82 @@
+<?php
+/**
+ * Plugin Name:       MarMar Design
+ * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, zvaigznītes ✦, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
+ * Version:           1.0.1
+ * Author:            MarMar CANDLES
+ * Requires PHP:      7.4
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+final class MarMar_Design {
+
+	const VER = '1.0.1';
+
+	public static function init() {
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 99 );
+		add_action( 'wp_head', array( __CLASS__, 'preload' ), 1 );
+		add_action( 'wp_body_open', array( __CLASS__, 'topbar' ), 5 );
+		add_action( 'woocommerce_single_product_summary', array( __CLASS__, 'eta_box' ), 25 );
+		add_action( 'woocommerce_single_product_summary', array( __CLASS__, 'trust_row' ), 35 );
+		add_action( 'wp_footer', array( __CLASS__, 'sticky_bar' ), 20 );
+		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
+	}
+
+	public static function body_class( $c ) {
+		$c[] = 'mmd';
+		return $c;
+	}
+
+	public static function assets() {
+		if ( is_admin() ) {
+			return;
+		}
+		$u = plugins_url( 'assets/', __FILE__ );
+		wp_enqueue_style( 'marmar-design-fonts', $u . 'fonts.css', array(), self::VER );
+		$deps = wp_style_is( 'ct-main-styles', 'registered' ) ? array( 'ct-main-styles' ) : array();
+		wp_enqueue_style( 'marmar-design', $u . 'design.css', $deps, self::VER );
+		wp_enqueue_script( 'marmar-design', $u . 'design.js', array(), self::VER, array( 'strategy' => 'defer', 'in_footer' => true ) );
+		// Vecie Google šrifti (Montserrat, Cormorant) vairs nav vajadzīgi.
+		wp_dequeue_style( 'blocksy-fonts-font-source-google' );
+	}
+
+	public static function preload() {
+		$u = plugins_url( 'assets/fonts/', __FILE__ );
+		foreach ( array( 'marcellus-latin', 'figtree-latin' ) as $f ) {
+			echo '<link rel="preload" href="' . esc_url( $u . $f . '.woff2' ) . '" as="font" type="font/woff2" crossorigin>' . "\n";
+		}
+	}
+
+	public static function topbar() {
+		echo '<div class="mmd-topbar" role="note"><span>Bezmaksas piegāde no 50 €</span><span class="mmd-sep" aria-hidden="true">✦</span><span>Gatavs 5–7 dienās</span><span class="mmd-sep mmd-d" aria-hidden="true">✦</span><span class="mmd-d">Steidzami 1–2 dienās</span></div>';
+	}
+
+	/** Termiņu bloks produkta lapā. Datumu aprēķina JS (lapa tiek kešota). */
+	public static function eta_box() {
+		global $product;
+		if ( ! $product || ! $product->is_purchasable() ) {
+			return;
+		}
+		echo '<div class="mmd-eta" data-mmd-eta>';
+		echo '<span class="mmd-eta-ico" aria-hidden="true">✓</span><span><strong>Saņemsiet <span data-mmd-eta-date>5–9 dienu laikā</span></strong><br><small>Izgatavošana 5–7 dienas + pakomātā 1–2 darba dienās. Steidzami — 1–2 dienās (+5 €), izvēlieties grozā.</small></span>';
+		echo '</div>';
+	}
+
+	public static function trust_row() {
+		echo '<div class="mmd-trust"><span>✦ Pakomātā no 2 €</span><span>✦ Bez maksas no 50 €</span><span>✦ Min. pasūtījums 5 €</span></div>';
+	}
+
+	public static function sticky_bar() {
+		if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+			return;
+		}
+		$product = wc_get_product( get_queried_object_id() );
+		if ( ! $product || ! $product->is_purchasable() || ! $product->is_in_stock() ) {
+			return;
+		}
+		echo '<div class="mmd-sticky" data-mmd-sticky hidden><div class="mmd-sticky-info"><span class="mmd-sticky-price">' . wp_kses_post( $product->get_price_html() ) . '</span><small data-mmd-eta-short></small></div><button type="button" class="mmd-sticky-btn" data-mmd-sticky-btn>' . esc_html( $product->is_type( 'simple' ) ? 'Ielikt grozā' : 'Izvēlēties' ) . '</button></div>';
+	}
+}
+
+add_action( 'plugins_loaded', array( 'MarMar_Design', 'init' ) );
