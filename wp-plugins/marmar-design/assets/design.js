@@ -37,28 +37,6 @@
 		document.querySelectorAll('[data-mmd-eta-short]').forEach(function (el) { el.textContent = short; });
 	} catch (e) { /* atstājam noklusēto tekstu */ }
 
-	// --- Parādīšanās, ritinot (kā pašreizējā vietnē, bet arī Safari) ---
-	try {
-		var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (!reduce && 'IntersectionObserver' in window) {
-			var sel = '[data-products] > .product, .entry-content .wp-block-image, .entry-content .wp-block-column, .entry-content .wp-block-gallery figure, .mmk-card, .wc-block-grid__product, .wp-block-post';
-			var vh = window.innerHeight || 800;
-			var items = [].slice.call(document.querySelectorAll(sel)).filter(function (el) {
-				var r = el.getBoundingClientRect();
-				return r.top > vh * 0.9 && !el.closest('[data-aos]'); // pirmo ekrānu neaiztiekam (ātrums, LCP)
-			});
-			var rio = new IntersectionObserver(function (es) {
-				es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); rio.unobserve(e.target); } });
-			}, { rootMargin: '0px 0px -8% 0px' });
-			items.forEach(function (el) {
-				var sib = el.parentElement ? [].indexOf.call(el.parentElement.children, el) : 0;
-				el.style.setProperty('--mmd-d', ((sib % 4) * 90) + 'ms');
-				el.classList.add('mmd-rv');
-				rio.observe(el);
-			});
-		}
-	} catch (e) { /* nav kritiski */ }
-
 	// --- Lipīgā “Ielikt grozā” josla (telefonā) ---
 	try {
 		var bar = document.querySelector('[data-mmd-sticky]');

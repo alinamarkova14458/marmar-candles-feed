@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.3.0
+ * Version:           1.5.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.3.0';
+	const VER = '1.5.2';
 
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 99 );
@@ -19,6 +19,7 @@ final class MarMar_Design {
 		add_action( 'wp_body_open', array( __CLASS__, 'topbar' ), 5 );
 		add_action( 'woocommerce_single_product_summary', array( __CLASS__, 'eta_box' ), 25 );
 		// trust_row nav vajadzīga: produkta lapā jau ir MarMar UX informācijas bloks.
+		add_action( 'wp_footer', array( __CLASS__, 'reveal_inline' ), 1 );
 		add_action( 'wp_footer', array( __CLASS__, 'sticky_bar' ), 20 );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'theme_mod_header_placements', array( __CLASS__, 'one_logo' ), 20 );
@@ -70,6 +71,8 @@ final class MarMar_Design {
 	}
 
 	public static function preload() {
+		// Parādīšanās animācijai: sākuma stāvoklis uzreiz (bez “mirgošanas”), drošībai — viss redzams pēc 4 s.
+		echo "<script>document.documentElement.classList.add('mmd-js');window.mmdT=setTimeout(function(){document.documentElement.classList.add('mmd-all')},4000);</script>\n";
 		$u = plugins_url( 'assets/fonts/', __FILE__ );
 		foreach ( array( 'marcellus-latin', 'figtree-latin' ) as $f ) {
 			echo '<link rel="preload" href="' . esc_url( $u . $f . '.woff2' ) . '" as="font" type="font/woff2" crossorigin>' . "\n";
@@ -93,6 +96,14 @@ final class MarMar_Design {
 
 	public static function trust_row() {
 		echo '<div class="mmd-trust"><span>Pakomātā no 2 €</span><span>Bez maksas no 50 €</span><span>Min. pasūtījums 5 €</span></div>';
+	}
+
+	/** Inline lapas apakšā pirms citiem skriptiem — kartītes parādās uzreiz, negaidot jQuery u.c. */
+	public static function reveal_inline() {
+		$f = __DIR__ . '/assets/reveal.js';
+		if ( is_readable( $f ) ) {
+			echo '<script id="marmar-design-reveal">' . file_get_contents( $f ) . '</script>' . "\n"; // phpcs:ignore
+		}
 	}
 
 	public static function sticky_bar() {

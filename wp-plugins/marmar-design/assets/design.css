@@ -106,9 +106,27 @@ body.mmd [data-products] .ct-woo-card-actions .button::before {
 body.mmd [data-products] .ct-woo-card-actions .button:hover { background: #A24F4E !important; }
 body.mmd [data-products] .ct-woo-card-actions .button:active { transform: scale(.97); }
 body.mmd [data-products] .ct-woo-card-actions .added_to_cart { font-size: 13px; margin-top: 6px; }
-/* Parādīšanās, ritinot: JS pievieno .mmd-rv tikai elementiem zem ekrāna (strādā arī Safari/iPhone) */
-.mmd-rv { opacity: 0; transform: translate3d(0, 50px, 0); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .75, .25, 1); transition-delay: var(--mmd-d, 0ms); will-change: opacity, transform; }
-.mmd-rv.is-in { opacity: 1; transform: none; }
+/* Parādīšanās, ritinot. Sākuma stāvokli liek CSS (html.mmd-js no galvenes), JS pievieno .is-in.
+   Ja JS nenostrādā — pēc 4 s html.mmd-all parāda visu. Galveno banneri un pirmo (LCP) attēlu neslēpjam. */
+html.mmd-js :is([data-products] > .product, .entry-content .wp-block-image, .entry-content .wp-block-column, .mmk-card) { transition: opacity .9s ease, transform .9s cubic-bezier(.2, .75, .25, 1); transition-delay: var(--mmd-d, 0ms); }
+html.mmd-js :is([data-products] > .product, .entry-content .wp-block-image, .entry-content .wp-block-column, .mmk-card):not(.is-in):not(.mm2-hero):not(:has(img[fetchpriority="high"])) { opacity: 0; transform: translate3d(0, 70px, 0) scale(.96); }
+html.mmd-js :is([data-products] > .product, .entry-content .wp-block-image, .entry-content .wp-block-column, .mmk-card).mmd-done { transition: transform .45s cubic-bezier(.2, .75, .25, 1), box-shadow .45s ease; transition-delay: 0ms; }
+html.mmd-all :is([data-products] > .product, .entry-content .wp-block-image, .entry-content .wp-block-column, .mmk-card) { opacity: 1 !important; transform: none !important; }
+
+/* ---------- Kustība, uzbraucot ar peli ---------- */
+@media (hover: hover) {
+	body.mmd [data-products] > .product { border-radius: 22px; }
+	body.mmd [data-products] > .product:hover { transform: translateY(-6px) !important; }
+	body.mmd [data-products] .ct-media-container { transition: box-shadow .45s ease; }
+	body.mmd [data-products] > .product:hover .ct-media-container { box-shadow: 0 16px 30px rgba(80, 60, 64, .16); }
+	body.mmd [data-products] .ct-media-container img,
+	body.mmd .entry-content .wp-block-image a img,
+	body.mmd .mmk-card .mmk-img { transition: transform .8s cubic-bezier(.2, .75, .25, 1) !important; }
+	body.mmd [data-products] > .product:hover .ct-media-container img,
+	body.mmd .entry-content .wp-block-image a:hover img,
+	body.mmd .mmk-card:hover .mmk-img { transform: scale(1.07) !important; }
+	body.mmd .entry-content .wp-block-image a { display: block; overflow: hidden; border-radius: inherit; }
+}
 
 /* ---------- Produkta lapa ---------- */
 body.mmd.single-product .woocommerce-product-gallery img,
@@ -148,7 +166,7 @@ body.mmd .wc-block-components-checkout-place-order-button {
 /* ---------- Kustības samazināšana ---------- */
 @media (prefers-reduced-motion: reduce) {
 	body.mmd .entry-content h2::before, body.mmd .woocommerce-products-header__title::before { animation: none !important; }
-	.mmd-rv { opacity: 1 !important; transform: none !important; transition: none !important; }
+	html.mmd-js :is([data-products] > .product, .entry-content .wp-block-image, .entry-content .wp-block-column, .mmk-card) { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
 
 /* Liesmiņa (svece) — dekoratīvā zīme zvaigznītes ✦ vietā (✦ atgādina AI ikonu) */
