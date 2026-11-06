@@ -277,3 +277,18 @@ body.mmd { overflow-x: clip; }
 .mmh-wed { background: #FFFFFF; border: 1px solid var(--mmd-line); box-shadow: 0 10px 30px rgba(80, 60, 64, .08); }
 .mmh-steps > div { padding: 22px 18px; background: #FFFFFF; border: 1px solid var(--mmd-line); border-radius: 20px; box-shadow: 0 8px 22px rgba(80, 60, 64, .06); }
 @media (max-width: 767px) { .mmh-steps { gap: 12px; } .mmh-steps > div { padding: 18px 16px; } }
+
+/* Formu pogas (CF7, WPForms u.c.) — nekad platākas par ekrānu */
+body.mmd input[type="submit"], body.mmd .wpcf7-submit, body.mmd .wpforms-submit { max-width: 100%; box-sizing: border-box; }
+@media (max-width: 689px) {
+	body.mmd input[type="submit"], body.mmd .wpcf7-submit, body.mmd .wpforms-submit {
+		width: 100%; padding-left: 12px !important; padding-right: 12px !important;
+		font-size: 13px !important; letter-spacing: .04em !important; white-space: normal;
+	}
+}
+
+/* Teksta lielums un rindstarpa (tēma telefonā lika 12px / 1) */
+body.mmd { --theme-font-size: 17px; --theme-line-height: 1.65; }
+@media (max-width: 689px) { body.mmd { --theme-font-size: 16px; --theme-line-height: 1.6; } }
+body.mmd .entry-content li { margin-bottom: 6px; }
+body.mmd .entry-content td, body.mmd .entry-content th { line-height: 1.45; }
