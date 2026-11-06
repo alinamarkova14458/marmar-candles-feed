@@ -1,0 +1,44 @@
+/* MarMar Konditori */
+.mmk, .mmk-form-wrap { --mmk-btn: #B9605F; --mmk-pink: #D68684; --mmk-plum: #735360; --mmk-ink: #504E4A; --mmk-muted: #6B5A5E; --mmk-cream: #FAF3F0; --mmk-blush: #F5E8EA; --mmk-soft: #EFD9DC; --mmk-line: #EFE3E0; color: var(--mmk-ink); }
+.mmk-tools { display: grid; gap: 10px; margin: 0 0 18px; }
+.mmk-search input { width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid var(--mmk-line); border-radius: 14px; font: inherit; box-sizing: border-box; }
+.mmk-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.mmk-chip { flex: 0 0 auto; min-height: 40px; padding: 0 14px; border: 1px solid var(--mmk-line); border-radius: 20px; background: #fff; color: var(--mmk-ink); font: inherit; font-size: 14px; cursor: pointer; }
+.mmk-chip.is-on { background: var(--mmk-btn); border-color: var(--mmk-btn); color: #fff; }
+.mmk-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.mmk-card { background: #fff; border: 1px solid var(--mmk-line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; }
+.mmk-card[hidden] { display: none; }
+.mmk-img { display: block; width: 100%; height: 220px; object-fit: cover; }
+.mmk-img--empty { display: grid; place-items: center; background: var(--mmk-cream); color: var(--mmk-pink); font-size: 36px; }
+.mmk-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.mmk-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.mmk-head h3 { margin: 0; font-size: 18px; line-height: 1.25; }
+.mmk-city { font-size: 13px; color: var(--mmk-muted); white-space: nowrap; }
+.mmk-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.mmk-tags span { font-size: 12px; padding: 4px 10px; border-radius: 12px; background: var(--mmk-blush); }
+.mmk-about { margin: 0; font-size: 14px; color: var(--mmk-muted); }
+.mmk-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px; margin-top: auto; }
+.mmk-links a { display: flex; align-items: center; justify-content: center; min-height: 44px; border: 1px solid var(--mmk-ink); border-radius: 12px; color: var(--mmk-ink); text-decoration: none; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+.mmk-btn { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 48px; padding: 0 22px; border: 0; border-radius: 12px; background: var(--mmk-btn); color: #fff !important; text-decoration: none; font: inherit; font-size: 13px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; box-shadow: 0 6px 16px rgba(185, 96, 95, .25); }
+.mmk-btn:hover { filter: brightness(.95); }
+.mmk-empty { padding: 18px; text-align: center; background: var(--mmk-cream); border-radius: 16px; }
+.mmk-join { margin: 34px 0 0; padding: 28px 22px; border-radius: 20px; background: var(--mmk-soft); text-align: center; }
+.mmk-join h2 { margin: 6px 0 10px; font-size: 22px; }
+.mmk-join p { margin: 0 auto 16px; max-width: 520px; }
+.mmk-join .mmk-btn { display: inline-flex; }
+.mmk-star { color: var(--mmk-plum); font-size: 20px; }
+.mmk-form-wrap { max-width: 640px; margin: 30px auto 0; scroll-margin-top: 90px; }
+.mmk-form { display: grid; gap: 14px; padding: 24px; background: var(--mmk-cream); border-radius: 20px; }
+.mmk-field { display: grid; gap: 6px; margin: 0; border: 0; padding: 0; }
+.mmk-field > span, .mmk-field legend { font-weight: 600; font-size: 14px; }
+.mmk-field small { font-weight: 400; color: var(--mmk-muted); }
+.mmk-field input[type=text], .mmk-field input[type=tel], .mmk-field input[type=url], .mmk-field input[type=email], .mmk-field select, .mmk-field textarea { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid var(--mmk-line); border-radius: 12px; background: #fff; font: inherit; box-sizing: border-box; }
+.mmk-checks { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; }
+.mmk-checks label { display: inline-flex; gap: 6px; align-items: center; min-height: 32px; }
+.mmk-consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; }
+.mmk-consent input { width: 20px; height: 20px; margin: 1px 0 0; flex: 0 0 auto; accent-color: var(--mmk-btn); }
+.mmk-small { margin: 0; font-size: 13px; color: var(--mmk-muted); text-align: center; }
+.mmk-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.mmk-notice { padding: 14px 16px; border-radius: 14px; margin: 0 0 14px; }
+.mmk-notice--ok { background: #EAF4EC; color: #2F5E3A; }
+.mmk-notice--err { background: #FFF4E5; border: 1.5px solid #F0C27B; color: #7A4F00; }
