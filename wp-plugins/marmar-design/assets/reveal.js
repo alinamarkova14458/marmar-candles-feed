@@ -21,13 +21,13 @@
 					var d = parseInt(t.style.getPropertyValue('--mmd-d'), 10) || 0;
 					setTimeout(function () { t.classList.add('mmd-done'); }, d + 950); // pēc tam — ātra reakcija uz peli
 				});
-			}, { rootMargin: '0px 0px -6% 0px' });
+			}, { rootMargin: '0px' });
 			// Drošība: ja kāds elements jau ir ekrānā vai virs tā, bet novērotājs to nepamanīja — parādām.
 			var check = function () {
 				var cur = document.querySelectorAll(SEL); // svaigi — ja kāds skripts elementu aizstājis
 				for (var i = 0; i < cur.length; i++) {
 					var el = cur[i];
-					if (!el.classList.contains('is-in') && el.getBoundingClientRect().top < vh * 0.95) { el.classList.add('is-in'); setTimeout(function (t) { return function () { t.classList.add('mmd-done'); }; }(el), 1000); }
+					if (!el.classList.contains('is-in') && el.getBoundingClientRect().top < vh) { el.classList.add('is-in'); setTimeout(function (t) { return function () { t.classList.add('mmd-done'); }; }(el), 1000); }
 				}
 			};
 			var tick = false;

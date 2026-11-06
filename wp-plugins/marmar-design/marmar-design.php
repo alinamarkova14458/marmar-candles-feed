@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.10.0
+ * Version:           1.10.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.10.0';
+	const VER = '1.10.1';
 
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 99 );
@@ -169,7 +169,7 @@ final class MarMar_Design {
 		echo '<ul class="mmd-list">'
 			. '<li><strong>Izgatavošana — 5–7 dienas</strong> pēc apmaksas. Katru sveci darinām ar rokām.</li>'
 			. '<li><strong>Steidzams pasūtījums — 1–2 dienās</strong>, +5 €. Atzīmējiet to virs pogas “Pievienot grozam” vai grozā.</li>'
-			. '<li><strong>Piegāde uz pakomātiem visā Latvijā</strong> — Omniva, DPD, Venipak, Unisend: no 2,00 € līdz 4,50 €, parasti 1–2 darba dienās.</li>'
+			. '<li><strong>Piegāde uz pakomātiem visā Latvijā</strong> — Unisend un Venipak — 2,00 €, DPD — 4,00 €, Omniva — 5,00 €; parasti 1–2 darba dienās.</li>'
 			. '<li><strong>Bezmaksas piegāde</strong>, ja pasūtījums ir no 50 €.</li>'
 			. '<li><strong>Saņemšana Rīgā, Iļģuciemā</strong> — saskaņojot laiku.</li>'
 			. '<li><strong>Minimālais pasūtījums — 5 €</strong> (bez piegādes).</li>'

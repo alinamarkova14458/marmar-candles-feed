@@ -379,3 +379,12 @@ html.mmd-scrolling body.mmd .mmd-together h2::before,
 html.mmd-scrolling .mmh-flame,
 html.mmd-scrolling .mmk-flame { animation: mmdSway .45s ease-in-out infinite alternate !important; }
 @media (prefers-reduced-motion: reduce) { html.mmd-scrolling body.mmd .entry-content h2::before, html.mmd-scrolling .mmh-flame, html.mmd-scrolling .mmk-flame { animation: none !important; } }
+
+/* Noformēšana: soļu virsraksti mazāki, lai nesaspiež “Pieslēgties” */
+body.mmd .wc-block-components-checkout-step__title,
+body.mmd .wc-block-components-checkout-step__heading .wc-block-components-title { font-size: 19px !important; letter-spacing: .06em !important; line-height: 1.3 !important; }
+@media (max-width: 689px) {
+	body.mmd .wc-block-components-checkout-step__title,
+	body.mmd .wc-block-components-checkout-step__heading .wc-block-components-title { font-size: 16px !important; }
+	body.mmd .wc-block-components-checkout-step__heading { gap: 8px; }
+}
