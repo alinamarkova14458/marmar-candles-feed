@@ -3,9 +3,12 @@
 	'use strict';
 	var C = window.MarMarCheckout;
 	if (!C) return;
+	// wp_localize_script передаёт числа строками.
+	C.freeFrom = parseFloat(C.freeFrom) || 0;
+	C.minOrder = parseFloat(C.minOrder) || 0;
 
 	function el(tag, cls, html) { var n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; }
-	function money(v) { return v.toFixed(2).replace('.', ',') + ' €'; }
+	function money(v) { return (Number(v) || 0).toFixed(2).replace('.', ',') + ' €'; }
 	function store() { return window.wp && wp.data && wp.data.select && wp.data.select('wc/store/cart'); }
 
 	function cartNumbers() {
@@ -25,6 +28,15 @@
 	var bar = el('div', 'mmco-free', '<div class="mmco-free-text"></div><div class="mmco-free-track"><span></span></div>');
 	function updateBar() {
 		var n = cartNumbers(); if (!n) return;
+		// Меньше минимального заказа — сначала показываем, сколько не хватает до него.
+		if (C.minOrder && n.items > 0 && n.items < C.minOrder) {
+			bar.querySelector('.mmco-free-text').textContent = C.i18n.minLeft.replace('%1$s', money(C.minOrder)).replace('%2$s', money(C.minOrder - n.items));
+			bar.querySelector('.mmco-free-track span').style.width = Math.min(100, n.items / C.minOrder * 100) + '%';
+			bar.classList.add('is-min'); bar.classList.remove('is-done');
+			bar.setAttribute('role', 'alert');
+			return;
+		}
+		bar.classList.remove('is-min'); bar.removeAttribute('role');
 		var left = Math.max(0, C.freeFrom - n.items);
 		bar.querySelector('.mmco-free-text').textContent = left > 0 ? C.i18n.left.replace('%s', money(left)) : C.i18n.free;
 		bar.querySelector('.mmco-free-track span').style.width = Math.min(100, n.items / C.freeFrom * 100) + '%';
@@ -78,10 +90,12 @@
 	var scheduled = false;
 	new MutationObserver(function () {
 		if (scheduled) return; scheduled = true;
-		requestAnimationFrame(function () { scheduled = false; place(); refresh(); });
+		requestAnimationFrame(function () { scheduled = false; safe(place); refresh(); });
 	}).observe(document.body, { childList: true, subtree: true });
 
-	function refresh() { updateBar(); updateEta(); }
+	// Наш код никогда не должен ронять корзину WooCommerce: любые ошибки гасим здесь.
+	function safe(fn) { try { fn(); } catch (err) { if (window.console) console.warn('MarMar Checkout:', err); } }
+	function refresh() { safe(updateBar); safe(updateEta); }
 	if (window.wp && wp.data && wp.data.subscribe) wp.data.subscribe(refresh);
-	place(); refresh();
+	safe(place); refresh();
 })();

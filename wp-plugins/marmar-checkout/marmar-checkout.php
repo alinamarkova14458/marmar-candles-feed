@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.0.0';
+	const VERSION = '1.1.0';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -20,6 +20,7 @@ final class MarMar_Checkout {
 			'marmar_checkout_config',
 			array(
 				'free_shipping_from' => 50,
+				'min_order'          => 5,   // должен совпадать со сниппетом «Minimum Order 5 EUR»
 				'make_days'          => array( 5, 7 ),  // обычное изготовление, рабочие дни
 				'make_days_express'  => array( 1, 2 ),  // срочное
 				'ship_days'          => array( 1, 2 ),  // доставка в пакомат
@@ -33,10 +34,39 @@ final class MarMar_Checkout {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 30 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'i18n' ), 5 );
 		add_filter( 'gettext_woocommerce', array( __CLASS__, 'gettext' ), 10, 2 );
+		// Минимальный заказ (заменяет сниппет WPCode «Minimum Order 5 EUR»).
+		add_action( 'woocommerce_check_cart_items', array( __CLASS__, 'check_minimum' ) );
+		add_action( 'woocommerce_checkout_process', array( __CLASS__, 'check_minimum' ) );
 	}
 
 	private static function on_cart_or_checkout() {
 		return function_exists( 'is_cart' ) && ( is_cart() || ( is_checkout() && ! is_order_received_page() ) );
+	}
+
+	/** Сумма товаров с НДС, без доставки и доплат. */
+	public static function items_total() {
+		if ( ! WC()->cart ) {
+			return 0.0;
+		}
+		return (float) WC()->cart->get_subtotal() + (float) WC()->cart->get_subtotal_tax();
+	}
+
+	public static function check_minimum() {
+		if ( ! WC()->cart || WC()->cart->is_empty() || function_exists( 'marmar_minimum_order_amount' ) ) {
+			return; // старый сниппет ещё включён — не дублируем сообщение
+		}
+		$min   = (float) self::cfg()['min_order'];
+		$total = self::items_total();
+		if ( $total < $min ) {
+			wc_add_notice(
+				sprintf(
+					'Minimālā pasūtījuma summa ir %1$s (bez piegādes). Pievienojiet vēl preces par %2$s 🕯️',
+					wp_strip_all_tags( wc_price( $min ) ),
+					wp_strip_all_tags( wc_price( $min - $total ) )
+				),
+				'error'
+			);
+		}
 	}
 
 	/* ---------------- Даты ---------------- */
@@ -96,6 +126,7 @@ final class MarMar_Checkout {
 			<div class="mmco-chips">
 				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">🕯️</span><span><strong>Gatavs <?php echo esc_html( $c['make_days'][0] . '–' . $c['make_days'][1] ); ?> darba dienās</strong><br><small>Steidzami — <?php echo esc_html( $c['make_days_express'][1] ); ?> d.d. (+5 €)</small></span></div>
 				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">📦</span><span><strong>Pakomātā no 2 €</strong><br><small>Bez maksas no <?php echo esc_html( $c['free_shipping_from'] ); ?> €</small></span></div>
+				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">🛒</span><span><strong>Minimālais pasūtījums <?php echo esc_html( $c['min_order'] ); ?> €</strong><br><small>bez piegādes</small></span></div>
 				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">📍</span><span><strong>Saņemšana Rīgā</strong><br><small>Iļģuciemā, saskaņojot laiku</small></span></div>
 			</div>
 			<details class="mmco-details">
@@ -133,12 +164,14 @@ final class MarMar_Checkout {
 			array(
 				'page'        => is_cart() ? 'cart' : 'checkout',
 				'freeFrom'    => (float) $c['free_shipping_from'],
+				'minOrder'    => (float) $c['min_order'],
 				'feeName'     => $c['express_fee_name'],
 				'estimate'    => self::lv_range( $normal['from'], $normal['to'] ),
 				'estimateFast'=> self::lv_range( $fast['from'], $fast['to'] ),
 				'rating'      => $rating ? array( 'score' => number_format( round( $rating['rating'], 1 ), 1, ',', '' ), 'count' => (int) $rating['count'] ) : null,
 				'i18n'        => array(
 					'left'      => 'Vēl %s līdz bezmaksas piegādei',
+					'minLeft'   => 'Minimālais pasūtījums — %1$s. Pievienojiet vēl preces par %2$s',
 					'free'      => 'Piegāde pakomātā — bez maksas! 🎉',
 					'eta'       => 'Saņemsiet ~%s',
 					'etaNote'   => 'pēc apmaksas saņemšanas',
@@ -175,6 +208,8 @@ final class MarMar_Checkout {
 			'Total price for %1$d %2$s item: %3$s'               => array( 'Kopējā cena par %1$d × %2$s: %3$s', 'Kopējā cena par %1$d × %2$s: %3$s', 'Kopējā cena par %1$d × %2$s: %3$s' ),
 			'Remove item'                                        => array( 'Noņemt preci' ),
 			'Free'                                               => array( 'Bez maksas' ),
+			'Please fix the following error before continuing'  => array( 'Lūdzu, izlabojiet šo kļūdu, lai turpinātu' ),
+			'Please fix the following errors before continuing' => array( 'Lūdzu, izlabojiet šīs kļūdas, lai turpinātu' ),
 		);
 		$data = array( '' => array( 'domain' => 'woocommerce', 'lang' => 'lv', 'plural-forms' => 'nplurals=3; plural=(n%10==0 || (n%100>=11 && n%100<=19) ? 2 : (n%10==1 && n%100!=11 ? 0 : 1));' ) );
 		foreach ( $t as $k => $v ) {
