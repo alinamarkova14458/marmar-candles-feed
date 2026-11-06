@@ -50,3 +50,9 @@
 .mmco-fast small { color: var(--mmco-muted); }
 .mmco-fast.is-on { border-color: var(--mmco-accent); background: var(--mmco-soft); }
 .mmco-fast.is-busy { opacity: .6; pointer-events: none; }
+
+/* Комментарий к заказу — сразу поле ввода: прячем только квадратик галочки, подпись остаётся заголовком */
+.mmco-note-open .wc-block-components-checkbox__input, .mmco-note-open .wc-block-components-checkbox__mark { display: none !important; }
+.mmco-note-open .wc-block-components-checkbox label { padding-left: 0 !important; cursor: default; pointer-events: none; }
+.mmco-note-open .wc-block-components-checkbox__label { font-weight: 600; padding-left: 0 !important; margin-left: 0 !important; }
+.mmco-note-open textarea { margin-top: 8px; min-height: 90px; }

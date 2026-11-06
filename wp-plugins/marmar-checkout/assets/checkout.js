@@ -97,6 +97,13 @@
 				if (expressBox && expressBox.nextElementSibling !== submit) submit.parentNode.insertBefore(expressBox, submit);
 			}
 		} else {
+			// Поле комментария сразу открыто: один раз ставим скрытую галочку WooCommerce.
+			var note = document.querySelector('.wc-block-checkout__add-note');
+			if (note && !note.querySelector('textarea') && !note.dataset.mmcoOpened) {
+				var cb = note.querySelector('input[type="checkbox"]');
+				if (cb && !cb.checked) { note.dataset.mmcoOpened = '1'; cb.click(); }
+			}
+			if (note) note.classList.add('mmco-note-open');
 			var actions = document.querySelector('.wc-block-checkout__actions');
 			if (actions) {
 				document.querySelectorAll('.mmco-eta').forEach(function (n) { if (n !== eta) n.remove(); });
