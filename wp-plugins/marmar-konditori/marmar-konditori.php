@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditori
  * Description:       Bezmaksas konditoru katalogs: pieteikuma forma ([marmar_konditori_forma]), moderācija administrācijā un katalogs ar filtriem ([marmar_konditori]).
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditori
@@ -14,7 +14,7 @@ final class MarMar_Konditori {
 
 	const CPT    = 'mm_konditors';
 	const OPTION = 'marmar_konditori';
-	const VER    = '1.0.1';
+	const VER    = '1.0.2';
 	const MAX_MB = 5;
 
 	public static function cities() {
@@ -163,7 +163,7 @@ final class MarMar_Konditori {
 		} else {
 			echo '<p class="mmk-empty">Katalogs tikko sācies — pirmie konditori drīz būs šeit.</p>';
 		}
-		echo '<div class="mmk-join"><span class="mmk-star" aria-hidden="true">✦</span><h2>Esat konditors? Pievienojieties bez maksas</h2>';
+		echo '<div class="mmk-join"><span class="mmk-star mmk-flame" aria-hidden="true"></span><h2>Esat konditors? Pievienojieties bez maksas</h2>';
 		echo '<p>Jūsu tortes redzēs cilvēki, kas meklē sveces svētkiem. Mēs atzīmēsim jūs Instagram un uztaisīsim kopīgu ierakstu.</p>';
 		echo '<a class="mmk-btn" href="' . esc_url( $form_url ) . '">Pieteikties katalogā</a></div>';
 		echo '</div>';
@@ -175,7 +175,7 @@ final class MarMar_Konditori {
 		$ig   = self::ig_handle( $m['instagram'] );
 		$hay  = function_exists( 'mb_strtolower' ) ? mb_strtolower( $p->post_title . ' ' . $m['city'] ) : strtolower( $p->post_title . ' ' . $m['city'] );
 		$html = '<article class="mmk-card" data-city="' . esc_attr( $m['city'] ) . '" data-types="' . esc_attr( implode( '|', $m['types'] ) ) . '" data-hay="' . esc_attr( $hay ) . '">';
-		$html .= $img ? $img : '<div class="mmk-img mmk-img--empty" aria-hidden="true">✦</div>';
+		$html .= $img ? $img : '<div class="mmk-img mmk-img--empty" aria-hidden="true"><span class="mmk-flame"></span></div>';
 		$html .= '<div class="mmk-body"><div class="mmk-head"><h3>' . esc_html( $p->post_title ) . '</h3>';
 		if ( $m['city'] ) {
 			$html .= '<span class="mmk-city">' . esc_html( $m['city'] ) . '</span>';
@@ -203,7 +203,7 @@ final class MarMar_Konditori {
 			$html .= '<a href="' . esc_url( $m['website'] ) . '" target="_blank" rel="noopener">Mājaslapa</a>';
 		}
 		$html .= '</div>';
-		$html .= '<a class="mmk-btn mmk-btn--candles" href="' . esc_url( $s['candles'] ) . '">✦ Sveces šai tortei</a>';
+		$html .= '<a class="mmk-btn mmk-btn--candles" href="' . esc_url( $s['candles'] ) . '"><span class="mmk-flame" aria-hidden="true"></span> Sveces šai tortei</a>';
 		$html .= '</div></article>';
 		return $html;
 	}
@@ -385,7 +385,7 @@ final class MarMar_Konditori {
 		$page = self::catalog_page_url();
 		wp_mail(
 			$email,
-			'Jūsu kartīte ir MarMar Candles konditoru katalogā ✦',
+			'Jūsu kartīte ir MarMar Candles konditoru katalogā',
 			"Sveiki!\n\nPaldies, ka pievienojāties! Jūsu kartīte \"" . $post->post_title . "\" ir publicēta: " . ( $page ? $page : home_url( '/' ) ) . "\n\nMēs būsim priecīgi, ja atzīmēsiet @" . $s['instagram'] . " Instagram — tad uztaisīsim arī kopīgu ierakstu.\n\nJa vēlaties ko mainīt vai dzēst, vienkārši atbildiet uz šo e-pastu.\n\nAr siltiem sveicieniem,\nMarMar Candles",
 			array( 'Reply-To: ' . $s['notify'] )
 		);

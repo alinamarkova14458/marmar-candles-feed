@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       MarMar Design
- * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, zvaigznītes ✦, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.0.1
+ * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
+ * Version:           1.1.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,14 +11,14 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.0.1';
+	const VER = '1.1.0';
 
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 99 );
 		add_action( 'wp_head', array( __CLASS__, 'preload' ), 1 );
 		add_action( 'wp_body_open', array( __CLASS__, 'topbar' ), 5 );
 		add_action( 'woocommerce_single_product_summary', array( __CLASS__, 'eta_box' ), 25 );
-		add_action( 'woocommerce_single_product_summary', array( __CLASS__, 'trust_row' ), 35 );
+		// trust_row nav vajadzīga: produkta lapā jau ir MarMar UX informācijas bloks.
 		add_action( 'wp_footer', array( __CLASS__, 'sticky_bar' ), 20 );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 	}
@@ -49,7 +49,7 @@ final class MarMar_Design {
 	}
 
 	public static function topbar() {
-		echo '<div class="mmd-topbar" role="note"><span>Bezmaksas piegāde no 50 €</span><span class="mmd-sep" aria-hidden="true">✦</span><span>Gatavs 5–7 dienās</span><span class="mmd-sep mmd-d" aria-hidden="true">✦</span><span class="mmd-d">Steidzami 1–2 dienās</span></div>';
+		echo '<div class="mmd-topbar" role="note"><span>Bezmaksas piegāde no 50 €</span><span class="mmd-sep mmd-flame" aria-hidden="true"></span><span>Gatavs 5–7 dienās</span><span class="mmd-sep mmd-flame mmd-d" aria-hidden="true"></span><span class="mmd-d">Steidzami 1–2 dienās</span></div>';
 	}
 
 	/** Termiņu bloks produkta lapā. Datumu aprēķina JS (lapa tiek kešota). */
@@ -64,7 +64,7 @@ final class MarMar_Design {
 	}
 
 	public static function trust_row() {
-		echo '<div class="mmd-trust"><span>✦ Pakomātā no 2 €</span><span>✦ Bez maksas no 50 €</span><span>✦ Min. pasūtījums 5 €</span></div>';
+		echo '<div class="mmd-trust"><span>Pakomātā no 2 €</span><span>Bez maksas no 50 €</span><span>Min. pasūtījums 5 €</span></div>';
 	}
 
 	public static function sticky_bar() {
