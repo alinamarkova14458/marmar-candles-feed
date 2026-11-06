@@ -135,6 +135,12 @@ class MarMar_Wedding_Product {
 
 			<fieldset class="mmw-step">
 				<legend><span class="mmw-n">2</span> Daudzums</legend>
+				<div class="mmw-qty">
+					<button type="button" class="mmw-qty-btn" data-step="-1" aria-label="Mazāk">−</button>
+					<input type="number" id="mmw_qty" inputmode="numeric" min="<?php echo (int) MarMar_Wedding_Settings::min_qty(); ?>" step="1" value="<?php echo (int) max( MarMar_Wedding_Settings::min_qty(), (int) $posted( 'quantity', MarMar_Wedding_Settings::min_qty() ) ); ?>" aria-label="Daudzums, gab.">
+					<button type="button" class="mmw-qty-btn" data-step="1" aria-label="Vairāk">+</button>
+					<span class="mmw-qty-unit">gab.</span>
+				</div>
 				<table class="mmw-tiers">
 					<?php
 					$froms = array_keys( $tiers );
@@ -147,7 +153,7 @@ class MarMar_Wedding_Product {
 						</tr>
 					<?php endforeach; ?>
 				</table>
-				<p class="mmw-help">Minimālais daudzums — <?php echo (int) MarMar_Wedding_Settings::min_qty(); ?> gab. Daudzumu ievadiet zemāk pie pogas.</p>
+				<p class="mmw-help">Minimālais daudzums — <?php echo (int) MarMar_Wedding_Settings::min_qty(); ?> gab.</p>
 			</fieldset>
 
 			<fieldset class="mmw-step">
@@ -203,10 +209,15 @@ class MarMar_Wedding_Product {
 			</fieldset>
 
 			<fieldset class="mmw-step">
-				<legend><span class="mmw-n">5</span> Kāzu datums un vēlmes</legend>
+				<legend><span class="mmw-n">5</span> Datumi un vēlmes</legend>
 				<p class="mmw-field">
 					<label for="mmw_wedding_date">Kāzu datums</label>
 					<input type="date" id="mmw_wedding_date" name="mmw_wedding_date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( $posted( 'mmw_wedding_date' ) ); ?>" required>
+				</p>
+				<p class="mmw-field">
+					<label for="mmw_delivery_date">Vēlamais saņemšanas datums</label>
+					<input type="date" id="mmw_delivery_date" name="mmw_delivery_date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( $posted( 'mmw_delivery_date' ) ); ?>">
+					<small class="mmw-help"><?php echo esc_html( $s['lead_time'] ); ?></small>
 				</p>
 				<p class="mmw-field">
 					<label for="mmw_comment">Komentārs (stils, krāsas, vēlmes)</label>
@@ -218,8 +229,16 @@ class MarMar_Wedding_Product {
 				<span class="mmw-summary-unit"></span>
 				<strong class="mmw-summary-total"></strong>
 			</div>
-			<?php if ( $s['after'] ) : ?>
-				<p class="mmw-after"><?php echo esc_html( $s['after'] ); ?></p>
+			<?php $steps = array_values( array_filter( array_map( 'trim', preg_split( '/\r?\n/', (string) $s['process'] ) ) ) ); ?>
+			<?php if ( $steps ) : ?>
+				<div class="mmw-process">
+					<p class="mmw-process-title">Kā notiek pasūtījums</p>
+					<ol>
+						<?php foreach ( $steps as $step ) : ?>
+							<li><?php echo esc_html( $step ); ?></li>
+						<?php endforeach; ?>
+					</ol>
+				</div>
 			<?php endif; ?>
 		</div>
 		<?php

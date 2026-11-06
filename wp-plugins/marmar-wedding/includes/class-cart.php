@@ -12,7 +12,8 @@ class MarMar_Wedding_Cart {
 		'pers'         => 'Personalizācija',
 		'names'        => 'Teksts',
 		'text_date'    => 'Datums uz birkas/uzlīmes',
-		'wedding_date' => 'Kāzu datums',
+		'wedding_date'  => 'Kāzu datums',
+		'delivery_date' => 'Vēlamais saņemšanas datums',
 		'comment'      => 'Komentārs',
 		'files'        => 'Faili',
 	);
@@ -84,6 +85,7 @@ class MarMar_Wedding_Cart {
 			'names'        => 'none' === $pers ? '' : sanitize_text_field( self::field( 'names' ) ),
 			'text_date'    => 'none' === $pers ? '' : sanitize_text_field( self::field( 'text_date' ) ),
 			'wedding_date' => sanitize_text_field( self::field( 'wedding_date' ) ),
+			'delivery_date' => preg_match( '/^\d{4}-\d{2}-\d{2}$/', sanitize_text_field( self::field( 'delivery_date' ) ) ) ? sanitize_text_field( self::field( 'delivery_date' ) ) : '',
 			'comment'      => sanitize_textarea_field( self::field( 'comment' ) ),
 			'files'        => $files,
 		);
@@ -119,6 +121,9 @@ class MarMar_Wedding_Cart {
 		}
 		if ( $w['wedding_date'] ) {
 			$out['wedding_date'] = wp_date( 'd.m.Y', strtotime( $w['wedding_date'] . ' 12:00:00' ) );
+		}
+		if ( ! empty( $w['delivery_date'] ) ) {
+			$out['delivery_date'] = wp_date( 'd.m.Y', strtotime( $w['delivery_date'] . ' 12:00:00' ) );
 		}
 		if ( ! empty( $w['files'] ) ) {
 			$out['files'] = implode( ', ', wp_list_pluck( $w['files'], 'name' ) );

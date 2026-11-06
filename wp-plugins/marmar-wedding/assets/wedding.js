@@ -8,6 +8,7 @@
 	if (!form) return;
 
 	var qty = form.querySelector('input.qty');
+	var own = root.querySelector('#mmw_qty');
 	var unitEl = root.querySelector('.mmw-summary-unit');
 	var totalEl = root.querySelector('.mmw-summary-total');
 	var tiers = Object.keys(C.tiers).map(Number).sort(function (a, b) { return a - b; });
@@ -15,8 +16,24 @@
 	function money(v) { return v.toFixed(2).replace('.', C.decimal) + ' €'; }
 	function unitFor(n) { var p = C.tiers[tiers[0]]; tiers.forEach(function (t) { if (n >= t) p = C.tiers[t]; }); return Number(p); }
 
+	// Собственное поле количества в шаге 2 управляет скрытым полем WooCommerce.
+	function setQty(n) {
+		n = Math.max(C.minQty, parseInt(n, 10) || C.minQty);
+		if (own) own.value = n;
+		if (qty) { qty.value = n; qty.setAttribute('value', n); }
+		update();
+	}
+	if (own) {
+		root.querySelectorAll('.mmw-qty-btn').forEach(function (b) {
+			b.addEventListener('click', function () { setQty((parseInt(own.value, 10) || C.minQty) + Number(b.dataset.step)); });
+		});
+		own.addEventListener('input', function () { var n = parseInt(own.value, 10); if (n >= C.minQty && qty) { qty.value = n; } update(); });
+		own.addEventListener('change', function () { setQty(own.value); });
+		form.addEventListener('submit', function () { setQty(own.value); }, true);
+	}
+
 	function update() {
-		var n = Math.max(parseInt(qty && qty.value, 10) || C.minQty, 0);
+		var n = Math.max(parseInt(own ? own.value : (qty && qty.value), 10) || C.minQty, 0);
 		var u = unitFor(n);
 		unitEl.textContent = n + ' gab. × ' + money(u);
 		totalEl.textContent = C.i18n.total + ': ' + money(u * n);
@@ -28,6 +45,7 @@
 	if (qty) {
 		qty.min = C.minQty;
 		if ((parseInt(qty.value, 10) || 0) < C.minQty) qty.value = C.minQty;
+		if (own) own.value = qty.value;
 		['input', 'change'].forEach(function (ev) { qty.addEventListener(ev, update); });
 		// Кнопки +/- темы Blocksy меняют значение без события input.
 		new MutationObserver(update).observe(qty, { attributes: true, attributeFilter: ['value'] });

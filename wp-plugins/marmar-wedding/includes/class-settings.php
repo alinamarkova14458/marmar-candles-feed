@@ -15,7 +15,9 @@ class MarMar_Wedding_Settings {
 			// «Название: #цвет», по одному в строке.
 			'ribbons'  => "Balta: #ffffff\nKrēmkrāsa: #f3e9d2\nPūderrozā: #e8c4c0\nPutekļaini rozā: #c99a96\nBordo: #6d1f2f\nLavandas: #b9a7d6\nZila: #8fb3d9\nEikalipta zaļa: #9db4a0\nOlīvzaļa: #6b7350\nZelta: #c9a64b\nSudraba: #c0c0c0\nMelna: #222222",
 			'intro'    => '', // краткое описание товара уже объясняет конструктор
-			'after'    => 'Pēc pasūtījuma mēs sazināsimies ar Jums, saskaņosim dizainu un termiņus un atsūtīsim rēķinu. Izgatavošanu sākam pēc dizaina apstiprināšanas un apmaksas.',
+			'lead_time' => 'Izgatavošana parasti aizņem 2 nedēļas pēc maketa apstiprināšanas. Norādiet, līdz kuram datumam vēlaties saņemt sveces, — vadīsimies pēc tā.',
+			// Шаги «Kā notiek pasūtījums», по одному в строке.
+			'process'  => "Noformējiet pasūtījumu — mēs atsūtīsim rēķinu e-pastā.\n3 darba dienu laikā pēc apmaksas atsūtīsim birkas vai uzlīmes maketu, lai Jūs redzētu gatavo dizainu.\nJūs apskatāt maketu un to apstiprināt vai lūdzat labojumus.\nPēc apstiprināšanas izgatavojam sveces (parasti 2 nedēļās) un nosūtām uz izvēlēto pakomātu.",
 		);
 	}
 

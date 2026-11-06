@@ -59,8 +59,9 @@ class MarMar_Wedding_Admin {
 						'tiers'   => sanitize_textarea_field( $in['tiers'] ?? '' ),
 						'types'   => sanitize_textarea_field( $in['types'] ?? '' ),
 						'ribbons' => sanitize_textarea_field( $in['ribbons'] ?? '' ),
-						'intro'   => sanitize_textarea_field( $in['intro'] ?? '' ),
-						'after'   => sanitize_textarea_field( $in['after'] ?? '' ),
+						'intro'     => sanitize_textarea_field( $in['intro'] ?? '' ),
+						'lead_time' => sanitize_textarea_field( $in['lead_time'] ?? '' ),
+						'process'   => sanitize_textarea_field( $in['process'] ?? '' ),
 					);
 				},
 			)
@@ -78,11 +79,12 @@ class MarMar_Wedding_Admin {
 			'tiers'   => array( 'Цены по количеству', 'Формат: «от N шт.: цена за штуку», по одному в строке. Например: 50: 3.5' ),
 			'types'   => array( 'Виды свечей', 'По одному в строке.' ),
 			'ribbons' => array( 'Цвета лент', 'Формат: «Название: #цвет», по одному в строке. Вариант «Cita» добавляется автоматически.' ),
-			'intro'   => array( 'Текст над конструктором', '' ),
-			'after'   => array( 'Текст под конструктором', '' ),
+			'intro'     => array( 'Текст над конструктором', 'Можно оставить пустым.' ),
+			'lead_time' => array( 'Подсказка о сроках', 'Показывается под полем «Vēlamais saņemšanas datums».' ),
+			'process'   => array( 'Шаги «Kā notiek pasūtījums»', 'По одному шагу в строке.' ),
 		);
 		foreach ( $areas as $k => $a ) {
-			echo '<tr><th>' . esc_html( $a[0] ) . '</th><td><textarea name="' . esc_attr( $o ) . '[' . esc_attr( $k ) . ']" rows="' . ( in_array( $k, array( 'intro', 'after' ), true ) ? 3 : 7 ) . '" class="large-text">' . esc_textarea( $s[ $k ] ) . '</textarea>' . ( $a[1] ? '<p class="description">' . esc_html( $a[1] ) . '</p>' : '' ) . '</td></tr>';
+			echo '<tr><th>' . esc_html( $a[0] ) . '</th><td><textarea name="' . esc_attr( $o ) . '[' . esc_attr( $k ) . ']" rows="' . ( in_array( $k, array( 'intro', 'lead_time' ), true ) ? 3 : 7 ) . '" class="large-text">' . esc_textarea( $s[ $k ] ) . '</textarea>' . ( $a[1] ? '<p class="description">' . esc_html( $a[1] ) . '</p>' : '' ) . '</td></tr>';
 		}
 		echo '</table>';
 		submit_button( 'Сохранить' );
