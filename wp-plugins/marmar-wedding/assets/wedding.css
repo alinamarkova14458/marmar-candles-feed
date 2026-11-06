@@ -1,0 +1,47 @@
+/* MarMar Wedding */
+.mmw { --mmw-accent: #c88a85; --mmw-dark: #a96f6a; --mmw-soft: #f8f2f1; --mmw-line: #eee3e1; --mmw-muted: #8a7f83;
+	margin: 0 0 24px; display: grid; gap: 22px; width: 100%; }
+.mmw-intro, .mmw-after { margin: 0; color: var(--mmw-muted); font-size: 14px; }
+.mmw-step { border: 0; margin: 0; padding: 0; min-width: 0; }
+.mmw-step legend { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; margin-bottom: 10px; padding: 0; }
+.mmw-n { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--mmw-accent); color: #fff; font-size: 13px; }
+
+.mmw-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.mmw-card, .mmw-option { position: relative; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1.5px solid var(--mmw-line); border-radius: 12px; cursor: pointer; background: #fff; font-size: 14px; }
+.mmw-card input, .mmw-option input { accent-color: var(--mmw-accent); margin: 0; }
+.mmw-card:has(input:checked), .mmw-option:has(input:checked) { border-color: var(--mmw-accent); background: var(--mmw-soft); }
+.mmw-options { display: grid; gap: 8px; }
+
+.mmw-tiers { width: 100%; border-collapse: collapse; font-size: 14px; margin: 0; }
+.mmw-tiers td { padding: 6px 10px; border-bottom: 1px solid var(--mmw-line); }
+.mmw-tiers td:last-child { text-align: right; }
+.mmw-tiers tr.is-active td { background: var(--mmw-soft); font-weight: 600; color: var(--mmw-dark); }
+.mmw-help { margin: 8px 0 0; font-size: 13px; color: var(--mmw-muted); }
+
+.mmw-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.mmw-swatch { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1.5px solid transparent; border-radius: 10px; cursor: pointer; font-size: 13px; }
+.mmw-swatch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.mmw-dot { flex: 0 0 26px; width: 26px; height: 26px; border-radius: 50%; border: 1px solid rgba(0,0,0,.15); }
+.mmw-dot--other { display: grid; place-items: center; background: #fff; color: var(--mmw-muted); font-weight: 600; }
+.mmw-swatch:has(input:checked) { border-color: var(--mmw-accent); background: var(--mmw-soft); }
+.mmw-swatch:has(input:focus-visible) { outline: 2px solid var(--mmw-dark); outline-offset: 2px; }
+
+.mmw-pers-fields { display: grid; gap: 10px; margin-top: 12px; }
+.mmw-pers-fields[hidden] { display: none; }
+.mmw-field { display: grid; gap: 4px; margin: 0; }
+.mmw-field label, .mmw-label { font-size: 13px; font-weight: 600; }
+.mmw-field input[type=text], .mmw-field input[type=date], .mmw-field textarea { width: 100%; font-size: 16px; }
+.mmw-upload { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.mmw-upload input[type=file] { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.mmw-upload-btn { display: inline-block; padding: 9px 16px; border: 1.5px dashed var(--mmw-accent); border-radius: 10px; color: var(--mmw-dark); cursor: pointer; font-weight: 600; font-size: 14px; }
+.mmw-upload input:focus-visible + .mmw-upload-btn { outline: 2px solid var(--mmw-dark); outline-offset: 2px; }
+.mmw-upload small { color: var(--mmw-muted); }
+.mmw-files { display: grid; gap: 4px; }
+.mmw-file { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 10px; background: var(--mmw-soft); border-radius: 8px; font-size: 13px; }
+.mmw-file.is-error { background: #fdecec; color: #8a1f1f; }
+.mmw-file-x { background: none; border: 0; font-size: 18px; line-height: 1; cursor: pointer; color: inherit; }
+
+.mmw-summary { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--mmw-soft); }
+.mmw-summary-unit { color: var(--mmw-muted); font-size: 14px; }
+.mmw-summary-total { font-size: 18px; color: var(--mmw-dark); }
+.mmw-unit { font-size: .8em; opacity: .75; }
