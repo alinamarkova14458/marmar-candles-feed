@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.1.0';
+	const VERSION = '1.1.1';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -208,7 +208,8 @@ final class MarMar_Checkout {
 			'Total price for %1$d %2$s item: %3$s'               => array( 'Kopējā cena par %1$d × %2$s: %3$s', 'Kopējā cena par %1$d × %2$s: %3$s', 'Kopējā cena par %1$d × %2$s: %3$s' ),
 			'Remove item'                                        => array( 'Noņemt preci' ),
 			'Free'                                               => array( 'Bez maksas' ),
-			'Please fix the following error before continuing'  => array( 'Lūdzu, izlabojiet šo kļūdu, lai turpinātu' ),
+			// _n(): ключ — форма единственного числа, значения — три латышские формы.
+			'Please fix the following error before continuing'  => array( 'Lūdzu, izlabojiet šo kļūdu, lai turpinātu', 'Lūdzu, izlabojiet šīs kļūdas, lai turpinātu', 'Lūdzu, izlabojiet šīs kļūdas, lai turpinātu' ),
 			'Please fix the following errors before continuing' => array( 'Lūdzu, izlabojiet šīs kļūdas, lai turpinātu' ),
 		);
 		$data = array( '' => array( 'domain' => 'woocommerce', 'lang' => 'lv', 'plural-forms' => 'nplurals=3; plural=(n%10==0 || (n%100>=11 && n%100<=19) ? 2 : (n%10==1 && n%100!=11 ? 0 : 1));' ) );
