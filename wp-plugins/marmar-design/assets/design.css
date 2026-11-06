@@ -292,3 +292,35 @@ body.mmd { --theme-font-size: 17px; --theme-line-height: 1.65; }
 @media (max-width: 689px) { body.mmd { --theme-font-size: 16px; --theme-line-height: 1.6; } }
 body.mmd .entry-content li { margin-bottom: 6px; }
 body.mmd .entry-content td, body.mmd .entry-content th { line-height: 1.45; }
+
+/* ---------- Produkta lapa: steidzamais, kopā pērk, krāsu apļi ---------- */
+.mmd-fast { display: flex; gap: 12px; align-items: flex-start; width: 100%; margin: 0 0 14px; padding: 12px 14px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid var(--mmd-line); cursor: pointer; font-size: 15px; line-height: 1.4; transition: border-color .2s, background .2s; }
+.mmd-fast input { width: 20px; height: 20px; margin: 1px 0 0; flex: 0 0 auto; accent-color: var(--mmd-btn); }
+.mmd-fast span { display: grid; gap: 2px; }
+.mmd-fast small { color: var(--mmd-muted); font-size: 13px; }
+.mmd-fast:has(input:checked) { border-color: var(--mmd-btn); background: var(--mmd-cream); }
+body.mmd form.cart:not(.variations_form) .mmd-fast, body.mmd .woocommerce-variation-add-to-cart .mmd-fast { flex-basis: 100%; }
+body.mmd form.cart { flex-wrap: wrap; }
+
+.mmd-together { margin: 40px 0 10px; }
+.mmd-together h2 { text-align: center; }
+.mmd-tg-list { display: grid; gap: 10px; max-width: 640px; margin: 18px auto 0; }
+@media (min-width: 1000px) { .mmd-tg-list { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; } }
+.mmd-tg-row { display: flex; align-items: center; gap: 12px; padding: 10px; background: #FFFFFF; border: 1px solid var(--mmd-line); border-radius: 16px; }
+.mmd-tg-pic { flex: 0 0 64px; }
+.mmd-tg-img { width: 64px !important; height: 64px !important; object-fit: cover; border-radius: 12px; display: block; }
+.mmd-tg-info { flex: 1; min-width: 0; display: grid; gap: 2px; font-size: 14px; line-height: 1.3; }
+.mmd-tg-info a { color: var(--mmd-ink); text-decoration: none; }
+.mmd-tg-price { font-weight: 500; }
+.mmd-tg-add { flex: 0 0 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; background: var(--mmd-btn); color: #FFFFFF !important; font-size: 22px; line-height: 1; text-decoration: none !important; transition: background .2s, transform .15s; }
+.mmd-tg-add:hover { background: #A24F4E; }
+.mmd-tg-add.added::after { content: none; }
+.mmd-tg-add.loading { opacity: .6; }
+.mmd-tg-row .added_to_cart { display: none; }
+
+/* Krāsu izvēle — apļi (Variation Swatches) */
+body.mmd .variable-items-wrapper .variable-item.color-variable-item,
+body.mmd .variable-items-wrapper .variable-item.color-variable-item .variable-item-contents,
+body.mmd .variable-items-wrapper .variable-item.color-variable-item .variable-item-span { border-radius: 50% !important; }
+body.mmd .variable-items-wrapper .variable-item.image-variable-item,
+body.mmd .variable-items-wrapper .variable-item.image-variable-item img { border-radius: 10px !important; }
