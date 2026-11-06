@@ -58,6 +58,7 @@ class MarMar_Wedding_Admin {
 						'min_qty' => max( 1, (int) ( $in['min_qty'] ?? 10 ) ),
 						'tiers'   => sanitize_textarea_field( $in['tiers'] ?? '' ),
 						'types'   => sanitize_textarea_field( $in['types'] ?? '' ),
+						'pers_images' => sanitize_textarea_field( $in['pers_images'] ?? '' ),
 						'ribbons' => sanitize_textarea_field( $in['ribbons'] ?? '' ),
 						'intro'     => sanitize_textarea_field( $in['intro'] ?? '' ),
 						'lead_time' => sanitize_textarea_field( $in['lead_time'] ?? '' ),
@@ -77,7 +78,8 @@ class MarMar_Wedding_Admin {
 		echo '<tr><th>Минимальное количество</th><td><input type="number" min="1" name="' . esc_attr( $o ) . '[min_qty]" value="' . esc_attr( $s['min_qty'] ) . '" class="small-text"></td></tr>';
 		$areas = array(
 			'tiers'   => array( 'Цены по количеству', 'Формат: «от N шт.: цена за штуку», по одному в строке. Например: 50: 3.5' ),
-			'types'   => array( 'Виды свечей', 'По одному в строке.' ),
+			'types'   => array( 'Виды свечей', 'По одному в строке: «Название | ссылка на картинку» (картинка необязательна).' ),
+			'pers_images' => array( 'Примеры персонализации', 'Строки «tag | ссылка» и «sticker | ссылка» — маленькое фото рядом с вариантом.' ),
 			'ribbons' => array( 'Цвета лент', 'Формат: «Название: #цвет», по одному в строке. Вариант «Cita» добавляется автоматически.' ),
 			'intro'     => array( 'Текст над конструктором', 'Можно оставить пустым.' ),
 			'lead_time' => array( 'Подсказка о сроках', 'Показывается под полем «Vēlamais saņemšanas datums».' ),

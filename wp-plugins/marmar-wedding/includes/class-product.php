@@ -124,10 +124,16 @@ class MarMar_Wedding_Product {
 			<fieldset class="mmw-step">
 				<legend><span class="mmw-n">1</span> Svece</legend>
 				<div class="mmw-cards">
+					<?php $timgs = MarMar_Wedding_Settings::type_images(); ?>
 					<?php foreach ( $types as $i => $t ) : ?>
-						<label class="mmw-card">
-							<input type="radio" name="mmw_type" value="<?php echo esc_attr( $t ); ?>" <?php checked( $posted( 'mmw_type', $types[0] ?? '' ), $t ); ?> required>
-							<span><?php echo esc_html( $t ); ?></span>
+						<label class="mmw-card<?php echo ! empty( $timgs[ $t ] ) ? ' mmw-card--img' : ''; ?>">
+							<?php if ( ! empty( $timgs[ $t ] ) ) : ?>
+								<img src="<?php echo esc_url( $timgs[ $t ] ); ?>" alt="" loading="lazy" width="160" height="160">
+							<?php endif; ?>
+							<span class="mmw-card-label">
+								<input type="radio" name="mmw_type" value="<?php echo esc_attr( $t ); ?>" <?php checked( $posted( 'mmw_type', $types[0] ?? '' ), $t ); ?> required>
+								<span><?php echo esc_html( $t ); ?></span>
+							</span>
 						</label>
 					<?php endforeach; ?>
 				</div>
@@ -177,10 +183,14 @@ class MarMar_Wedding_Product {
 			<fieldset class="mmw-step">
 				<legend><span class="mmw-n">4</span> Personalizācija</legend>
 				<div class="mmw-options">
+					<?php $pimgs = MarMar_Wedding_Settings::pers_images(); ?>
 					<?php foreach ( MarMar_Wedding_Settings::personalisations() as $key => $label ) : ?>
 						<label class="mmw-option">
 							<input type="radio" name="mmw_pers" value="<?php echo esc_attr( $key ); ?>" <?php checked( $posted( 'mmw_pers', 'tag' ), $key ); ?>>
-							<span><?php echo esc_html( $label ); ?></span>
+							<span class="mmw-option-text"><?php echo esc_html( $label ); ?></span>
+							<?php if ( ! empty( $pimgs[ $key ] ) ) : ?>
+								<img class="mmw-option-img" src="<?php echo esc_url( $pimgs[ $key ] ); ?>" alt="" loading="lazy" width="56" height="56">
+							<?php endif; ?>
 						</label>
 					<?php endforeach; ?>
 				</div>

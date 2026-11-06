@@ -11,7 +11,10 @@ class MarMar_Wedding_Settings {
 			'min_qty'  => 10,
 			// «от N шт.: цена за штуку», по одному в строке.
 			'tiers'    => "10: 5\n20: 4.5\n30: 4\n50: 3.5\n100: 3",
+			// «Название | URL картинки», по одному в строке.
 			'types'    => "Svece burciņā (20 ml)\nMini Bubble svecīte",
+			// Примеры персонализации: «tag | URL» и «sticker | URL».
+			'pers_images' => '',
 			// «Название: #цвет», по одному в строке.
 			'ribbons'  => "Balta: #ffffff\nKrēmkrāsa: #f3e9d2\nPūderrozā: #e8c4c0\nPutekļaini rozā: #c99a96\nBordo: #6d1f2f\nLavandas: #b9a7d6\nZila: #8fb3d9\nEikalipta zaļa: #9db4a0\nOlīvzaļa: #6b7350\nZelta: #c9a64b\nSudraba: #c0c0c0\nMelna: #222222",
 			'intro'    => '', // краткое описание товара уже объясняет конструктор
@@ -65,8 +68,31 @@ class MarMar_Wedding_Settings {
 		return (float) $price;
 	}
 
+	/** Строка «Название | URL картинки» → название. */
 	public static function types() {
-		return self::lines( 'types' );
+		return array_map( function ( $l ) { return trim( explode( '|', $l, 2 )[0] ); }, self::lines( 'types' ) );
+	}
+
+	/** @return array<string,string> название => URL картинки (может быть пустым) */
+	public static function type_images() {
+		$out = array();
+		foreach ( self::lines( 'types' ) as $l ) {
+			$p = array_map( 'trim', explode( '|', $l, 2 ) );
+			$out[ $p[0] ] = isset( $p[1] ) ? esc_url_raw( $p[1] ) : '';
+		}
+		return $out;
+	}
+
+	/** @return array<string,string> tag|sticker => URL примера */
+	public static function pers_images() {
+		$out = array();
+		foreach ( self::lines( 'pers_images' ) as $l ) {
+			$p = array_map( 'trim', explode( '|', $l, 2 ) );
+			if ( isset( $p[1] ) ) {
+				$out[ $p[0] ] = esc_url_raw( $p[1] );
+			}
+		}
+		return $out;
 	}
 
 	/** @return array<string,string> name => hex */
