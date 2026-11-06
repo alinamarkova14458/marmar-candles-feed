@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Speed
  * Description:       Ātruma uzlabojumi: produktu video ielādējas tikai pēc “play”; piegādes spraudņu skripti (UNISEND, DPD, select2) ielādējas tikai grozā un noformēšanā.
- * Version:           1.2.0
+ * Version:           1.2.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -66,7 +66,15 @@ final class MarMar_Speed {
 
 	/** [video] apraksta tekstā — arī nelādējam iepriekš. */
 	public static function video_shortcode( $out ) {
-		return str_replace( array( 'preload="metadata"', 'preload="auto"' ), 'preload="none"', $out );
+		$out = str_replace( array( 'preload="metadata"', 'preload="auto"' ), 'preload="none"', $out );
+		// Bez iepriekšējas ielādes video būtu melns — liekam produkta foto kā vāku.
+		if ( false === strpos( $out, 'poster=' ) && function_exists( 'is_product' ) && is_product() ) {
+			$img = get_the_post_thumbnail_url( get_queried_object_id(), 'woocommerce_single' );
+			if ( $img ) {
+				$out = preg_replace( '/<video\b/', '<video poster="' . esc_url( $img ) . '"', $out, 1 );
+			}
+		}
+		return $out;
 	}
 }
 

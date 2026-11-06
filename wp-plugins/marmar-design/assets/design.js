@@ -57,4 +57,40 @@
 			});
 		}
 	} catch (e) { /* nav kritiski */ }
+
+	// --- Produkta cilnes → izvēršamas rindas (akordeons) ---
+	try {
+		var tabs = document.querySelector('.woocommerce-tabs');
+		if (tabs && tabs.querySelector('ul.tabs')) {
+			var wrap = document.createElement('div');
+			wrap.className = 'mmd-acc-wrap';
+			[].slice.call(tabs.querySelectorAll('ul.tabs li a')).forEach(function (a, i) {
+				var id = (a.getAttribute('href') || '').replace(/^#/, '');
+				var panel = id && document.getElementById(id);
+				if (!panel) return;
+				var d = document.createElement('details');
+				d.className = 'mmd-acc';
+				d.id = 'mmd-' + id;
+				if (i === 0) d.open = true;
+				var sm = document.createElement('summary');
+				sm.textContent = a.textContent.trim();
+				d.appendChild(sm);
+				panel.style.display = '';
+				panel.removeAttribute('hidden');
+				d.appendChild(panel);
+				wrap.appendChild(d);
+			});
+			if (wrap.children.length) {
+				tabs.appendChild(wrap);
+				tabs.classList.add('mmd-acc-on');
+				// Woo cilņu skripts slēpj paneļus — atceļam to arī vēlāk
+				setTimeout(function () { wrap.querySelectorAll('.wc-tab').forEach(function (pn) { pn.style.display = ''; }); }, 600);
+				var openHash = function () {
+					var h = (location.hash || '').replace('#', '');
+					if (/review/.test(h)) { var r = document.getElementById('mmd-tab-reviews'); if (r) { r.open = true; r.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
+				};
+				window.addEventListener('hashchange', openHash); openHash();
+			}
+		}
+	} catch (e) { /* nav kritiski */ }
 })();
