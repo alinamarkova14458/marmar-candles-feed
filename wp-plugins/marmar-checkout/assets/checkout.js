@@ -103,7 +103,13 @@
 				var cb = note.querySelector('input[type="checkbox"]');
 				if (cb && !cb.checked) { note.dataset.mmcoOpened = '1'; cb.click(); }
 			}
-			if (note) note.classList.add('mmco-note-open');
+			if (note) {
+				note.classList.add('mmco-note-open');
+				var lbl = note.querySelector('.wc-block-components-checkbox__label');
+				if (lbl && lbl.textContent !== C.i18n.noteLabel) lbl.textContent = C.i18n.noteLabel;
+				var ta = note.querySelector('textarea');
+				if (ta && ta.placeholder !== C.i18n.noteHint) ta.placeholder = C.i18n.noteHint;
+			}
 			var actions = document.querySelector('.wc-block-checkout__actions');
 			if (actions) {
 				document.querySelectorAll('.mmco-eta').forEach(function (n) { if (n !== eta) n.remove(); });

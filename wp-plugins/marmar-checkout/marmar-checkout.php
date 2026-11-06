@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.2.1
+ * Version:           1.2.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.2.1';
+	const VERSION = '1.2.2';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -200,6 +200,8 @@ final class MarMar_Checkout {
 					'etaNote'   => 'pēc apmaksas saņemšanas',
 					'handmade'  => 'Roku darbs Latvijā',
 					'invoice'   => 'Apmaksa ar rēķinu',
+					'noteLabel' => 'Komentārs pasūtījumam (nav obligāts)',
+					'noteHint'  => 'Piemēram: vārds vai cipars uz sveces, vēlamais saņemšanas datums vai cita svarīga informācija',
 					'express'   => 'Steidzams pasūtījums — +5 €',
 					'expressSub'=> 'Izgatavošana 1–2 dienās — saņemsiet ~%s',
 				),
