@@ -259,3 +259,16 @@ body.mmd { overflow-x: clip; }
 .mmh-wed-img { display: block; height: 260px; }
 .mmh-wed-img img { height: 100%; min-height: 0; object-position: 50% 35%; }
 @media (min-width: 768px) { .mmh-wed { grid-template-columns: 1fr 1.4fr; } .mmh-wed-img { height: 400px; } }
+
+/* “Pieejams uzreiz” — pamanāma josla ar precēm */
+.mmh-ready { background: var(--mmd-soft); padding: clamp(36px, 5vw, 64px) 0; }
+.mmh-ready-in { max-width: 1290px; margin: 0 auto; padding: 0 16px; }
+@media (min-width: 768px) { .mmh-ready-in { padding: 0 40px; } }
+.mmh-ready-head { text-align: center; max-width: 640px; margin: 0 auto 24px; }
+.mmh-ready-head h2 { margin: 8px 0 10px !important; }
+.mmh-ready-head h2::before { display: none !important; }
+.mmh-ready-head p { margin: 0; font-size: 16px; color: var(--mmd-ink); }
+.mmh-badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 20px; background: #FFFFFF; color: var(--mmd-btn); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.mmh-badge .mmh-flame { width: 11px; height: 14px; background: var(--mmd-btn); }
+.mmh-ready [data-products] .ct-media-container { background: #FFFFFF; }
+.mmh-ready .mmh-all-wrap { margin-top: 22px; }
