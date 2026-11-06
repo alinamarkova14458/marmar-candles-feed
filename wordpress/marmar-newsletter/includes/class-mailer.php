@@ -19,7 +19,7 @@ class Marmar_NL_Mailer {
 	public static function settings() {
 		$defaults = array(
 			'from_email'   => get_option( 'admin_email' ),
-			'from_name'    => 'Alina | MarMar Candles',
+			'from_name'    => 'MarMar Candles',
 			'smtp_enabled' => 0,
 			'smtp_host'    => 'smtp.gmail.com',
 			'smtp_port'    => 587,

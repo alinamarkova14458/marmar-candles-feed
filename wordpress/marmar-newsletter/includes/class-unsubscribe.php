@@ -39,12 +39,12 @@ class Marmar_NL_Unsubscribe {
 			}
 			self::page(
 				'Tu esi atrakstījies(-usies)',
-				'<p>Vairs nesūtīšu tev jaunumus. Paldies, ka biji kopā ar mani!</p><p>Ja pārdomāsi, vari atkal atzīmēt piekrišanu nākamajā pasūtījumā.</p>'
+				'<p>Vairs nesūtīsim tev jaunumus. Paldies, ka biji kopā ar mums!</p><p>Ja pārdomāsi, vari atkal atzīmēt piekrišanu nākamajā pasūtījumā.</p>'
 			);
 		}
 
 		if ( ! $subscriber ) {
-			self::page( 'Saite nav derīga', '<p>Šī atrakstīšanās saite nav derīga vai jau ir izmantota. Ja vēstules joprojām pienāk, uzraksti man, un es to sakārtošu.</p>' );
+			self::page( 'Saite nav derīga', '<p>Šī atrakstīšanās saite nav derīga vai jau ir izmantota. Ja vēstules joprojām pienāk, uzraksti mums, un mēs to sakārtosim.</p>' );
 		}
 
 		if ( 'subscribed' !== $subscriber->status ) {

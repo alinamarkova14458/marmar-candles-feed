@@ -9,8 +9,8 @@ class Marmar_NL_Subscribers {
 
 	const DB_VERSION = '1';
 
-	/** Источники с явным согласием (галочка, вручную). */
-	const CONSENT_SOURCES = array( 'checkout', 'manual' );
+	/** Источники с явным согласием (галочка, вручную, готовая база подписчиков). */
+	const CONSENT_SOURCES = array( 'checkout', 'manual', 'list' );
 
 	public static function table() {
 		global $wpdb;
@@ -124,7 +124,9 @@ class Marmar_NL_Subscribers {
 				}
 				return 'exists';
 			}
-			if ( ! in_array( $source, self::CONSENT_SOURCES, true ) ) {
+			// Вернуть отписавшегося может только свежее согласие (галочка или вручную),
+			// но не импорт старой базы.
+			if ( ! in_array( $source, array( 'checkout', 'manual' ), true ) ) {
 				return 'skipped';
 			}
 			$wpdb->update(
@@ -269,5 +271,98 @@ class Marmar_NL_Subscribers {
 			++$page;
 		} while ( count( $orders ) === 100 );
 		return $result;
+	}
+
+	/**
+	 * Импорт готовой базы подписчиков из CSV (экспорт Mailchimp, Excel, Google Sheets).
+	 *
+	 * Колонка email ищется по заголовку (email, e-mail, e-pasts, почта) или по
+	 * содержимому; имя — по заголовку (first name, vārds, имя, name).
+	 * Строки со статусом «unsubscribed / cleaned» заносятся как отписавшиеся.
+	 *
+	 * @return array{created:int,exists:int,skipped:int,unsubscribed:int,invalid:int}|string
+	 */
+	public static function import_csv( $path, $source = 'list' ) {
+		$raw = file_get_contents( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		if ( false === $raw || '' === trim( $raw ) ) {
+			return 'Файл пустой.';
+		}
+		$raw = preg_replace( '/^\xEF\xBB\xBF/', '', $raw );
+		if ( ! mb_check_encoding( $raw, 'UTF-8' ) ) {
+			$raw = mb_convert_encoding( $raw, 'UTF-8', 'Windows-1257' );
+		}
+		$lines = preg_split( '/\r\n|\r|\n/', $raw );
+		$first = (string) $lines[0];
+		$delim = ',';
+		foreach ( array( ';', "\t", ',' ) as $d ) {
+			if ( substr_count( $first, $d ) > substr_count( $first, $delim ) ) {
+				$delim = $d;
+			}
+		}
+		$rows = array();
+		foreach ( $lines as $line ) {
+			if ( '' !== trim( $line ) ) {
+				$rows[] = str_getcsv( $line, $delim, '"', '\\' );
+			}
+		}
+		if ( ! $rows ) {
+			return 'В файле нет строк.';
+		}
+
+		$header    = array_map( static fn( $h ) => mb_strtolower( trim( (string) $h ) ), $rows[0] );
+		$email_col = null;
+		$name_col  = null;
+		$state_col = null;
+		foreach ( $header as $i => $h ) {
+			if ( null === $email_col && preg_match( '/e-?mail|e-?pasts|почт|адрес/u', $h ) ) {
+				$email_col = $i;
+			} elseif ( null === $name_col && preg_match( '/first|vārd|vard|имя|^name$|^vārds$/u', $h ) ) {
+				$name_col = $i;
+			} elseif ( null === $state_col && preg_match( '/status|statuss|статус/u', $h ) ) {
+				$state_col = $i;
+			}
+		}
+		$has_header = null !== $email_col;
+		if ( ! $has_header ) {
+			// Без заголовка: колонка, где в первой строке email.
+			foreach ( $rows[0] as $i => $cell ) {
+				if ( is_email( trim( (string) $cell ) ) ) {
+					$email_col = $i;
+					break;
+				}
+			}
+		}
+		if ( null === $email_col ) {
+			return 'Не нашёл колонку с email.';
+		}
+
+		$out = array( 'created' => 0, 'exists' => 0, 'skipped' => 0, 'unsubscribed' => 0, 'invalid' => 0 );
+		foreach ( array_slice( $rows, $has_header ? 1 : 0 ) as $row ) {
+			$email = self::normalize_email( $row[ $email_col ] ?? '' );
+			if ( ! $email ) {
+				++$out['invalid'];
+				continue;
+			}
+			$name  = null !== $name_col ? trim( (string) ( $row[ $name_col ] ?? '' ) ) : '';
+			$state = null !== $state_col ? mb_strtolower( trim( (string) ( $row[ $state_col ] ?? '' ) ) ) : '';
+			if ( preg_match( '/unsub|cleaned|bounced|atrakst|отпис/u', $state ) ) {
+				$r = self::add( $email, $name, $source );
+				$s = self::get_by_email( $email );
+				if ( $s ) {
+					self::unsubscribe( $s->id );
+				}
+				++$out['unsubscribed'];
+				continue;
+			}
+			$r = self::add( $email, $name, $source );
+			if ( 'created' === $r ) {
+				++$out['created'];
+			} elseif ( 'exists' === $r ) {
+				++$out['exists'];
+			} else {
+				++$out['skipped'];
+			}
+		}
+		return $out;
 	}
 }

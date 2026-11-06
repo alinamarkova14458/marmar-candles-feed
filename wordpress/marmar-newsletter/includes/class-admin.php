@@ -18,7 +18,7 @@ class Marmar_NL_Admin {
 		add_filter( 'manage_' . Marmar_NL_Campaigns::CPT . '_posts_columns', array( __CLASS__, 'columns' ) );
 		add_action( 'manage_' . Marmar_NL_Campaigns::CPT . '_posts_custom_column', array( __CLASS__, 'column' ), 10, 2 );
 
-		foreach ( array( 'test', 'start', 'pause', 'retry', 'import', 'add_sub', 'unsub', 'delete_sub', 'smtp_test' ) as $a ) {
+		foreach ( array( 'test', 'start', 'pause', 'retry', 'import', 'import_csv', 'add_sub', 'unsub', 'delete_sub', 'smtp_test' ) as $a ) {
 			add_action( 'admin_post_marmar_nl_' . $a, array( __CLASS__, 'action_' . $a ) );
 		}
 	}
@@ -236,6 +236,18 @@ class Marmar_NL_Admin {
 		self::back( sprintf( 'Импорт: новых %d, уже были %d, пропущено (отписались/ошибка) %d.', $r['created'], $r['exists'], $r['skipped'] ) );
 	}
 
+	public static function action_import_csv() {
+		self::guard( 'import_csv' );
+		if ( empty( $_FILES['csv']['tmp_name'] ) || ! is_uploaded_file( $_FILES['csv']['tmp_name'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			self::back( 'Файл не выбран.', 'error' );
+		}
+		$r = Marmar_NL_Subscribers::import_csv( $_FILES['csv']['tmp_name'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		if ( is_string( $r ) ) {
+			self::back( $r, 'error' );
+		}
+		self::back( sprintf( 'Импорт базы: новых %d, уже были %d, отписавшихся %d, пропущено %d, неверных адресов %d.', $r['created'], $r['exists'], $r['unsubscribed'], $r['skipped'], $r['invalid'] ) );
+	}
+
 	public static function action_add_sub() {
 		self::guard( 'add_sub' );
 		$email = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
@@ -291,6 +303,7 @@ class Marmar_NL_Admin {
 		$src    = array(
 			'checkout' => 'галочка в заказе',
 			'manual'   => 'вручную',
+			'list'     => 'база подписчиков (CSV)',
 			'customer' => 'покупатель (импорт)',
 		);
 		?>
@@ -306,6 +319,17 @@ class Marmar_NL_Admin {
 					<p>Добавляет покупателей из выполненных заказов. Им уходят только рассылки с аудиторией «Согласие + покупатели».
 						Отписавшиеся не возвращаются.</p>
 					<p><a class="button" href="<?php echo esc_url( self::action_url( 'import' ) ); ?>">Импортировать из заказов</a></p>
+				</div>
+				<div class="card" style="max-width:420px;">
+					<h2>Загрузить базу подписчиков</h2>
+					<p>CSV с колонкой email (и, если есть, имя). Подходит экспорт из Mailchimp, Excel или Google Sheets («Сохранить как CSV»).
+						Эти люди считаются давшими согласие. Отписавшиеся в файле останутся отписанными.</p>
+					<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+						<input type="hidden" name="action" value="marmar_nl_import_csv">
+						<?php wp_nonce_field( 'marmar_nl_import_csv' ); ?>
+						<input type="file" name="csv" accept=".csv,text/csv" required>
+						<button class="button">Загрузить</button>
+					</form>
 				</div>
 				<div class="card" style="max-width:420px;">
 					<h2>Добавить вручную</h2>

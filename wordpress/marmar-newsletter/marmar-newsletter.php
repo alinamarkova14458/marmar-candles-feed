@@ -2,7 +2,7 @@
 /**
  * Plugin Name: MarMar Newsletter
  * Description: Собственные рассылки без платных сервисов: галочка согласия при оформлении заказа, база подписчиков, письма-кампании с тестовой отправкой, отправка порциями, ссылка «atrakstīties», отправка через SMTP (Google).
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: MarMar CANDLES
  * Requires at least: 6.5
  * Requires PHP: 8.0
@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MARMAR_NL_VERSION', '1.0.0' );
+define( 'MARMAR_NL_VERSION', '1.1.0' );
 define( 'MARMAR_NL_FILE', __FILE__ );
 define( 'MARMAR_NL_DIR', plugin_dir_path( __FILE__ ) );
 
