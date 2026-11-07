@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem: loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā.
- * Version:           1.0.1
+ * Version:           1.1.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.0.1';
+	const VER       = '1.1.0';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -51,6 +51,7 @@ final class MarMar_Konditoru_Cenas {
 
 		// Pieteikums.
 		add_shortcode( 'marmar_konditoru_cenas', array( __CLASS__, 'shortcode' ) );
+		add_shortcode( 'marmar_konditori_pogas', array( __CLASS__, 'buttons' ) );
 		add_action( 'init', array( __CLASS__, 'handle_application' ), 20 );
 
 		// Administrācija.
@@ -225,6 +226,14 @@ final class MarMar_Konditoru_Cenas {
 .mmkc-form .mmkc-check input{width:auto;margin-top:.3em}
 .mmkc-form button{grid-column:1/-1;justify-self:start;padding:.75em 1.6em;border:0;border-radius:999px;background:#B9605F;color:#fff;font-weight:600;font-size:16px;cursor:pointer}
 .mmkc-hp{position:absolute!important;left:-9999px!important}
+.mmkc-tabs{max-width:760px;margin:0 auto 2em}
+.mmkc-tabbtns{display:flex;gap:.8em;justify-content:center;flex-wrap:wrap;margin-bottom:1.2em}
+.mmkc-tabbtn{padding:.8em 1.6em;border-radius:999px;border:1px solid #B9605F;background:#B9605F;color:#fff;font-weight:600;font-size:16px;line-height:1.3;cursor:pointer}
+.mmkc-tabbtn[aria-expanded=true]{background:#fff;color:#B9605F}
+.mmkc-tabbtn:after{content:" ↓"}
+.mmkc-tabbtn[aria-expanded=true]:after{content:" ↑"}
+.mmkc-panel .mmkc-box{margin-bottom:0}
+@media(max-width:640px){.mmkc-tabbtn{flex:1 1 100%}}
 .mm-toggle{margin:1em 0}
 .mm-toggle>summary{display:inline-block;list-style:none;cursor:pointer;padding:.75em 1.6em;border-radius:999px;background:#B9605F;color:#fff;font-weight:600;font-size:16px;line-height:1.3}
 .mm-toggle>summary::-webkit-details-marker{display:none}
@@ -238,7 +247,7 @@ final class MarMar_Konditoru_Cenas {
 		wp_enqueue_style( 'marmar-konditoru-cenas' );
 		wp_add_inline_style( 'marmar-konditoru-cenas', $css );
 		// Atver formu, ja lapa atvērta pēc nosūtīšanas (paziņojums / kļūda) vai ar saiti uz formu.
-		$js = "(function(){function openFor(h){if(!h||h.length<2)return;var el=document.getElementById(decodeURIComponent(h.slice(1)));if(!el)return;var d=el.tagName==='DETAILS'?el:el.closest('details');if(d){d.open=true;setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},50);}}document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href*=\\'#\\']');if(a&&a.hash&&a.pathname===location.pathname)openFor(a.hash);});window.addEventListener('hashchange',function(){openFor(location.hash);});document.addEventListener('DOMContentLoaded',function(){openFor(location.hash);var q=location.search;if(!/mmk/i.test(q))return;document.querySelectorAll('details.mm-toggle').forEach(function(d){if(/mmkc/i.test(q)?d.querySelector('.mmkc-form'):!d.querySelector('.mmkc-form'))d.open=true;});});})();";
+		$js = "(function(){function tab(name,scroll){var w=document.querySelector('[data-mmkc-tabs]');if(!w)return false;var hit=false;w.querySelectorAll('[data-mmkc-tab]').forEach(function(b){var on=b.getAttribute('data-mmkc-tab')===name&&b.getAttribute('aria-expanded')!=='true';if(b.getAttribute('data-mmkc-tab')===name)hit=true;b.setAttribute('aria-expanded',on?'true':'false');});w.querySelectorAll('[data-mmkc-panel]').forEach(function(p){p.hidden=!(p.getAttribute('data-mmkc-panel')===name&&w.querySelector('[data-mmkc-tab=\\''+name+'\\']').getAttribute('aria-expanded')==='true');});if(scroll)w.scrollIntoView({behavior:'smooth',block:'start'});return hit;}function openFor(h){if(!h||h.length<2)return;var el=document.getElementById(decodeURIComponent(h.slice(1)));if(!el)return;var p=el.closest('[data-mmkc-panel]');if(p){var b=document.querySelector('[data-mmkc-tab=\\''+p.getAttribute('data-mmkc-panel')+'\\']');if(b&&b.getAttribute('aria-expanded')!=='true')tab(p.getAttribute('data-mmkc-panel'),false);}var d=el.tagName==='DETAILS'?el:el.closest('details');if(d)d.open=true;setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'start'});},50);}document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-mmkc-tab]');if(t){tab(t.getAttribute('data-mmkc-tab'),false);return;}var a=e.target.closest&&e.target.closest('a[href*=\\'#\\']');if(a&&a.hash&&a.pathname===location.pathname){if(a.hash==='#konditoru-cenas'&&tab('cenas',true)){e.preventDefault();return;}openFor(a.hash);}});window.addEventListener('hashchange',function(){openFor(location.hash);});document.addEventListener('DOMContentLoaded',function(){if(location.hash==='#konditoru-cenas'&&document.querySelector('[data-mmkc-tabs]')&&!document.querySelector('[data-mmkc-tab=cenas][aria-expanded=true]')){tab('cenas',true);}else{openFor(location.hash);}var q=location.search;if(!/mmk/i.test(q))return;document.querySelectorAll('details.mm-toggle').forEach(function(d){if(/mmkc/i.test(q)?d.querySelector('.mmkc-form'):!d.querySelector('.mmkc-form'))d.open=true;});});})();";
 		wp_register_script( 'marmar-konditoru-cenas', false, array(), self::VER, true );
 		wp_enqueue_script( 'marmar-konditoru-cenas' );
 		wp_add_inline_script( 'marmar-konditoru-cenas', $js );
@@ -246,7 +255,9 @@ final class MarMar_Konditoru_Cenas {
 
 	/* ---------------- Pieteikums ---------------- */
 
-	public static function shortcode() {
+	public static function shortcode( $atts = array() ) {
+		$atts   = shortcode_atts( array( 'inline' => '0' ), (array) $atts );
+		$inline = '1' === $atts['inline'];
 		$s   = self::settings();
 		$out = '<div id="konditoru-cenas" class="mmkc-box">';
 		$uid = get_current_user_id();
@@ -280,8 +291,10 @@ final class MarMar_Konditoru_Cenas {
 		$open = isset( $_GET['mmkc_err'] ) ? ' open' : ''; // phpcs:ignore WordPress.Security.NonceVerification
 		ob_start();
 		?>
+		<?php if ( ! $inline ) : ?>
 		<details class="mm-toggle"<?php echo $open; // phpcs:ignore ?>>
 		<summary>Pieteikties konditora kontam</summary>
+		<?php endif; ?>
 		<form class="mmkc-form" method="post" action="">
 			<?php wp_nonce_field( 'mm_kc_apply', 'mm_kc_nonce' ); ?>
 			<input type="hidden" name="mm_kc_apply" value="1">
@@ -296,9 +309,35 @@ final class MarMar_Konditoru_Cenas {
 			<label class="mmkc-full mmkc-check"><input type="checkbox" name="mm_kc_consent" value="1" required> <span>Piekrītu, ka MarMar Candles apstrādā šos datus, lai izskatītu pieteikumu un izveidotu konditora kontu.</span></label>
 			<button type="submit">Nosūtīt pieteikumu</button>
 		</form>
+		<?php if ( ! $inline ) : ?>
 		</details>
+		<?php endif; ?>
 		<?php
 		$out .= ob_get_clean() . '</div>';
+		return $out;
+	}
+
+	/**
+	 * Divas pogas lapas augšā: «Reģistrēties katalogā» un «Saņemt īpašas cenas».
+	 * Katra atver savu paneli (vienlaikus atvērts tikai viens).
+	 */
+	public static function buttons() {
+		$cenas   = self::shortcode( array( 'inline' => '1' ) );
+		$katalogs = shortcode_exists( 'marmar_konditori_forma' ) ? do_shortcode( '[marmar_konditori_forma]' ) : '';
+		$open    = '';
+		if ( isset( $_GET['mmkc'] ) || isset( $_GET['mmkc_err'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$open = 'cenas';
+		} elseif ( isset( $_GET['mmk'] ) || isset( $_GET['mmk_err'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$open = 'katalogs';
+		}
+		$out  = '<div class="mmkc-tabs" data-mmkc-tabs>';
+		$out .= '<div class="mmkc-tabbtns">';
+		$out .= '<button type="button" class="mmkc-tabbtn" data-mmkc-tab="katalogs" aria-expanded="' . ( 'katalogs' === $open ? 'true' : 'false' ) . '" aria-controls="mmkc-p-katalogs">Reģistrēties katalogā</button>';
+		$out .= '<button type="button" class="mmkc-tabbtn" data-mmkc-tab="cenas" aria-expanded="' . ( 'cenas' === $open ? 'true' : 'false' ) . '" aria-controls="mmkc-p-cenas">Saņemt īpašas cenas</button>';
+		$out .= '</div>';
+		$out .= '<div class="mmkc-panel" id="mmkc-p-katalogs" data-mmkc-panel="katalogs"' . ( 'katalogs' === $open ? '' : ' hidden' ) . '><div class="mmkc-box">' . $katalogs . '</div></div>';
+		$out .= '<div class="mmkc-panel" id="mmkc-p-cenas" data-mmkc-panel="cenas"' . ( 'cenas' === $open ? '' : ' hidden' ) . '>' . $cenas . '</div>';
+		$out .= '</div>';
 		return $out;
 	}
 
