@@ -127,5 +127,17 @@
    "toppers",
    "Svečturi kūku svecēm (holders accessory)"
   ]
+ },
+ "konditori_wholesale": {
+  "display": "konditor sees pack price with per-piece price (e.g. 5,00 € / 10 gab = 0,50 €/gab)",
+  "quick_qty_buttons_konditor_only": [
+   "5 iep. = 50 gab",
+   "10 iep. = 100 gab",
+   "20 iep. = 200 gab"
+  ],
+  "tier": "from 20 packs of one product (200+ pcs): pack price 4,50 € instead of 5,00 € (konditors only, in cart)",
+  "numbers": "2,50 € per piece, any quantity; order min 30 €",
+  "approved": "Alina 07.11.2026",
+  "build_with": "merged cake-candle cards"
  }
 }
