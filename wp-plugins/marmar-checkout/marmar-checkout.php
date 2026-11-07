@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.2.2
+ * Version:           1.2.3
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.2.2';
+	const VERSION = '1.2.3';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -148,7 +148,7 @@ final class MarMar_Checkout {
 		<div class="mmco-info">
 			<div class="mmco-chips">
 				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">🕯️</span><span><strong>Gatavs <?php echo esc_html( $c['make_days'][0] . '–' . $c['make_days'][1] ); ?> dienās</strong><br><small>Steidzami — <?php echo esc_html( $c['make_days_express'][0] . '–' . $c['make_days_express'][1] ); ?> dienās (+5 €)</small></span></div>
-				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">📦</span><span><strong>Pakomātā no 2 €</strong><br><small>Bez maksas no <?php echo esc_html( $c['free_shipping_from'] ); ?> €</small></span></div>
+				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">📦</span><span><strong>Pakomātā no 2,50 €</strong><br><small>Bez maksas no <?php echo esc_html( $c['free_shipping_from'] ); ?> €</small></span></div>
 				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">🛒</span><span><strong>Minimālais pasūtījums <?php echo esc_html( $c['min_order'] ); ?> €</strong><br><small>bez piegādes</small></span></div>
 				<div class="mmco-chip"><span class="mmco-ico" aria-hidden="true">📍</span><span><strong>Saņemšana Rīgā</strong><br><small>Iļģuciemā, saskaņojot laiku</small></span></div>
 			</div>
@@ -156,7 +156,7 @@ final class MarMar_Checkout {
 				<summary>Visi piegādes un pasūtījuma noteikumi</summary>
 				<ul>
 					<li>Minimālā pasūtījuma summa — 5 € (bez piegādes).</li>
-					<li>Piegāde uz Omniva, DPD, Venipak un Unisend pakomātiem visā Latvijā: 2,00–4,50 €, no <?php echo esc_html( $c['free_shipping_from'] ); ?> € — bez maksas.</li>
+					<li>Piegāde uz Omniva, DPD, Venipak un Unisend pakomātiem visā Latvijā: 2,50–5,00 €, no <?php echo esc_html( $c['free_shipping_from'] ); ?> € — bez maksas.</li>
 					<li>Saņemšana Rīgā, Iļģuciemā (Jaunsaules iela 7a), iepriekš saskaņojot laiku.</li>
 					<li>Izgatavošana: <?php echo esc_html( $c['make_days'][0] . '–' . $c['make_days'][1] ); ?> dienas pēc apmaksas (strādājam arī brīvdienās). Steidzams pasūtījums: +5 €, <?php echo esc_html( $c['make_days_express'][0] . '–' . $c['make_days_express'][1] ); ?> dienas. Piegāde uz pakomātu — 1–2 darba dienas.</li>
 					<li>Sūtījuma izsekošanas saiti atsūtīsim e-pastā, kad pasūtījums būs ceļā.</li>
