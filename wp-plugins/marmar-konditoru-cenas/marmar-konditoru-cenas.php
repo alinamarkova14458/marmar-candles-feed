@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem: loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā.
- * Version:           1.3.1
+ * Version:           1.3.4
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.3.1';
+	const VER       = '1.3.4';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -253,11 +253,25 @@ final class MarMar_Konditoru_Cenas {
 .single-product .mm-info>div:nth-child(2){border-top:0!important}
 .single-product table.variations{margin-bottom:12px!important}
 .single-product table.variations tr{margin-bottom:10px!important}
-.single-product .button-variable-items-wrapper{flex-wrap:wrap;gap:8px}
+.single-product .button-variable-items-wrapper{flex-wrap:wrap;gap:8px!important;justify-content:flex-start!important}
 .single-product .button-variable-items-wrapper .variable-item{margin:0!important}
 .single-product .image-variable-items-wrapper .variable-item{margin-bottom:24px!important}
 .single-product .variations .variable-items-wrapper{padding-top:4px!important;padding-bottom:0!important;margin:0!important}
 .single-product .variations td.value{padding-bottom:0!important}
+.single-product .reset_variations{display:none!important}
+.single-product table.variations td.value ul.variable-items-wrapper.button-variable-items-wrapper{display:flex!important;flex-wrap:wrap!important;width:100%!important;padding:4px 0 0!important;gap:8px!important}
+.single-product table.variations td.value ul.button-variable-items-wrapper li.variable-item{margin:0!important}
+@media(max-width:400px){.single-product .single_add_to_cart_button{letter-spacing:.06em!important;font-size:14px!important;white-space:nowrap}}
+.single-product .single_variation .price{display:block;margin:2px 0 10px!important;font-size:1.15em}
+.single-product .single_variation:empty,.single-product .woocommerce-variation-description:empty{display:none}
+@media(max-width:640px){
+.single-product .image-variable-items-wrapper{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px!important;justify-items:center}
+.single-product .image-variable-items-wrapper .variable-item{margin:0 0 30px!important}
+.single-product .image-variable-items-wrapper .mm-lbl{font-size:10.5px!important;line-height:1.2!important;width:62px!important;max-width:19vw;white-space:normal!important;text-align:center}
+.single-product .button-variable-items-wrapper .variable-item{height:auto!important;min-height:34px;padding:0!important}
+.single-product .button-variable-items-wrapper .variable-item .variable-item-contents{font-size:12.5px;padding:6px 10px;white-space:nowrap}
+.single-product table.variations th.label,.single-product table.variations th.label label{font-size:13px!important}
+}
 .mmkc-label{display:inline-block;margin-left:.5em;padding:.1em .55em;border-radius:999px;background:#F6E6E4;color:#8E3F3E;font-size:.72em;font-weight:600;vertical-align:middle;letter-spacing:.02em}
 .mmkc-retail{display:block;margin-top:.2em;color:#8a8a8a;font-size:.78em;font-weight:400}
 .mmkc-teaser{margin:.6em 0 1.1em;padding:.7em .9em;border-radius:12px;background:#FBF3F2;font-size:.95em;line-height:1.5}
