@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem: loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.1.0';
+	const VER       = '1.1.1';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -227,13 +227,14 @@ final class MarMar_Konditoru_Cenas {
 .mmkc-form button{grid-column:1/-1;justify-self:start;padding:.75em 1.6em;border:0;border-radius:999px;background:#B9605F;color:#fff;font-weight:600;font-size:16px;cursor:pointer}
 .mmkc-hp{position:absolute!important;left:-9999px!important}
 .mmkc-tabs{max-width:760px;margin:0 auto 2em}
-.mmkc-tabbtns{display:flex;gap:.8em;justify-content:center;flex-wrap:wrap;margin-bottom:1.2em}
-.mmkc-tabbtn{padding:.8em 1.6em;border-radius:999px;border:1px solid #B9605F;background:#B9605F;color:#fff;font-weight:600;font-size:16px;line-height:1.3;cursor:pointer}
-.mmkc-tabbtn[aria-expanded=true]{background:#fff;color:#B9605F}
-.mmkc-tabbtn:after{content:" ↓"}
-.mmkc-tabbtn[aria-expanded=true]:after{content:" ↑"}
+.mmkc-tabbtns{display:flex;gap:.6em;justify-content:center;flex-wrap:wrap;margin-bottom:1.2em}
+.mmkc-tabbtn{padding:.55em 1.15em;border-radius:999px;border:1px solid #E3C9C5;background:#fff;color:#8E3F3E;font-weight:600;font-size:15px;line-height:1.3;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.mmkc-tabbtn:hover{border-color:#B9605F}
+.mmkc-tabbtn[aria-expanded=true]{background:#B9605F;border-color:#B9605F;color:#fff}
+.mmkc-tabbtn:after{content:"⌄";display:inline-block;margin-left:.4em;font-size:.9em;transform:translateY(-.15em)}
+.mmkc-tabbtn[aria-expanded=true]:after{transform:rotate(180deg) translateY(-.1em)}
 .mmkc-panel .mmkc-box{margin-bottom:0}
-@media(max-width:640px){.mmkc-tabbtn{flex:1 1 100%}}
+@media(max-width:640px){.mmkc-tabbtns{gap:.5em}.mmkc-tabbtn{flex:1 1 0;min-width:0;font-size:13.5px;padding:.55em .7em;white-space:nowrap}}
 .mm-toggle{margin:1em 0}
 .mm-toggle>summary{display:inline-block;list-style:none;cursor:pointer;padding:.75em 1.6em;border-radius:999px;background:#B9605F;color:#fff;font-weight:600;font-size:16px;line-height:1.3}
 .mm-toggle>summary::-webkit-details-marker{display:none}
