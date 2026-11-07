@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem: loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā.
- * Version:           1.2.2
+ * Version:           1.2.3
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.2.2';
+	const VER       = '1.2.3';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -235,6 +235,9 @@ final class MarMar_Konditoru_Cenas {
 	public static function assets() {
 		$css = '
 .single-product .product_meta,.single-product .entry-summary .product_meta{display:none!important}
+.single-product .entry-summary .ct-product-divider{display:none!important}
+.single-product .entry-summary .ct-product-add-to-cart{margin-bottom:0!important}
+@media(max-width:999px){.single-product .woocommerce-tabs{padding-top:24px!important}}
 .mmkc-label{display:inline-block;margin-left:.5em;padding:.1em .55em;border-radius:999px;background:#F6E6E4;color:#8E3F3E;font-size:.72em;font-weight:600;vertical-align:middle;letter-spacing:.02em}
 .mmkc-retail{display:block;margin-top:.2em;color:#8a8a8a;font-size:.78em;font-weight:400}
 .mmkc-teaser{margin:.6em 0 1.1em;padding:.7em .9em;border-radius:12px;background:#FBF3F2;font-size:.95em;line-height:1.5}
