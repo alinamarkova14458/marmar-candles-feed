@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.10.3
+ * Version:           1.10.4
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,10 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.10.3';
+	const VER = '1.10.4';
+
+	/** Preces, kuras nerādām blokā “Bieži pērk kopā” (pakalpojumi, papildinājumi). */
+	const TOGETHER_EXCLUDE = array( 11691, 11024 ); // Dzintara putekļi, Individuālā dizaina izstrāde
 
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 99 );
@@ -115,10 +118,10 @@ final class MarMar_Design {
 		if ( ! $product ) {
 			return;
 		}
-		$key = 'mmd_together_' . $product->get_id();
+		$key = 'mmd_together2_' . $product->get_id();
 		$ids = get_transient( $key );
 		if ( ! is_array( $ids ) ) {
-			$ids = array_slice( array_map( 'intval', $product->get_cross_sell_ids() ), 0, 3 );
+			$ids = array_slice( array_values( array_diff( array_map( 'intval', $product->get_cross_sell_ids() ), self::TOGETHER_EXCLUDE ) ), 0, 3 );
 			if ( count( $ids ) < 3 ) {
 				$cats = $product->get_category_ids();
 				$more = wc_get_products(
@@ -128,12 +131,12 @@ final class MarMar_Design {
 						'orderby'      => 'popularity',
 						'order'        => 'DESC',
 						'category'     => array_map( function ( $id ) { $t = get_term( $id ); return $t && ! is_wp_error( $t ) ? $t->slug : ''; }, $cats ),
-						'exclude'      => array_merge( array( $product->get_id() ), $ids ),
+						'exclude'      => array_merge( array( $product->get_id() ), $ids, self::TOGETHER_EXCLUDE ),
 						'stock_status' => 'instock',
 						'return'       => 'ids',
 					)
 				);
-				$ids = array_slice( array_merge( $ids, $more ), 0, 3 );
+				$ids = array_slice( array_values( array_diff( array_merge( $ids, $more ), self::TOGETHER_EXCLUDE ) ), 0, 3 );
 			}
 			set_transient( $key, $ids, 12 * HOUR_IN_SECONDS );
 		}

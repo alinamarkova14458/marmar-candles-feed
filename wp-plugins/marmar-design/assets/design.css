@@ -388,3 +388,4 @@ body.mmd .wc-block-components-checkout-step__heading .wc-block-components-title 
 	body.mmd .wc-block-components-checkout-step__heading .wc-block-components-title { font-size: 16px !important; }
 	body.mmd .wc-block-components-checkout-step__heading { gap: 8px; }
 }
+@media (min-width: 1000px) { .mmd-tg-add.mmd-tg-add--more::after { content: ' Izvēlēties'; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; margin-left: 6px; } }
