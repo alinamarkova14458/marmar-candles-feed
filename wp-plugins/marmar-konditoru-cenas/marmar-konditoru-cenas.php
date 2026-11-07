@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.4.2
+ * Version:           1.4.4
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.4.2';
+	const VER       = '1.4.4';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -321,6 +321,14 @@ final class MarMar_Konditoru_Cenas {
 .mm-toggle[open]>summary::after{content:" ↑"}
 .mmkb-cartbox{margin:1.5em 0;padding:1em 1.2em;border-radius:14px;background:#FBF3F2;border:1px solid #F0D9D6}
 .mmkb-cartbox p{margin:0 0 .7em}
+.mmkb-head{display:flex;align-items:center;gap:.5em;flex-wrap:wrap;position:relative;margin:0 0 .7em}
+.mmkb-help{display:inline-block;position:relative}
+.mmkb-help summary{list-style:none;cursor:pointer;width:22px;height:22px;border-radius:50%;border:1.5px solid #B85F5F;color:#B85F5F;font:600 13px/19px sans-serif;text-align:center;user-select:none}
+.mmkb-help summary::-webkit-details-marker{display:none}
+.mmkb-help[open] summary{background:#B85F5F;color:#fff}
+.mmkb-help-pop{position:absolute;z-index:50;top:30px;left:50%;transform:translateX(-50%);width:min(320px,86vw);background:#fff;border:1px solid #F0D9D6;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);padding:.9em 1em;font-size:14px;line-height:1.45;font-weight:400;text-transform:none;letter-spacing:0;color:#444;font-family:inherit}
+.mmkb-help-pop ul{margin:.5em 0 0 1.1em;padding:0}.mmkb-help-pop li{margin:.3em 0}
+@media(max-width:600px){.mmkb-help{position:static}.mmkb-help-pop{left:0;right:0;width:auto;transform:none}}
 .mmkb-cartbox .mmkb-save{background:transparent!important;color:#B85F5F!important;border:1.5px solid #B85F5F!important;box-shadow:none!important;padding:.55em 1.1em!important;font-size:.85em!important;letter-spacing:.04em!important;min-height:0!important;width:auto!important}
 .mmkb-actions .button{margin:0 .3em .5em 0}
 .mmkc-msg{padding:.8em 1em;border-radius:12px;background:#fff;border-left:4px solid #B9605F;margin-bottom:1em}

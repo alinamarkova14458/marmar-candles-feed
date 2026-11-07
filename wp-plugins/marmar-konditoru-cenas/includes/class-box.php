@@ -147,7 +147,7 @@ final class MarMar_KC_Box {
 			}
 		}
 		if ( ! $box ) {
-			echo '<h3>Kā tas strādā</h3><ol>';
+			echo '<h3 class="mmkb-head">Kā tas strādā' . self::help() . '</h3><ol>'; // phpcs:ignore
 			echo '<li>Ieliec grozā sveces un ciparus, ko tev vajag katru mēnesi.</li>';
 			echo '<li>Grozā nospied <strong>«Saglabāt kā mēneša kasti»</strong>.</li>';
 			echo '<li>Katra mēneša ' . (int) self::DAY . '. datumā saņemsi e-pastu: <em>Apstiprināt / Mainīt / Izlaist</em>.</li>';
@@ -163,6 +163,7 @@ final class MarMar_KC_Box {
 		$total = array_sum( wp_list_pluck( $lines, 'sum' ) );
 		$skip  = get_user_meta( $uid, self::U_SKIP, true ) === wp_date( 'Y-m', strtotime( 'first day of next month', current_time( 'timestamp' ) ) );
 		$active = ! empty( $box['active'] );
+		echo '<div class="mmkb-head"><strong>Kā tas strādā</strong>' . self::help() . '</div>'; // phpcs:ignore
 		echo '<p><strong>Statuss:</strong> ' . ( $active ? ( $skip ? 'nākamais mēnesis izlaists' : 'aktīva — atgādinājums ' . (int) self::DAY . '. datumā' ) : 'apturēta' ) . '</p>';
 		echo '<table class="shop_table"><thead><tr><th>Prece</th><th>Daudzums</th><th>Summa</th></tr></thead><tbody>';
 		foreach ( $lines as $l ) {
@@ -193,6 +194,17 @@ final class MarMar_KC_Box {
 		echo '<button type="submit" class="button mmkb-save" name="mm_kc_box_save" value="1">🗓 Saglabāt kā mēneša kasti</button>';
 	}
 
+	/** «?» ikona ar paskaidrojumu (atveras ar pieskārienu, bez JS). */
+	public static function help() {
+		return '<details class="mmkb-help"><summary aria-label="Kas ir mēneša kaste?">?</summary><div class="mmkb-help-pop">'
+			. '<strong>Kas ir mēneša kaste?</strong>'
+			. '<ul><li>Tu vienreiz saglabā savu ierasto pasūtījumu.</li>'
+			. '<li>Katra mēneša ' . (int) self::DAY . '. datumā saņemsi e-pastu ar kastes saturu un summu.</li>'
+			. '<li><b>Apstiprināt</b> — kaste ielikta grozā, atliek apmaksāt. <b>Mainīt</b> — pievieno vai noņem preces. <b>Izlaist</b> — šomēnes nepasūti.</li>'
+			. '<li>Nauda netiek noņemta automātiski: maksā tikai tad, kad apstiprini.</li>'
+			. '<li>Apturēt vai dzēst vari jebkurā brīdī: Mans konts → Mana mēneša kaste.</li></ul></div></details>';
+	}
+
 	public static function save_form( $label = '🗓 Saglabāt kā mēneša kasti' ) {
 		$html  = '<form method="post" class="mmkb-saveform" action="' . esc_url( self::url() ) . '">';
 		$html .= wp_nonce_field( 'mm_kc_box_save', 'mm_kc_box_nonce', true, false );
@@ -205,7 +217,7 @@ final class MarMar_KC_Box {
 		if ( 'woocommerce/cart' !== ( $block['blockName'] ?? '' ) || ! MarMar_Konditoru_Cenas::is_konditor() ) {
 			return $content;
 		}
-		return $content . '<div class="mmkb-cartbox"><p><strong>Pasūti to pašu katru mēnesi?</strong> Saglabā šo grozu kā mēneša kasti — 20. datumā saņemsi atgādinājumu ar apstiprināšanu vienā klikšķī.</p>' . self::save_form() . '</div>';
+		return $content . '<div class="mmkb-cartbox"><div class="mmkb-head"><strong>🗓 Mēneša kaste konditoriem</strong>' . self::help() . '</div><p>Pasūti to pašu katru mēnesi? Saglabā šo grozu kā mēneša kasti — 20. datumā saņemsi atgādinājumu ar apstiprināšanu vienā klikšķī.</p>' . self::save_form() . '</div>';
 	}
 
 	public static function save_cart_as_box( $uid ) {
