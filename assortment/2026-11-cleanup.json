@@ -129,15 +129,10 @@
   ]
  },
  "konditori_wholesale": {
-  "display": "konditor sees pack price with per-piece price (e.g. 5,00 € / 10 gab = 0,50 €/gab)",
-  "quick_qty_buttons_konditor_only": [
-   "5 iep. = 50 gab",
-   "10 iep. = 100 gab",
-   "20 iep. = 200 gab"
-  ],
-  "tier": "from 20 packs of one product (200+ pcs): pack price 4,50 € instead of 5,00 € (konditors only, in cart)",
-  "numbers": "2,50 € per piece, any quantity; order min 30 €",
-  "approved": "Alina 07.11.2026",
+  "display": "no 'packs' wording for konditors: choose number of candles with buttons 10 / 50 / 100 / 200 sveces; total price shown automatically",
+  "pricing": "0,50 €/svece (10–199), 0,45 €/svece from 200 (konditors only); numbers 2,50 €/gab any quantity; order min 30 €",
+  "implementation_note": "buttons set quantity of the 10-gab variation (x1, x5, x10, x20) and label shows candles + total; tier applied in cart",
+  "approved": "Alina 07.11.2026 (replaces previous pack-buttons idea)",
   "build_with": "merged cake-candle cards"
  }
 }
