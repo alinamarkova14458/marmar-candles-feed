@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem: loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā.
- * Version:           1.2.0
+ * Version:           1.2.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.2.0';
+	const VER       = '1.2.2';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -26,7 +26,7 @@ final class MarMar_Konditoru_Cenas {
 			array(
 				'min_order' => 30,
 				'notify'    => get_option( 'admin_email' ),
-				'page_url'  => home_url( '/konditori/#konditoru-cenas' ),
+				'page_url'  => home_url( '/lv/konditori/#mmkc-p-cenas' ),
 			)
 		);
 	}
@@ -48,6 +48,9 @@ final class MarMar_Konditoru_Cenas {
 		add_action( 'woocommerce_before_shop_loop', array( __CLASS__, 'category_banner' ), 5 );
 		add_action( 'wp_body_open', array( __CLASS__, 'konditor_bar' ) );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ) );
+
+		// Preces lapā nerādām bloku «Kategorija:» (Alīnas lūgums 07.11.2026).
+		add_action( 'wp', array( __CLASS__, 'hide_product_meta' ) );
 
 		// Pieteikums.
 		add_shortcode( 'marmar_konditoru_cenas', array( __CLASS__, 'shortcode' ) );
@@ -164,15 +167,33 @@ final class MarMar_Konditoru_Cenas {
 
 	public static function product_teaser() {
 		global $product;
-		if ( self::is_konditor() || ! $product || ! self::has_kc_prices( $product ) ) {
+		if ( ! $product instanceof WC_Product ) {
 			return;
 		}
-		$s = self::settings();
-		printf(
-			'<p class="mmkc-teaser">🎂 <strong>Esi konditors?</strong> Tev ir īpašas cenas un pasūtījums no %1$s €. <a href="%2$s">Pieteikties&nbsp;→</a></p>',
-			esc_html( (int) $s['min_order'] ),
-			esc_url( $s['page_url'] )
-		);
+		$cake = self::has_kc_prices( $product );
+		if ( ! $cake ) {
+			foreach ( wc_get_product_terms( $product->get_id(), 'product_cat' ) as $t ) {
+				if ( preg_match( '/kūk|tort|dzimšan|cipar|svecīt|toper/iu', $t->name . ' ' . $t->slug ) ) {
+					$cake = true;
+					break;
+				}
+			}
+		}
+		if ( ! $cake ) {
+			return;
+		}
+		$s    = self::settings();
+		$page = home_url( '/lv/konditori/' );
+		echo '<div class="mmkc-teaser">';
+		echo '<p>🎂 <strong>Meklējat torti šīm svecēm?</strong> <a href="' . esc_url( $page ) . '">Konditori visā Latvijā&nbsp;→</a></p>';
+		if ( ! self::is_konditor() && self::has_kc_prices( $product ) ) {
+			printf(
+				'<p class="mmkc-teaser-pro">Esat konditors? Jums ir īpašas cenas un pasūtījums no %1$s €. <a href="%2$s">Pieteikties&nbsp;→</a></p>',
+				esc_html( (int) $s['min_order'] ),
+				esc_url( $s['page_url'] )
+			);
+		}
+		echo '</div>';
 	}
 
 	public static function is_konditor_category() {
@@ -207,11 +228,18 @@ final class MarMar_Konditoru_Cenas {
 		);
 	}
 
+	public static function hide_product_meta() {
+		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
+	}
+
 	public static function assets() {
 		$css = '
+.single-product .product_meta,.single-product .entry-summary .product_meta{display:none!important}
 .mmkc-label{display:inline-block;margin-left:.5em;padding:.1em .55em;border-radius:999px;background:#F6E6E4;color:#8E3F3E;font-size:.72em;font-weight:600;vertical-align:middle;letter-spacing:.02em}
 .mmkc-retail{display:block;margin-top:.2em;color:#8a8a8a;font-size:.78em;font-weight:400}
 .mmkc-teaser{margin:.6em 0 1.1em;padding:.7em .9em;border-radius:12px;background:#FBF3F2;font-size:.95em;line-height:1.5}
+.mmkc-teaser p{margin:0}
+.mmkc-teaser .mmkc-teaser-pro{margin-top:.35em;font-size:.9em;color:#6b5a58}
 .mmkc-teaser a{color:#B9605F;font-weight:600;text-decoration:none}
 .mmkc-banner{display:flex;gap:1em;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:0 0 1.5em;padding:1em 1.2em;border-radius:16px;background:#FBF3F2;border:1px solid #F0D9D6;line-height:1.5}
 .mmkc-btn{display:inline-block;padding:.55em 1.1em;border-radius:999px;background:#B9605F;color:#fff!important;text-decoration:none;font-weight:600;white-space:nowrap}
