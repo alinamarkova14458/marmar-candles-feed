@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem: loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā.
- * Version:           1.1.1
+ * Version:           1.2.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.1.1';
+	const VER       = '1.2.0';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -52,6 +52,7 @@ final class MarMar_Konditoru_Cenas {
 		// Pieteikums.
 		add_shortcode( 'marmar_konditoru_cenas', array( __CLASS__, 'shortcode' ) );
 		add_shortcode( 'marmar_konditori_pogas', array( __CLASS__, 'buttons' ) );
+		add_shortcode( 'marmar_konditori_promo', array( __CLASS__, 'promo' ) );
 		add_action( 'init', array( __CLASS__, 'handle_application' ), 20 );
 
 		// Administrācija.
@@ -227,6 +228,18 @@ final class MarMar_Konditoru_Cenas {
 .mmkc-form button{grid-column:1/-1;justify-self:start;padding:.75em 1.6em;border:0;border-radius:999px;background:#B9605F;color:#fff;font-weight:600;font-size:16px;cursor:pointer}
 .mmkc-hp{position:absolute!important;left:-9999px!important}
 .mmkc-tabs{max-width:760px;margin:0 auto 2em}
+.mmkp{display:grid;grid-template-columns:1fr 1.15fr;gap:2em;align-items:center;max-width:1200px;margin:3em auto;padding:2.2em;border-radius:24px;background:#FBF3F2;border:1px solid #F0D9D6}
+.mmkp-text h2{margin:.3em 0 .5em}
+.mmkp-text p{margin:0 0 1.2em;line-height:1.6}
+.mmkp-btn{display:inline-block;margin-bottom:1.2em}
+.mmkp .mmkp-pro{margin:0;font-size:.95em;color:#5a4a48}
+.mmkp-pro a{color:#B9605F;font-weight:600}
+.mmkp-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:.8em}
+.mmkp-photo{position:relative;display:block;border-radius:16px;overflow:hidden;aspect-ratio:3/4;background:#f3e3e1}
+.mmkp-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.mmkp-photo:hover img{transform:scale(1.04)}
+.mmkp-photo span{position:absolute;left:0;right:0;bottom:0;padding:1.6em .7em .6em;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:.85em;font-weight:600;line-height:1.3}
+@media(max-width:820px){.mmkp{grid-template-columns:1fr;padding:1.4em;margin:2em 16px;gap:1.2em}.mmkp-photos{order:-1;gap:.5em}.mmkp-photo{border-radius:12px}.mmkp-photo span{font-size:.75em;padding:1.2em .5em .45em}}
 .mmkc-tabbtns{display:flex;gap:.6em;justify-content:center;flex-wrap:wrap;margin-bottom:1.2em}
 .mmkc-tabbtn{padding:.55em 1.15em;border-radius:999px;border:1px solid #E3C9C5;background:#fff;color:#8E3F3E;font-weight:600;font-size:15px;line-height:1.3;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .mmkc-tabbtn:hover{border-color:#B9605F}
@@ -339,6 +352,41 @@ final class MarMar_Konditoru_Cenas {
 		$out .= '<div class="mmkc-panel" id="mmkc-p-katalogs" data-mmkc-panel="katalogs"' . ( 'katalogs' === $open ? '' : ' hidden' ) . '><div class="mmkc-box">' . $katalogs . '</div></div>';
 		$out .= '<div class="mmkc-panel" id="mmkc-p-cenas" data-mmkc-panel="cenas"' . ( 'cenas' === $open ? '' : ' hidden' ) . '>' . $cenas . '</div>';
 		$out .= '</div>';
+		return $out;
+	}
+
+	/**
+	 * Bloks sākumlapai: klientiem — atrast torti, konditoriem — katalogs un īpašas cenas.
+	 */
+	public static function promo() {
+		$page = home_url( '/lv/konditori/' );
+		$imgs = '';
+		if ( post_type_exists( 'mm_konditors' ) ) {
+			$q = get_posts(
+				array(
+					'post_type'      => 'mm_konditors',
+					'post_status'    => 'publish',
+					'posts_per_page' => 3,
+					'meta_key'       => '_thumbnail_id', // phpcs:ignore
+					'orderby'        => 'date',
+					'order'          => 'DESC',
+				)
+			);
+			foreach ( $q as $k ) {
+				$imgs .= '<a class="mmkp-photo" href="' . esc_url( $page ) . '">' . get_the_post_thumbnail( $k->ID, 'medium_large', array( 'loading' => 'lazy', 'alt' => esc_attr( $k->post_title . ' — torte' ) ) ) . '<span>' . esc_html( $k->post_title ) . '</span></a>';
+			}
+		}
+		$out  = '<section class="mmkp" aria-label="Konditori un konditorejas">';
+		$out .= '<div class="mmkp-text"><span class="mmh-eyebrow">Konditori</span>';
+		$out .= '<h2>Torte un sveces — vienuviet</h2>';
+		$out .= '<p>Mūsu katalogā — konditori un konditorejas visā Latvijā. Atrodiet torti savā pilsētā, un sveces tai pasūtiet šeit.</p>';
+		$out .= '<a class="mmh-btn mmkp-btn" href="' . esc_url( $page ) . '">Atrast konditoru →</a>';
+		$out .= '<p class="mmkp-pro">🎂 <strong>Esat konditors?</strong> <a href="' . esc_url( $page . '#mmkc-p-katalogs' ) . '">Reģistrējieties katalogā bez maksas</a> vai <a href="' . esc_url( $page . '#mmkc-p-cenas' ) . '">saņemiet īpašas cenas</a>.</p>';
+		$out .= '</div>';
+		if ( $imgs ) {
+			$out .= '<div class="mmkp-photos">' . $imgs . '</div>';
+		}
+		$out .= '</section>';
 		return $out;
 	}
 
