@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       MarMar Konditoru cenas
- * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā.
- * Version:           1.3.5
+ * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
+ * Version:           1.4.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.3.5';
+	const VER       = '1.4.2';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -319,6 +319,10 @@ final class MarMar_Konditoru_Cenas {
 .mm-toggle>summary::after{content:" ↓"}
 .mm-toggle[open]>summary{margin-bottom:1.2em;background:#fff;color:#B9605F;border:1px solid #B9605F}
 .mm-toggle[open]>summary::after{content:" ↑"}
+.mmkb-cartbox{margin:1.5em 0;padding:1em 1.2em;border-radius:14px;background:#FBF3F2;border:1px solid #F0D9D6}
+.mmkb-cartbox p{margin:0 0 .7em}
+.mmkb-cartbox .mmkb-save{background:transparent!important;color:#B85F5F!important;border:1.5px solid #B85F5F!important;box-shadow:none!important;padding:.55em 1.1em!important;font-size:.85em!important;letter-spacing:.04em!important;min-height:0!important;width:auto!important}
+.mmkb-actions .button{margin:0 .3em .5em 0}
 .mmkc-msg{padding:.8em 1em;border-radius:12px;background:#fff;border-left:4px solid #B9605F;margin-bottom:1em}
 @media(max-width:640px){.mmkc-form{grid-template-columns:1fr}.mmkc-banner{flex-direction:column;align-items:flex-start}}
 ';
@@ -685,6 +689,9 @@ final class MarMar_Konditoru_Cenas {
 			}
 			echo '</tbody></table>';
 		}
+		if ( class_exists( 'MarMar_KC_Box' ) ) {
+			MarMar_KC_Box::admin_section();
+		}
 		echo '<h2>Iestatījumi</h2><form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
 		wp_nonce_field( 'mm_kc_settings' );
 		echo '<input type="hidden" name="action" value="mm_kc_settings"><table class="form-table">';
@@ -743,4 +750,7 @@ final class MarMar_Konditoru_Cenas {
 }
 
 register_activation_hook( __FILE__, array( 'MarMar_Konditoru_Cenas', 'activate' ) );
+require_once __DIR__ . '/includes/class-box.php';
 add_action( 'plugins_loaded', array( 'MarMar_Konditoru_Cenas', 'init' ) );
+add_action( 'plugins_loaded', array( 'MarMar_KC_Box', 'init' ) );
+register_deactivation_hook( __FILE__, function () { wp_clear_scheduled_hook( 'mm_kc_daily' ); } );
