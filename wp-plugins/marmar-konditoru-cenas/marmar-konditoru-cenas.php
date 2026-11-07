@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       MarMar Konditoru cenas
- * Description:       Īpašas cenas konditoriem: loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā.
- * Version:           1.3.4
+ * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā.
+ * Version:           1.3.5
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.3.4';
+	const VER       = '1.3.5';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -188,7 +188,7 @@ final class MarMar_Konditoru_Cenas {
 		echo '<p>🎂 <strong>Meklējat torti šīm svecēm?</strong> <a href="' . esc_url( $page ) . '">Konditori visā Latvijā&nbsp;→</a></p>';
 		if ( ! self::is_konditor() && self::has_kc_prices( $product ) ) {
 			printf(
-				'<p class="mmkc-teaser-pro">Esat konditors? Jums ir īpašas cenas un pasūtījums no %1$s €. <a href="%2$s">Pieteikties&nbsp;→</a></p>',
+				'<p class="mmkc-teaser-pro">Esat konditors? Jums ir īpašas cenas kūku un ciparu svecēm, pasūtījums no %1$s €. <a href="%2$s">Pieteikties&nbsp;→</a></p>',
 				esc_html( (int) $s['min_order'] ),
 				esc_url( $s['page_url'] )
 			);
@@ -201,7 +201,7 @@ final class MarMar_Konditoru_Cenas {
 			return false;
 		}
 		$t = get_queried_object();
-		return $t && preg_match( '/kūk|tort|dzimšan|cipar|svecīt/iu', $t->name . ' ' . $t->slug );
+		return $t && preg_match( '/kūk|tort|dzimšan|cipar|svecīt/iu', $t->name . ' ' . $t->slug ) && ! preg_match( '/toper|figūr/iu', $t->name . ' ' . $t->slug );
 	}
 
 	public static function category_banner() {
@@ -210,7 +210,7 @@ final class MarMar_Konditoru_Cenas {
 		}
 		$s = self::settings();
 		printf(
-			'<div class="mmkc-banner"><div><strong>Konditoriem un konditorejām</strong> — īpašas cenas, rēķins automātiski, ērta atkārtota pasūtīšana.</div><a class="mmkc-btn" href="%s">Uzzināt vairāk →</a></div>',
+			'<div class="mmkc-banner"><div><strong>Konditoriem un konditorejām</strong> — īpašas cenas kūku un ciparu svecēm, rēķins automātiski, ērta atkārtota pasūtīšana.</div><a class="mmkc-btn" href="%s">Uzzināt vairāk →</a></div>',
 			esc_url( $s['page_url'] )
 		);
 	}
@@ -358,7 +358,7 @@ final class MarMar_Konditoru_Cenas {
 		}
 
 		$out .= '<h2>Konditoru cenas</h2>';
-		$out .= '<p>Konditoriem un konditorejām man ir īpašas cenas sveču komplektiem, cipariem un figūrsvecēm.</p><ul>';
+		$out .= '<p>Konditoriem un konditorejām man ir īpašas cenas <strong>kūku svecēm un ciparu svecēm</strong>.</p><ul>';
 		$out .= '<li>īpašas cenas, kas redzamas pēc pieslēgšanās;</li>';
 		$out .= '<li>minimālais pasūtījums — ' . esc_html( (int) $s['min_order'] ) . ' € (bez piegādes);</li>';
 		$out .= '<li>rēķins pienāk automātiski uz e-pastu;</li>';
