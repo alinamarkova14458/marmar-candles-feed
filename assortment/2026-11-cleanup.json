@@ -116,5 +116,16 @@
    "id": 19853,
    "name": "Dāvanu karte 100 eur vērtībā"
   }
- ]
+ ],
+ "rules": {
+  "cake_candles_min_pack": "10 gab (no single pieces), approved by Alina 07.11.2026",
+  "matches": "sold only in the stated pack, not per piece",
+  "sold_per_piece_ok": [
+   "Kūku svece, spirālveida, 1 gab (spiral)",
+   "Balonu formas kūku svece, 1 gab (balloon)",
+   "number candles",
+   "toppers",
+   "Svečturi kūku svecēm (holders accessory)"
+  ]
+ }
 }
