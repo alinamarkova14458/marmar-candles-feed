@@ -133,6 +133,7 @@
   "pricing": "0,50 €/svece (10–199), 0,45 €/svece from 200 (konditors only); numbers 2,50 €/gab any quantity; order min 30 €",
   "implementation_note": "buttons set quantity of the 10-gab variation (x1, x5, x10, x20) and label shows candles + total; tier applied in cart",
   "approved": "Alina 07.11.2026 (replaces previous pack-buttons idea)",
-  "build_with": "merged cake-candle cards"
+  "build_with": "merged cake-candle cards",
+  "pack7_products": "Zigzag and Viļņota stay 7 gab in retail (Alina 07.11.2026). For konditors their buttons are 7 / 35 / 70 / 140 sveces (multiples of 7); Zigzag 0,70 €/svece, Viļņota 0,50 €/svece."
  }
 }
