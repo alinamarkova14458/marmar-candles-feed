@@ -23,10 +23,14 @@ jobs:
           APP_ID: ${{ secrets.PINTEREST_APP_ID }}
           APP_SECRET: ${{ secrets.PINTEREST_APP_SECRET }}
           GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
+          PINTEREST_ENV: ${{ vars.PINTEREST_ENV || 'sandbox' }}
         run: |
           set -euo pipefail
           for v in APP_ID APP_SECRET GH_TOKEN; do [ -n "${!v}" ] || { echo "::error::secret for $v is missing"; exit 1; }; done
-          resp=$(curl -sS -u "$APP_ID:$APP_SECRET" https://api.pinterest.com/v5/oauth/token \
+          # sandbox (Trial access) and production issue separate tokens
+          host=api.pinterest.com; [ "$PINTEREST_ENV" = "sandbox" ] && host=api-sandbox.pinterest.com
+          gh api "repos/$GITHUB_REPOSITORY/actions/secrets/public-key" --silent || { echo "::error::GH_SECRETS_PAT cannot write secrets (needs Secrets: Read and write)"; exit 1; }
+          resp=$(curl -sS -u "$APP_ID:$APP_SECRET" "https://$host/v5/oauth/token" \
             -d grant_type=authorization_code -d "code=$CODE" \
             --data-urlencode "redirect_uri=https://jalina.art/")
           rt=$(printf '%s' "$resp" | python3 -c 'import sys,json; print(json.load(sys.stdin).get("refresh_token",""))')
@@ -36,4 +40,4 @@ jobs:
           fi
           echo "::add-mask::$rt"
           printf '%s' "$rt" | gh secret set PINTEREST_REFRESH_TOKEN --repo "$GITHUB_REPOSITORY"
-          echo "Connected. PINTEREST_REFRESH_TOKEN saved."
+          echo "Connected ($PINTEREST_ENV). PINTEREST_REFRESH_TOKEN saved."

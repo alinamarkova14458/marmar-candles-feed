@@ -42,7 +42,6 @@ MAX_LATE = timedelta(hours=6)  # older than this -> skipped, not published
 
 API = {"production": "https://api.pinterest.com/v5",
        "sandbox": "https://api-sandbox.pinterest.com/v5"}
-TOKEN_URL = "https://api.pinterest.com/v5/oauth/token"
 
 
 def pin_id(item: dict) -> str:
@@ -125,12 +124,12 @@ def pin_payload(it: dict) -> dict:
     return p
 
 
-def access_token() -> tuple[str, str | None]:
+def access_token(env: str) -> tuple[str, str | None]:
     """Refresh grant. Returns (access_token, new_refresh_token_or_None)."""
     cid, sec = os.environ["PINTEREST_APP_ID"], os.environ["PINTEREST_APP_SECRET"]
     rt = os.environ["PINTEREST_REFRESH_TOKEN"]
     basic = base64.b64encode(f"{cid}:{sec}".encode()).decode()
-    r = requests.post(TOKEN_URL, timeout=30,
+    r = requests.post(f"{API[env]}/oauth/token", timeout=30,  # sandbox has its own tokens
                       headers={"Authorization": f"Basic {basic}"},
                       data={"grant_type": "refresh_token", "refresh_token": rt})
     if r.status_code != 200:
@@ -179,7 +178,7 @@ def main() -> int:
             state[it["_id"]] = {"skipped": why, "at": now.isoformat(), "file": it["_file"]}
 
     if to_publish and not dry:
-        token, new_rt = access_token()
+        token, new_rt = access_token(env)
         mask(token)
         if new_rt and os.environ.get("NEW_RT_FILE"):
             mask(new_rt)
