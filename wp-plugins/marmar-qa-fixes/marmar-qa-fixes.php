@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -24,6 +24,29 @@ final class MarMar_QA_Fixes {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'checkout_i18n' ), 100 );
 		add_filter( 'rank_math/sitemap/entry', array( __CLASS__, 'sitemap_entry' ), 10, 3 );
 		add_action( 'template_redirect', array( __CLASS__, 'product_buffer' ), 2 );
+		add_action( 'template_redirect', array( __CLASS__, 'page_buffer' ), 3 );
+	}
+
+	/** GPTranslate bootstrap.css (27 KB) nebloķē lapas attēlošanu — ielādējas fonā. */
+	public static function page_buffer() {
+		if ( is_admin() || wp_doing_ajax() || is_feed() ) {
+			return;
+		}
+		ob_start( array( __CLASS__, 'async_css' ) );
+	}
+
+	public static function async_css( $html ) {
+		if ( strlen( $html ) < 500 ) {
+			return $html;
+		}
+		return preg_replace_callback(
+			"~<link rel=['\"]stylesheet['\"] id=['\"]bootstrap-css-css['\"]([^>]*?)media=['\"]all['\"]\s*/?>~i",
+			function ( $m ) {
+				return '<link rel="stylesheet" id="bootstrap-css-css"' . $m[1] . 'media="print" onload="this.media=\'all\'" /><noscript><link rel="stylesheet"' . $m[1] . 'media="all" /></noscript>';
+			},
+			$html,
+			1
+		);
 	}
 
 	/** Video galerijas skripti/stili (video.js 150 KB + Font Awesome) — tikai produktiem ar video. */
