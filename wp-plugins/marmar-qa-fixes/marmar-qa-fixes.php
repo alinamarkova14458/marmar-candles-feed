@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.6.0
+ * Version:           1.7.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -28,6 +28,16 @@ final class MarMar_QA_Fixes {
 		add_action( 'wp_head', array( __CLASS__, 'css' ), 99 );
 		add_filter( 'marmar_checkout_config', array( __CLASS__, 'min_order' ), 20 );
 		add_action( 'wp_footer', array( __CLASS__, 'single_option_js' ), 99 );
+		add_filter( 'wp_nav_menu_items', array( __CLASS__, 'mobile_account_item' ), 20, 2 );
+	}
+
+	/** Telefonā konta ikona galvenē ir paslēpta (MarMar Design) — pieteikšanos liekam mobilajā izvēlnē. */
+	public static function mobile_account_item( $items, $args ) {
+		if ( empty( $args->theme_location ) || 'menu_mobile' !== $args->theme_location || ! function_exists( 'wc_get_page_permalink' ) ) {
+			return $items;
+		}
+		$label = is_user_logged_in() ? 'Mans konts' : 'Pieslēgties / Mans konts';
+		return $items . '<li class="menu-item mm-account-item"><a href="' . esc_url( wc_get_page_permalink( 'myaccount' ) ) . '" class="ct-menu-link"><span aria-hidden="true">👤</span>&nbsp;' . esc_html( $label ) . '</a></li>';
 	}
 
 	/** Ja atribūtam ir tikai viena vērtība (piem. «Daudzums: 10 gab») — izvēlamies to automātiski un rindu nerādām. */
