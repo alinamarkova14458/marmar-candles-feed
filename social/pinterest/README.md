@@ -31,6 +31,6 @@ Put a JSON list into `queue/<YYYY-MM-DD>-<topic>.json` on `master`:
 ## One-time connect
 1. App redirect URI in developers.pinterest.com: `https://jalina.art/`
 2. Open (replace APP_ID):
-   `https://www.pinterest.com/oauth/?client_id=APP_ID&redirect_uri=https%3A%2F%2Fjalina.art%2F&response_type=code&scope=boards:read,pins:read,pins:write,user_accounts:read`
+   `https://www.pinterest.com/oauth/?client_id=APP_ID&redirect_uri=https%3A%2F%2Fjalina.art%2F&response_type=code&scope=boards:read,boards:write,pins:read,pins:write,user_accounts:read`
 3. Allow, copy the `code=` value from the jalina.art address bar, run the "Pinterest connect"
    workflow with it within a few minutes.

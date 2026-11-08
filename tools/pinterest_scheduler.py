@@ -142,8 +142,16 @@ def access_token(env: str) -> tuple[str, str | None]:
 SANDBOX_BOARD = "Sandbox test"
 
 
+# Secret board "Sandbox test" created 08.11.2026 in the sandbox of account jalinaart.
+# The sandbox GET /boards returns an empty list even for existing boards, and the
+# OAuth sandbox token may not create boards (403), so use this id directly.
+SANDBOX_BOARD_ID = os.environ.get("PINTEREST_SANDBOX_BOARD") or "679128887499450390"
+
+
 def sandbox_board_id(token: str) -> str:
-    """Trial access: pins go to the sandbox, which has its own boards. Find or create one."""
+    """Trial access: pins go to the sandbox, which has its own boards."""
+    if SANDBOX_BOARD_ID:
+        return SANDBOX_BOARD_ID
     h = {"Authorization": f"Bearer {token}"}
     r = requests.get(f"{API['sandbox']}/boards", headers=h, timeout=30, params={"page_size": 100})
     if r.status_code == 200:
