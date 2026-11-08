@@ -17,6 +17,12 @@ final class MarMar_KC_Qty {
 	const HOLDER = 0.07;     // svečturis, €/gab
 	const BASE_PPC = 0.50;   // tievās sveces konditora cena par gabalu
 	const BTNS = array( 10, 50, 100 );
+	const FLAT_13 = 0.60;    // 13 cm sveces: 0,60 €/gab jebkuram daudzumam
+
+	public static function is_13( $product ) {
+		$p = ( $product instanceof WC_Product && $product->is_type( 'variation' ) ) ? wc_get_product( $product->get_parent_id() ) : $product;
+		return $p instanceof WC_Product && (bool) preg_match( '/\b13\s*cm\b/i', $p->get_name() );
+	}
 
 	public static function init() {
 		add_action( 'woocommerce_before_add_to_cart_quantity', array( __CLASS__, 'buttons' ), 5 );
@@ -110,19 +116,25 @@ final class MarMar_KC_Qty {
 		} else {
 			$any_thin = self::is_thin( $product );
 		}
-		if ( ! $any_thin ) {
+		$flat = self::is_13( $product );
+		if ( ! $any_thin && ! $flat ) {
 			return;
 		}
 		$tiers = array();
-		foreach ( self::TIERS as $from => $p ) {
-			$tiers[] = array( (int) $from, (float) $p );
+		if ( $flat ) {
+			$tiers[] = array( 1, self::FLAT_13 );
+		} else {
+			foreach ( self::TIERS as $from => $p ) {
+				$tiers[] = array( (int) $from, (float) $p );
+			}
 		}
+		$base = $flat ? self::FLAT_13 : self::BASE_PPC;
 		?>
-		<div class="mmq" data-pack="<?php echo (int) $n; ?>" data-tiers='<?php echo esc_attr( wp_json_encode( $tiers ) ); ?>' data-holder="<?php echo esc_attr( self::HOLDER ); ?>" data-base="<?php echo esc_attr( self::BASE_PPC ); ?>">
+		<div class="mmq" data-pack="<?php echo (int) $n; ?>" data-tiers='<?php echo esc_attr( wp_json_encode( $tiers ) ); ?>' data-holder="<?php echo esc_attr( self::HOLDER ); ?>" data-base="<?php echo esc_attr( $base ); ?>">
 			<div class="mmq-t">Daudzums</div>
 			<div class="mmq-btns">
 				<?php foreach ( self::BTNS as $i => $c ) : ?>
-					<button type="button" class="mmq-b<?php echo 0 === $i ? ' is-on' : ''; ?>" data-candles="<?php echo (int) $c; ?>"><?php echo (int) $c; ?> gab<small><?php echo esc_html( number_format( self::ppc_for( $c, false ), 2, ',', '' ) ); ?> €/gab</small></button>
+					<button type="button" class="mmq-b<?php echo 0 === $i ? ' is-on' : ''; ?>" data-candles="<?php echo (int) $c; ?>"><?php echo (int) $c; ?> gab<small><?php echo esc_html( number_format( $flat ? self::FLAT_13 : self::ppc_for( $c, false ), 2, ',', '' ) ); ?> €/gab</small></button>
 				<?php endforeach; ?>
 			</div>
 			<div class="mmq-sum" aria-live="polite"></div>
