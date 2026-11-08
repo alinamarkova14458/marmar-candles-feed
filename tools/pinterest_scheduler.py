@@ -135,6 +135,7 @@ def access_token(env: str) -> tuple[str, str | None]:
     if r.status_code != 200:
         sys.exit(f"token refresh failed: HTTP {r.status_code}")  # body may echo secrets
     j = r.json()
+    print(f"  token ok: scope={j.get('scope')!r} expires_in={j.get('expires_in')}")  # no secrets
     new_rt = j.get("refresh_token")
     return j["access_token"], (new_rt if new_rt and new_rt != rt else None)
 
@@ -208,6 +209,10 @@ def main() -> int:
                 msg = r.text[:300].replace("\n", " ")
                 rec["error"] = f"HTTP {r.status_code}: {msg}"
                 print(f"  FAIL {it['_id']} {rec['error']}")
+                if r.status_code in (401, 403):  # diagnose: does this token work at all here?
+                    u = requests.get(f"{API[env]}/user_account", timeout=30,
+                                     headers={"Authorization": f"Bearer {token}"})
+                    print(f"  diag: GET /user_account -> HTTP {u.status_code}")
                 if r.status_code in (429, 500, 502, 503):
                     print("  transient error, will retry next run")
                     continue  # not recorded -> retried
