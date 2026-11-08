@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.7.0
+ * Version:           1.8.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -29,6 +29,43 @@ final class MarMar_QA_Fixes {
 		add_filter( 'marmar_checkout_config', array( __CLASS__, 'min_order' ), 20 );
 		add_action( 'wp_footer', array( __CLASS__, 'single_option_js' ), 99 );
 		add_filter( 'wp_nav_menu_items', array( __CLASS__, 'mobile_account_item' ), 20, 2 );
+		// Mazā pasūtījuma piemaksa (mazumtirdzniecība) bloķēšanas vietā.
+		add_action( 'init', array( __CLASS__, 'unhook_min_block' ), 20 );
+		add_action( 'woocommerce_cart_calculate_fees', array( __CLASS__, 'small_order_fee' ), 20 );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'small_order_js_text' ), 40 );
+	}
+
+	const FEE_NAME = 'Mazā pasūtījuma piemaksa';
+
+	private static function is_kc() {
+		return class_exists( 'MarMar_Konditoru_Cenas' ) && MarMar_Konditoru_Cenas::is_konditor();
+	}
+
+	/** MarMar Checkout vairs nebloķē pasūtījumu zem 10 € (konditoru 30 € pārbaude paliek savā spraudnī). */
+	public static function unhook_min_block() {
+		if ( class_exists( 'MarMar_Checkout' ) ) {
+			remove_action( 'woocommerce_check_cart_items', array( 'MarMar_Checkout', 'check_minimum' ) );
+			remove_action( 'woocommerce_checkout_process', array( 'MarMar_Checkout', 'check_minimum' ) );
+		}
+	}
+
+	/** Preču summa zem 10 € → piemaksa līdz 10 € (bez piegādes). Konditoriem nav. */
+	public static function small_order_fee( $cart ) {
+		if ( ( is_admin() && ! defined( 'DOING_AJAX' ) ) || self::is_kc() || $cart->is_empty() ) {
+			return;
+		}
+		$items = (float) $cart->get_subtotal() + (float) $cart->get_subtotal_tax();
+		if ( $items > 0 && $items < self::MIN_ORDER ) {
+			$cart->add_fee( self::FEE_NAME, round( self::MIN_ORDER - $items, 2 ), false );
+		}
+	}
+
+	/** Groza josliņas teksts (MarMar Checkout JS). */
+	public static function small_order_js_text() {
+		if ( self::is_kc() || ! wp_script_is( 'marmar-checkout', 'enqueued' ) ) {
+			return;
+		}
+		wp_add_inline_script( 'marmar-checkout', 'if(window.MarMarCheckout&&MarMarCheckout.i18n){MarMarCheckout.i18n.minLeft="Līdz %1$s pievienojam mazā pasūtījuma piemaksu. Pievienojiet preces vēl par %2$s — un piemaksas nebūs";}', 'before' );
 	}
 
 	/** Telefonā konta ikona galvenē ir paslēpta (MarMar Design) — pieteikšanos liekam mobilajā izvēlnē. */
@@ -65,11 +102,16 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 
 	/** Teksti ar «5 €» par minimālo pasūtījumu citos spraudņos/snipetos → 10 €. Steidzamības «+5 €» netiek skarts. */
 	public static function min_order_texts( $html ) {
-		return preg_replace(
-			'~((?:Minimāl\w*\s+pasūtījum\w*(?:\s+summa)?|Min\.\s*pasūtījums)\s*(?:—|–|-|ir)?\s*(?:<b>|<strong>)?)5((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)~u',
-			'${1}' . self::MIN_ORDER . '$2',
+		if ( self::is_kc() ) {
+			return $html;
+		}
+		$m    = self::MIN_ORDER;
+		$html = preg_replace(
+			'~Minimāl\w*\s+pasūtījum\w*(?:\s+summa)?\s*(?:—|–|-|ir)?\s*(<b>|<strong>)?(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)(</b>|</strong>)?~u',
+			'Pasūtījumiem zem ${1}' . $m . '$2$3 — piemaksa līdz ' . $m . ' €',
 			$html
 		);
+		return preg_replace( '~Min\.\s*pasūtījums\s*(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)~u', 'Zem ' . $m . '$1 — piemaksa', $html );
 	}
 
 	/** Poga «uz augšu» (#fab-stt) bija zem čata pogas apakšējā labajā stūrī — paceļam virs tās. */
