@@ -1,7 +1,10 @@
 <?php
 /**
- * Konditoriem: sveču skaita pogas (10 / 50 / 100 / 200 sveces) ar kopsummu
- * un cena 0,45 €/svece, ja grozā ir 200+ šādu sveču (Alīna, 07.11.2026).
+ * Konditoriem (Alīna, 08.11.2026):
+ * - tievās sveces 8 / 10 / 13 cm: plāksnītes 10 / 50 / 100 gab, cena par gabalu
+ *   10 gab — 0,50 €, 50 gab — 0,48 €, 100 gab — 0,45 € (+0,07 €/gab ar svečturiem);
+ *   cena mainās lapā un grozā automātiski pēc sveču skaita rindā;
+ * - Zigzag un Viļņotās (mazumtirdzniecībā 7 gab) konditoram ir 10 gab iepakojums.
  * Mazumtirdzniecības pircēji to neredz.
  */
 
@@ -9,17 +12,23 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_KC_Qty {
 
-	const TIER_FROM   = 200;   // sveces grozā
-	const TIER_OFF    = 0.05;  // €/svece (0,50 → 0,45)
-	const TIER_MAXPPC = 0.575; // tikai sveces ar konditora cenu ~0,50 €/svece (ar svečturiem 0,57)
+	/** Sveču skaits rindā → cena par gabalu (bez svečturiem). */
+	const TIERS = array( 100 => 0.45, 50 => 0.48, 10 => 0.50 );
+	const HOLDER = 0.07;     // svečturis, €/gab
+	const BASE_PPC = 0.50;   // tievās sveces konditora cena par gabalu
+	const BTNS = array( 10, 50, 100 );
 
 	public static function init() {
 		add_action( 'woocommerce_before_add_to_cart_quantity', array( __CLASS__, 'buttons' ), 5 );
 		add_action( 'woocommerce_before_calculate_totals', array( __CLASS__, 'tier' ), 50 );
 		add_filter( 'woocommerce_cart_item_name', array( __CLASS__, 'cart_label' ), 20, 3 );
+		add_filter( 'woocommerce_get_item_data', array( __CLASS__, 'pack_item_data' ), 20, 2 );
+		add_action( 'woocommerce_checkout_create_order_line_item', array( __CLASS__, 'pack_order_meta' ), 20, 4 );
+		add_filter( 'the_title', array( __CLASS__, 'title_10' ), 20, 2 );
+		add_filter( 'woocommerce_product_title', array( __CLASS__, 'product_title_10' ), 20, 2 );
 	}
 
-	/** Cik sveču ir vienā iepakojumā («Daudzums: 10 gab» vai «| 10 gab» nosaukumā). */
+	/** Cik sveču ir vienā mazumtirdzniecības iepakojumā («Daudzums: 10 gab» vai «10 gab» nosaukumā). */
 	public static function pack_size( $product ) {
 		if ( ! $product instanceof WC_Product ) {
 			return 0;
@@ -38,10 +47,46 @@ final class MarMar_KC_Qty {
 				return 0;
 			}
 		}
-		if ( preg_match( '/\|\s*(\d+)\s*gab\b/i', $p->get_name(), $m ) && (int) $m[1] > 1 ) {
+		if ( preg_match( '/(?:\||,)\s*(\d+)\s*gab\b/i', $p->get_name(), $m ) && (int) $m[1] > 1 ) {
 			return (int) $m[1];
 		}
 		return 0;
+	}
+
+	/** Zigzag / Viļņotās 7 gab → konditoram 10 gab. */
+	public static function is_pack7_to_10( $product ) {
+		if ( ! $product instanceof WC_Product ) {
+			return false;
+		}
+		$p = $product->is_type( 'variation' ) ? wc_get_product( $product->get_parent_id() ) : $product;
+		return $p && 7 === self::pack_size( $product ) && preg_match( '/zig\s*zag|viļņ/iu', $p->get_name() );
+	}
+
+	/** Konditora sveču skaits iepakojumā. */
+	public static function kc_pack( $product ) {
+		return self::is_pack7_to_10( $product ) ? 10 : self::pack_size( $product );
+	}
+
+	/** Tievās sveces: konditora cena ≈ 0,50 €/gab (ar svečturiem 0,57). */
+	public static function is_thin( $product ) {
+		$n  = self::pack_size( $product );
+		$kc = MarMar_Konditoru_Cenas::kc_price( $product );
+		if ( $n < 2 || '' === $kc || self::is_pack7_to_10( $product ) ) {
+			return false;
+		}
+		$ppc = $kc / $n;
+		return abs( $ppc - self::BASE_PPC ) < 0.005 || abs( $ppc - self::BASE_PPC - self::HOLDER ) < 0.005;
+	}
+
+	public static function ppc_for( $candles, $holder ) {
+		$ppc = self::BASE_PPC;
+		foreach ( self::TIERS as $from => $p ) {
+			if ( $candles >= $from ) {
+				$ppc = $p;
+				break;
+			}
+		}
+		return $ppc + ( $holder ? self::HOLDER : 0 );
 	}
 
 	public static function buttons() {
@@ -50,53 +95,67 @@ final class MarMar_KC_Qty {
 			return;
 		}
 		$n = self::pack_size( $product );
-		if ( $n < 2 ) {
+		if ( $n < 2 || self::is_pack7_to_10( $product ) ) {
 			return;
 		}
-		$simple_price = $product->is_type( 'variable' ) ? 0 : (float) MarMar_Konditoru_Cenas::kc_price( $product );
+		// Tikai tievajām svecēm (0,50 €/gab); pārbaudām pēc pirmās variācijas / paša produkta.
+		$any_thin = false;
+		if ( $product->is_type( 'variable' ) ) {
+			foreach ( $product->get_children() as $vid ) {
+				if ( self::is_thin( wc_get_product( $vid ) ) ) {
+					$any_thin = true;
+					break;
+				}
+			}
+		} else {
+			$any_thin = self::is_thin( $product );
+		}
+		if ( ! $any_thin ) {
+			return;
+		}
+		$tiers = array();
+		foreach ( self::TIERS as $from => $p ) {
+			$tiers[] = array( (int) $from, (float) $p );
+		}
 		?>
-		<div class="mmq" data-pack="<?php echo (int) $n; ?>" data-price="<?php echo esc_attr( $simple_price ); ?>" data-tier="<?php echo esc_attr( self::TIER_FROM ); ?>" data-off="<?php echo esc_attr( self::TIER_OFF ); ?>" data-maxppc="<?php echo esc_attr( self::TIER_MAXPPC ); ?>">
-			<div class="mmq-t">Cik sveču vajag?</div>
+		<div class="mmq" data-pack="<?php echo (int) $n; ?>" data-tiers='<?php echo esc_attr( wp_json_encode( $tiers ) ); ?>' data-holder="<?php echo esc_attr( self::HOLDER ); ?>" data-base="<?php echo esc_attr( self::BASE_PPC ); ?>">
+			<div class="mmq-t">Daudzums</div>
 			<div class="mmq-btns">
-				<?php foreach ( array( 1, 5, 10, 20 ) as $k ) : ?>
-					<button type="button" class="mmq-b<?php echo 1 === $k ? ' is-on' : ''; ?>" data-packs="<?php echo (int) $k; ?>"><?php echo (int) ( $k * $n ); ?> <small>sveces</small></button>
+				<?php foreach ( self::BTNS as $i => $c ) : ?>
+					<button type="button" class="mmq-b<?php echo 0 === $i ? ' is-on' : ''; ?>" data-candles="<?php echo (int) $c; ?>"><?php echo (int) $c; ?> gab<small><?php echo esc_html( number_format( self::ppc_for( $c, false ), 2, ',', '' ) ); ?> €/gab</small></button>
 				<?php endforeach; ?>
 			</div>
-			<label class="mmq-other">Cits daudzums: <input type="number" min="<?php echo (int) $n; ?>" step="<?php echo (int) $n; ?>" value="<?php echo (int) $n; ?>" inputmode="numeric"> sveces</label>
 			<div class="mmq-sum" aria-live="polite"></div>
 		</div>
 		<style>
 		.mmq{margin:4px 0 14px;width:100%}
-		.mmq-t{font-weight:600;margin-bottom:8px}
-		.mmq-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-		.mmq-b{padding:10px 4px!important;border:1.5px solid #E5C9C6!important;background:#fff!important;color:#5a4a4a!important;border-radius:12px!important;font-weight:600!important;font-size:15px!important;line-height:1.1!important;min-height:0!important;letter-spacing:0!important;text-transform:none!important}
-		.mmq-b small{display:block;font-weight:400;font-size:11px;opacity:.8}
+		.mmq-t{font-size:14px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+		.mmq-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+		.mmq-b{padding:9px 4px!important;border:1.5px solid #E5C9C6!important;background:#fff!important;color:#5a4a4a!important;border-radius:12px!important;font-weight:600!important;font-size:15px!important;line-height:1.15!important;min-height:0!important;letter-spacing:0!important;text-transform:none!important}
+		.mmq-b small{display:block;font-weight:400;font-size:11.5px;opacity:.85}
 		.mmq-b.is-on{border-color:#B85F5F!important;background:#FBF3F2!important;color:#B85F5F!important}
-		.mmq-other{display:block;margin-top:10px;font-size:13px;color:#7a6a6a}
-		.mmq-other input{width:84px!important;padding:4px 8px!important;margin:0 4px;display:inline-block!important;min-height:0!important;height:32px!important}
 		.mmq-sum{margin-top:10px;font-size:15px}
 		.mmq-sum b{font-size:18px}
 		form.cart .mmq ~ .quantity,form.cart .woocommerce-variation-add-to-cart .quantity{display:none!important}
 		</style>
 		<script>
 		(function(){var box=document.currentScript.previousElementSibling.previousElementSibling;var form=box.closest('form.cart');if(!form)return;
-		var N=+box.dataset.pack,price=+box.dataset.price||0,TIER=+box.dataset.tier,OFF=+box.dataset.off,MAX=+box.dataset.maxppc;
-		var qty=form.querySelector('input.qty'),other=box.querySelector('.mmq-other input'),sum=box.querySelector('.mmq-sum');
+		var N=+box.dataset.pack,T=JSON.parse(box.dataset.tiers),H=+box.dataset.holder,B=+box.dataset.base,holder=null,cur=10;
+		var qty=form.querySelector('input.qty'),sum=box.querySelector('.mmq-sum');
 		function fmt(v){return v.toFixed(2).replace('.',',')+' €';}
-		function setPacks(p){p=Math.max(1,Math.round(p));if(qty){qty.value=p;qty.dispatchEvent(new Event('change',{bubbles:true}));}
-		 box.querySelectorAll('.mmq-b').forEach(function(b){b.classList.toggle('is-on',+b.dataset.packs===p);});other.value=p*N;draw();}
-		function draw(){var p=qty?Math.max(1,+qty.value||1):1,c=p*N;if(!price){sum.innerHTML='Izvēlies dizainu, lai redzētu summu.';return;}
-		 var ppc=price/N,unit=price,tier=false;if(c>=TIER&&ppc<=MAX){unit=price-OFF*N;tier=true;}
-		 sum.innerHTML=c+' sveces × '+fmt(unit/N).replace(' €','')+' €/svece = <b>'+fmt(unit*p)+'</b>'+(tier?' <small>(cena no '+TIER+' svecēm)</small>':(ppc<=MAX?' <small>No '+TIER+' svecēm — '+fmt(ppc-OFF)+'/svece</small>':''));}
-		box.querySelectorAll('.mmq-b').forEach(function(b){b.addEventListener('click',function(){setPacks(+b.dataset.packs);});});
-		other.addEventListener('change',function(){setPacks(Math.ceil((+other.value||N)/N));});
-		if(window.jQuery){jQuery(form).on('found_variation',function(e,v){price=+v.display_price||0;draw();}).on('reset_data',function(){if(form.classList.contains('variations_form'))price=0;draw();});}
-		setPacks(1);})();
+		function ppc(c){var p=B;for(var i=0;i<T.length;i++){if(c>=T[i][0]){p=T[i][1];break;}}return p+(holder?H:0);}
+		function set(c){cur=c;if(qty){qty.value=Math.max(1,Math.round(c/N));qty.dispatchEvent(new Event('change',{bubbles:true}));}
+		 box.querySelectorAll('.mmq-b').forEach(function(b){b.classList.toggle('is-on',+b.dataset.candles===c);});draw();}
+		function draw(){var p=ppc(cur);box.querySelectorAll('.mmq-b').forEach(function(b){b.querySelector('small').textContent=fmt(ppc(+b.dataset.candles)).replace(' €','')+' €/gab';});
+		 sum.innerHTML=cur+' gab × '+fmt(p).replace(' €','')+' €/gab = <b>'+fmt(p*cur)+'</b>'+(holder?' <small>(ar svečturiem)</small>':'');}
+		box.querySelectorAll('.mmq-b').forEach(function(b){b.addEventListener('click',function(){set(+b.dataset.candles);});});
+		if(window.jQuery){jQuery(form).on('found_variation',function(e,v){var a=v.attributes||{},h=false;for(var k in a){if(/ar-svec|ar svečtur/i.test(a[k]))h=true;}holder=h;draw();}).on('reset_data',function(){holder=null;draw();});}
+		set(10);})();
 		</script>
 		<?php
 	}
 
-	/** 200+ sveces grozā (konditoram) → 0,45 €/svece tām precēm, kuru konditora cena ~0,50 €/svece. */
+	/** Cena rindā pēc sveču skaita (tievās sveces) un 10 gab cena Zigzag/Viļņotajām. */
 	public static function tier( $cart ) {
 		if ( is_admin() && ! defined( 'DOING_AJAX' ) ) {
 			return;
@@ -104,35 +163,75 @@ final class MarMar_KC_Qty {
 		if ( ! MarMar_Konditoru_Cenas::is_konditor() ) {
 			return;
 		}
-		$elig  = array();
-		$total = 0;
 		foreach ( $cart->get_cart() as $key => $ci ) {
 			$p = $ci['data'];
-			$p->delete_meta_data( '_mm_tier_price' ); // tikai atmiņā, netiek saglabāts
-			$n  = self::pack_size( $p );
-			$kc = MarMar_Konditoru_Cenas::kc_price( $p );
-			if ( $n > 1 && '' !== $kc && ( $kc / $n ) <= self::TIER_MAXPPC ) {
-				$elig[ $key ] = array( $n, (float) $kc );
-				$total       += $n * (int) $ci['quantity'];
+			$p->delete_meta_data( '_mm_tier_price' ); // tikai atmiņā
+			if ( ! self::is_thin( $p ) ) {
+				continue;
 			}
-		}
-		if ( $total < self::TIER_FROM ) {
-			return;
-		}
-		foreach ( $elig as $key => $x ) {
-			$cart->cart_contents[ $key ]['data']->update_meta_data( '_mm_tier_price', round( $x[1] - self::TIER_OFF * $x[0], 2 ) );
+			$n       = self::pack_size( $p );
+			$kc      = (float) MarMar_Konditoru_Cenas::kc_price( $p );
+			$holder  = ( $kc / $n ) > self::BASE_PPC + 0.03;
+			$candles = $n * (int) $ci['quantity'];
+			$price   = round( self::ppc_for( $candles, $holder ) * $n, 2 );
+			if ( abs( $price - $kc ) > 0.001 ) {
+				$cart->cart_contents[ $key ]['data']->update_meta_data( '_mm_tier_price', $price );
+			}
 		}
 	}
 
-	/** Grozā konditoram: «× 5» → redzams arī sveču skaits. */
+	/** Grozā: sveču skaits un cena par gabalu. */
 	public static function cart_label( $name, $ci, $key ) {
 		if ( ! MarMar_Konditoru_Cenas::is_konditor() ) {
 			return $name;
 		}
-		$n = self::pack_size( $ci['data'] );
-		if ( $n > 1 && $ci['quantity'] > 1 ) {
-			$name .= ' <small class="mmq-cnt">(' . (int) ( $n * $ci['quantity'] ) . ' sveces)</small>';
+		$p = $ci['data'];
+		if ( self::is_thin( $p ) ) {
+			$n = self::pack_size( $p );
+			$c = $n * (int) $ci['quantity'];
+			$name .= ' <small class="mmq-cnt">(' . (int) $c . ' gab × ' . esc_html( number_format( (float) $p->get_price() / $n, 2, ',', '' ) ) . ' €/gab)</small>';
 		}
 		return $name;
+	}
+
+	/** Zigzag/Viļņotās: konditoram nosaukumā «10 gab» «7 gab» vietā. */
+	public static function swap_7( $title ) {
+		return preg_replace( '/\b7\s*gab\b/iu', '10 gab', $title );
+	}
+
+	public static function title_10( $title, $id = 0 ) {
+		if ( $id && ! is_admin() && MarMar_Konditoru_Cenas::is_konditor() && 'product' === get_post_type( $id ) ) {
+			$p = wc_get_product( $id );
+			if ( $p && self::is_pack7_to_10( $p ) ) {
+				return self::swap_7( $title );
+			}
+		}
+		return $title;
+	}
+
+	public static function product_title_10( $title, $product ) {
+		return ( MarMar_Konditoru_Cenas::is_konditor() && ! is_admin() && self::is_pack7_to_10( $product ) ) ? self::swap_7( $title ) : $title;
+	}
+
+	public static function pack_item_data( $data, $ci ) {
+		if ( MarMar_Konditoru_Cenas::is_konditor() && self::is_pack7_to_10( $ci['data'] ) ) {
+			foreach ( $data as $i => $d ) {
+				if ( isset( $d['value'] ) ) {
+					$data[ $i ]['value'] = self::swap_7( (string) $d['value'] );
+				}
+				if ( isset( $d['display'] ) ) {
+					$data[ $i ]['display'] = self::swap_7( (string) $d['display'] );
+				}
+			}
+			$data[] = array( 'key' => 'Konditora iepakojums', 'value' => '10 gab' );
+		}
+		return $data;
+	}
+
+	public static function pack_order_meta( $item, $key, $values, $order ) {
+		if ( MarMar_Konditoru_Cenas::is_konditor( $order->get_customer_id() ) && self::is_pack7_to_10( $values['data'] ) ) {
+			$item->add_meta_data( 'Konditora iepakojums', '10 gab', true );
+			$item->set_name( self::swap_7( $item->get_name() ) );
+		}
 	}
 }
