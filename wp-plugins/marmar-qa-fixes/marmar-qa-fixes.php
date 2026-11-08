@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.5.0
+ * Version:           1.6.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -27,6 +27,22 @@ final class MarMar_QA_Fixes {
 		add_action( 'template_redirect', array( __CLASS__, 'page_buffer' ), 3 );
 		add_action( 'wp_head', array( __CLASS__, 'css' ), 99 );
 		add_filter( 'marmar_checkout_config', array( __CLASS__, 'min_order' ), 20 );
+		add_action( 'wp_footer', array( __CLASS__, 'single_option_js' ), 99 );
+	}
+
+	/** Ja atribūtam ir tikai viena vērtība (piem. «Daudzums: 10 gab») — izvēlamies to automātiski un rindu nerādām. */
+	public static function single_option_js() {
+		if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+			return;
+		}
+		?>
+<script id="mm-single-option">
+(function(){function run(){document.querySelectorAll('form.variations_form table.variations tr').forEach(function(tr){var lis=tr.querySelectorAll('li.variable-item'),sel=tr.querySelector('select');var opts=sel?[].filter.call(sel.options,function(o){return o.value}):[];
+if(lis.length===1){if(!lis[0].classList.contains('selected'))lis[0].click();tr.classList.add('mm-single');}
+else if(!lis.length&&opts.length===1){if(sel.value!==opts[0].value){sel.value=opts[0].value;if(window.jQuery)jQuery(sel).trigger('change');}tr.classList.add('mm-single');}});}
+if(document.readyState!=='loading')setTimeout(run,300);else document.addEventListener('DOMContentLoaded',function(){setTimeout(run,300);});})();
+</script>
+		<?php
 	}
 
 	/** Minimālais mazumtirdzniecības pasūtījums no 08.11.2026 — 10 € (konditoriem paliek 30 €). */
@@ -48,7 +64,8 @@ final class MarMar_QA_Fixes {
 
 	/** Poga «uz augšu» (#fab-stt) bija zem čata pogas apakšējā labajā stūrī — paceļam virs tās. */
 	public static function css() {
-		echo '<style id="mm-qa-css">#fab-stt{bottom:88px!important;right:22px!important}</style>';
+		echo '<style id="mm-qa-css">#fab-stt{bottom:88px!important;right:22px!important}'
+			. '.single-product table.variations tr.mm-single,.single-product table.variations tr:has(ul.variable-items-wrapper>li.variable-item:only-child){display:none!important}</style>';
 	}
 
 	/** GPTranslate bootstrap.css (27 KB) nebloķē lapas attēlošanu — ielādējas fonā. */
