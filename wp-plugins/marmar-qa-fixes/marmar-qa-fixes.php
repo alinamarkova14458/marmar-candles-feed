@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.3.0
+ * Version:           1.4.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -41,10 +41,26 @@ final class MarMar_QA_Fixes {
 		ob_start( array( __CLASS__, 'async_css' ) );
 	}
 
+	/**
+	 * Clarity ielādējas pēc pirmās mijiedarbības vai 2,5 s pēc lapas ielādes — nebremzē pirmo attēlošanu.
+	 * window.clarity rinda paliek uzreiz, tāpēc piekrišanas signāli nepazūd.
+	 */
+	public static function delay_clarity( $html ) {
+		if ( false === strpos( $html, 'id="marmar-clarity"' ) ) {
+			return $html;
+		}
+		$re  = '~t\s*=\s*l\.createElement\(r\);\s*t\.async\s*=\s*1;\s*t\.src\s*=\s*(\'https://www\.clarity\.ms/tag/\'\s*\+\s*i);\s*y\s*=\s*l\.getElementsByTagName\(r\)\[0\];\s*y\.parentNode\.insertBefore\(t,\s*y\);~';
+		$rep = 'var go=function(){if(go.d)return;go.d=1;t=l.createElement(r);t.async=1;t.src=$1;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);};'
+			. '["scroll","pointerdown","keydown","touchstart"].forEach(function(e){c.addEventListener(e,go,{once:true,passive:true});});'
+			. 'c.addEventListener("load",function(){setTimeout(go,2500);});';
+		return preg_replace( $re, $rep, $html, 1 );
+	}
+
 	public static function async_css( $html ) {
 		if ( strlen( $html ) < 500 ) {
 			return $html;
 		}
+		$html = self::delay_clarity( $html );
 		return preg_replace_callback(
 			"~<link rel=['\"]stylesheet['\"] id=['\"]bootstrap-css-css['\"]([^>]*?)media=['\"]all['\"]\s*/?>~i",
 			function ( $m ) {
