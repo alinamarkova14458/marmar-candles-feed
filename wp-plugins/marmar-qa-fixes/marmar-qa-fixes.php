@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       MarMar QA labojumi
- * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.0.0
+ * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
+ * Version:           1.1.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -23,6 +23,30 @@ final class MarMar_QA_Fixes {
 		add_filter( 'pre_get_document_title', array( __CLASS__, 'title_404' ), 20 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'checkout_i18n' ), 100 );
 		add_filter( 'rank_math/sitemap/entry', array( __CLASS__, 'sitemap_entry' ), 10, 3 );
+		add_action( 'template_redirect', array( __CLASS__, 'product_buffer' ), 2 );
+	}
+
+	/** Video galerijas skripti/stili (video.js 150 KB + Font Awesome) — tikai produktiem ar video. */
+	public static function product_buffer() {
+		if ( is_admin() || ! function_exists( 'is_product' ) || ! is_product() ) {
+			return;
+		}
+		ob_start( array( __CLASS__, 'strip_video_assets' ) );
+	}
+
+	public static function strip_video_assets( $html ) {
+		if ( strlen( $html ) < 500 || false !== strpos( $html, 'data-vwg-video=' ) || false !== strpos( $html, '<video' ) ) {
+			return $html;
+		}
+		return preg_replace(
+			array(
+				"~<link[^>]+id=['\"]vwg_fontawesome-css['\"][^>]*>\s*~i",
+				"~<link[^>]+id=['\"]videojs-css-css['\"][^>]*>\s*~i",
+				"~<script[^>]+id=['\"]videojs-js['\"][^>]*></script>\s*~i",
+			),
+			'',
+			$html
+		);
 	}
 
 	public static function redirects() {
