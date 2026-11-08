@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.4.0
+ * Version:           1.5.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -26,6 +26,24 @@ final class MarMar_QA_Fixes {
 		add_action( 'template_redirect', array( __CLASS__, 'product_buffer' ), 2 );
 		add_action( 'template_redirect', array( __CLASS__, 'page_buffer' ), 3 );
 		add_action( 'wp_head', array( __CLASS__, 'css' ), 99 );
+		add_filter( 'marmar_checkout_config', array( __CLASS__, 'min_order' ), 20 );
+	}
+
+	/** Minimālais mazumtirdzniecības pasūtījums no 08.11.2026 — 10 € (konditoriem paliek 30 €). */
+	const MIN_ORDER = 10;
+
+	public static function min_order( $c ) {
+		$c['min_order'] = self::MIN_ORDER;
+		return $c;
+	}
+
+	/** Teksti ar «5 €» par minimālo pasūtījumu citos spraudņos/snipetos → 10 €. Steidzamības «+5 €» netiek skarts. */
+	public static function min_order_texts( $html ) {
+		return preg_replace(
+			'~((?:Minimāl\w*\s+pasūtījum\w*(?:\s+summa)?|Min\.\s*pasūtījums)\s*(?:—|–|-|ir)?\s*(?:<b>|<strong>)?)5((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)~u',
+			'${1}' . self::MIN_ORDER . '$2',
+			$html
+		);
 	}
 
 	/** Poga «uz augšu» (#fab-stt) bija zem čata pogas apakšējā labajā stūrī — paceļam virs tās. */
@@ -61,6 +79,7 @@ final class MarMar_QA_Fixes {
 			return $html;
 		}
 		$html = self::delay_clarity( $html );
+		$html = self::min_order_texts( $html );
 		return preg_replace_callback(
 			"~<link rel=['\"]stylesheet['\"] id=['\"]bootstrap-css-css['\"]([^>]*?)media=['\"]all['\"]\s*/?>~i",
 			function ( $m ) {
