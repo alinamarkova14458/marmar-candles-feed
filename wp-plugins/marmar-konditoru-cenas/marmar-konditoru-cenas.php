@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.4.4
+ * Version:           1.4.7
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.4.4';
+	const VER       = '1.4.7';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -265,9 +265,10 @@ final class MarMar_Konditoru_Cenas {
 .single-product .single_variation .price{display:block;margin:2px 0 10px!important;font-size:1.15em}
 .single-product .single_variation:empty,.single-product .woocommerce-variation-description:empty{display:none}
 @media(max-width:640px){
-.single-product .image-variable-items-wrapper{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px!important;justify-items:center}
-.single-product .image-variable-items-wrapper .variable-item{margin:0 0 30px!important}
-.single-product .image-variable-items-wrapper .mm-lbl{font-size:10.5px!important;line-height:1.2!important;width:62px!important;max-width:19vw;white-space:normal!important;text-align:center}
+.single-product .image-variable-items-wrapper{display:flex!important;flex-wrap:wrap!important;justify-content:flex-start!important;gap:2px!important;column-gap:2px!important;row-gap:2px!important}
+.single-product .image-variable-items-wrapper .variable-item{margin:0 calc((min(62px,17vw) - 30px)/2) 30px!important}
+body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper{gap:2px!important;padding-left:0!important}
+.single-product .image-variable-items-wrapper .mm-lbl{font-size:10.5px!important;line-height:1.2!important;width:min(62px,17vw)!important;max-width:none!important;white-space:normal!important;text-align:center}
 .single-product .button-variable-items-wrapper .variable-item{height:auto!important;min-height:34px;padding:0!important}
 .single-product .button-variable-items-wrapper .variable-item .variable-item-contents{font-size:12.5px;padding:6px 10px;white-space:nowrap}
 .single-product table.variations th.label,.single-product table.variations th.label label{font-size:13px!important}
