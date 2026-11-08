@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.5.0
+ * Version:           1.5.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.5.0';
+	const VER       = '1.5.2';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena

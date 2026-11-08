@@ -207,14 +207,15 @@ final class MarMar_KC_Qty {
 		<script>
 		(function(){var box=document.currentScript.previousElementSibling.previousElementSibling;var form=box.closest('form.cart');if(!form)return;
 		var N=+box.dataset.pack,T=JSON.parse(box.dataset.tiers),H=+box.dataset.holder,B=+box.dataset.base,holder=null,cur=10;
-		var qty=form.querySelector('input.qty'),sum=box.querySelector('.mmq-sum');
+		var sum=box.querySelector('.mmq-sum');function Q(){return form.querySelector('input[name="quantity"]');}
 		function fmt(v){return v.toFixed(2).replace('.',',')+' €';}
 		function ppc(c){var p=B;for(var i=0;i<T.length;i++){if(c>=T[i][0]){p=T[i][1];break;}}return p+(holder?H:0);}
-		function set(c){cur=c;if(qty){qty.value=Math.max(1,Math.round(c/N));qty.dispatchEvent(new Event('change',{bubbles:true}));}
+		function set(c){cur=c;var qty=Q();if(qty){qty.value=Math.max(1,Math.round(c/N));qty.dispatchEvent(new Event('change',{bubbles:true}));}
 		 box.querySelectorAll('.mmq-b').forEach(function(b){b.classList.toggle('is-on',+b.dataset.candles===c);});draw();}
 		function draw(){var p=ppc(cur);box.querySelectorAll('.mmq-b').forEach(function(b){b.querySelector('small').textContent=fmt(ppc(+b.dataset.candles)).replace(' €','')+' €/gab';});
 		 sum.innerHTML=cur+' gab × '+fmt(p).replace(' €','')+' €/gab = <b>'+fmt(p*cur)+'</b>'+(holder?' <small>(ar svečturiem)</small>':'');}
 		box.querySelectorAll('.mmq-b').forEach(function(b){b.addEventListener('click',function(){set(+b.dataset.candles);});});
+		function sync(){var qty=Q();if(qty)qty.value=Math.max(1,Math.round(cur/N));}form.addEventListener('submit',sync,true);var btn=form.querySelector('.single_add_to_cart_button');if(btn){btn.addEventListener('click',sync,true);btn.addEventListener('pointerdown',sync,true);}
 		if(window.jQuery){jQuery(form).on('found_variation',function(e,v){var a=v.attributes||{},h=false;for(var k in a){if(/ar-svec|ar svečtur/i.test(a[k]))h=true;}holder=h;draw();}).on('reset_data',function(){holder=null;draw();});}
 		set(10);})();
 		</script>
