@@ -140,6 +140,25 @@ def access_token() -> tuple[str, str | None]:
     return j["access_token"], (new_rt if new_rt and new_rt != rt else None)
 
 
+SANDBOX_BOARD = "Sandbox test"
+
+
+def sandbox_board_id(token: str) -> str:
+    """Trial access: pins go to the sandbox, which has its own boards. Find or create one."""
+    h = {"Authorization": f"Bearer {token}"}
+    r = requests.get(f"{API['sandbox']}/boards", headers=h, timeout=30, params={"page_size": 100})
+    if r.status_code == 200:
+        for b in r.json().get("items", []):
+            if b.get("name") == SANDBOX_BOARD:
+                return b["id"]
+    r = requests.post(f"{API['sandbox']}/boards", headers=h, timeout=30,
+                      json={"name": SANDBOX_BOARD, "privacy": "SECRET"})
+    if r.status_code not in (200, 201):
+        sys.exit(f"sandbox board create failed: HTTP {r.status_code} {r.text[:200]}")
+    print(f"  created sandbox board {r.json()['id']}")
+    return r.json()["id"]
+
+
 def mask(value: str) -> None:
     if os.environ.get("GITHUB_ACTIONS"):
         print(f"::add-mask::{value}")
@@ -167,8 +186,12 @@ def main() -> int:
             # rotated refresh token -> file for the workflow's "save secret" step (never logged)
             with open(os.environ["NEW_RT_FILE"], "w") as f:
                 f.write(new_rt)
+        sandbox_board = sandbox_board_id(token) if env == "sandbox" else None
         for it in to_publish:
-            r = requests.post(f"{API[env]}/pins", json=pin_payload(it), timeout=60,
+            payload = pin_payload(it)
+            if sandbox_board:  # real boards don't exist in the sandbox
+                payload["board_id"] = sandbox_board
+            r = requests.post(f"{API[env]}/pins", json=payload, timeout=60,
                               headers={"Authorization": f"Bearer {token}"})
             rec = {"at": now.isoformat(), "file": it["_file"], "env": env}
             if r.status_code in (200, 201):
