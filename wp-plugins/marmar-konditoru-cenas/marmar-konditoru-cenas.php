@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.4.7
+ * Version:           1.5.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.4.7';
+	const VER       = '1.5.0';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -107,6 +107,10 @@ final class MarMar_Konditoru_Cenas {
 	public static function filter_price( $price, $product ) {
 		if ( ! self::is_konditor() ) {
 			return $price;
+		}
+		$tier = $product instanceof WC_Product ? $product->get_meta( '_mm_tier_price', true ) : '';
+		if ( '' !== $tier && is_numeric( $tier ) ) {
+			return (float) $tier; // 200+ sveces grozā (MarMar_KC_Qty)
 		}
 		$kc = self::kc_price( $product );
 		return '' === $kc ? $price : $kc;
@@ -760,6 +764,8 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 
 register_activation_hook( __FILE__, array( 'MarMar_Konditoru_Cenas', 'activate' ) );
 require_once __DIR__ . '/includes/class-box.php';
+require_once __DIR__ . '/includes/class-qty.php';
 add_action( 'plugins_loaded', array( 'MarMar_Konditoru_Cenas', 'init' ) );
 add_action( 'plugins_loaded', array( 'MarMar_KC_Box', 'init' ) );
+add_action( 'plugins_loaded', array( 'MarMar_KC_Qty', 'init' ) );
 register_deactivation_hook( __FILE__, function () { wp_clear_scheduled_hook( 'mm_kc_daily' ); } );
