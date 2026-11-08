@@ -32,6 +32,60 @@ final class MarMar_KC_Qty {
 		add_action( 'woocommerce_checkout_create_order_line_item', array( __CLASS__, 'pack_order_meta' ), 20, 4 );
 		add_filter( 'the_title', array( __CLASS__, 'title_10' ), 20, 2 );
 		add_filter( 'woocommerce_product_title', array( __CLASS__, 'product_title_10' ), 20, 2 );
+		add_action( 'rest_api_init', array( __CLASS__, 'rest' ) );
+	}
+
+	/**
+	 * Administratoram: konditora cenu iestatīšana vienā pieprasījumā (lai hostings nebremzē).
+	 * POST /wp-json/marmar-kc/v1/set  {"items":[{"product":123,"price":6.0,"holder_price":6.7}]}
+	 * Variācijām ar «AR SVEČTURIEM» liek holder_price (ja dots), pārējām price; vecās vērtības atgriež.
+	 */
+	public static function rest() {
+		register_rest_route( 'marmar-kc/v1', '/set', array(
+			'methods'             => 'POST',
+			'permission_callback' => function () {
+				return current_user_can( 'manage_woocommerce' );
+			},
+			'callback'            => function ( WP_REST_Request $r ) {
+				$out = array();
+				foreach ( (array) $r->get_param( 'items' ) as $it ) {
+					$p = wc_get_product( (int) ( $it['product'] ?? 0 ) );
+					if ( ! $p ) {
+						$out[] = array( 'product' => $it['product'] ?? 0, 'error' => 'not found' );
+						continue;
+					}
+					$price  = number_format( (float) $it['price'], 2, '.', '' );
+					$hprice = isset( $it['holder_price'] ) ? number_format( (float) $it['holder_price'], 2, '.', '' ) : $price;
+					$old    = array();
+					if ( $p->is_type( 'variable' ) ) {
+						foreach ( $p->get_children() as $vid ) {
+							$v = wc_get_product( $vid );
+							if ( ! $v ) {
+								continue;
+							}
+							$ar = false;
+							foreach ( $v->get_attributes() as $val ) {
+								if ( preg_match( '/^ar[\s-]+sve/iu', (string) $val ) ) {
+									$ar = true;
+								}
+							}
+							$old[ $vid ] = $v->get_meta( MarMar_Konditoru_Cenas::META, true );
+							$v->update_meta_data( MarMar_Konditoru_Cenas::META, $ar ? $hprice : $price );
+							$v->save_meta_data();
+						}
+						$p->update_meta_data( MarMar_Konditoru_Cenas::META_HAS, 'yes' );
+						$p->save_meta_data();
+						wc_delete_product_transients( $p->get_id() );
+					} else {
+						$old[ $p->get_id() ] = $p->get_meta( MarMar_Konditoru_Cenas::META, true );
+						$p->update_meta_data( MarMar_Konditoru_Cenas::META, $price );
+						$p->save_meta_data();
+					}
+					$out[] = array( 'product' => $p->get_id(), 'type' => $p->get_type(), 'set' => count( $old ), 'old' => $old );
+				}
+				return $out;
+			},
+		) );
 	}
 
 	/** Cik sveču ir vienā mazumtirdzniecības iepakojumā («Daudzums: 10 gab» vai «10 gab» nosaukumā). */
