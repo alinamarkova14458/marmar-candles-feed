@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.2.0
+ * Version:           1.3.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -25,6 +25,12 @@ final class MarMar_QA_Fixes {
 		add_filter( 'rank_math/sitemap/entry', array( __CLASS__, 'sitemap_entry' ), 10, 3 );
 		add_action( 'template_redirect', array( __CLASS__, 'product_buffer' ), 2 );
 		add_action( 'template_redirect', array( __CLASS__, 'page_buffer' ), 3 );
+		add_action( 'wp_head', array( __CLASS__, 'css' ), 99 );
+	}
+
+	/** Poga «uz augšu» (#fab-stt) bija zem čata pogas apakšējā labajā stūrī — paceļam virs tās. */
+	public static function css() {
+		echo '<style id="mm-qa-css">#fab-stt{bottom:88px!important;right:22px!important}</style>';
 	}
 
 	/** GPTranslate bootstrap.css (27 KB) nebloķē lapas attēlošanu — ielādējas fonā. */
