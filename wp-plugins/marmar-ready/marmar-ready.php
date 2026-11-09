@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Pieejams uzreiz
  * Description:       Gatavās sveces bez atsevišķām kartītēm: administratore atzīmē variantu un daudzumu → prece automātiski nonāk sadaļā «Pieejams uzreiz» ar plāksnīti; kad izpārdots — pazūd no sadaļas, bet paliek pārdošanā pēc pasūtījuma. Plāksnītes: «Pieejams uzreiz», «Populārs», «Dažādas krāsas».
- * Version:           1.1.0
+ * Version:           1.2.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -28,6 +28,49 @@ final class MarMar_Ready {
 		add_action( 'woocommerce_before_shop_loop_item_title', array( __CLASS__, 'badges' ), 9 );
 		add_action( 'wp_head', array( __CLASS__, 'css' ), 99 );
 		add_action( 'woocommerce_before_variations_form', array( __CLASS__, 'ready_box' ), 5 );
+		add_action( 'mm_bestsellers_daily', array( __CLASS__, 'compute_bestsellers' ) );
+		if ( ! wp_next_scheduled( 'mm_bestsellers_daily' ) ) {
+			wp_schedule_event( strtotime( 'tomorrow 03:17' ), 'daily', 'mm_bestsellers_daily' );
+		}
+	}
+
+	const OPT_BEST = 'marmar_bestsellers';
+	const BEST_N   = 6;
+	const EXCLUDE  = array( 11212 );                 // svečturi — aksesuārs
+	/** Vecās kartītes → apvienotā kartīte (pārdošanas vēsture). */
+	const MERGE_MAP = array( 14657 => 25282, 14536 => 25282, 12016 => 25282, 11956 => 25282, 11926 => 25282, 11925 => 25282, 11867 => 25282, 11866 => 25282, 11837 => 25282, 11836 => 25282, 11806 => 25282, 11777 => 25282, 11776 => 25282, 11746 => 25282, 11717 => 25282, 11511 => 25282, 11390 => 25282, 11213 => 25282, 11690 => 25282, 22821 => 25282, 22059 => 25282, 22061 => 25282, 22062 => 25282, 11063 => 25282, 22820 => 25282, 22854 => 25282, 18852 => 25256, 19123 => 25256, 18850 => 25256, 19121 => 25256, 19122 => 25256, 18853 => 25256, 18851 => 25256, 11092 => 25256, 15406 => 25256 );
+
+	/** Top N pēc pārdotā daudzuma pēdējos 12 mēnešos (apvienotajām — ar veco kartīšu pārdošanu). */
+	public static function compute_bestsellers() {
+		$orders = wc_get_orders( array( 'status' => array( 'wc-processing', 'wc-completed' ), 'date_created' => '>' . strtotime( '-365 days' ), 'limit' => -1 ) );
+		$sum    = array();
+		foreach ( $orders as $o ) {
+			foreach ( $o->get_items() as $it ) {
+				$pid = (int) $it->get_product_id();
+				$pid = self::MERGE_MAP[ $pid ] ?? $pid;
+				if ( in_array( $pid, self::EXCLUDE, true ) || 'publish' !== get_post_status( $pid ) ) {
+					continue;
+				}
+				$sum[ $pid ] = ( $sum[ $pid ] ?? 0 ) + (int) $it->get_quantity();
+			}
+		}
+		arsort( $sum );
+		$top = array_slice( array_keys( array_filter( $sum, function ( $q ) { return $q >= 3; } ) ), 0, self::BEST_N );
+		$qty = array();
+		foreach ( $top as $id ) {
+			$qty[ (string) $id ] = (int) $sum[ $id ];
+		}
+		update_option( self::OPT_BEST, array( 'ids' => $top, 'qty' => $qty, 'time' => time() ), false );
+		return $top;
+	}
+
+	public static function bestsellers() {
+		$o = get_option( self::OPT_BEST );
+		if ( ! $o || empty( $o['qty'] ) || ( time() - (int) ( $o['time'] ?? 0 ) ) > 2 * DAY_IN_SECONDS ) {
+			self::compute_bestsellers();
+			$o = get_option( self::OPT_BEST );
+		}
+		return array_map( 'intval', (array) ( $o['ids'] ?? array() ) );
 	}
 
 	/** Produkta lapā: kuri tieši varianti ir gatavi; klikšķis izvēlas variantu. */
@@ -156,7 +199,9 @@ final class MarMar_Ready {
 				$out[] = '<span class="mmb mmb-ready">⚡ Uzreiz: ' . count( $list ) . ' varianti</span>';
 			}
 		}
-		if ( in_array( (int) $product->get_id(), array_map( 'intval', (array) get_option( self::OPT_POP, array() ) ), true ) ) {
+		if ( in_array( (int) $product->get_id(), self::bestsellers(), true ) ) {
+			$out[] = '<span class="mmb mmb-best">🔥 Pārdotākais</span>';
+		} elseif ( in_array( (int) $product->get_id(), array_map( 'intval', (array) get_option( self::OPT_POP, array() ) ), true ) ) {
 			$out[] = '<span class="mmb mmb-pop">★ Populārs</span>';
 		}
 		if ( in_array( (int) $product->get_id(), self::merged_ids(), true ) ) {
@@ -178,7 +223,7 @@ final class MarMar_Ready {
 	public static function css() {
 		echo '<style id="mm-ready-css">ul.products li.product{position:relative}.mmb-stack{position:absolute;top:12px;right:12px;z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:none}'
 			. '.mmb{font-size:12px;font-weight:600;line-height:1;padding:7px 10px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}'
-			. '.mmb-colors{background:rgba(255,255,255,.92);color:#5a4a4a}.mmb-ready{background:#2f7d5b;color:#fff}.mmb-pop{background:#B85F5F;color:#fff}'
+			. '.mmb-colors{background:rgba(255,255,255,.92);color:#5a4a4a}.mmb-ready{background:#2f7d5b;color:#fff}.mmb-pop{background:#B85F5F;color:#fff}.mmb-best{background:#C8862E;color:#fff}'
 			. '.mmr-box{margin:0 0 16px;padding:12px 14px;border-radius:14px;background:#EEF6F1;border:1px solid #CFE6D8}.mmr-t{font-weight:600;color:#2f7d5b;font-size:14px;margin-bottom:8px}.mmr-l{display:flex;flex-wrap:wrap;gap:6px}.mmr-i{background:#fff!important;border:1px solid #CFE6D8!important;color:#3a4a42!important;border-radius:999px!important;padding:6px 12px!important;font-size:13px!important;min-height:0!important;line-height:1.2!important;text-transform:none!important;letter-spacing:0!important}.mmr-i b{color:#2f7d5b}.mmr-n{font-size:12px;color:#6b7a72;margin-top:8px}'
 			. '.single-product .stock.available-on-backorder,.single-product .stock.in-stock{font-size:14px}</style>';
 	}
@@ -260,6 +305,7 @@ final class MarMar_Ready {
 	}
 
 	public static function page() {
+		self::compute_bestsellers(); // svaigs saraksts, atverot lapu
 		$products = wc_get_products( array( 'status' => 'publish', 'limit' => -1, 'orderby' => 'title', 'order' => 'ASC', 'return' => 'objects' ) );
 		$ready    = array();
 		$flagged  = wc_get_products( array( 'status' => 'publish', 'limit' => -1, 'meta_key' => self::FLAG, 'meta_value' => 'yes', 'return' => 'objects' ) );
@@ -307,7 +353,10 @@ final class MarMar_Ready {
 			<?php endforeach; ?>
 			</tbody></table>
 
-			<h2 style="margin-top:2em">★ Populārs</h2>
+			<h2 style="margin-top:2em">🔥 Pārdotākais (automātiski)</h2>
+			<p>Katru nakti — <?php echo (int) self::BEST_N; ?> pārdotākās preces pēdējos 12 mēnešos (vismaz 3 gab.). Pašlaik:
+			<?php $bo = get_option( self::OPT_BEST ); foreach ( self::bestsellers() as $bid ) { echo '<br>• ' . esc_html( get_the_title( $bid ) ) . ' — ' . (int) ( $bo['qty'][ (string) $bid ] ?? 0 ) . ' gab.'; } ?></p>
+			<h2 style="margin-top:2em">★ Populārs (atzīmē pati)</h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="mm_ready_save"><input type="hidden" name="do" value="popular">
 				<?php wp_nonce_field( 'mm_ready' ); ?>
