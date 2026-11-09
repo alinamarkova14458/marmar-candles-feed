@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Pieejams uzreiz
  * Description:       Gatavās sveces bez atsevišķām kartītēm: administratore atzīmē variantu un daudzumu → prece automātiski nonāk sadaļā «Pieejams uzreiz» ar plāksnīti; kad izpārdots — pazūd no sadaļas, bet paliek pārdošanā pēc pasūtījuma. Plāksnītes: «Pieejams uzreiz», «Populārs», «Dažādas krāsas».
- * Version:           1.2.2
+ * Version:           1.2.4
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -223,7 +223,7 @@ final class MarMar_Ready {
 	public static function css() {
 		echo '<style id="mm-ready-css">ul.products li.product{position:relative}.mmb-stack{position:absolute;top:12px;right:12px;z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:none}'
 			. '.mmb{font-size:12px;font-weight:600;line-height:1;padding:7px 10px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}'
-			. '.mmb-colors{background:rgba(255,255,255,.92);color:#5a4a4a}.mmb-ready{background:#2f7d5b;color:#fff}.mmb-pop{background:#B85F5F;color:#fff}.mmb-best{background:#C8862E;color:#fff}'
+			. '.mmb-colors{background:rgba(255,255,255,.94);color:#5a4a4a}.mmb-ready{background:rgba(255,255,255,.94);color:#2f6e52}.mmb-pop{background:#FBF3F2;color:#B85F5F;border:1px solid #F0D9D6}.mmb-best{background:#B85F5F;color:#fff}'
 			. '.mmr-box{margin:0 0 16px;padding:12px 14px;border-radius:14px;background:#EEF6F1;border:1px solid #CFE6D8}.mmr-t{font-weight:600;color:#2f7d5b;font-size:14px;margin-bottom:8px}.mmr-l{display:flex;flex-wrap:wrap;gap:6px}.mmr-i{background:#fff!important;border:1px solid #CFE6D8!important;color:#3a4a42!important;border-radius:999px!important;padding:6px 12px!important;font-size:13px!important;min-height:0!important;line-height:1.2!important;text-transform:none!important;letter-spacing:0!important}.mmr-i b{color:#2f7d5b}.mmr-n{font-size:12px;color:#6b7a72;margin-top:8px}'
 			. '.single-product .stock.available-on-backorder,.single-product .stock.in-stock{font-size:14px}</style>';
 	}
