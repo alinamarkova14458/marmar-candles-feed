@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.7
+ * Version:           1.9.8
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -87,7 +87,6 @@ final class MarMar_QA_Fixes {
 		add_action( 'wp_head', array( __CLASS__, 'verify_meta' ), 1 );
 		// Katalogs: 24 preces lapā (dalās ar 2, 3 un 4 kolonnām) un plāksnīte «Dažādas krāsas».
 		add_filter( 'loop_shop_per_page', array( __CLASS__, 'per_page' ), 99 );
-		add_action( 'woocommerce_before_shop_loop_item_title', array( __CLASS__, 'colors_badge' ), 9 );
 		// Komentāri blogā un lapās izslēgti (spams, 09.11.2026). Produktu atsauksmes netiek skartas.
 		add_filter( 'comments_open', array( __CLASS__, 'no_comments' ), 20, 2 );
 		add_filter( 'pings_open', array( __CLASS__, 'no_comments' ), 20, 2 );
