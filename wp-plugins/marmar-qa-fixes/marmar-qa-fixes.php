@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.0
+ * Version:           1.9.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -49,6 +49,7 @@ final class MarMar_QA_Fixes {
 		add_action( 'template_redirect', array( __CLASS__, 'product_buffer' ), 2 );
 		add_action( 'template_redirect', array( __CLASS__, 'page_buffer' ), 3 );
 		add_action( 'wp_head', array( __CLASS__, 'css' ), 99 );
+		add_action( 'wp_head', array( __CLASS__, 'verify_meta' ), 1 );
 		add_filter( 'marmar_checkout_config', array( __CLASS__, 'min_order' ), 20 );
 		add_action( 'wp_footer', array( __CLASS__, 'single_option_js' ), 99 );
 		add_filter( 'wp_nav_menu_items', array( __CLASS__, 'mobile_account_item' ), 20, 2 );
@@ -135,6 +136,11 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 			$html
 		);
 		return preg_replace( '~Min\.\s*pasūtījums\s*(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)~u', 'Zem ' . $m . '$1 — piemaksa', $html );
+	}
+
+	/** Domēna verifikācija (Paysera, 09.11.2026). */
+	public static function verify_meta() {
+		echo '<meta name="paysera-verify" content="paysera-verify-7826bdda7bfcab1a57b017efd44d5ee6" />' . "\n";
 	}
 
 	/** Poga «uz augšu» (#fab-stt) bija zem čata pogas apakšējā labajā stūrī — paceļam virs tās. */
