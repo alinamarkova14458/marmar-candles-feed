@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.3
+ * Version:           1.9.4
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -46,6 +46,30 @@ final class MarMar_QA_Fixes {
 		'product/melnas-dabiga-vaska-kuku-svecites-zalu-foliju' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 18851 (09.11 melnās apvienotas)
 		'product/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-foliju-8cm' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 11092 (09.11 melnās apvienotas)
 		'product/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-melnas' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 15406 (09.11 melnās apvienotas)
+		'product/bisu-vaska-svecites-kuku-un-torsu-rotasanai-8cm-kosi-zals' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 14657 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kuku-un-torsu-dekoresanai-8cm-ice-blue-zils' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 14536 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kuku-un-torsu-dekoresanai-8cm-bubble-gum-roza' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 12016 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-kobaltzils' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11956 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kuku-un-torsu-dekoresanai-8cm-gaisi-peleks' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11926 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kuku-un-torsu-dekoresanai-8cm-besa' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11925 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kukam-un-tortem-8cm-bruns' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11867 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-pienbalts' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11866 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-debeszils' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11837 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kukam-un-tortem-8cm-olivzals' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11836 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kuku-un-torsu-dekoresanai-8cm-krema' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11806 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kuku-un-torsu-rotasanai-8cm-korallu' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11777 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-gaisi-roza' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11776 (09.11 8 cm apvienotas)
+		'product/dabiga-bisu-vaska-svecites-kuku-un-torsu-rotajumiem-8cm-oranzas' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11746 (09.11 8 cm apvienotas)
+		'product/ekologiskas-bisu-vaska-kuku-svecites-8cm-lavandas' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11717 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kukam-un-tortem-8cm-dzeltenas' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11511 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kukam-un-tortem-8cm-fuksija' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11390 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kukam-un-tortem-8cm-sarkanas' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11213 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kukam-un-tortem-8cm-pasteltonu-mix' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11690 (09.11 8 cm apvienotas)
+		'product/pasteltonu-kukas-svecites' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 22821 (09.11 8 cm apvienotas)
+		'product/dzimsanas-dienas-svecisu-komplekts-8-cm-10-gab-krasu-mix-2' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 22059 (09.11 8 cm apvienotas)
+		'product/dzimsanas-dienas-svecisu-komplekts-8-cm-10-gab-krasu-mix-4' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 22061 (09.11 8 cm apvienotas)
+		'product/dzimsanas-dienas-svecisu-komplekts-8-cm-10-gab-krasu-mix-6' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 22062 (09.11 8 cm apvienotas)
+		'product/bisu-vaska-svecites-kukam-un-tortem-8cm-ar-foliju' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11063 (09.11 8 cm apvienotas)
 	);
 
 	public static function init() {
