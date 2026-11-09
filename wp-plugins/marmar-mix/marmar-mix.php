@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Mikss
  * Description:       «Savs mikss (līdz 5 krāsām)»: ja krāsā izvēlēts šis variants, pircējs atzīmē 2–5 krāsas; izvēle redzama grozā, pasūtījumā un e-pastos.
- * Version:           1.1.1
+ * Version:           1.2.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -24,6 +24,7 @@ final class MarMar_Mix {
 		add_filter( 'woocommerce_get_item_data', array( __CLASS__, 'item_data' ), 20, 2 );
 		add_action( 'woocommerce_checkout_create_order_line_item', array( __CLASS__, 'order_meta' ), 20, 4 );
 		add_action( 'init', array( __CLASS__, 'mix_colors' ), 30 );
+		add_action( 'init', array( __CLASS__, 'new_colors_v2' ), 31 );
 		// «Vēlmes» lauks (pirmā gada ciparu komplekti).
 		add_action( 'woocommerce_before_add_to_cart_button', array( __CLASS__, 'wish_field' ), 6 );
 	}
@@ -57,6 +58,27 @@ final class MarMar_Mix {
 		}
 		if ( $done >= 5 ) {
 			update_option( 'marmar_mix_colors_v1', 1, false );
+		}
+	}
+
+	/** Jaunas krāsas (10 cm kartīte, 09.11.2026). */
+	public static function new_colors_v2() {
+		if ( get_option( 'marmar_mix_colors_v2' ) ) {
+			return;
+		}
+		$map  = array( 'aprikozu' => '#F7C59F', 'smilsu' => '#CDB8A6', 'pudertonu-mikss' => '#D9B8B8', 'earth-wine-mikss' => '#8E5E5E' );
+		$done = 0;
+		foreach ( $map as $slug => $hex ) {
+			$t = get_term_by( 'slug', $slug, self::TAX );
+			if ( $t ) {
+				if ( ! get_term_meta( $t->term_id, 'product_attribute_color', true ) ) {
+					update_term_meta( $t->term_id, 'product_attribute_color', $hex );
+				}
+				$done++;
+			}
+		}
+		if ( count( $map ) === $done ) {
+			update_option( 'marmar_mix_colors_v2', 1, false );
 		}
 	}
 
