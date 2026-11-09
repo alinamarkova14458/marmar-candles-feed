@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Mikss
  * Description:       «Savs mikss (līdz 5 krāsām)»: ja krāsā izvēlēts šis variants, pircējs atzīmē 2–5 krāsas; izvēle redzama grozā, pasūtījumā un e-pastos.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -36,9 +36,8 @@ final class MarMar_Mix {
 		if ( ! $product instanceof WC_Product || ! in_array( (int) $product->get_id(), apply_filters( 'marmar_wish_products', self::WISH_PRODS ), true ) ) {
 			return;
 		}
-		echo '<div class="mmw"><label for="mmw-t">Vēlmes <span>(nav obligāti)</span></label>'
-			. '<textarea id="mmw-t" name="' . esc_attr( self::WISH ) . '" maxlength="200" rows="2" placeholder="Piem.: cipari 1 un 12 ar zelta foliju; zēnam"></textarea></div>'
-			. '<style>.mmw{width:100%;margin:4px 0 14px}.mmw label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}.mmw label span{font-weight:400;color:#8a7a7a}.mmw textarea{width:100%;border-radius:12px;padding:10px 12px;font-size:14px;min-height:64px}</style>';
+		echo '<div class="mmw"><input type="text" id="mmw-t" name="' . esc_attr( self::WISH ) . '" maxlength="200" placeholder="Vēlmes (nav obligāti), piem.: 1 un 12 ar zelta foliju" aria-label="Vēlmes (nav obligāti)"></div>'
+			. '<style>.mmw{width:100%;margin:2px 0 12px}.mmw input{width:100%;height:40px!important;min-height:0!important;border-radius:10px;padding:6px 12px!important;font-size:13px!important}</style>';
 	}
 
 	/** Miksu flīžu krāsas (Variation Swatches «color» tips), ja vēl nav iestatītas. */
