@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.9
+ * Version:           1.9.10
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -72,6 +72,22 @@ final class MarMar_QA_Fixes {
 		'product/bisu-vaska-svecites-kukam-un-tortem-8cm-ar-foliju' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11063 (09.11 8 cm apvienotas)
 		'product/roza-kukas-svecites' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 22820 (09.11 8 cm)
 		'product/maigu-tonu-kukas-svecites-tievas-dzimsanas-dienas-sveces' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 22854 (09.11 8 cm)
+		'product/bordo-kuku-sveces-ar-zelta-dekoru' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 24867 (09.11 10 cm apvienotas)
+		'product/kobaltzilas-kukas-svecites' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 22717 (09.11 10 cm apvienotas)
+		'product/bisu-vaska-kuku-sveces-aprikozu-krasa-10cm' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 16639 (09.11 10 cm apvienotas)
+		'product/bisu-vaska-svecites-kukam-un-tortem-smilsu-krasa-10-cm' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 16698 (09.11 10 cm apvienotas)
+		'product/bisu-vaska-kuku-sveces-10-cm-puteklaina-roza-krasa' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 16638 (09.11 10 cm apvienotas)
+		'product/bisu-vaska-kuku-sveces-10-cm-puderroza' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 16637 (09.11 10 cm apvienotas)
+		'product/roza-kukas-svecites-ar-spidumiem' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 22718 (09.11 10 cm apvienotas)
+		'product/dzimsanas-dienas-svecite-kukam-un-tortem-ar-spidumiem-10cm' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 16728 (09.11 10 cm apvienotas)
+		'product/bisu-vaska-svecites-kukam-un-tortem-10cm-ar-spidumiem' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 15196 (09.11 10 cm apvienotas)
+		'product/bisu-vaska-svecites-kukam-un-tortem-10cm-pasteltonu-mix' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 14656 (09.11 10 cm apvienotas)
+		'product/pasteltonu-kukas-svecites-ar-zelta-dekoru-dzimsanas-dienas-sveces' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 22857 (09.11 10 cm apvienotas)
+		'product/bisu-vaska-kuku-sveces-10-cm-pudertonu-mix' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 16336 (09.11 10 cm apvienotas)
+		'product/earth-wine-kukas-svecites' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 22894 (09.11 10 cm apvienotas)
+		'product/kukas-sveces-ar-rudzupukem' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 22891 (09.11 10 cm apvienotas)
+		'product/neitralu-tonu-kukas-svecites-tievas-dzimsanas-dienas-sveces' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 22822 (09.11 10 cm apvienotas)
+		'product/dabiga-vaska-tortes-sveces-10-gab' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 22170 (09.11 10 cm apvienotas)
 	);
 
 	public static function init() {
