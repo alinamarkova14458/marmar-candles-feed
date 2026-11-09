@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Pieejams uzreiz
  * Description:       Gatavās sveces bez atsevišķām kartītēm: administratore atzīmē variantu un daudzumu → prece automātiski nonāk sadaļā «Pieejams uzreiz» ar plāksnīti; kad izpārdots — pazūd no sadaļas, bet paliek pārdošanā pēc pasūtījuma. Plāksnītes: «Pieejams uzreiz», «Populārs», «Dažādas krāsas».
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -27,6 +27,25 @@ final class MarMar_Ready {
 		add_filter( 'woocommerce_backordered_item_meta_name', array( __CLASS__, 'backorder_label' ) );
 		add_action( 'woocommerce_before_shop_loop_item_title', array( __CLASS__, 'badges' ), 9 );
 		add_action( 'wp_head', array( __CLASS__, 'css' ), 99 );
+		add_action( 'woocommerce_before_variations_form', array( __CLASS__, 'ready_box' ), 5 );
+	}
+
+	/** Produkta lapā: kuri tieši varianti ir gatavi; klikšķis izvēlas variantu. */
+	public static function ready_box() {
+		global $product;
+		if ( ! $product instanceof WC_Product || 'yes' !== $product->get_meta( self::FLAG, true ) ) {
+			return;
+		}
+		$list = (array) $product->get_meta( '_mm_ready_list', true );
+		if ( ! $list ) {
+			return;
+		}
+		echo '<div class="mmr-box"><div class="mmr-t">⚡ Pieejams uzreiz — izsūtīsim 1–2 darba dienās</div><div class="mmr-l">';
+		foreach ( $list as $r ) {
+			echo '<button type="button" class="mmr-i" data-attrs="' . esc_attr( wp_json_encode( $r['attrs'] ) ) . '">' . esc_html( ucfirst( mb_strtolower( (string) $r['label'] ) ) ) . ' <b>' . (int) $r['q'] . ' gab</b></button>';
+		}
+		echo '</div><div class="mmr-n">Pārējās krāsas izgatavoju pēc pasūtījuma 5–7 dienās.</div></div>';
+		echo '<script>document.addEventListener("click",function(e){var b=e.target.closest(".mmr-i");if(!b)return;var a=JSON.parse(b.dataset.attrs||"{}"),f=document.querySelector("form.variations_form");if(!f)return;Object.keys(a).forEach(function(k){var s=f.querySelector("select[name=\""+k+"\"]");if(s){s.value=a[k];if(window.jQuery)jQuery(s).trigger("change");else s.dispatchEvent(new Event("change",{bubbles:true}));}var li=f.querySelector("ul[data-attribute_name=\""+k+"\"] li[data-value=\""+a[k]+"\"]");if(li&&!li.classList.contains("selected"))li.click();});f.scrollIntoView({behavior:"smooth",block:"center"});});</script>';
 	}
 
 	/* ---------------- Gatavība ---------------- */
@@ -63,7 +82,16 @@ final class MarMar_Ready {
 		if ( ! $term ) {
 			return;
 		}
-		$qty = self::product_ready( $product );
+		$qty  = self::product_ready( $product );
+		$list = array();
+		$its  = $product->is_type( 'variable' ) ? array_map( 'wc_get_product', $product->get_children() ) : array( $product );
+		foreach ( $its as $it ) {
+			$q = self::ready_qty( $it );
+			if ( $it && $q > 0 ) {
+				$list[] = array( 'id' => $it->get_id(), 'q' => $q, 'label' => $it->is_type( 'variation' ) ? self::var_label( $it ) : '', 'attrs' => $it->is_type( 'variation' ) ? $it->get_variation_attributes() : array() );
+			}
+		}
+		$product->update_meta_data( '_mm_ready_list', $list );
 		$product->update_meta_data( '_mm_ready_qty', $qty );
 		$product->save_meta_data();
 		$ids = $product->get_category_ids();
@@ -118,7 +146,15 @@ final class MarMar_Ready {
 		}
 		$out = array();
 		if ( 'yes' === $product->get_meta( self::FLAG, true ) && (int) $product->get_meta( '_mm_ready_qty', true ) > 0 ) {
-			$out[] = '<span class="mmb mmb-ready">⚡ Pieejams uzreiz</span>';
+			$list = (array) $product->get_meta( '_mm_ready_list', true );
+			if ( ! $product->is_type( 'variable' ) || ! $list ) {
+				$out[] = '<span class="mmb mmb-ready">⚡ Pieejams uzreiz</span>';
+			} elseif ( 1 === count( $list ) ) {
+				$first = explode( ' · ', (string) $list[0]['label'] );
+				$out[] = '<span class="mmb mmb-ready">⚡ Uzreiz: ' . esc_html( $first[0] ) . '</span>';
+			} else {
+				$out[] = '<span class="mmb mmb-ready">⚡ Uzreiz: ' . count( $list ) . ' varianti</span>';
+			}
 		}
 		if ( in_array( (int) $product->get_id(), array_map( 'intval', (array) get_option( self::OPT_POP, array() ) ), true ) ) {
 			$out[] = '<span class="mmb mmb-pop">★ Populārs</span>';
@@ -143,6 +179,7 @@ final class MarMar_Ready {
 		echo '<style id="mm-ready-css">ul.products li.product{position:relative}.mmb-stack{position:absolute;top:12px;right:12px;z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:none}'
 			. '.mmb{font-size:12px;font-weight:600;line-height:1;padding:7px 10px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}'
 			. '.mmb-colors{background:rgba(255,255,255,.92);color:#5a4a4a}.mmb-ready{background:#2f7d5b;color:#fff}.mmb-pop{background:#B85F5F;color:#fff}'
+			. '.mmr-box{margin:0 0 16px;padding:12px 14px;border-radius:14px;background:#EEF6F1;border:1px solid #CFE6D8}.mmr-t{font-weight:600;color:#2f7d5b;font-size:14px;margin-bottom:8px}.mmr-l{display:flex;flex-wrap:wrap;gap:6px}.mmr-i{background:#fff!important;border:1px solid #CFE6D8!important;color:#3a4a42!important;border-radius:999px!important;padding:6px 12px!important;font-size:13px!important;min-height:0!important;line-height:1.2!important;text-transform:none!important;letter-spacing:0!important}.mmr-i b{color:#2f7d5b}.mmr-n{font-size:12px;color:#6b7a72;margin-top:8px}'
 			. '.single-product .stock.available-on-backorder,.single-product .stock.in-stock{font-size:14px}</style>';
 	}
 
