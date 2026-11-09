@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.1
+ * Version:           1.9.3
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -37,6 +37,15 @@ final class MarMar_QA_Fixes {
 		'product/davanu-karte-30-eur-vertiba-2' => '/lv/product/davanu-karte-30-eur-vertiba/', // 19857 (08.11 ассортимент)
 		'product/davanu-karte-40-eur-vertiba-2' => '/lv/product/davanu-karte-40-eur-vertiba/', // 19858 (08.11 ассортимент)
 		'product/davanu-karte-50-eur-vertiba-2' => '/lv/product/davanu-karte-50-eur-vertiba/', // 19859 (08.11 ассортимент)
+		'product/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-melnas-ar-zelta-foliju' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 18852 (09.11 melnās apvienotas)
+		'product/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-sudraba-foliju-8cm' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 19123 (09.11 melnās apvienotas)
+		'product/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-roza-foliju-8cm' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 18850 (09.11 melnās apvienotas)
+		'product/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-sarkanu-foliju-8cm' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 19121 (09.11 melnās apvienotas)
+		'product/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-zilo-foliju-8cm' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 19122 (09.11 melnās apvienotas)
+		'product/melnas-dabiga-vaska-kuku-svecites-lilla-foliju' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 18853 (09.11 melnās apvienotas)
+		'product/melnas-dabiga-vaska-kuku-svecites-zalu-foliju' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 18851 (09.11 melnās apvienotas)
+		'product/melnas-bisu-vaska-sveces-kukam-un-tortem-ar-foliju-8cm' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 11092 (09.11 melnās apvienotas)
+		'product/bisu-vaska-dzimsanas-dienas-kuku-svecites-8cm-melnas' => '/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/', // 15406 (09.11 melnās apvienotas)
 	);
 
 	public static function init() {
@@ -50,6 +59,9 @@ final class MarMar_QA_Fixes {
 		add_action( 'template_redirect', array( __CLASS__, 'page_buffer' ), 3 );
 		add_action( 'wp_head', array( __CLASS__, 'css' ), 99 );
 		add_action( 'wp_head', array( __CLASS__, 'verify_meta' ), 1 );
+		// Komentāri blogā un lapās izslēgti (spams, 09.11.2026). Produktu atsauksmes netiek skartas.
+		add_filter( 'comments_open', array( __CLASS__, 'no_comments' ), 20, 2 );
+		add_filter( 'pings_open', array( __CLASS__, 'no_comments' ), 20, 2 );
 		add_filter( 'marmar_checkout_config', array( __CLASS__, 'min_order' ), 20 );
 		add_action( 'wp_footer', array( __CLASS__, 'single_option_js' ), 99 );
 		add_filter( 'wp_nav_menu_items', array( __CLASS__, 'mobile_account_item' ), 20, 2 );
@@ -136,6 +148,10 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 			$html
 		);
 		return preg_replace( '~Min\.\s*pasūtījums\s*(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)~u', 'Zem ' . $m . '$1 — piemaksa', $html );
+	}
+
+	public static function no_comments( $open, $post_id = 0 ) {
+		return in_array( get_post_type( $post_id ), array( 'post', 'page', 'attachment' ), true ) ? false : $open;
 	}
 
 	/** Domēna verifikācija (Paysera, 09.11.2026). */
