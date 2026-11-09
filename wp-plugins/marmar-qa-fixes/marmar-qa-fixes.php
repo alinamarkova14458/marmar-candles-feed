@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.4
+ * Version:           1.9.7
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -70,6 +70,8 @@ final class MarMar_QA_Fixes {
 		'product/dzimsanas-dienas-svecisu-komplekts-8-cm-10-gab-krasu-mix-4' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 22061 (09.11 8 cm apvienotas)
 		'product/dzimsanas-dienas-svecisu-komplekts-8-cm-10-gab-krasu-mix-6' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 22062 (09.11 8 cm apvienotas)
 		'product/bisu-vaska-svecites-kukam-un-tortem-8cm-ar-foliju' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 11063 (09.11 8 cm apvienotas)
+		'product/roza-kukas-svecites' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 22820 (09.11 8 cm)
+		'product/maigu-tonu-kukas-svecites-tievas-dzimsanas-dienas-sveces' => '/lv/product/dabiga-vaska-kuku-svecites-8-cm/', // 22854 (09.11 8 cm)
 	);
 
 	public static function init() {
@@ -83,6 +85,9 @@ final class MarMar_QA_Fixes {
 		add_action( 'template_redirect', array( __CLASS__, 'page_buffer' ), 3 );
 		add_action( 'wp_head', array( __CLASS__, 'css' ), 99 );
 		add_action( 'wp_head', array( __CLASS__, 'verify_meta' ), 1 );
+		// Katalogs: 24 preces lapā (dalās ar 2, 3 un 4 kolonnām) un plāksnīte «Dažādas krāsas».
+		add_filter( 'loop_shop_per_page', array( __CLASS__, 'per_page' ), 99 );
+		add_action( 'woocommerce_before_shop_loop_item_title', array( __CLASS__, 'colors_badge' ), 9 );
 		// Komentāri blogā un lapās izslēgti (spams, 09.11.2026). Produktu atsauksmes netiek skartas.
 		add_filter( 'comments_open', array( __CLASS__, 'no_comments' ), 20, 2 );
 		add_filter( 'pings_open', array( __CLASS__, 'no_comments' ), 20, 2 );
@@ -174,6 +179,28 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 		return preg_replace( '~Min\.\s*pasūtījums\s*(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)~u', 'Zem ' . $m . '$1 — piemaksa', $html );
 	}
 
+	public static function per_page() {
+		return 24;
+	}
+
+	/** Apvienotās kartītes (visas krāsas vienā kartītē) — plāksnīte «Dažādas krāsas» uz foto katalogā. */
+	const MERGED = array( 25256, 25282 );
+
+	public static function colors_badge() {
+		global $product;
+		if ( ! $product instanceof WC_Product || ! in_array( (int) $product->get_id(), apply_filters( 'marmar_merged_products', self::MERGED ), true ) ) {
+			return;
+		}
+		echo '<span class="mm-badge-colors">🎨 Dažādas krāsas</span>';
+		static $js = false;
+		if ( ! $js ) {
+			$js = true;
+			add_action( 'wp_footer', function () {
+				echo '<script>document.querySelectorAll(".mm-badge-colors").forEach(function(b){var li=b.closest("li");var f=li&&li.querySelector("figure");if(f){f.style.position="relative";f.appendChild(b);}});</script>';
+			}, 99 );
+		}
+	}
+
 	public static function no_comments( $open, $post_id = 0 ) {
 		return in_array( get_post_type( $post_id ), array( 'post', 'page', 'attachment' ), true ) ? false : $open;
 	}
@@ -186,6 +213,7 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 	/** Poga «uz augšu» (#fab-stt) bija zem čata pogas apakšējā labajā stūrī — paceļam virs tās. */
 	public static function css() {
 		echo '<style id="mm-qa-css">#fab-stt{bottom:88px!important;right:22px!important}'
+			. 'ul.products li.product{position:relative}.mm-badge-colors{position:absolute;top:12px;right:12px;z-index:5;background:rgba(255,255,255,.92);color:#5a4a4a;font-size:12px;font-weight:600;line-height:1;padding:7px 10px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.08);pointer-events:none}'
 			. '.single-product table.variations tr.mm-single,.single-product table.variations tr:has(ul.variable-items-wrapper>li.variable-item:only-child){display:none!important}</style>';
 	}
 
