@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Pieejams uzreiz
  * Description:       Gatavās sveces bez atsevišķām kartītēm: administratore atzīmē variantu un daudzumu → prece automātiski nonāk sadaļā «Pieejams uzreiz» ar plāksnīti; kad izpārdots — pazūd no sadaļas, bet paliek pārdošanā pēc pasūtījuma. Plāksnītes: «Pieejams uzreiz», «Populārs», «Dažādas krāsas».
- * Version:           1.3.1
+ * Version:           1.3.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -217,6 +217,15 @@ final class MarMar_Ready {
 		} elseif ( in_array( (int) $product->get_id(), array_map( 'intval', (array) get_option( self::OPT_POP, array() ) ), true ) ) {
 			$out[] = '<span class="mmb mmb-new"><i class="mmb-dot"></i>Jaunums</span>';
 		}
+		$cats = wp_get_post_terms( $product->get_id(), 'product_cat', array( 'fields' => 'slugs' ) );
+		if ( in_array( 'kazu-sveces', (array) $cats, true ) || false !== mb_stripos( $product->get_name(), 'personaliz' ) ) {
+			$pers = '<span class="mmb mmb-pers"><i class="mmb-dot"></i>Personalizējams</span>';
+			// Personalizējams pirms «Jaunums», pēc «Uzreiz»/«Pārdotākais».
+			$jn = array_values( array_filter( $out, function ( $x ) { return false !== strpos( $x, 'mmb-new' ); } ) );
+			$out = array_values( array_filter( $out, function ( $x ) { return false === strpos( $x, 'mmb-new' ); } ) );
+			$out[] = $pers;
+			$out = array_merge( $out, $jn );
+		}
 		$out = array_slice( $out, 0, 2 );
 		if ( ! $out ) {
 			return;
@@ -259,7 +268,9 @@ final class MarMar_Ready {
 				foreach ( $a->get_options() as $o ) {
 					$k = mb_strtolower( $o );
 					if ( isset( self::FOIL[ $k ] ) ) {
-						$cols[] = array( self::FOIL[ $k ], $o );
+						$f      = self::FOIL[ $k ];
+						$bg     = 'bez folijas' === $k ? '#1f1f1f' : 'linear-gradient(135deg,#1f1f1f 0 38%,' . $f . ' 38% 66%,#1f1f1f 66%)';
+						$cols[] = array( $bg, $o );
 					}
 				}
 			}
@@ -292,7 +303,7 @@ final class MarMar_Ready {
 	public static function css() {
 		echo '<style id="mm-ready-css">ul.products li.product{position:relative}.mmb-stack{position:absolute;top:12px;right:12px;z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:none}'
 			. '.mmb{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.93);color:#5a4a4a;font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;line-height:1;padding:7px 11px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);white-space:nowrap}'
-			. '.mmb-dot{width:7px;height:7px;border-radius:50%;background:#B85F5F;display:inline-block}.mmb-ready .mmb-dot{background:#3C9A5F}.mmb-ico{font-style:normal;font-size:12px;letter-spacing:0}'
+			. '.mmb-dot{width:7px;height:7px;border-radius:50%;background:#B85F5F;display:inline-block}.mmb-ready .mmb-dot{background:#3C9A5F}.mmb-pers .mmb-dot{background:#C8A46A}.mmb-ico{font-style:normal;font-size:12px;letter-spacing:0}'
 			. '.mmd-dots{display:flex;align-items:center;gap:5px;margin:6px 0 2px}.mmd-dots i{width:13px;height:13px;border-radius:50%;border:1px solid rgba(0,0,0,.12);box-shadow:inset 0 0 0 1.5px #fff}.mmd-dots span{font-size:11.5px;color:#8a7a7a;margin-left:2px}'
 			. '.mm-eta-line{font-size:12px;color:#8a7a7a;margin:2px 0 8px}.mm-eta-line.is-ready{color:#2f7d5b;font-weight:600}'
 			. '.mmr-box{margin:0 0 16px;padding:12px 14px;border-radius:14px;background:#EEF6F1;border:1px solid #CFE6D8}.mmr-t{font-weight:600;color:#2f7d5b;font-size:14px;margin-bottom:8px}.mmr-l{display:flex;flex-wrap:wrap;gap:6px}.mmr-i{background:#fff!important;border:1px solid #CFE6D8!important;color:#3a4a42!important;border-radius:999px!important;padding:6px 12px!important;font-size:13px!important;min-height:0!important;line-height:1.2!important;text-transform:none!important;letter-spacing:0!important}.mmr-i b{color:#2f7d5b}.mmr-n{font-size:12px;color:#6b7a72;margin-top:8px}'
