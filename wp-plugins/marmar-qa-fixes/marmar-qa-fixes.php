@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.8
+ * Version:           1.9.9
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -245,6 +245,8 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 		}
 		$html = self::delay_clarity( $html );
 		$html = self::min_order_texts( $html );
+		// Steidzamības izvēle produkta lapā tagad ir augstāk par termiņa bloku.
+		$html = str_replace( 'Steidzami — 1–2 dienās (+5 €), atzīmējiet zemāk.', 'Steidzami — 1–2 dienās (+5 €): atzīmējiet «Steidzams pasūtījums» augstāk.', $html );
 		return preg_replace_callback(
 			"~<link rel=['\"]stylesheet['\"] id=['\"]bootstrap-css-css['\"]([^>]*?)media=['\"]all['\"]\s*/?>~i",
 			function ( $m ) {
