@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Pieejams uzreiz
  * Description:       Gatavās sveces bez atsevišķām kartītēm: administratore atzīmē variantu un daudzumu → prece automātiski nonāk sadaļā «Pieejams uzreiz» ar plāksnīti; kad izpārdots — pazūd no sadaļas, bet paliek pārdošanā pēc pasūtījuma. Plāksnītes: «Pieejams uzreiz», «Populārs», «Dažādas krāsas».
- * Version:           1.2.4
+ * Version:           1.3.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -26,6 +26,8 @@ final class MarMar_Ready {
 		add_filter( 'woocommerce_get_availability_text', array( __CLASS__, 'availability' ), 20, 2 );
 		add_filter( 'woocommerce_backordered_item_meta_name', array( __CLASS__, 'backorder_label' ) );
 		add_action( 'woocommerce_before_shop_loop_item_title', array( __CLASS__, 'badges' ), 9 );
+		add_action( 'woocommerce_after_shop_loop_item_title', array( __CLASS__, 'dots' ), 5 );
+		add_action( 'woocommerce_after_shop_loop_item_title', array( __CLASS__, 'eta_line' ), 15 );
 		add_action( 'wp_head', array( __CLASS__, 'css' ), 99 );
 		add_action( 'woocommerce_before_variations_form', array( __CLASS__, 'ready_box' ), 5 );
 		add_action( 'mm_bestsellers_daily', array( __CLASS__, 'compute_bestsellers' ) );
@@ -182,6 +184,16 @@ final class MarMar_Ready {
 		return $ids ? $ids : array( 25256, 25282 );
 	}
 
+	/** Vai prece ir gatava (mūsu atzīme vai manuāli kategorijā «Pieejams uzreiz»). */
+	private static function is_ready_now( $product ) {
+		if ( 'yes' === $product->get_meta( self::FLAG, true ) ) {
+			return (int) $product->get_meta( '_mm_ready_qty', true ) > 0;
+		}
+		$term = get_term_by( 'slug', self::CAT_SLUG, 'product_cat' );
+		return $term && in_array( (int) $term->term_id, array_map( 'intval', $product->get_category_ids() ), true );
+	}
+
+	/** Plāksnītes (variants D): maks. 2; secība Uzreiz → Pārdotākais → Jaunums. */
 	public static function badges() {
 		global $product;
 		if ( ! $product instanceof WC_Product ) {
@@ -191,22 +203,21 @@ final class MarMar_Ready {
 		if ( 'yes' === $product->get_meta( self::FLAG, true ) && (int) $product->get_meta( '_mm_ready_qty', true ) > 0 ) {
 			$list = (array) $product->get_meta( '_mm_ready_list', true );
 			if ( ! $product->is_type( 'variable' ) || ! $list ) {
-				$out[] = '<span class="mmb mmb-ready">⚡ Pieejams uzreiz</span>';
+				$t = 'Pieejams uzreiz';
 			} elseif ( 1 === count( $list ) ) {
 				$first = explode( ' · ', (string) $list[0]['label'] );
-				$out[] = '<span class="mmb mmb-ready">⚡ Uzreiz: ' . esc_html( $first[0] ) . '</span>';
+				$t     = 'Uzreiz: ' . $first[0];
 			} else {
-				$out[] = '<span class="mmb mmb-ready">⚡ Uzreiz: ' . count( $list ) . ' varianti</span>';
+				$t = 'Uzreiz: ' . count( $list ) . ' varianti';
 			}
+			$out[] = '<span class="mmb mmb-ready"><i class="mmb-dot"></i>' . esc_html( $t ) . '</span>';
 		}
 		if ( in_array( (int) $product->get_id(), self::bestsellers(), true ) ) {
-			$out[] = '<span class="mmb mmb-best">🔥 Pārdotākais</span>';
+			$out[] = '<span class="mmb mmb-best"><i class="mmb-ico">🔥</i>Pārdotākais</span>';
 		} elseif ( in_array( (int) $product->get_id(), array_map( 'intval', (array) get_option( self::OPT_POP, array() ) ), true ) ) {
-			$out[] = '<span class="mmb mmb-pop">★ Populārs</span>';
+			$out[] = '<span class="mmb mmb-new"><i class="mmb-dot"></i>Jaunums</span>';
 		}
-		if ( in_array( (int) $product->get_id(), self::merged_ids(), true ) ) {
-			$out[] = '<span class="mmb mmb-colors">🎨 Dažādas krāsas</span>';
-		}
+		$out = array_slice( $out, 0, 2 );
 		if ( ! $out ) {
 			return;
 		}
@@ -220,10 +231,70 @@ final class MarMar_Ready {
 		}
 	}
 
+	/** Folijas krāsu nosaukumi (lokālais atribūts melnajām svecēm) → krāsa. */
+	const FOIL = array( 'zelta' => '#D4AF37', 'sudraba' => '#C9CBD0', 'rozā' => '#E59AB4', 'sarkana' => '#C0392B', 'zila' => '#2E5EAA', 'lillā' => '#9B59B6', 'zaļa' => '#3C9A5F', 'bez folijas' => '#222' );
+
+	/** Krāsu punkti zem foto katalogā: līdz 5 + «+N». */
+	public static function dots() {
+		global $product;
+		if ( ! $product instanceof WC_Product || ! $product->is_type( 'variable' ) ) {
+			return;
+		}
+		$cols = array();
+		foreach ( $product->get_attributes() as $a ) {
+			if ( ! $a->get_variation() ) {
+				continue;
+			}
+			if ( $a->is_taxonomy() && 'pa_izvelieties-krasu' === $a->get_name() ) {
+				foreach ( $a->get_terms() as $t ) {
+					if ( false !== strpos( $t->slug, 'mikss' ) ) {
+						continue;
+					}
+					$c = get_term_meta( $t->term_id, 'product_attribute_color', true );
+					if ( $c ) {
+						$cols[] = array( $c, $t->name );
+					}
+				}
+			} elseif ( ! $a->is_taxonomy() && false !== mb_stripos( $a->get_name(), 'krās' ) ) {
+				foreach ( $a->get_options() as $o ) {
+					$k = mb_strtolower( $o );
+					if ( isset( self::FOIL[ $k ] ) ) {
+						$cols[] = array( self::FOIL[ $k ], $o );
+					}
+				}
+			}
+		}
+		if ( count( $cols ) < 3 ) {
+			return;
+		}
+		$show = array_slice( $cols, 0, 5 );
+		echo '<div class="mmd-dots" aria-label="' . count( $cols ) . ' krāsas">';
+		foreach ( $show as $c ) {
+			echo '<i style="background:' . esc_attr( $c[0] ) . '" title="' . esc_attr( $c[1] ) . '"></i>';
+		}
+		if ( count( $cols ) > 5 ) {
+			echo '<span>+' . ( count( $cols ) - 5 ) . '</span>';
+		}
+		echo '</div>';
+	}
+
+	/** Termiņa rinda zem cenas katalogā. */
+	public static function eta_line() {
+		global $product;
+		if ( ! $product instanceof WC_Product ) {
+			return;
+		}
+		echo self::is_ready_now( $product )
+			? '<div class="mm-eta-line is-ready">Gatavs — izsūtīsim 1–2 d.</div>'
+			: '<div class="mm-eta-line">Izgatavošu 5–7 d.</div>';
+	}
+
 	public static function css() {
 		echo '<style id="mm-ready-css">ul.products li.product{position:relative}.mmb-stack{position:absolute;top:12px;right:12px;z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:none}'
-			. '.mmb{font-size:12px;font-weight:600;line-height:1;padding:7px 10px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.08);white-space:nowrap}'
-			. '.mmb-colors{background:rgba(255,255,255,.94);color:#5a4a4a}.mmb-ready{background:rgba(255,255,255,.94);color:#2f6e52}.mmb-pop{background:#FBF3F2;color:#B85F5F;border:1px solid #F0D9D6}.mmb-best{background:#B85F5F;color:#fff}'
+			. '.mmb{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.93);color:#5a4a4a;font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;line-height:1;padding:7px 11px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);white-space:nowrap}'
+			. '.mmb-dot{width:7px;height:7px;border-radius:50%;background:#B85F5F;display:inline-block}.mmb-ready .mmb-dot{background:#3C9A5F}.mmb-ico{font-style:normal;font-size:12px;letter-spacing:0}'
+			. '.mmd-dots{display:flex;align-items:center;gap:5px;margin:6px 0 2px}.mmd-dots i{width:13px;height:13px;border-radius:50%;border:1px solid rgba(0,0,0,.12);box-shadow:inset 0 0 0 1.5px #fff}.mmd-dots span{font-size:11.5px;color:#8a7a7a;margin-left:2px}'
+			. '.mm-eta-line{font-size:12px;color:#8a7a7a;margin:2px 0 8px}.mm-eta-line.is-ready{color:#2f7d5b;font-weight:600}'
 			. '.mmr-box{margin:0 0 16px;padding:12px 14px;border-radius:14px;background:#EEF6F1;border:1px solid #CFE6D8}.mmr-t{font-weight:600;color:#2f7d5b;font-size:14px;margin-bottom:8px}.mmr-l{display:flex;flex-wrap:wrap;gap:6px}.mmr-i{background:#fff!important;border:1px solid #CFE6D8!important;color:#3a4a42!important;border-radius:999px!important;padding:6px 12px!important;font-size:13px!important;min-height:0!important;line-height:1.2!important;text-transform:none!important;letter-spacing:0!important}.mmr-i b{color:#2f7d5b}.mmr-n{font-size:12px;color:#6b7a72;margin-top:8px}'
 			. '.single-product .stock.available-on-backorder,.single-product .stock.in-stock{font-size:14px}</style>';
 	}
@@ -323,7 +394,7 @@ final class MarMar_Ready {
 		?>
 		<div class="wrap">
 			<h1>Pieejams uzreiz</h1>
-			<?php if ( $m ) : ?><div class="notice notice-success is-dismissible"><p><?php echo esc_html( array( 'saved' => 'Saglabāts.', 'removed' => 'Noņemts no «Pieejams uzreiz».', 'popular' => 'Populārie saglabāti.' )[ $m ] ?? 'Saglabāts.' ); ?></p></div><?php endif; ?>
+			<?php if ( $m ) : ?><div class="notice notice-success is-dismissible"><p><?php echo esc_html( array( 'saved' => 'Saglabāts.', 'removed' => 'Noņemts no «Pieejams uzreiz».', 'popular' => 'Jaunumi saglabāti.' )[ $m ] ?? 'Saglabāts.' ); ?></p></div><?php endif; ?>
 			<p>Atzīmē gatavās sveces: prece un variants (krāsa, dizains) un cik gatavu iepakojumu ir. Prece parādās sadaļā «Pieejams uzreiz» ar plāksnīti; kad izpārdota — pazūd no sadaļas, bet paliek pārdošanā pēc pasūtījuma (5–7 dienas).</p>
 
 			<h2>Pievienot / mainīt</h2>
@@ -356,7 +427,7 @@ final class MarMar_Ready {
 			<h2 style="margin-top:2em">🔥 Pārdotākais (automātiski)</h2>
 			<p>Katru nakti — <?php echo (int) self::BEST_N; ?> pārdotākās preces pēdējos 12 mēnešos (vismaz 3 gab.). Pašlaik:
 			<?php $bo = get_option( self::OPT_BEST ); foreach ( self::bestsellers() as $bid ) { echo '<br>• ' . esc_html( get_the_title( $bid ) ) . ' — ' . (int) ( $bo['qty'][ (string) $bid ] ?? 0 ) . ' gab.'; } ?></p>
-			<h2 style="margin-top:2em">★ Populārs (atzīmē pati)</h2>
+			<h2 style="margin-top:2em">Jaunums (atzīmē pati — jaunumiem)</h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="mm_ready_save"><input type="hidden" name="do" value="popular">
 				<?php wp_nonce_field( 'mm_ready' ); ?>
@@ -365,7 +436,7 @@ final class MarMar_Ready {
 					<label style="display:block;break-inside:avoid;margin:2px 0"><input type="checkbox" name="popular[]" value="<?php echo (int) $p->get_id(); ?>" <?php checked( in_array( (int) $p->get_id(), $pop, true ) ); ?>> <?php echo esc_html( $p->get_name() ); ?></label>
 				<?php endforeach; ?>
 				</div>
-				<p><button class="button button-primary">Saglabāt populāros</button></p>
+				<p><button class="button button-primary">Saglabāt jaunumus</button></p>
 			</form>
 		</div>
 		<script>
