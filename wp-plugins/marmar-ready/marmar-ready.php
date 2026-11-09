@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Pieejams uzreiz
  * Description:       Gatavās sveces bez atsevišķām kartītēm: administratore atzīmē variantu un daudzumu → prece automātiski nonāk sadaļā «Pieejams uzreiz» ar plāksnīti; kad izpārdots — pazūd no sadaļas, bet paliek pārdošanā pēc pasūtījuma. Plāksnītes: «Pieejams uzreiz», «Populārs», «Dažādas krāsas».
- * Version:           1.3.0
+ * Version:           1.3.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -89,7 +89,7 @@ final class MarMar_Ready {
 		foreach ( $list as $r ) {
 			echo '<button type="button" class="mmr-i" data-attrs="' . esc_attr( wp_json_encode( $r['attrs'] ) ) . '">' . esc_html( ucfirst( mb_strtolower( (string) $r['label'] ) ) ) . ' <b>' . (int) $r['q'] . ' gab</b></button>';
 		}
-		echo '</div><div class="mmr-n">Pārējās krāsas izgatavoju pēc pasūtījuma 5–7 dienās.</div></div>';
+		echo '</div><div class="mmr-n">Pārējās krāsas izgatavojam pēc pasūtījuma 5–7 dienās.</div></div>';
 		echo '<script>document.addEventListener("click",function(e){var b=e.target.closest(".mmr-i");if(!b)return;var a=JSON.parse(b.dataset.attrs||"{}"),f=document.querySelector("form.variations_form");if(!f)return;Object.keys(a).forEach(function(k){var s=f.querySelector("select[name=\""+k+"\"]");if(s){s.value=a[k];if(window.jQuery)jQuery(s).trigger("change");else s.dispatchEvent(new Event("change",{bubbles:true}));}var li=f.querySelector("ul[data-attribute_name=\""+k+"\"] li[data-value=\""+a[k]+"\"]");if(li&&!li.classList.contains("selected"))li.click();});f.scrollIntoView({behavior:"smooth",block:"center"});});</script>';
 	}
 
@@ -286,7 +286,7 @@ final class MarMar_Ready {
 		}
 		echo self::is_ready_now( $product )
 			? '<div class="mm-eta-line is-ready">Gatavs — izsūtīsim 1–2 d.</div>'
-			: '<div class="mm-eta-line">Izgatavošu 5–7 d.</div>';
+			: '<div class="mm-eta-line">Izgatavojam 5–7 d.</div>';
 	}
 
 	public static function css() {
