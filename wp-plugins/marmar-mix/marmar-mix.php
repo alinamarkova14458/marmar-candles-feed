@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Mikss
  * Description:       «Savs mikss (līdz 5 krāsām)»: ja krāsā izvēlēts šis variants, pircējs atzīmē 2–5 krāsas; izvēle redzama grozā, pasūtījumā un e-pastos.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -24,6 +24,21 @@ final class MarMar_Mix {
 		add_filter( 'woocommerce_get_item_data', array( __CLASS__, 'item_data' ), 20, 2 );
 		add_action( 'woocommerce_checkout_create_order_line_item', array( __CLASS__, 'order_meta' ), 20, 4 );
 		add_action( 'init', array( __CLASS__, 'mix_colors' ), 30 );
+		// «Vēlmes» lauks (pirmā gada ciparu komplekti).
+		add_action( 'woocommerce_before_add_to_cart_button', array( __CLASS__, 'wish_field' ), 6 );
+	}
+
+	const WISH        = 'mm_wish';
+	const WISH_PRODS  = array( 24811, 20440, 20651 );
+
+	public static function wish_field() {
+		global $product;
+		if ( ! $product instanceof WC_Product || ! in_array( (int) $product->get_id(), apply_filters( 'marmar_wish_products', self::WISH_PRODS ), true ) ) {
+			return;
+		}
+		echo '<div class="mmw"><label for="mmw-t">Vēlmes <span>(nav obligāti)</span></label>'
+			. '<textarea id="mmw-t" name="' . esc_attr( self::WISH ) . '" maxlength="200" rows="2" placeholder="Piem.: cipari 1 un 12 ar zelta foliju; zēnam"></textarea></div>'
+			. '<style>.mmw{width:100%;margin:4px 0 14px}.mmw label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}.mmw label span{font-weight:400;color:#8a7a7a}.mmw textarea{width:100%;border-radius:12px;padding:10px 12px;font-size:14px;min-height:64px}</style>';
 	}
 
 	/** Miksu flīžu krāsas (Variation Swatches «color» tips), ja vēl nav iestatītas. */
@@ -140,6 +155,10 @@ final class MarMar_Mix {
 	}
 
 	public static function cart_data( $data, $product_id, $variation_id ) {
+		$wish = isset( $_POST[ self::WISH ] ) ? trim( sanitize_textarea_field( wp_unslash( $_POST[ self::WISH ] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+		if ( '' !== $wish ) {
+			$data[ self::WISH ] = mb_substr( $wish, 0, 200 );
+		}
 		$vars = array();
 		foreach ( $_POST as $k => $v ) { // phpcs:ignore WordPress.Security.NonceVerification
 			if ( 0 === strpos( $k, 'attribute_' ) ) {
@@ -165,12 +184,18 @@ final class MarMar_Mix {
 		if ( ! empty( $ci[ self::FIELD ] ) ) {
 			$data[] = array( 'key' => 'Mikss', 'value' => $ci[ self::FIELD ] );
 		}
+		if ( ! empty( $ci[ self::WISH ] ) ) {
+			$data[] = array( 'key' => 'Vēlmes', 'value' => $ci[ self::WISH ] );
+		}
 		return $data;
 	}
 
 	public static function order_meta( $item, $key, $values, $order ) {
 		if ( ! empty( $values[ self::FIELD ] ) ) {
 			$item->add_meta_data( 'Krāsu mikss', $values[ self::FIELD ], true );
+		}
+		if ( ! empty( $values[ self::WISH ] ) ) {
+			$item->add_meta_data( 'Vēlmes', $values[ self::WISH ], true );
 		}
 	}
 }
