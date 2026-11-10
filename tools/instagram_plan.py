@@ -53,7 +53,7 @@ def render(items: list[dict], state: dict, prs: list[dict], now: datetime) -> st
     upcoming = [it for it in items if it["_id"] not in state]
     done = sorted((it for it in items if it["_id"] in state), key=lambda x: x["_when"], reverse=True)[:30]
     out = ["# План Instagram @marmar.candles", "",
-           f"_Обновлено: {when(now)}. Страница обновляется сама при каждом запуске планировщика._", ""]
+           "_Страница обновляется сама при каждом запуске планировщика и сразу после слияния поста._", ""]
     waiting = [p for p in prs if any(f.get("path", "").startswith("social/instagram/queue/") for f in p.get("files", []))]
     out += ["## 🙋 Ждут твоего подтверждения", ""]
     out += [f"- [{p['title']}]({p['url']}): открой, посмотри и нажми Merge" for p in waiting] or ["Ничего не ждёт."]
