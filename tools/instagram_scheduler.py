@@ -147,6 +147,11 @@ def main() -> int:
         if not dry:
             state[it["_id"]] = {"skipped": why, "at": now.isoformat(), "file": it["_file"]}
     if dry:
+        if os.environ.get("IG_ACCESS_TOKEN"):  # read-only check that the token works
+            mask(os.environ["IG_ACCESS_TOKEN"])
+            j = Api(os.environ["IG_ACCESS_TOKEN"]).call("GET", "me", fields="user_id,username")
+            j = j["data"][0] if "data" in j else j
+            print(f"  token OK: @{j.get('username')} (id {j.get('user_id')})")
         for it in to_publish:
             print(f"  WOULD {it['_id']} {it['date']} {it.get('type', 'image')} {it.get('caption', '')[:60]!r}")
         return 0
