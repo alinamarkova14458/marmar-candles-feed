@@ -22,7 +22,8 @@ Workflow `.github/workflows/instagram-scheduler.yml` запускается по
 ```
 
 - `date` без смещения = время Риги.
-- `type`: `image` (1 фото), `carousel` (2–20 фото), `reel` (1 видео MP4/MOV).
+- `type`: `image` (1 фото), `carousel` (2–20 фото), `reel` (1 видео MP4/MOV),
+  `story` (1 фото JPEG или видео MP4/MOV, лучше 1080×1920; подпись в сторис не показывается).
 - `media`: публичные https-ссылки. Фото только JPEG, до 8 МБ. Файлы кладём в `media/`
   (ссылка raw.githubusercontent.com, как у фида).
 - Встроенные проверки: максимум 5 хэштегов, подпись до 2200 знаков. Пост с ошибкой
