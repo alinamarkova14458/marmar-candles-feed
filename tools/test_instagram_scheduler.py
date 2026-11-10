@@ -91,3 +91,16 @@ def test_account_falls_back_to_page(monkeypatch):
     monkeypatch.setattr(ig.requests, "request",
                         lambda method, url, headers, params, timeout: R(answers[url.split("/v27.0/")[1]]))
     assert ig.Api("t").account() == {"id": "IG1", "username": "marmar.candles"}
+
+
+def test_plan_page():
+    import instagram_plan as plan
+    up = post("2026-11-21T18:00:00", type="carousel", media=[JPG] * 5, caption="Ko saka | klienti")
+    done = post("2026-11-12T18:00:00")
+    state = {ig.post_id(done): {"media_id": "1", "permalink": "https://instagram.com/p/x"}}
+    prs = [{"title": "Пост", "url": "https://github.com/x/pull/1", "files": [{"path": "social/instagram/queue/a.json"}]},
+           {"title": "Код", "url": "u", "files": [{"path": "tools/x.py"}]}]
+    md = plan.render([up, done], state, prs, NOW)
+    assert "[Пост](https://github.com/x/pull/1)" in md and "Код" not in md
+    assert "сб 21.11 18:00" in md and "карусель (5)" in md and "+2" in md and "Ko saka / klienti" in md
+    assert "[опубликован](https://instagram.com/p/x)" in md and "чт 12.11 18:00" in md

@@ -159,6 +159,10 @@ def main() -> int:
         rec = {"at": now.isoformat(), "file": it["_file"]}
         try:
             rec["media_id"] = api.publish(uid, it)
+            try:  # for the PLAN.md link; a missing link must not mark the post as failed
+                rec["permalink"] = api.call("GET", rec["media_id"], fields="permalink")["permalink"]
+            except Exception as e:
+                print(f"::warning::permalink: {e}")
             print(f"  OK   {it['_id']} -> {rec['media_id']}")
         except Exception as e:
             rec["error"] = str(e)
