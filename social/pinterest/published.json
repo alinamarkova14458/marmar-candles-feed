@@ -4,5 +4,10 @@
   "env": "sandbox",
   "error": "HTTP 403: {\"code\":29,\"message\":\"You are not permitted to access that resource.\"}",
   "file": "2026-11-08-sandbox-test.json"
+ },
+ "test-sandbox-2": {
+  "at": "2026-11-10T21:56:36.047191+00:00",
+  "file": "2026-11-08-sandbox-test-2.json",
+  "skipped": "too late"
  }
 }
