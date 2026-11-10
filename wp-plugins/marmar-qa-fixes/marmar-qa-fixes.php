@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.11
+ * Version:           1.9.12
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -108,6 +108,9 @@ final class MarMar_QA_Fixes {
 		'product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-gaisi-zals-ar-zelta-spidumiem' => '/lv/product/zigzag-kuku-svecites/', // 22075 (10.11 Zigzag apvienotas)
 		'product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-gaisi-roza-ar-spidumiem' => '/lv/product/zigzag-kuku-svecites/', // 22078 (10.11 Zigzag apvienotas)
 		'product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-persiku-ar-spidumiem' => '/lv/product/zigzag-kuku-svecites/', // 22080 (10.11 Zigzag apvienotas)
+		'product/vilnotas-kukas-svecites-krasainas-dzimsanas-dienas-sveces-10-gab' => '/lv/product/vilnotas-kuku-svecites/', // 22883 (10.11 Viļņotās)
+		'product/persiku-krasas-vilnotas-kukas-svecites-ar-zelta-dekoru' => '/lv/product/vilnotas-kuku-svecites/', // 22858 (10.11 Viļņotās)
+		'product/dzimsanas-dienas-svecite-vilnota-kukam-un-tortem-10cm' => '/lv/product/spirales-kuku-svecites-10-cm/', // 14956 (10.11 Spirāles)
 	);
 
 	public static function init() {
