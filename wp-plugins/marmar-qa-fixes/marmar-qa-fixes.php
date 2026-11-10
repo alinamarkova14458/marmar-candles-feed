@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.13
+ * Version:           1.9.14
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -112,6 +112,7 @@ final class MarMar_QA_Fixes {
 		'product/persiku-krasas-vilnotas-kukas-svecites-ar-zelta-dekoru' => '/lv/product/vilnotas-kuku-svecites/', // 22858 (10.11 Viļņotās)
 		'product/dzimsanas-dienas-svecite-vilnota-kukam-un-tortem-10cm' => '/lv/product/spirales-kuku-svecites-10-cm/', // 14956 (10.11 Spirāles)
 		'product/bisu-vaska-kuku-svecite-vilnota-11cm' => '/lv/product/vilnis-kuku-svecites-11-cm/', // 18137 (10.11 Vilnis)
+		'product/bisu-vaska-kuku-svecite-vilnis-11cm' => '/lv/product/vilnotas-kuku-svecites/', // 18854 (10.11 = Viļņotās)
 	);
 
 	public static function init() {
