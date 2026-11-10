@@ -38,7 +38,8 @@ Workflow `.github/workflows/instagram-scheduler.yml` запускается по
    `marmar-scheduler` (админ). «Назначить объекты»: страница MarMar Candles, Instagram
    marmar.candles, приложение MarMar Scheduler («Управление приложением»).
 4. «Сгенерировать маркер»: приложение MarMar Scheduler, срок «Никогда», разрешения
-   `instagram_basic`, `instagram_content_publish` (+ `pages_show_list`, если предлагается).
+   `instagram_basic`, `instagram_content_publish`, `pages_show_list`, `pages_read_engagement`
+   (без двух последних маркер не видит Instagram, связанный со страницей).
 5. GitHub → Settings → Secrets and variables → Actions → секрет `IG_ACCESS_TOKEN`.
 6. Проверка: Actions → «Instagram scheduler» → Run workflow с галочкой dry_run, в логе
    `token OK: @marmar.candles`.
