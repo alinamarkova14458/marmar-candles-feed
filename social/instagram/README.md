@@ -38,12 +38,12 @@ Workflow `.github/workflows/instagram-scheduler.yml` запускается по
 3. «Сценарии использования» → Instagram API → «API setup with Unified login» →
    «Создать новую конфигурацию». Маркер: системного пользователя, срок: «Никогда»,
    объект: аккаунт Instagram marmar.candles.
-4. Там же «URL переадресации»: `https://jalina.art/`.
+4. Там же «URL переадресации»: `https://marmarcandles.com/lv/`.
 5. «Настройки приложения» → «Основное»: «Идентификатор приложения» и «Секрет приложения»
    сохранить в GitHub → Settings → Secrets and variables → Actions как секреты
    `META_APP_ID` и `META_APP_SECRET`. (`GH_SECRETS_PAT` уже есть от Pinterest.)
 6. Открыть «Login URL» конфигурации, войти, выбрать marmar.candles, разрешить. Браузер
-   откроет jalina.art с `?code=...` в адресной строке. Скопировать значение после `code=`
+   откроет marmarcandles.com с `?code=...` в адресной строке. Скопировать значение после `code=`
    и в течение нескольких минут запустить Actions → «Instagram connect (one-time)» с ним.
    Workflow сам сохранит маркер в секрет `IG_ACCESS_TOKEN` и покажет подключённый аккаунт.
 7. Actions → «Instagram scheduler» → Run workflow с галочкой dry_run: в логе должна быть

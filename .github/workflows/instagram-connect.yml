@@ -1,14 +1,14 @@
 name: Instagram connect (one-time)
 
 # One-time login step (Meta "unified login"). Alina opens the Login URL from the app's
-# configuration, Meta redirects to https://jalina.art/?code=XXXX, she pastes XXXX here.
+# configuration, Meta redirects to https://marmarcandles.com/lv/?code=XXXX, she pastes XXXX here.
 # The code is single-use and expires in minutes; the never-expiring system user token
 # goes straight into the IG_ACCESS_TOKEN secret and is never printed.
 on:
   workflow_dispatch:
     inputs:
       code:
-        description: "code= value from the jalina.art address bar after allowing access"
+        description: "code= value from the marmarcandles.com address bar after allowing access"
         required: true
 
 permissions:
@@ -31,7 +31,7 @@ jobs:
           CODE="${CODE%%#*}"  # Meta appends "#_=_" to the redirect
           resp=$(curl -sS -G "https://graph.facebook.com/v27.0/oauth/access_token" \
             --data-urlencode "client_id=$APP_ID" --data-urlencode "client_secret=$APP_SECRET" \
-            --data-urlencode "redirect_uri=https://jalina.art/" --data-urlencode "code=$CODE")
+            --data-urlencode "redirect_uri=https://marmarcandles.com/lv/" --data-urlencode "code=$CODE")
           tok=$(printf '%s' "$resp" | python3 -c 'import sys,json; print(json.load(sys.stdin).get("access_token",""))')
           if [ -z "$tok" ]; then
             printf '%s' "$resp" | python3 -c 'import sys,json; e=json.load(sys.stdin).get("error",{}); print("Meta error:", e.get("code"), e.get("message"))'
