@@ -39,14 +39,14 @@ def test_already_done_ignored():
 
 
 def test_too_late_skipped():
-    pub, skip = ps.plan([item("2026-11-20T08:00:00", 1)], {}, NOW)
+    pub, skip = ps.plan([item("2026-11-19T17:00:00", 1)], {}, NOW)
     assert pub == [] and skip[0][1] == "too late"
 
 
-def test_per_run_cap_leaves_rest_queued():
-    items = [item(f"2026-11-20T17:{m:02d}:00", m) for m in range(10, 16)]
+def test_late_run_publishes_all_due():
+    items = [item(f"2026-11-20T{h:02d}:00:00", h) for h in range(9, 18)]  # 9 pins, run 1-9 h late
     pub, skip = ps.plan(items, {}, NOW)
-    assert len(pub) == ps.PER_RUN_CAP and skip == []
+    assert len(pub) == 9 and skip == []
 
 
 def test_daily_cap_counts_already_published_today():

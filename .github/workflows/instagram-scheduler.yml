@@ -1,0 +1,61 @@
+name: Instagram scheduler
+
+# Publishes due MarMar posts from social/instagram/queue/*.json via the free Instagram API.
+# Posts reach the queue on master only through a pull request Alina merges (= her approval).
+# Until the IG_ACCESS_TOKEN secret exists it runs in DRY_RUN mode (logs only, changes nothing).
+on:
+  schedule:
+    - cron: "7,37 * * * *"   # GitHub often starts it hours late; posts may go out late
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only show what would be published"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram-scheduler
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q requests
+      - name: Publish due posts
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          MANUAL_DRY: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+          NEW_TOKEN_FILE: ${{ runner.temp }}/new_ig_token
+        run: |
+          if [ -z "$IG_ACCESS_TOKEN" ] || [ "$MANUAL_DRY" = "true" ]; then export DRY_RUN=1; fi
+          python3 tools/instagram_scheduler.py
+      - name: Save refreshed token
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
+          F: ${{ runner.temp }}/new_ig_token
+        run: |
+          if [ -s "$F" ]; then
+            if [ -n "$GH_TOKEN" ]; then gh secret set IG_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY" < "$F" && echo "token refreshed and saved";
+            else echo "::warning::Instagram token was refreshed but GH_SECRETS_PAT is not set"; fi
+            rm -f "$F"
+          fi
+      - name: Commit state
+        if: always()   # a failed post is still logged, so it is never published twice
+        run: |
+          if git status --porcelain social/instagram/published.json | grep -q .; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add social/instagram/published.json
+            git commit -qm "Instagram: published posts log"
+            git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q
+          fi

@@ -17,8 +17,9 @@ Put a JSON list into `queue/<YYYY-MM-DD>-<topic>.json` on `master`:
 
 - `date` without offset = Riga time. Same format as `affiliate/pins/daily/*-schedule.json`.
 - Image must be a public URL (jalina.art/pins/...). Images only for now; video pins are not supported yet.
-- Rules built in: max 15 pins per Riga day (counted from `published.json`), max 3 per run,
-  pins more than 6 hours late are skipped (logged, not published).
+- Rules built in: max 15 pins per Riga day (counted from `published.json`); each run publishes
+  every due pin (GitHub runs the 20-minute cron only every 4-10 hours, so pins go out late, in batches);
+  pins more than 24 hours late are skipped (logged, not published).
 
 ## Settings (GitHub → Settings → Secrets and variables → Actions)
 - Secrets: `PINTEREST_APP_ID`, `PINTEREST_APP_SECRET`, `GH_SECRETS_PAT`
