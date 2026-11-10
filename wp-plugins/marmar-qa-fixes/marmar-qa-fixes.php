@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.10
+ * Version:           1.9.11
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -88,6 +88,26 @@ final class MarMar_QA_Fixes {
 		'product/kukas-sveces-ar-rudzupukem' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 22891 (09.11 10 cm apvienotas)
 		'product/neitralu-tonu-kukas-svecites-tievas-dzimsanas-dienas-sveces' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 22822 (09.11 10 cm apvienotas)
 		'product/dabiga-vaska-tortes-sveces-10-gab' => '/lv/product/dabiga-vaska-kuku-svecites-10-cm/', // 22170 (09.11 10 cm apvienotas)
+		'product/bisu-vaska-svecites-bumbinas-kukam-un-tortem-11cm' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 16337 (10.11 Bumbiņas apvienotas)
+		'product/dzimsanas-dienas-svecite-perlites-kukam-un-tortem-krasu-palete-milk-blush-11cm' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 21967 (10.11 Bumbiņas apvienotas)
+		'product/dzimsanas-dienas-svecite-perlites-kukam-un-tortem-persiku-11cm' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 18767 (10.11 Bumbiņas apvienotas)
+		'product/dzimsanas-dienas-svecite-perlites-kukam-un-tortem-ice-blue-zils-11cm' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 18738 (10.11 Bumbiņas apvienotas)
+		'product/dzimsanas-dienas-svecite-perlites-kukam-un-tortem-dzeltenas-11-cm' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 18737 (10.11 Bumbiņas apvienotas)
+		'product/dzimsanas-dienas-svecite-perlites-kukam-un-tortem-lavandas-11-cm' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 18707 (10.11 Bumbiņas apvienotas)
+		'product/bisu-vaska-svecites-perlites-kukam-un-tortem-pasteltonu-mix-11-cm' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 17567 (10.11 Bumbiņas apvienotas)
+		'product/bisu-vaska-svecites-perlites-kukam-un-tortem-gaisi-roza-11cm' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 16730 (10.11 Bumbiņas apvienotas)
+		'product/bisu-vaska-svecites-perlites-kukam-un-tortem-fuksija-11cm' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 16729 (10.11 Bumbiņas apvienotas)
+		'product/roza-bumbinu-kukas-svecites-dekorativas-dzimsanas-dienas-sveces' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 22889 (10.11 Bumbiņas apvienotas)
+		'product/pasteltonu-bumbinu-kukas-svecites-dzimsanas-dienas-sveces-tortei' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 22750 (10.11 Bumbiņas apvienotas)
+		'product/roza-kremkrasas-bumbinu-kukas-sveces' => '/lv/product/bumbinas-kuku-svecites-11-cm/', // 22749 (10.11 Bumbiņas apvienotas)
+		'product/kantaina-kuku-svece-dzimsanas-dienas-svecite-11cm' => '/lv/product/kantainas-kuku-svecites-11-cm/', // 17027 (10.11 Kantainās apvienotas)
+		'product/dzimsanas-dienas-svecisu-komplekts-kantainas-formas-11cm-10-gab-krasu-mix-ar-spidumiem' => '/lv/product/kantainas-kuku-svecites-11-cm/', // 22083 (10.11 Kantainās apvienotas)
+		'product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-krasu-mix' => '/lv/product/zigzag-kuku-svecites/', // 22069 (10.11 Zigzag apvienotas)
+		'product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-pienbalts-ar-spidumiem' => '/lv/product/zigzag-kuku-svecites/', // 22071 (10.11 Zigzag apvienotas)
+		'product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-zils-ar-spidumiem' => '/lv/product/zigzag-kuku-svecites/', // 22073 (10.11 Zigzag apvienotas)
+		'product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-gaisi-zals-ar-zelta-spidumiem' => '/lv/product/zigzag-kuku-svecites/', // 22075 (10.11 Zigzag apvienotas)
+		'product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-gaisi-roza-ar-spidumiem' => '/lv/product/zigzag-kuku-svecites/', // 22078 (10.11 Zigzag apvienotas)
+		'product/dzimsanas-dienas-svecisu-komplekts-zigzag-7-gab-persiku-ar-spidumiem' => '/lv/product/zigzag-kuku-svecites/', // 22080 (10.11 Zigzag apvienotas)
 	);
 
 	public static function init() {

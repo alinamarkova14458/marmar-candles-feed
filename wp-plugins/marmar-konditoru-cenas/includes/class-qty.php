@@ -119,7 +119,7 @@ final class MarMar_KC_Qty {
 			return false;
 		}
 		$p = $product->is_type( 'variation' ) ? wc_get_product( $product->get_parent_id() ) : $product;
-		return $p && 7 === self::pack_size( $product ) && preg_match( '/zig\s*zag|viļņ/iu', $p->get_name() );
+		return $p && 7 === self::pack_size( $product ) && preg_match( '/zig\s*zag|viļņ|spirāl/iu', $p->get_name() );
 	}
 
 	/** Konditora sveču skaits iepakojumā. */
