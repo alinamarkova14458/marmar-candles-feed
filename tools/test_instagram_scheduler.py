@@ -73,3 +73,21 @@ def test_publish_call_sequence(monkeypatch):
     assert paths == [("POST", "U/media"), ("POST", "U/media"), ("GET", "c1"), ("GET", "c2"),
                      ("POST", "U/media"), ("GET", "c5"), ("POST", "U/media_publish")]
     assert calls[4][2]["children"] == "c1,c2" and calls[-1][2] == {"creation_id": "c5"}
+
+
+def test_account_falls_back_to_page(monkeypatch):
+    class R:
+        status_code = 200
+
+        def __init__(self, j):
+            self.j = j
+
+        def json(self):
+            return self.j
+
+    answers = {"me/assigned_instagram_accounts": {"data": []},
+               "me/accounts": {"data": [{"id": "P"}, {"id": "P2", "instagram_business_account":
+                                                      {"id": "IG1", "username": "marmar.candles"}}]}}
+    monkeypatch.setattr(ig.requests, "request",
+                        lambda method, url, headers, params, timeout: R(answers[url.split("/v27.0/")[1]]))
+    assert ig.Api("t").account() == {"id": "IG1", "username": "marmar.candles"}

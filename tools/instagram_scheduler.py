@@ -91,6 +91,10 @@ class Api:
 
     def account(self) -> dict:
         accs = self.call("GET", "me/assigned_instagram_accounts", fields="id,username")["data"]
+        if not accs:  # Business Settings system user token: Instagram is reached via the FB Page
+            pages = self.call("GET", "me/accounts",
+                              fields="instagram_business_account{id,username}")["data"]
+            accs = [p["instagram_business_account"] for p in pages if p.get("instagram_business_account")]
         if not accs:
             raise RuntimeError("token has no Instagram account assigned")
         return accs[0]  # only @marmar.candles is connected

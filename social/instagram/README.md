@@ -28,25 +28,23 @@ Workflow `.github/workflows/instagram-scheduler.yml` запускается по
 - Если публикация упала, запуск workflow красный, GitHub присылает письмо. Повторно такой пост
   сам не публикуется (чтобы не было дублей): нужно поменять ему `id` или дату.
 
-## Настройка (один раз, делает Алина)
-Для новых приложений Meta вход через Instagram закрыт, используется «единый вход»
-(unified login) с маркером системного пользователя, который не истекает.
+## Настройка (один раз, делает Алина) — сделано 10.11.2026
+Маркер системного пользователя из настроек компании Meta, бессрочный, без URL и кодов.
 
-1. Instagram @marmar.candles должен быть **профессиональным** (Бизнес или Автор).
-2. developers.facebook.com → «Мои приложения» → «Создать приложение», сценарий
-   «Управление сообщениями и контентом в Instagram», компания Marmar Candles.
-3. «Сценарии использования» → Instagram API → «API setup with Unified login» →
-   «Создать новую конфигурацию». Маркер: системного пользователя, срок: «Никогда»,
-   объект: аккаунт Instagram marmar.candles.
-4. Там же «URL переадресации»: `https://marmarcandles.com/lv/`.
-5. «Настройки приложения» → «Основное»: «Идентификатор приложения» и «Секрет приложения»
-   сохранить в GitHub → Settings → Secrets and variables → Actions как секреты
-   `META_APP_ID` и `META_APP_SECRET`. (`GH_SECRETS_PAT` уже есть от Pinterest.)
-6. Открыть «Login URL» конфигурации, войти, выбрать marmar.candles, разрешить. Браузер
-   откроет marmarcandles.com с `?code=...` в адресной строке. Скопировать значение после `code=`
-   и в течение нескольких минут запустить Actions → «Instagram connect (one-time)» с ним.
-   Workflow сам сохранит маркер в секрет `IG_ACCESS_TOKEN` и покажет подключённый аккаунт.
-7. Actions → «Instagram scheduler» → Run workflow с галочкой dry_run: в логе должна быть
-   строка `token OK: @marmar.candles`. Ничего не публикуется.
+1. Instagram @marmar.candles — профессиональный аккаунт, связан со страницей Facebook MarMar Candles.
+2. developers.facebook.com: приложение «MarMar Scheduler» (сценарий «Управление сообщениями
+   и контентом в Instagram», компания Marmar Candles).
+3. business.facebook.com/settings → «Пользователи» → «Системные пользователи» →
+   `marmar-scheduler` (админ). «Назначить объекты»: страница MarMar Candles, Instagram
+   marmar.candles, приложение MarMar Scheduler («Управление приложением»).
+4. «Сгенерировать маркер»: приложение MarMar Scheduler, срок «Никогда», разрешения
+   `instagram_basic`, `instagram_content_publish` (+ `pages_show_list`, если предлагается).
+5. GitHub → Settings → Secrets and variables → Actions → секрет `IG_ACCESS_TOKEN`.
+6. Проверка: Actions → «Instagram scheduler» → Run workflow с галочкой dry_run, в логе
+   `token OK: @marmar.candles`.
+
+Запасной путь (если маркер из настроек компании перестанет подходить): конфигурация
+«API setup with Unified login», URL переадресации `https://marmarcandles.com/lv/`,
+секреты `META_APP_ID` и `META_APP_SECRET`, разовый workflow «Instagram connect (one-time)».
 
 Пока секрета нет, workflow только пишет в лог, что опубликовал бы.
