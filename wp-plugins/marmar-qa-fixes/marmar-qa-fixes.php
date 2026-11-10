@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.14
+ * Version:           1.9.15
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -337,8 +337,39 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 		if ( 'blocksy' === $domain && 0 === strpos( $text, 'Search Results for' ) ) {
 			return str_replace( 'Search Results for', 'Meklēšanas rezultāti:', $text );
 		}
+		if ( 'woocommerce' === $domain && $translation === $text && isset( self::MAIL_LV[ $text ] ) ) {
+			return self::MAIL_LV[ $text ];
+		}
 		return $translation;
 	}
+
+	/** WooCommerce e-pastu teksti, kam latviešu tulkojuma vēl nav (WC 9.8+ „email improvements"). */
+	const MAIL_LV = array(
+		'We’re getting in touch to let you know that order #%1$s from %2$s has been cancelled.' => 'Informējam, ka pasūtījums #%1$s (%2$s) ir atcelts.',
+		'Notification to let you know — order #%1$s belonging to %2$s has been cancelled:'      => 'Informējam, ka pasūtījums #%1$s (%2$s) ir atcelts:',
+		'You’ve received a new order from %s:'                                                   => 'Saņemts jauns pasūtījums no %s:',
+		'You’ve received the following order from %s:'                                          => 'Saņemts šāds pasūtījums no %s:',
+		'Manage the order with the app.'                                                          => 'Pārvaldiet pasūtījumu lietotnē.',
+		'Unfortunately, the payment for order #%1$s from %2$s has failed. The order was as follows:' => 'Diemžēl pasūtījuma #%1$s (%2$s) apmaksa neizdevās. Pasūtījums:',
+		'Payment for order #%1$s from %2$s has failed. The order was as follows:'                 => 'Pasūtījuma #%1$s (%2$s) apmaksa neizdevās. Pasūtījums:',
+		'Your order from %s has been refunded.'                                                   => 'Jūsu pasūtījumam no %s ir veikta naudas atmaksa.',
+		'Your order from %s has been partially refunded.'                                         => 'Jūsu pasūtījumam no %s ir veikta daļēja naudas atmaksa.',
+		'Your order on %s has been refunded. There are more details below for your reference:'   => 'Jūsu pasūtījumam %s ir veikta naudas atmaksa. Sīkāka informācija zemāk:',
+		'Your order on %s has been partially refunded. There are more details below for your reference:' => 'Jūsu pasūtījumam %s ir veikta daļēja naudas atmaksa. Sīkāka informācija zemāk:',
+		"Unfortunately, we couldn't complete your order due to an issue with your payment method." => 'Diemžēl pasūtījumu nevarējām pabeigt, jo neizdevās apmaksa.',
+		"If you'd like to continue with your purchase, please return to %s and try a different method of payment." => 'Ja vēlaties turpināt pirkumu, atgriezieties %s un izvēlieties citu apmaksas veidu.',
+		'Your order details are as follows:'                                                      => 'Jūsu pasūtījuma informācija:',
+		'Sorry, your order on %1$s was unsuccessful. Your order details are below, with a link to try your payment again: %2$s' => 'Diemžēl Jūsu pasūtījums %1$s netika apmaksāts. Pasūtījuma informācija zemāk, un šeit varat mēģināt apmaksāt vēlreiz: %2$s',
+		'An order has been created for you on %1$s. Your order details are below, with a link to make payment when you’re ready: %2$s' => 'Jums ir izveidots pasūtījums %1$s. Pasūtījuma informācija zemāk, un šeit varat to apmaksāt: %2$s',
+		'Pay for this order'                                                                      => 'Apmaksāt pasūtījumu',
+		'Thanks for creating an account on %s. Here’s a copy of your user details.'              => 'Paldies, ka izveidojāt kontu %s! Jūsu lietotāja dati:',
+		'You can access your account area to view orders, change your password, and more via the link below:' => 'Savā kontā varat redzēt pasūtījumus, mainīt paroli un daudz ko citu:',
+		'Set your new password.'                                                                  => 'Iestatiet jaunu paroli.',
+		'Click here to set your new password.'                                                    => 'Spiediet šeit, lai iestatītu jaunu paroli.',
+		'If you didn’t make this request, just ignore this email. If you’d like to proceed, reset your password via the link below:' => 'Ja to nepieprasījāt Jūs, vienkārši ignorējiet šo e-pastu. Lai turpinātu, atjaunojiet paroli, spiežot uz saites zemāk:',
+		'Reset your password'                                                                     => 'Atjaunot paroli',
+		'Click here to reset your password'                                                       => 'Spiediet šeit, lai atjaunotu paroli',
+	);
 
 	public static function title_404( $title ) {
 		return is_404() ? 'Lapa nav atrasta - MarMar CANDLES' : $title;
