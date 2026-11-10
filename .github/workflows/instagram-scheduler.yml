@@ -34,21 +34,9 @@ jobs:
         env:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           MANUAL_DRY: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
-          NEW_TOKEN_FILE: ${{ runner.temp }}/new_ig_token
         run: |
           if [ -z "$IG_ACCESS_TOKEN" ] || [ "$MANUAL_DRY" = "true" ]; then export DRY_RUN=1; fi
           python3 tools/instagram_scheduler.py
-      - name: Save refreshed token
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
-          F: ${{ runner.temp }}/new_ig_token
-        run: |
-          if [ -s "$F" ]; then
-            if [ -n "$GH_TOKEN" ]; then gh secret set IG_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY" < "$F" && echo "token refreshed and saved";
-            else echo "::warning::Instagram token was refreshed but GH_SECRETS_PAT is not set"; fi
-            rm -f "$F"
-          fi
       - name: Commit state
         if: always()   # a failed post is still logged, so it is never published twice
         run: |

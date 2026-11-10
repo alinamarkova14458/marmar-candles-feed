@@ -28,17 +28,25 @@ Workflow `.github/workflows/instagram-scheduler.yml` запускается по
 - Если публикация упала, запуск workflow красный, GitHub присылает письмо. Повторно такой пост
   сам не публикуется (чтобы не было дублей): нужно поменять ему `id` или дату.
 
-## Настройка (один раз, делает Алина, ~15 минут)
-1. Instagram @marmar.candles должен быть **профессиональным** (Business или Creator).
-2. developers.facebook.com → My Apps → Create App → тип **Business** → добавить продукт
-   **Instagram** → «API setup with Instagram business login».
-3. В разделе «Generate access tokens» добавить аккаунт marmar.candles и нажать
-   **Generate token**, войти в Instagram, скопировать токен. Нужны разрешения
-   `instagram_business_basic` и `instagram_business_content_publish`.
-4. GitHub → Settings → Secrets and variables → Actions → New repository secret:
-   `IG_ACCESS_TOKEN` = скопированный токен. (`GH_SECRETS_PAT` уже есть от Pinterest — он
-   нужен, чтобы workflow раз в неделю сам продлевал токен; токен живёт 60 дней.)
-5. Actions → Instagram scheduler → Run workflow с галочкой dry_run — проверить, что всё
-   работает, ничего не публикуя.
+## Настройка (один раз, делает Алина)
+Для новых приложений Meta вход через Instagram закрыт, используется «единый вход»
+(unified login) с маркером системного пользователя, который не истекает.
+
+1. Instagram @marmar.candles должен быть **профессиональным** (Бизнес или Автор).
+2. developers.facebook.com → «Мои приложения» → «Создать приложение», сценарий
+   «Управление сообщениями и контентом в Instagram», компания Marmar Candles.
+3. «Сценарии использования» → Instagram API → «API setup with Unified login» →
+   «Создать новую конфигурацию». Маркер: системного пользователя, срок: «Никогда»,
+   объект: аккаунт Instagram marmar.candles.
+4. Там же «URL переадресации»: `https://jalina.art/`.
+5. «Настройки приложения» → «Основное»: «Идентификатор приложения» и «Секрет приложения»
+   сохранить в GitHub → Settings → Secrets and variables → Actions как секреты
+   `META_APP_ID` и `META_APP_SECRET`. (`GH_SECRETS_PAT` уже есть от Pinterest.)
+6. Открыть «Login URL» конфигурации, войти, выбрать marmar.candles, разрешить. Браузер
+   откроет jalina.art с `?code=...` в адресной строке. Скопировать значение после `code=`
+   и в течение нескольких минут запустить Actions → «Instagram connect (one-time)» с ним.
+   Workflow сам сохранит маркер в секрет `IG_ACCESS_TOKEN` и покажет подключённый аккаунт.
+7. Actions → «Instagram scheduler» → Run workflow с галочкой dry_run: в логе должна быть
+   строка `token OK: @marmar.candles`. Ничего не публикуется.
 
 Пока секрета нет, workflow только пишет в лог, что опубликовал бы.
