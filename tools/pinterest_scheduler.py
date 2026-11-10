@@ -37,8 +37,8 @@ QUEUE_GLOB = os.path.join(ROOT, "social", "pinterest", "queue", "*.json")
 STATE_PATH = os.path.join(ROOT, "social", "pinterest", "published.json")
 
 DAILY_CAP = 15          # Alina's rule: max 15 pins per day (Riga date), all sources
-PER_RUN_CAP = 3         # spread catch-up after an outage instead of a burst
-MAX_LATE = timedelta(hours=6)  # older than this -> skipped, not published
+# GitHub runs the "every 20 min" cron only every 4-10 h, so each run publishes every due pin.
+MAX_LATE = timedelta(hours=24)  # older than this -> skipped, not published
 
 API = {"production": "https://api.pinterest.com/v5",
        "sandbox": "https://api-sandbox.pinterest.com/v5"}
@@ -47,7 +47,7 @@ API = {"production": "https://api.pinterest.com/v5",
 def pin_id(item: dict) -> str:
     if item.get("id"):
         return str(item["id"])
-    raw = f'{item["date"]}|{item["media"]}|{item["link"]}'
+    raw = f'{item["date"]}|{item["media"]}|{item.get("link", "")}'  # no link: Instagram queue
     return hashlib.sha1(raw.encode()).hexdigest()[:16]
 
 
@@ -106,8 +106,6 @@ def plan(items: list[dict], state: dict, now: datetime):
         if used_today + len(to_publish) >= DAILY_CAP:
             to_skip.append((it, f"daily cap {DAILY_CAP}"))
             continue
-        if len(to_publish) >= PER_RUN_CAP:
-            continue  # stays in queue for the next run
         to_publish.append(it)
     return to_publish, to_skip
 
