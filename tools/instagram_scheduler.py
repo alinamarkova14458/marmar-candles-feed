@@ -142,7 +142,10 @@ def main() -> int:
     if dry:
         if os.environ.get("IG_ACCESS_TOKEN"):  # read-only check that the token works
             mask(os.environ["IG_ACCESS_TOKEN"])
-            acc = Api(os.environ["IG_ACCESS_TOKEN"]).account()
+            api = Api(os.environ["IG_ACCESS_TOKEN"])
+            perms = api.call("GET", "me/permissions")["data"]  # names only, no secrets
+            print("  permissions:", sorted(p["permission"] for p in perms if p.get("status") == "granted"))
+            acc = api.account()
             print(f"  token OK: @{acc.get('username')} (id {acc['id']})")
         for it in to_publish:
             print(f"  WOULD {it['_id']} {it['date']} {it.get('type', 'image')} {it.get('caption', '')[:60]!r}")
