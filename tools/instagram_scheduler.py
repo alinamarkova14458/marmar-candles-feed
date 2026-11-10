@@ -3,8 +3,9 @@
 
 Queue: social/instagram/queue/*.json, each file is a JSON list of posts:
   {"date": "2026-11-20T18:00:00",          # Riga time if no offset given
-   "type": "image" | "carousel" | "reel",   # default "image"
-   "media": ["https://.../1.jpg", ...],     # public URLs: JPEG for images, MP4/MOV for a reel
+   "type": "image" | "carousel" | "reel" | "story",   # default "image"
+   "media": ["https://.../1.jpg", ...],     # public URLs: JPEG for images, MP4/MOV for a reel;
+                                            # a story is 1 JPEG or MP4/MOV, ideally 1080x1920, no caption
    "caption": "...",
    "id": "..."}                             # optional; default = hash of date+media
 A queue file reaches master only by Alina merging a pull request: the merge is her approval.
@@ -49,10 +50,14 @@ def media(it: dict) -> list[str]:
     return [m] if isinstance(m, str) else list(m)
 
 
+def is_video(url: str) -> bool:
+    return url.split("?")[0].lower().endswith((".mp4", ".mov"))
+
+
 def problem(it: dict) -> str | None:
     """Reasons a post must not go out as is (checked before any API call)."""
     kind, urls, cap = it.get("type", "image"), media(it), it.get("caption", "")
-    if kind not in ("image", "carousel", "reel"):
+    if kind not in ("image", "carousel", "reel", "story"):
         return f"unknown type {kind}"
     if not urls or not all(u.startswith("https://") for u in urls):
         return "media must be public https URLs"
@@ -113,6 +118,9 @@ class Api:
         kind, urls, cap = it.get("type", "image"), media(it), it.get("caption", "")
         if kind == "image":
             c = self.call("POST", f"{uid}/media", image_url=urls[0], caption=cap)["id"]
+        elif kind == "story":  # Instagram shows no caption on stories
+            src = {"video_url": urls[0]} if is_video(urls[0]) else {"image_url": urls[0]}
+            c = self.call("POST", f"{uid}/media", media_type="STORIES", **src)["id"]
         elif kind == "reel":
             c = self.call("POST", f"{uid}/media", media_type="REELS", video_url=urls[0],
                           caption=cap, share_to_feed="true")["id"]

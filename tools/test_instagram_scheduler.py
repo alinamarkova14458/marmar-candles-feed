@@ -37,7 +37,9 @@ def test_brand_and_api_rules():
     assert ig.problem(post("2026-11-20T17:00:00", type="carousel", media=[JPG, JPG])) is None
     assert "exactly 1" in ig.problem(post("2026-11-20T17:00:00", type="reel", media=[JPG, JPG]))
     assert "https" in ig.problem(post("2026-11-20T17:00:00", media=["http://a/1.jpg"]))
-    assert "unknown" in ig.problem(post("2026-11-20T17:00:00", type="story"))
+    assert "unknown" in ig.problem(post("2026-11-20T17:00:00", type="live"))
+    assert ig.problem(post("2026-11-20T17:00:00", type="story", caption="")) is None
+    assert "exactly 1" in ig.problem(post("2026-11-20T17:00:00", type="story", media=[JPG, JPG]))
 
 
 def test_single_url_string_ok_and_stable_id():
@@ -104,3 +106,33 @@ def test_plan_page():
     assert "[Пост](https://github.com/x/pull/1)" in md and "Код" not in md
     assert "сб 21.11 18:00" in md and "карусель (5)" in md and "+2" in md and "Ko saka / klienti" in md
     assert "[опубликован](https://instagram.com/p/x)" in md and "чт 12.11 18:00" in md
+
+
+def test_story_image_and_video(monkeypatch):
+    calls = []
+
+    class R:
+        status_code = 200
+
+        def __init__(self, j):
+            self.j = j
+
+        def json(self):
+            return self.j
+
+    def fake(method, url, headers, params, timeout):
+        path = url.split("/v27.0/")[1]
+        calls.append((path, params))
+        if path.endswith("/media"):
+            return R({"id": "c"})
+        if path.endswith("/media_publish"):
+            return R({"id": "S1"})
+        return R({"status_code": "FINISHED"})
+
+    monkeypatch.setattr(ig.requests, "request", fake)
+    api = ig.Api("tok")
+    assert api.publish("U", post("2026-11-20T17:00:00", type="story", caption="")) == "S1"
+    assert calls[0] == ("U/media", {"media_type": "STORIES", "image_url": JPG})
+    calls.clear()
+    api.publish("U", post("2026-11-20T17:00:00", type="story", media=["https://x/v.MP4"]))
+    assert calls[0] == ("U/media", {"media_type": "STORIES", "video_url": "https://x/v.MP4"})

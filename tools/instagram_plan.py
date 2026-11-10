@@ -14,7 +14,7 @@ from instagram_scheduler import QUEUE_GLOB, STATE_PATH, RIGA, load_queue, load_s
 
 PLAN_PATH = os.path.join(os.path.dirname(STATE_PATH), "PLAN.md")
 DAYS = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]
-KIND = {"image": "фото", "carousel": "карусель", "reel": "рилс"}
+KIND = {"image": "фото", "carousel": "карусель", "reel": "рилс", "story": "сторис"}
 
 
 def when(d: datetime) -> str:
