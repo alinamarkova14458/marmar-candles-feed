@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.6.2
+ * Version:           1.6.3
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.6.2';
+	const VER       = '1.6.3';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -67,6 +67,7 @@ final class MarMar_Konditoru_Cenas {
 		add_action( 'admin_post_mm_kc_decide', array( __CLASS__, 'admin_decide' ) );
 		add_action( 'admin_post_mm_kc_link_catalog', array( __CLASS__, 'admin_link_catalog' ) );
 		add_action( 'admin_post_mm_kc_mail', array( __CLASS__, 'admin_mail' ) );
+		add_action( 'admin_post_mm_kc_test_mail', array( __CLASS__, 'admin_test_mail' ) );
 		add_action( 'admin_post_mm_kc_settings', array( __CLASS__, 'admin_save_settings' ) );
 		add_filter( 'add_menu_classes', array( __CLASS__, 'menu_bubble' ) );
 	}
@@ -837,6 +838,9 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin:1em 0">';
 		wp_nonce_field( 'mm_kc_link_catalog' );
 		echo '<input type="hidden" name="action" value="mm_kc_link_catalog"><button class="button" data-mmkc-link>Izveidot kontus kataloga konditoriem (jauniem — e-pasts ar paroles saiti)</button></form>';
+		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin:0 0 1em">';
+		wp_nonce_field( 'mm_kc_test_mail' );
+		echo '<input type="hidden" name="action" value="mm_kc_test_mail"><button class="button" data-mmkc-test>Nosūtīt testa e-pastu sev</button></form>';
 		if ( class_exists( 'MarMar_KC_Box' ) ) {
 			MarMar_KC_Box::admin_section();
 		}
@@ -943,6 +947,34 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 		);
 	}
 
+	/** Saturs skaistajai vēstulei «konts izveidots / apstiprināts». */
+	public static function pretty_args( $name, $link, $created, $catalog ) {
+		$min = (int) self::settings()['min_order'];
+		return array(
+			'title'        => $created ? 'Tavs konditora konts ir izveidots' : 'Tavs konditora konts ir apstiprināts',
+			'preheader'    => 'Tagad vari pasūtīt kūku sveces un ciparu sveces par īpašām cenām.',
+			'hello'        => 'Sveiki, ' . $name . '!',
+			'intro'        => ( $created ? 'Paldies, ka esi mūsu konditoru katalogā! Mēs izveidojām tev konditora kontu MarMar Candles veikalā' : 'Tavs konditora konts MarMar Candles veikalā ir apstiprināts' ) . ' — tagad vari pasūtīt <strong>kūku sveces un ciparu sveces par īpašām cenām</strong>. Cenas redzēsi pēc pieslēgšanās.' . ( $catalog ? ' Tava kartīte ir publicēta <a href="' . esc_url( home_url( '/lv/konditori/' ) ) . '" style="color:#B9605F;">konditoru katalogā</a>.' : '' ),
+			'button_url'   => $link,
+			'button_label' => 'Iestatīt paroli',
+			'button_hint'  => 'Saite paroles iestatīšanai ir personīga. Pēc tam pieslēdzies sadaļā <a href="' . esc_url( wc_get_page_permalink( 'myaccount' ) ) . '" style="color:#B9605F;">«Mans konts»</a>.',
+			'items'        => array( 'Īpašas cenas kūku svecēm un ciparu svecēm', 'Minimālais pasūtījums — ' . $min . ' € (bez piegādes)', 'Piegāde uz pakomātu 2,50 €, no 50 € — bez maksas', 'Rēķins automātiski pienāk uz e-pastu', 'Iepriekšējo pasūtījumu var atkārtot ar vienu klikšķi' ),
+			'note'         => 'Ja ir jautājumi — raksti mums Instagram <a href="https://www.instagram.com/marmar.candles" style="color:#B9605F;">@marmar.candles</a>.',
+		);
+	}
+
+	/** Testa vēstule uz paziņojumu e-pastu (paroles saite — uz «Mans konts», bez atslēgas). */
+	public static function admin_test_mail() {
+		if ( ! current_user_can( 'manage_woocommerce' ) || ! check_admin_referer( 'mm_kc_test_mail' ) ) {
+			wp_die( 'Nav atļauts.' );
+		}
+		$to = self::settings()['notify'];
+		$ok = MarMar_KC_Mail::send( $to, '[TESTS] MarMar Candles: tavs konditora konts ir izveidots 🎂', self::pretty_args( 'Tikaso_cake', wc_get_page_permalink( 'myaccount' ), true, false ) );
+		update_option( 'mm_kc_link_log', array( $ok ? 'Testa e-pasts nosūtīts.' : 'Neizdevās nosūtīt testa e-pastu.' ), false );
+		wp_safe_redirect( admin_url( 'admin.php?page=mm-konditoru-cenas&linked=1' ) );
+		exit;
+	}
+
 	public static function admin_mail() {
 		$uid = isset( $_GET['user'] ) ? absint( $_GET['user'] ) : 0;
 		if ( ! $uid || ! current_user_can( 'manage_woocommerce' ) || ! check_admin_referer( 'mm_kc_mail_' . $uid ) ) {
@@ -996,6 +1028,7 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 register_activation_hook( __FILE__, array( 'MarMar_Konditoru_Cenas', 'activate' ) );
 require_once __DIR__ . '/includes/class-box.php';
 require_once __DIR__ . '/includes/class-qty.php';
+require_once __DIR__ . '/includes/class-mail.php';
 add_action( 'plugins_loaded', array( 'MarMar_Konditoru_Cenas', 'init' ) );
 add_action( 'plugins_loaded', array( 'MarMar_KC_Box', 'init' ) );
 add_action( 'plugins_loaded', array( 'MarMar_KC_Qty', 'init' ) );
