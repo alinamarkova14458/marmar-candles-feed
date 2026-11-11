@@ -1,0 +1,43 @@
+name: Pinterest connect (one-time)
+
+# One-time OAuth step. Alina opens the authorize link, Pinterest redirects to
+# https://jalina.art/?code=XXXX, she pastes XXXX here. The code is single-use and
+# expires in minutes; the resulting refresh token goes straight into a repo secret.
+on:
+  workflow_dispatch:
+    inputs:
+      code:
+        description: "code= value from the jalina.art address bar after allowing access"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  connect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exchange code and save refresh token
+        env:
+          CODE: ${{ inputs.code }}
+          APP_ID: ${{ secrets.PINTEREST_APP_ID }}
+          APP_SECRET: ${{ secrets.PINTEREST_APP_SECRET }}
+          GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
+          PINTEREST_ENV: ${{ vars.PINTEREST_ENV || 'sandbox' }}
+        run: |
+          set -euo pipefail
+          for v in APP_ID APP_SECRET GH_TOKEN; do [ -n "${!v}" ] || { echo "::error::secret for $v is missing"; exit 1; }; done
+          # sandbox (Trial access) and production issue separate tokens
+          host=api.pinterest.com; [ "$PINTEREST_ENV" = "sandbox" ] && host=api-sandbox.pinterest.com
+          gh api "repos/$GITHUB_REPOSITORY/actions/secrets/public-key" --silent || { echo "::error::GH_SECRETS_PAT cannot write secrets (needs Secrets: Read and write)"; exit 1; }
+          resp=$(curl -sS -u "$APP_ID:$APP_SECRET" "https://$host/v5/oauth/token" \
+            -d grant_type=authorization_code -d "code=$CODE" \
+            --data-urlencode "redirect_uri=https://jalina.art/")
+          rt=$(printf '%s' "$resp" | python3 -c 'import sys,json; print(json.load(sys.stdin).get("refresh_token",""))')
+          if [ -z "$rt" ]; then
+            printf '%s' "$resp" | python3 -c 'import sys,json; j=json.load(sys.stdin); print("Pinterest error:", j.get("code"), j.get("message"))'
+            exit 1
+          fi
+          echo "::add-mask::$rt"
+          printf '%s' "$rt" | gh secret set PINTEREST_REFRESH_TOKEN --repo "$GITHUB_REPOSITORY"
+          echo "Connected ($PINTEREST_ENV). PINTEREST_REFRESH_TOKEN saved."

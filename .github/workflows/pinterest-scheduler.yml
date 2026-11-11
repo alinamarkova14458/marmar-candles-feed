@@ -1,0 +1,61 @@
+name: Pinterest scheduler
+
+# Publishes due pins from social/pinterest/queue/*.json via Pinterest API v5.
+# Until the Pinterest secrets exist it runs in DRY_RUN mode (logs only, changes nothing).
+on:
+  schedule:
+    - cron: "*/20 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only show what would be published"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pinterest-scheduler
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q requests
+      - name: Publish due pins
+        env:
+          PINTEREST_APP_ID: ${{ secrets.PINTEREST_APP_ID }}
+          PINTEREST_APP_SECRET: ${{ secrets.PINTEREST_APP_SECRET }}
+          PINTEREST_REFRESH_TOKEN: ${{ secrets.PINTEREST_REFRESH_TOKEN }}
+          PINTEREST_ENV: ${{ vars.PINTEREST_ENV || 'sandbox' }}
+          MANUAL_DRY: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+          NEW_RT_FILE: ${{ runner.temp }}/new_rt
+        run: |
+          if [ -z "$PINTEREST_REFRESH_TOKEN" ] || [ "$MANUAL_DRY" = "true" ]; then export DRY_RUN=1; fi
+          python3 tools/pinterest_scheduler.py
+      - name: Save rotated refresh token
+        env:
+          GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
+          F: ${{ runner.temp }}/new_rt
+        run: |
+          if [ -s "$F" ]; then
+            if [ -n "$GH_TOKEN" ]; then gh secret set PINTEREST_REFRESH_TOKEN --repo "$GITHUB_REPOSITORY" < "$F" && echo "refresh token rotated and saved";
+            else echo "::warning::Pinterest returned a new refresh token but GH_SECRETS_PAT is not set"; fi
+            rm -f "$F"
+          fi
+      - name: Commit state
+        run: |
+          if git status --porcelain social/pinterest/published.json | grep -q .; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add social/pinterest/published.json
+            git commit -qm "Pinterest: published pins log"
+            git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q
+          fi

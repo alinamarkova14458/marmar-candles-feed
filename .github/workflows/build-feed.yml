@@ -2,7 +2,9 @@ name: Build Google feed from WooCommerce
 
 on:
   schedule:
-    - cron: "17 2 * * *"   # every night, 02:17 UTC (04:17/05:17 in Riga)
+    # 18:17 UTC = 20:17/21:17 Riga. GitHub starts this cron up to ~7.5 h late, and Merchant Center
+    # fetches at 06:00 Riga, so an evening start still lands before the fetch.
+    - cron: "17 18 * * *"
   workflow_dispatch:        # manual run from the Actions tab
 
 permissions:

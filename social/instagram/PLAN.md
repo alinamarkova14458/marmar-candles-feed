@@ -1,0 +1,45 @@
+# План Instagram @marmar.candles
+
+_Страница обновляется сама при каждом запуске планировщика и сразу после слияния поста._
+
+## 🙋 Ждут твоего подтверждения
+
+Ничего не ждёт.
+
+## ⏳ Запланировано
+
+| Когда (Рига) | Фото | Тип | Подпись | Статус |
+|---|---|---|---|---|
+| чт 12.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/2026-11-12-piparkuku-svece.jpg" width="90"> | фото | Šis ir vienīgais piparkūku vīriņš, kuru neviens neapēdīs 😄🎄 Es viņu izlēju ar mīlestību un ieliku kraftpapīra… | ⏳ запланирован |
+| пт 13.11 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-paysera-story.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| сб 14.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/2026-11-14-atsauksmes-1.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/2026-11-14-atsauksmes-2.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/2026-11-14-atsauksmes-3.jpg" width="90"> +4 | карусель (7) | Šie ir īsti vārdi no jums, mani mīļie klienti 🥹 Es tos krāju savos Highlights un pārlasu, kad rokas ir vaskā … | ⏳ запланирован |
+| вс 15.11 20:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-grid-ny-1.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-grid-ny-2.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-grid-ny-3.jpg" width="90"> | карусель (3) | Mana Ziemassvētku kolekcija vienā kadrā ✨ Bumba — 9 €, bumba dāvanu kastītē — 15 €, figūriņas — 5 €. Katru sv… | ⏳ запланирован |
+| пн 16.11 12:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-st1d.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| пн 16.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-x1.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-x2.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-x3.jpg" width="90"> +2 | карусель (5) | Mana Ziemassvētku kolekcija ir gatava 🎄✨ Mājiņa ar svecītēm, eglīšu bumbas ar zelta dekoru un mazas figūriņas… | ⏳ запланирован |
+| вт 17.11 12:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-charity-v2-1.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-charity-v3-2.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-charity-v2-3.jpg" width="90"> | карусель (3) | Viena svece — viena vēlēšanās 🕯 No 17.11 līdz 15.12 no katras Ziemassvētku bumbas (arī dāvanu kastītē) 1 € zi… | ⏳ запланирован |
+| вт 17.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-n1.jpg" width="90"> | фото | Mazuļa pirmais gads paskrien tik ātri, ka svecītes vajag uzreiz visiem mēnešiem 😄 Mans mēnešsvētku komplekts:… | ⏳ запланирован |
+| ср 18.11 09:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-lv-1811-story.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| чт 19.11 12:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-st2.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| чт 19.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-kond-3soli-story.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| пт 20.11 12:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-cal-dec-1b.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-cal-dec-2.jpg" width="90"> | карусель (2) | Ziemassvētki vienmēr pienāk ātrāk, nekā gaidām, tāpēc šogad uzrakstīju sev kalendāru ✨ No 26.11 līdz 3.12 būš… | ⏳ запланирован |
+| сб 21.11 12:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-st3b.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| сб 21.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-s1.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-s2.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-s3.jpg" width="90"> +1 | карусель (4) | Zemenes novembrī? Pie manis var 🍓😄 Šīs zemenītes ir sveces: tās nesabojājas, nenokrīt no tortes, un neviens t… | ⏳ запланирован |
+| чт 26.11 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-vac-story.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| вт 01.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-cal-dec-st2.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| чт 03.12 12:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gw-v2-1.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gw-2.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gw-3.jpg" width="90"> | карусель (3) | Decembris sākas ar dāvanu 🎁 Izspēlēju 2 Ziemassvētku bumbas: vienu tev, otru draudzenei, kuru atzīmēsi. Kā pi… | ⏳ запланирован |
+| чт 03.12 12:45 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gw-st1.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| вс 06.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gw-st2.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| чт 10.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gw-st3.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| пн 14.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-slegts-post2.jpg" width="90"> | фото | Parastie pasūtījumi uz Ziemassvētkiem ir slēgti 🎄 Paldies par katru jūsu pasūtījumu! Ja vēl vajag dāvanu uz Z… | ⏳ запланирован |
+| пн 14.12 09:45 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-slegts-story2.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| чт 17.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-zs-1712-story.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| пт 18.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-jg-1812-story.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| вт 22.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-jg-2212-story.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| чт 24.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-xmas-card-v2.jpg" width="90"> | фото | Priecīgus Ziemassvētkus! 🕯️ Šis gads man bija pilns ar vaska smaržu, vēlām naktīm darbnīcā un jūsu siltajiem … | ⏳ запланирован |
+| чт 24.12 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-xmas-st1.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| пт 25.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-xmas-st2.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| чт 31.12 20:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-ny-st.jpg" width="90"> | сторис |  | ⏳ запланирован |
+
+## ✅ Уже вышло
+
+Пока ничего не опубликовано.

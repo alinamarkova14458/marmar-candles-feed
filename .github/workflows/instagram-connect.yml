@@ -1,0 +1,46 @@
+name: Instagram connect (one-time)
+
+# One-time login step (Meta "unified login"). Alina opens the Login URL from the app's
+# configuration, Meta redirects to https://marmarcandles.com/lv/?code=XXXX, she pastes XXXX here.
+# The code is single-use and expires in minutes; the never-expiring system user token
+# goes straight into the IG_ACCESS_TOKEN secret and is never printed.
+on:
+  workflow_dispatch:
+    inputs:
+      code:
+        description: "code= value from the marmarcandles.com address bar after allowing access"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  connect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exchange code and save token
+        env:
+          CODE: ${{ inputs.code }}
+          APP_ID: ${{ secrets.META_APP_ID }}
+          APP_SECRET: ${{ secrets.META_APP_SECRET }}
+          GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
+        run: |
+          set -euo pipefail
+          for v in APP_ID APP_SECRET GH_TOKEN; do [ -n "${!v}" ] || { echo "::error::secret for $v is missing"; exit 1; }; done
+          gh api "repos/$GITHUB_REPOSITORY/actions/secrets/public-key" --silent || { echo "::error::GH_SECRETS_PAT cannot write secrets (needs Secrets: Read and write)"; exit 1; }
+          CODE="${CODE%%#*}"  # Meta appends "#_=_" to the redirect
+          resp=$(curl -sS -G "https://graph.facebook.com/v27.0/oauth/access_token" \
+            --data-urlencode "client_id=$APP_ID" --data-urlencode "client_secret=$APP_SECRET" \
+            --data-urlencode "redirect_uri=https://marmarcandles.com/lv/" --data-urlencode "code=$CODE")
+          tok=$(printf '%s' "$resp" | python3 -c 'import sys,json; print(json.load(sys.stdin).get("access_token",""))')
+          if [ -z "$tok" ]; then
+            printf '%s' "$resp" | python3 -c 'import sys,json; e=json.load(sys.stdin).get("error",{}); print("Meta error:", e.get("code"), e.get("message"))'
+            exit 1
+          fi
+          echo "::add-mask::$tok"
+          printf '%s' "$resp" | python3 -c 'import sys,json; j=json.load(sys.stdin); print("token expires_in:", j.get("expires_in", "never"))'
+          curl -sS -G "https://graph.facebook.com/v27.0/me/assigned_instagram_accounts" \
+            --data-urlencode "fields=id,username" -H "Authorization: Bearer $tok" \
+            | python3 -c 'import sys,json; j=json.load(sys.stdin); print("Instagram accounts:", [a.get("username") for a in j.get("data", [])] or j)'
+          printf '%s' "$tok" | gh secret set IG_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY"
+          echo "Connected. IG_ACCESS_TOKEN saved."

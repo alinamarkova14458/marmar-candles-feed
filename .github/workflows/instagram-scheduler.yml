@@ -1,0 +1,61 @@
+name: Instagram scheduler
+
+# Publishes due MarMar posts from social/instagram/queue/*.json via the free Instagram API.
+# Posts reach the queue on master only through a pull request Alina merges (= her approval).
+# Until the IG_ACCESS_TOKEN secret exists it runs in DRY_RUN mode (logs only, changes nothing).
+on:
+  schedule:
+    - cron: "7,37 * * * *"   # GitHub often starts it hours late; posts may go out late
+  push:                      # right after Alina merges a post: publish if due, refresh PLAN.md
+    branches: [master]
+    paths: ["social/instagram/queue/**"]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only show what would be published"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: instagram-scheduler
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q requests
+      - name: Publish due posts
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          MANUAL_DRY: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        run: |
+          if [ -z "$IG_ACCESS_TOKEN" ] || [ "$MANUAL_DRY" = "true" ]; then export DRY_RUN=1; fi
+          python3 tools/instagram_scheduler.py
+      - name: Update plan page (PLAN.md)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRS_JSON: ${{ runner.temp }}/prs.json
+        run: |
+          gh pr list --repo "$GITHUB_REPOSITORY" --state open --json number,title,url,files > "$PRS_JSON" || echo "[]" > "$PRS_JSON"
+          python3 tools/instagram_plan.py
+      - name: Commit state
+        if: always()   # a failed post is still logged, so it is never published twice
+        run: |
+          if git status --porcelain social/instagram/published.json social/instagram/PLAN.md | grep -q .; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add social/instagram/  # published.json does not exist until the first post
+            git commit -qm "Instagram: published posts log and plan page"
+            git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q
+          fi
