@@ -26,7 +26,14 @@
 	}
 	var MON = ['janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī', 'oktobrī', 'novembrī', 'decembrī'];
 	var MS = ['janv.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
-	function plus(n) { var d = new Date(); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() + n); return d; }
+	// Atvaļinājums: šīs dienas neskaitās izgatavošanā (pasūtījumus pieņemam, izgatavojam no nākamās dienas).
+	var VAC = [[new Date(2026, 10, 26, 12), new Date(2026, 11, 3, 12)]];
+	function onVac(d) { return VAC.some(function (v) { return d >= v[0] && d <= v[1]; }); }
+	function plus(n) { var d = new Date(); d.setHours(12, 0, 0, 0); while (n > 0) { d.setDate(d.getDate() + 1); if (!onVac(d)) n--; } return d; }
+	try {
+		var now = new Date(), vb = document.querySelector('[data-mmd-vac]');
+		if (vb) { var a = new Date(2026, 10, 19), z = new Date(2026, 11, 3, 23, 59); vb.hidden = !(now >= a && now <= z); }
+	} catch (e) { /* nav kritiski */ }
 	try {
 		var from = addWork(plus(5), 1), to = addWork(plus(7), 2);
 		var txt = from.getMonth() === to.getMonth()

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.2.4
+ * Version:           1.2.5
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.2.4';
+	const VERSION = '1.2.5';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -118,14 +118,35 @@ final class MarMar_Checkout {
 		return $d;
 	}
 
+	/** Atvaļinājums: šīs dienas neskaitās izgatavošanā (pasūtījumus pieņemam). */
+	const VACATIONS = array( array( '2026-11-26', '2026-12-03' ) );
+
+	/** Izgatavošanas kalendārās dienas, izlaižot atvaļinājuma dienas. */
+	private static function add_make_days( DateTimeImmutable $d, $n ) {
+		while ( $n > 0 ) {
+			$d   = $d->modify( '+1 day' );
+			$ymd = $d->format( 'Y-m-d' );
+			$vac = false;
+			foreach ( self::VACATIONS as $v ) {
+				if ( $ymd >= $v[0] && $ymd <= $v[1] ) {
+					$vac = true;
+				}
+			}
+			if ( ! $vac ) {
+				$n--;
+			}
+		}
+		return $d;
+	}
+
 	/** @return array{from:string,to:string,express:bool} */
 	public static function estimate( $express ) {
 		$c    = self::cfg();
 		$make = $express ? $c['make_days_express'] : $c['make_days'];
 		$now  = new DateTimeImmutable( 'now', wp_timezone() );
 		// Изготовление — календарные дни, доставка в пакомат — рабочие.
-		$from = self::add_workdays( $now->modify( '+' . (int) $make[0] . ' days' ), $c['ship_days'][0] );
-		$to   = self::add_workdays( $now->modify( '+' . (int) $make[1] . ' days' ), $c['ship_days'][1] );
+		$from = self::add_workdays( self::add_make_days( $now, (int) $make[0] ), $c['ship_days'][0] );
+		$to   = self::add_workdays( self::add_make_days( $now, (int) $make[1] ), $c['ship_days'][1] );
 		return array( 'from' => $from->format( 'Y-m-d' ), 'to' => $to->format( 'Y-m-d' ), 'express' => (bool) $express );
 	}
 

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.10.4
+ * Version:           1.11.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.10.4';
+	const VER = '1.11.2';
 
 	/** Preces, kuras nerādām blokā “Bieži pērk kopā” (pakalpojumi, papildinājumi). */
 	const TOGETHER_EXCLUDE = array( 11691, 11024 ); // Dzintara putekļi, Individuālā dizaina izstrāde
@@ -30,6 +30,26 @@ final class MarMar_Design {
 		add_action( 'woocommerce_add_to_cart', array( __CLASS__, 'express_on_add' ), 10, 0 );
 		add_action( 'woocommerce_after_single_product_summary', array( __CLASS__, 'together' ), 12 );
 		add_filter( 'woocommerce_product_tabs', array( __CLASS__, 'tabs' ), 98 );
+		add_action( 'init', array( __CLASS__, 'schedule_purge' ) );
+		add_action( 'mmd_daily_purge', array( __CLASS__, 'daily_purge' ) );
+	}
+
+	/** Dienas, kad mainās augšējās joslas teksti (marmar-qa-fixes season_lines / atvaļinājums) — tad iztīrām LiteSpeed kešu. */
+	const PURGE_DATES = array( '2026-11-19', '2026-11-26', '2026-12-04', '2026-12-14', '2026-12-18', '2026-12-19', '2026-12-23', '2027-01-01' );
+
+	public static function schedule_purge() {
+		if ( ! wp_next_scheduled( 'mmd_daily_purge' ) ) {
+			$t = new DateTimeImmutable( 'tomorrow 00:05', wp_timezone() );
+			wp_schedule_event( $t->getTimestamp(), 'daily', 'mmd_daily_purge' );
+		}
+	}
+
+	public static function daily_purge() {
+		$today = wp_date( 'Y-m-d' );
+		if ( in_array( $today, self::PURGE_DATES, true ) && get_option( 'mmd_last_purge' ) !== $today ) {
+			do_action( 'litespeed_purge_all' );
+			update_option( 'mmd_last_purge', $today, false );
+		}
 	}
 
 	/**
