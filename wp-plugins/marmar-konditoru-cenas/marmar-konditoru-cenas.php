@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.5.5
+ * Version:           1.6.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.5.5';
+	const VER       = '1.6.0';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -65,6 +65,7 @@ final class MarMar_Konditoru_Cenas {
 		add_action( 'woocommerce_save_product_variation', array( __CLASS__, 'save_variation' ), 10, 2 );
 		add_action( 'admin_menu', array( __CLASS__, 'admin_menu' ) );
 		add_action( 'admin_post_mm_kc_decide', array( __CLASS__, 'admin_decide' ) );
+		add_action( 'admin_post_mm_kc_link_catalog', array( __CLASS__, 'admin_link_catalog' ) );
 		add_action( 'admin_post_mm_kc_settings', array( __CLASS__, 'admin_save_settings' ) );
 		add_filter( 'add_menu_classes', array( __CLASS__, 'menu_bubble' ) );
 	}
@@ -317,6 +318,24 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 .mmkc-tabbtn:after{content:"⌄";display:inline-block;margin-left:.4em;font-size:.9em;transform:translateY(-.15em)}
 .mmkc-tabbtn[aria-expanded=true]:after{transform:rotate(180deg) translateY(-.1em)}
 .mmkc-panel .mmkc-box{margin-bottom:0}
+.mmkc-uni{max-width:760px;margin:0 auto 2.5em;scroll-margin-top:90px}
+.mmkc-uni>span[id]{display:block;position:relative;top:-90px}
+.mmkc-hero{text-align:center;margin:0 0 1.2em}
+.mmkc-hero h2{font-size:clamp(22px,3vw,30px);line-height:1.25;margin:0 0 .8em}
+.mmkc-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:.7em}
+.mmkc-steps li{display:flex;flex-direction:column;align-items:center;gap:.45em;padding:1em .7em;border-radius:16px;background:#fff;border:1px solid #F0D9D6;font-size:.95em;line-height:1.35}
+.mmkc-steps b{display:flex;align-items:center;justify-content:center;width:2em;height:2em;border-radius:50%;background:#B9605F;color:#fff;font-size:1em}
+.mmkc-terms{margin:.2em 0 1.2em 1.1em}
+.mmkc-form select{width:100%;padding:.65em .8em;border:1px solid #E3C9C5;border-radius:10px;background:#fff;font-size:16px}
+.mmkc-form .mmkc-cat{padding:.8em 1em;border-radius:12px;background:#fff;border:1px solid #E3C9C5}
+.mmkc-catfields{display:flex;flex-direction:column;gap:.8em}
+.mmkc-catfields[hidden]{display:none}
+.mmkc-catfields fieldset{border:0;margin:0;padding:0}
+.mmkc-catfields legend{font-size:.95em;margin-bottom:.4em}
+.mmkc-types{display:flex;flex-wrap:wrap;gap:.35em 1.1em}
+.mmkc-types .mmkc-check{font-size:.92em}
+.mmkc-msg{margin:0 0 1em;padding:.8em 1em;border-radius:12px;background:#fff;border:1px solid #D68684}
+@media(max-width:689px){.mmkc-form{grid-template-columns:1fr}.mmkc-steps{grid-template-columns:1fr}.mmkc-steps li{flex-direction:row;justify-content:flex-start;text-align:left;padding:.7em .9em}.mmkc-form button{justify-self:stretch}}
 @media(max-width:640px){.mmkc-tabbtns{gap:.5em}.mmkc-tabbtn{flex:1 1 0;min-width:0;font-size:13.5px;padding:.55em .7em;white-space:nowrap}}
 .mm-toggle{margin:1em 0}
 .mm-toggle>summary{display:inline-block;list-style:none;cursor:pointer;padding:.75em 1.6em;border-radius:999px;background:#B9605F;color:#fff;font-weight:600;font-size:16px;line-height:1.3}
@@ -351,89 +370,97 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 
 	/* ---------------- Pieteikums ---------------- */
 
+	/** [marmar_konditoru_cenas] — tagad tā pati vienotā reģistrācija. */
 	public static function shortcode( $atts = array() ) {
-		$atts   = shortcode_atts( array( 'inline' => '0' ), (array) $atts );
-		$inline = '1' === $atts['inline'];
-		$s   = self::settings();
-		$out = '<div id="konditoru-cenas" class="mmkc-box">';
-		$uid = get_current_user_id();
+		return self::unified();
+	}
 
-		if ( isset( $_GET['mmkc'] ) && 'ok' === $_GET['mmkc'] ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$out .= '<div class="mmkc-msg"><strong>Paldies! Pieteikums saņemts.</strong> Es to izskatīšu tuvākajā laikā, un tu saņemsi e-pastu, kad konts būs apstiprināts.</div>';
-		} elseif ( isset( $_GET['mmkc_err'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$out .= '<div class="mmkc-msg">Lūdzu, aizpildi vārdu, e-pastu un Instagram vai mājaslapu, un apstiprini piekrišanu.</div>';
-		}
+	/** [marmar_konditori_pogas] — vecais nosaukums, tagad viena forma (agrāk divas pogas). */
+	public static function buttons() {
+		return self::unified();
+	}
 
-		if ( $uid && self::is_konditor( $uid ) ) {
-			$out .= '<h2>Tavs konditora konts ir aktīvs 🎂</h2><p>Veikalā tu redzi konditoru cenas. Minimālais pasūtījums — ' . esc_html( (int) $s['min_order'] ) . ' €. Rēķins pienāk automātiski uz e-pastu, un iepriekšējos pasūtījumus vari atkārtot sadaļā «Mans konts».</p>';
-			$out .= '<p><a class="mmkc-btn" href="' . esc_url( wc_get_page_permalink( 'shop' ) ) . '">Uz veikalu →</a></p></div>';
-			return $out;
-		}
-		if ( $uid && 'pending' === get_user_meta( $uid, self::U_STATUS, true ) ) {
-			$out .= '<h2>Pieteikums saņemts</h2><p>Tavs pieteikums gaida apstiprinājumu. Kad tas būs apstiprināts, saņemsi e-pastu.</p></div>';
-			return $out;
-		}
-
-		$out .= '<h2>Konditoru cenas</h2>';
-		$out .= '<p>Konditoriem un konditorejām man ir īpašas cenas <strong>kūku svecēm un ciparu svecēm</strong>.</p><ul>';
-		$out .= '<li>īpašas cenas, kas redzamas pēc pieslēgšanās;</li>';
-		$out .= '<li>minimālais pasūtījums — ' . esc_html( (int) $s['min_order'] ) . ' € (bez piegādes);</li>';
-		$out .= '<li>apmaksa uzreiz internetbankā (Paysera) vai pēc rēķina, kas pienāk uz e-pastu;</li>';
-		$out .= '<li>iepriekšējo pasūtījumu var atkārtot ar vienu klikšķi sadaļā «Mans konts»;</li>';
-		$out .= '<li>piegāde uz pakomātu 2,50 €, no 50 € — bez maksas.</li></ul>';
-		$out .= '<p>Piesakies — es apstiprināšu pieteikumu, un tu saņemsi e-pastu ar pieeju.</p>';
-
-		$u    = $uid ? wp_get_current_user() : null;
-		$open = isset( $_GET['mmkc_err'] ) ? ' open' : ''; // phpcs:ignore WordPress.Security.NonceVerification
-		ob_start();
-		?>
-		<?php if ( ! $inline ) : ?>
-		<details class="mm-toggle"<?php echo $open; // phpcs:ignore ?>>
-		<summary>Pieteikties konditora kontam</summary>
-		<?php endif; ?>
-		<form class="mmkc-form" method="post" action="">
-			<?php wp_nonce_field( 'mm_kc_apply', 'mm_kc_nonce' ); ?>
-			<input type="hidden" name="mm_kc_apply" value="1">
-			<label class="mmkc-hp" aria-hidden="true">Mājaslapa2<input type="text" name="mm_kc_url2" tabindex="-1" autocomplete="off"></label>
-			<label>Vārds, uzvārds *<input type="text" name="mm_kc_name" required value="<?php echo esc_attr( $u ? trim( $u->first_name . ' ' . $u->last_name ) : '' ); ?>"></label>
-			<label>E-pasts *<input type="email" name="mm_kc_email" required value="<?php echo esc_attr( $u ? $u->user_email : '' ); ?>"></label>
-			<label>Tālrunis<input type="tel" name="mm_kc_phone"></label>
-			<label>Instagram vai mājaslapa *<input type="text" name="mm_kc_insta" required placeholder="@mana.konditoreja"></label>
-			<label>Uzņēmuma nosaukums<input type="text" name="mm_kc_company"></label>
-			<label>Reģ. nr.<input type="text" name="mm_kc_regnr"></label>
-			<label class="mmkc-full">Komentārs<textarea name="mm_kc_msg" rows="3" placeholder="Piemēram, cik sveču parasti vajag mēnesī"></textarea></label>
-			<label class="mmkc-full mmkc-check"><input type="checkbox" name="mm_kc_consent" value="1" required> <span>Piekrītu, ka MarMar Candles apstrādā šos datus, lai izskatītu pieteikumu un izveidotu konditora kontu.</span></label>
-			<button type="submit">Nosūtīt pieteikumu</button>
-		</form>
-		<?php if ( ! $inline ) : ?>
-		</details>
-		<?php endif; ?>
-		<?php
-		$out .= ob_get_clean() . '</div>';
-		return $out;
+	private static function err_msgs() {
+		return array(
+			'1'       => 'Lūdzu, aizpildi vārdu, e-pastu un Instagram vai mājaslapu, un apstiprini piekrišanu.',
+			'city'    => 'Lai parādītos katalogā, izvēlies pilsētu.',
+			'photo'   => 'Lai parādītos katalogā, pievieno tortes foto (JPG, PNG vai WebP, līdz 5 MB).',
+			'account' => 'Neizdevās izveidot kontu. Lūdzu, pamēģini vēlreiz vai raksti mums e-pastā.',
+		);
 	}
 
 	/**
-	 * Divas pogas lapas augšā: «Reģistrēties katalogā» un «Saņemt īpašas cenas».
-	 * Katra atver savu paneli (vienlaikus atvērts tikai viens).
+	 * Viena reģistrācija konditoriem: konts + īpašas cenas + (pēc izvēles) vieta katalogā.
 	 */
-	public static function buttons() {
-		$cenas   = self::shortcode( array( 'inline' => '1' ) );
-		$katalogs = shortcode_exists( 'marmar_konditori_forma' ) ? do_shortcode( '[marmar_konditori_forma]' ) : '';
-		$open    = '';
-		if ( isset( $_GET['mmkc'] ) || isset( $_GET['mmkc_err'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$open = 'cenas';
-		} elseif ( isset( $_GET['mmk'] ) || isset( $_GET['mmk_err'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			$open = 'katalogs';
+	public static function unified() {
+		do_action( 'litespeed_control_set_nocache', 'marmar-konditoru-cenas form' );
+		$s   = self::settings();
+		$uid = get_current_user_id();
+		$out = '<div id="konditoru-cenas" class="mmkc-uni"><span id="mmkc-p-katalogs"></span><span id="mmkc-p-cenas"></span><span id="pieteikties"></span>';
+
+		if ( $uid && self::is_konditor( $uid ) ) {
+			$out .= '<div class="mmkc-box"><h2>Tavs konditora konts ir aktīvs 🎂</h2><p>Veikalā tu redzi īpašās cenas kūku svecēm un ciparu svecēm. Minimālais pasūtījums — ' . esc_html( (int) $s['min_order'] ) . ' € (bez piegādes). Rēķins pienāk automātiski uz e-pastu, iepriekšējo pasūtījumu vari atkārtot ar vienu klikšķi sadaļā «Mans konts».</p>';
+			$out .= '<p><a class="mmkc-btn" href="' . esc_url( wc_get_page_permalink( 'shop' ) ) . '">Uz veikalu →</a></p></div></div>';
+			return $out;
 		}
-		$out  = '<div class="mmkc-tabs" data-mmkc-tabs>';
-		$out .= '<div class="mmkc-tabbtns">';
-		$out .= '<button type="button" class="mmkc-tabbtn" data-mmkc-tab="katalogs" aria-expanded="' . ( 'katalogs' === $open ? 'true' : 'false' ) . '" aria-controls="mmkc-p-katalogs">Reģistrēties katalogā</button>';
-		$out .= '<button type="button" class="mmkc-tabbtn" data-mmkc-tab="cenas" aria-expanded="' . ( 'cenas' === $open ? 'true' : 'false' ) . '" aria-controls="mmkc-p-cenas">Saņemt īpašas cenas</button>';
-		$out .= '</div>';
-		$out .= '<div class="mmkc-panel" id="mmkc-p-katalogs" data-mmkc-panel="katalogs"' . ( 'katalogs' === $open ? '' : ' hidden' ) . '><div class="mmkc-box">' . $katalogs . '</div></div>';
-		$out .= '<div class="mmkc-panel" id="mmkc-p-cenas" data-mmkc-panel="cenas"' . ( 'cenas' === $open ? '' : ' hidden' ) . '>' . $cenas . '</div>';
-		$out .= '</div>';
+		if ( isset( $_GET['mmkc'] ) && 'ok' === $_GET['mmkc'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$out .= '<div class="mmkc-box mmkc-done" role="status"><h2>Paldies! Pieteikums saņemts 🎂</h2><p>Mēs to izskatīsim tuvākajā laikā. Kad konts būs apstiprināts, saņemsi e-pastu ar piekļuvi un saiti paroles iestatīšanai.</p></div></div>';
+			return $out;
+		}
+		if ( $uid && 'pending' === get_user_meta( $uid, self::U_STATUS, true ) ) {
+			$out .= '<div class="mmkc-box"><h2>Pieteikums saņemts</h2><p>Tavs pieteikums gaida apstiprinājumu. Kad tas būs apstiprināts, saņemsi e-pastu.</p></div></div>';
+			return $out;
+		}
+
+		$out .= '<div class="mmkc-hero"><h2>Viena reģistrācija — īpašas cenas un vieta konditoru katalogā</h2>';
+		$out .= '<ol class="mmkc-steps"><li><b>1</b><span>Aizpildi formu — izveidojam kontu</span></li><li><b>2</b><span>Mēs apstiprinām pieteikumu</span></li><li><b>3</b><span>Īpašas cenas un vieta katalogā</span></li></ol></div>';
+		$out .= '<div class="mmkc-box">';
+		$out .= '<ul class="mmkc-terms">';
+		$out .= '<li><strong>Īpašas cenas</strong> kūku svecēm un ciparu svecēm — redzamas pēc pieslēgšanās;</li>';
+		$out .= '<li>minimālais pasūtījums — ' . esc_html( (int) $s['min_order'] ) . ' € (bez piegādes);</li>';
+		$out .= '<li>piegāde uz pakomātu 2,50 €, no 50 € — bez maksas;</li>';
+		$out .= '<li>rēķins automātiski pienāk uz e-pastu;</li>';
+		$out .= '<li>iepriekšējo pasūtījumu var atkārtot ar vienu klikšķi;</li>';
+		$out .= '<li>bez maksas — vieta konditoru katalogā un kopīgs ieraksts Instagram.</li></ul>';
+
+		$err  = isset( $_GET['mmkc_err'] ) ? sanitize_key( wp_unslash( $_GET['mmkc_err'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+		$msgs = self::err_msgs();
+		if ( $err ) {
+			$out .= '<div class="mmkc-msg" role="alert">' . esc_html( $msgs[ $err ] ?? $msgs['1'] ) . '</div>';
+		}
+		$u      = $uid ? wp_get_current_user() : null;
+		$cities = class_exists( 'MarMar_Konditori' ) ? MarMar_Konditori::cities() : array();
+		$types  = class_exists( 'MarMar_Konditori' ) ? MarMar_Konditori::types() : array();
+		ob_start();
+		?>
+		<form class="mmkc-form" method="post" enctype="multipart/form-data" action="">
+			<?php wp_nonce_field( 'mm_kc_apply', 'mm_kc_nonce' ); ?>
+			<input type="hidden" name="mm_kc_apply" value="1">
+			<label class="mmkc-hp" aria-hidden="true">Mājaslapa2<input type="text" name="mm_kc_url2" tabindex="-1" autocomplete="off"></label>
+			<label>Vārds, uzvārds *<input type="text" name="mm_kc_name" required maxlength="80" autocomplete="name" value="<?php echo esc_attr( $u ? trim( $u->first_name . ' ' . $u->last_name ) : '' ); ?>"></label>
+			<label>Konditorejas nosaukums<input type="text" name="mm_kc_brand" maxlength="80" placeholder="ja ir"></label>
+			<label>E-pasts *<input type="email" name="mm_kc_email" required maxlength="120" autocomplete="email" value="<?php echo esc_attr( $u ? $u->user_email : '' ); ?>"></label>
+			<label>Tālrunis<input type="tel" name="mm_kc_phone" maxlength="30" autocomplete="tel" placeholder="+371 …"></label>
+			<label>Instagram vai mājaslapa *<input type="text" name="mm_kc_insta" required maxlength="200" placeholder="@mana.konditoreja"></label>
+			<label>Pilsēta<select name="mm_kc_city"><option value="">— izvēlies —</option><?php foreach ( $cities as $c ) : ?><option><?php echo esc_html( $c ); ?></option><?php endforeach; ?></select></label>
+			<label>Uzņēmuma nosaukums<input type="text" name="mm_kc_company" maxlength="120"></label>
+			<label>Reģ. nr.<input type="text" name="mm_kc_regnr" maxlength="40"></label>
+			<label class="mmkc-full">Komentārs<textarea name="mm_kc_msg" rows="2" maxlength="600" placeholder="Piemēram, cik sveču parasti vajag mēnesī"></textarea></label>
+
+			<label class="mmkc-full mmkc-check mmkc-cat"><input type="checkbox" name="mm_kc_catalog" value="1" checked data-mmkc-cat> <span><strong>Rādīt mani konditoru katalogā</strong> — klienti atradīs tavas tortes, un sveces tām pasūtīs šeit. Piekrītu, ka publicē manu vārdu vai konditorejas nosaukumu, pilsētu, foto un Instagram/tālruni/mājaslapu. Datus var mainīt vai dzēst jebkurā brīdī.</span></label>
+			<div class="mmkc-full mmkc-catfields" data-mmkc-catfields>
+				<?php if ( $types ) : ?>
+				<fieldset><legend>Ko gatavo?</legend><div class="mmkc-types"><?php foreach ( $types as $t ) : ?><label class="mmkc-check"><input type="checkbox" name="mm_kc_types[]" value="<?php echo esc_attr( $t ); ?>"> <span><?php echo esc_html( $t ); ?></span></label><?php endforeach; ?></div></fieldset>
+				<?php endif; ?>
+				<label>Tortes foto katalogam * <small>(JPG, PNG vai WebP, līdz 5 MB)</small><input type="file" name="mm_kc_photo" accept="image/jpeg,image/png,image/webp" data-mmkc-photo required></label>
+			</div>
+
+			<label class="mmkc-full mmkc-check"><input type="checkbox" name="mm_kc_consent" value="1" required> <span>Piekrītu, ka MarMar Candles apstrādā šos datus, lai izskatītu pieteikumu un izveidotu konditora kontu. *</span></label>
+			<button type="submit">Reģistrēties</button>
+		</form>
+		<script>(function(){var c=document.querySelector('[data-mmkc-cat]'),f=document.querySelector('[data-mmkc-catfields]'),ph=document.querySelector('[data-mmkc-photo]');if(!c||!f)return;function u(){f.hidden=!c.checked;if(ph)ph.required=c.checked;}c.addEventListener('change',u);u();})();</script>
+		<?php
+		$out .= ob_get_clean() . '</div></div>';
 		return $out;
 	}
 
@@ -463,7 +490,7 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 		$out .= '<h2>Torte un sveces — vienuviet</h2>';
 		$out .= '<p>Mūsu katalogā — konditori un konditorejas visā Latvijā. Atrodiet torti savā pilsētā, un sveces tai pasūtiet šeit.</p>';
 		$out .= '<a class="mmh-btn mmkp-btn" href="' . esc_url( $page ) . '">Atrast konditoru →</a>';
-		$out .= '<p class="mmkp-pro">🎂 <strong>Esat konditors?</strong> <a href="' . esc_url( $page . '#mmkc-p-katalogs' ) . '">Reģistrējieties katalogā bez maksas</a> vai <a href="' . esc_url( $page . '#mmkc-p-cenas' ) . '">saņemiet īpašas cenas</a>.</p>';
+		$out .= '<p class="mmkp-pro">🎂 <strong>Esat konditors?</strong> <a href="' . esc_url( $page . '#konditoru-cenas' ) . '">Viena reģistrācija — īpašas cenas un vieta katalogā →</a></p>';
 		$out .= '</div>';
 		if ( $imgs ) {
 			$out .= '<div class="mmkp-photos">' . $imgs . '</div>';
@@ -479,27 +506,55 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 		if ( ! isset( $_POST['mm_kc_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mm_kc_nonce'] ) ), 'mm_kc_apply' ) ) {
 			return;
 		}
-		$back = remove_query_arg( array( 'mmkc', 'mmkc_err' ), wp_get_referer() ? wp_get_referer() : home_url( '/konditori/' ) );
+		$ref  = wp_validate_redirect( wp_get_raw_referer(), '' );
+		$back = remove_query_arg( array( 'mmkc', 'mmkc_err' ), $ref ? $ref : home_url( '/lv/konditori/' ) );
 		$back = strtok( $back, '#' );
+		$fail = function ( $code ) use ( $back ) {
+			wp_safe_redirect( add_query_arg( 'mmkc_err', $code, $back ) . '#konditoru-cenas' );
+			exit;
+		};
 		if ( ! empty( $_POST['mm_kc_url2'] ) ) { // honeypot
 			wp_safe_redirect( add_query_arg( 'mmkc', 'ok', $back ) . '#konditoru-cenas' );
 			exit;
 		}
-		$name  = sanitize_text_field( wp_unslash( $_POST['mm_kc_name'] ?? '' ) );
-		$email = sanitize_email( wp_unslash( $_POST['mm_kc_email'] ?? '' ) );
-		$insta = sanitize_text_field( wp_unslash( $_POST['mm_kc_insta'] ?? '' ) );
+		$name    = sanitize_text_field( wp_unslash( $_POST['mm_kc_name'] ?? '' ) );
+		$email   = sanitize_email( wp_unslash( $_POST['mm_kc_email'] ?? '' ) );
+		$insta   = sanitize_text_field( wp_unslash( $_POST['mm_kc_insta'] ?? '' ) );
+		$catalog = ! empty( $_POST['mm_kc_catalog'] );
+		$city    = sanitize_text_field( wp_unslash( $_POST['mm_kc_city'] ?? '' ) );
 		if ( ! $name || ! is_email( $email ) || ! $insta || empty( $_POST['mm_kc_consent'] ) ) {
-			wp_safe_redirect( add_query_arg( 'mmkc_err', '1', $back ) . '#konditoru-cenas' );
-			exit;
+			$fail( '1' );
+		}
+		$photo = null;
+		if ( $catalog ) {
+			if ( class_exists( 'MarMar_Konditori' ) && ! in_array( $city, MarMar_Konditori::cities(), true ) ) {
+				$fail( 'city' );
+			}
+			$f = $_FILES['mm_kc_photo'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			if ( ! $f || UPLOAD_ERR_OK !== (int) $f['error'] || (int) $f['size'] > 5 * MB_IN_BYTES ) {
+				$fail( 'photo' );
+			}
+			$check = wp_check_filetype_and_ext( $f['tmp_name'], $f['name'], array( 'jpg|jpeg|jpe' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp' ) );
+			if ( empty( $check['type'] ) || ! @getimagesize( $f['tmp_name'] ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors
+				$fail( 'photo' );
+			}
+			$photo = $check['ext'];
+		}
+		$types = array();
+		if ( class_exists( 'MarMar_Konditori' ) ) {
+			$types = array_values( array_intersect( MarMar_Konditori::types(), array_map( 'sanitize_text_field', (array) wp_unslash( $_POST['mm_kc_types'] ?? array() ) ) ) );
 		}
 		$data = array(
 			'name'    => $name,
+			'brand'   => sanitize_text_field( wp_unslash( $_POST['mm_kc_brand'] ?? '' ) ),
 			'email'   => $email,
-			'phone'   => sanitize_text_field( wp_unslash( $_POST['mm_kc_phone'] ?? '' ) ),
+			'phone'   => preg_replace( '/[^0-9+ ()-]/', '', (string) wp_unslash( $_POST['mm_kc_phone'] ?? '' ) ),
 			'insta'   => $insta,
+			'city'    => $city,
 			'company' => sanitize_text_field( wp_unslash( $_POST['mm_kc_company'] ?? '' ) ),
 			'regnr'   => sanitize_text_field( wp_unslash( $_POST['mm_kc_regnr'] ?? '' ) ),
 			'msg'     => sanitize_textarea_field( wp_unslash( $_POST['mm_kc_msg'] ?? '' ) ),
+			'catalog' => $catalog ? 'yes' : 'no',
 			'date'    => current_time( 'mysql' ),
 		);
 
@@ -521,38 +576,107 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 					)
 				);
 				if ( is_wp_error( $uid ) ) {
-					wp_safe_redirect( add_query_arg( 'mmkc_err', '1', $back ) . '#konditoru-cenas' );
-					exit;
+					$fail( 'account' );
 				}
 			}
 		}
-		if ( self::is_konditor( $uid ) ) {
+		$already = self::is_konditor( $uid );
+		if ( ! $already ) {
+			update_user_meta( $uid, self::U_DATA, $data );
+			update_user_meta( $uid, self::U_STATUS, 'pending' );
+			if ( $data['phone'] ) {
+				update_user_meta( $uid, 'billing_phone', $data['phone'] );
+			}
+			if ( $data['company'] ) {
+				update_user_meta( $uid, 'billing_company', $data['company'] );
+			}
+		}
+
+		$cat_id = 0;
+		if ( $catalog && ! self::catalog_post( $uid ) ) {
+			$cat_id = self::create_catalog_post( $uid, $data, $types, $photo );
+		}
+
+		$s         = self::settings();
+		$admin_url = admin_url( 'admin.php?page=mm-konditoru-cenas' );
+		if ( $already && ! $cat_id ) {
 			wp_safe_redirect( add_query_arg( 'mmkc', 'ok', $back ) . '#konditoru-cenas' );
 			exit;
 		}
-		update_user_meta( $uid, self::U_DATA, $data );
-		update_user_meta( $uid, self::U_STATUS, 'pending' );
-		if ( $data['phone'] ) {
-			update_user_meta( $uid, 'billing_phone', $data['phone'] );
+		$body  = ( $already ? "Apstiprināts konditors vēlas vietu katalogā:\n\n" : "Jauns konditora pieteikums:\n\n" );
+		$body .= "Vārds: {$data['name']}\nKonditoreja: {$data['brand']}\nE-pasts: {$data['email']}\nTālrunis: {$data['phone']}\nInstagram / mājaslapa: {$data['insta']}\nPilsēta: {$data['city']}\nUzņēmums: {$data['company']} {$data['regnr']}\nKomentārs: {$data['msg']}\nKatalogā: " . ( $catalog ? 'jā' : 'nē' ) . "\n\n";
+		$body .= $already ? 'Publicēt kartīti: ' . admin_url( 'post.php?post=' . $cat_id . '&action=edit' ) . "\n" : "Apstiprināt vai noraidīt: {$admin_url}\n";
+		wp_mail( $s['notify'], ( $already ? 'Konditors katalogam — ' : 'Jauns konditora pieteikums — ' ) . $data['name'], $body, array( 'Reply-To: ' . $email ) );
+		if ( ! $already ) {
+			wp_mail(
+				$email,
+				'MarMar Candles: konditora pieteikums saņemts',
+				'Sveiki, ' . current( explode( ' ', $name ) ) . "!\n\nPaldies par pieteikumu. Mēs to izskatīsim tuvākajā laikā. Kad konts būs apstiprināts, saņemsi e-pastu ar piekļuvi un saiti paroles iestatīšanai" . ( $catalog ? ', un tava kartīte parādīsies konditoru katalogā' : '' ) . ".\n\nAr cieņu,\nMarMar Candles\nhttps://marmarcandles.com"
+			);
 		}
-		if ( $data['company'] ) {
-			update_user_meta( $uid, 'billing_company', $data['company'] );
-		}
-
-		$s = self::settings();
-		$admin_url = admin_url( 'admin.php?page=mm-konditoru-cenas' );
-		$body  = "Jauns konditora pieteikums:\n\n";
-		$body .= "Vārds: {$data['name']}\nE-pasts: {$data['email']}\nTālrunis: {$data['phone']}\nInstagram / mājaslapa: {$data['insta']}\nUzņēmums: {$data['company']} {$data['regnr']}\nKomentārs: {$data['msg']}\n\n";
-		$body .= "Apstiprināt vai noraidīt: {$admin_url}\n";
-		wp_mail( $s['notify'], 'Jauns konditora pieteikums — ' . $data['name'], $body );
-		wp_mail(
-			$email,
-			'MarMar Candles: konditora pieteikums saņemts',
-			"Sveiki, " . current( explode( ' ', $name ) ) . "!\n\nPaldies par pieteikumu. Es to izskatīšu tuvākajā laikā, un tu saņemsi e-pastu, kad konts būs apstiprināts.\n\nAr cieņu,\nAlīna, MarMar Candles\nhttps://marmarcandles.com"
-		);
-
 		wp_safe_redirect( add_query_arg( 'mmkc', 'ok', $back ) . '#konditoru-cenas' );
 		exit;
+	}
+
+	/** Kataloga kartīte (mm_konditors), kas piesaistīta lietotājam. */
+	public static function catalog_post( $uid ) {
+		$pid = (int) get_user_meta( $uid, 'mm_kc_catalog', true );
+		if ( $pid && get_post( $pid ) && 'trash' !== get_post_status( $pid ) ) {
+			return $pid;
+		}
+		$u = get_userdata( $uid );
+		if ( ! $u || ! post_type_exists( 'mm_konditors' ) ) {
+			return 0;
+		}
+		$q = get_posts( array( 'post_type' => 'mm_konditors', 'post_status' => array( 'publish', 'pending', 'draft' ), 'numberposts' => 1, 'fields' => 'ids', 'meta_key' => '_mmk_email', 'meta_value' => $u->user_email ) ); // phpcs:ignore
+		if ( $q ) {
+			update_user_meta( $uid, 'mm_kc_catalog', (int) $q[0] );
+			update_post_meta( (int) $q[0], '_mmk_user', $uid );
+			return (int) $q[0];
+		}
+		return 0;
+	}
+
+	private static function create_catalog_post( $uid, $data, $types, $photo_ext ) {
+		if ( ! post_type_exists( 'mm_konditors' ) ) {
+			return 0;
+		}
+		$title = $data['brand'] ? $data['brand'] : $data['name'];
+		$pid   = wp_insert_post( array( 'post_type' => 'mm_konditors', 'post_status' => 'pending', 'post_title' => $title, 'post_content' => '' ), true );
+		if ( is_wp_error( $pid ) ) {
+			return 0;
+		}
+		$raw = trim( $data['insta'] );
+		$ig  = '';
+		$web = '';
+		if ( preg_match( '#^(https?://)?(www\.)?instagram\.com/#i', $raw ) || ! preg_match( '#[./]#', ltrim( $raw, '@' ) ) || 0 === strpos( $raw, '@' ) ) {
+			$ig = class_exists( 'MarMar_Konditori' ) ? MarMar_Konditori::ig_handle( $raw ) : ltrim( $raw, '@' );
+		} else {
+			$web = esc_url_raw( preg_match( '#^https?://#i', $raw ) ? $raw : 'https://' . $raw );
+		}
+		update_post_meta( $pid, '_mmk_city', $data['city'] );
+		update_post_meta( $pid, '_mmk_types', $types );
+		update_post_meta( $pid, '_mmk_instagram', $ig );
+		update_post_meta( $pid, '_mmk_phone', trim( $data['phone'] ) );
+		update_post_meta( $pid, '_mmk_website', $web );
+		update_post_meta( $pid, '_mmk_email', $data['email'] );
+		update_post_meta( $pid, '_mmk_collab', 'yes' );
+		update_post_meta( $pid, '_mmk_consent_at', current_time( 'mysql' ) );
+		update_post_meta( $pid, '_mmk_user', $uid );
+		update_post_meta( $pid, '_mmk_notified', 'via-konditoru-cenas' ); // apstiprinājuma e-pastu sūta šis spraudnis
+		update_user_meta( $uid, 'mm_kc_catalog', $pid );
+		if ( $photo_ext ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			require_once ABSPATH . 'wp-admin/includes/media.php';
+			require_once ABSPATH . 'wp-admin/includes/image.php';
+			$_FILES['mm_kc_photo']['name'] = sanitize_file_name( 'konditors-' . sanitize_title( $title ) . '-torte.' . $photo_ext );
+			$att = media_handle_upload( 'mm_kc_photo', $pid, array( 'post_title' => $title . ' — torte' ) );
+			if ( ! is_wp_error( $att ) ) {
+				set_post_thumbnail( $pid, $att );
+				update_post_meta( $att, '_wp_attachment_image_alt', $title . ' — torte' );
+			}
+		}
+		return $pid;
 	}
 
 	private static function unique_login( $email ) {
@@ -687,10 +811,10 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 				echo '<p>—</p>';
 				continue;
 			}
-			echo '<table class="widefat striped"><thead><tr><th>Vārds</th><th>E-pasts</th><th>Instagram / mājaslapa</th><th>Uzņēmums</th><th>Komentārs</th><th>Datums</th><th></th></tr></thead><tbody>';
+			echo '<table class="widefat striped"><thead><tr><th>Vārds</th><th>E-pasts</th><th>Instagram / mājaslapa</th><th>Uzņēmums</th><th>Komentārs</th><th>Katalogā</th><th>Datums</th><th></th></tr></thead><tbody>';
 			foreach ( $users as $u ) {
 				$d = (array) get_user_meta( $u->ID, self::U_DATA, true );
-				echo '<tr><td>' . esc_html( $d['name'] ?? $u->display_name ) . '</td><td>' . esc_html( $u->user_email ) . '</td><td>' . esc_html( $d['insta'] ?? '' ) . '</td><td>' . esc_html( trim( ( $d['company'] ?? '' ) . ' ' . ( $d['regnr'] ?? '' ) ) ) . '</td><td>' . esc_html( $d['msg'] ?? '' ) . '</td><td>' . esc_html( $d['date'] ?? '' ) . '</td><td>';
+				echo '<tr><td>' . esc_html( $d['name'] ?? $u->display_name ) . '</td><td>' . esc_html( $u->user_email ) . '</td><td>' . esc_html( $d['insta'] ?? '' ) . '</td><td>' . esc_html( trim( ( $d['company'] ?? '' ) . ' ' . ( $d['regnr'] ?? '' ) ) ) . '</td><td>' . esc_html( $d['msg'] ?? '' ) . '</td><td>' . self::catalog_cell( $u->ID ) . '</td><td>' . esc_html( $d['date'] ?? '' ) . '</td><td>';
 				foreach ( array( 'approve' => 'Apstiprināt', 'reject' => 'Noraidīt' ) as $act => $lbl ) {
 					if ( ( 'approve' === $act && 'approved' === $status ) || ( 'reject' === $act && 'rejected' === $status ) ) {
 						continue;
@@ -702,6 +826,12 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 			}
 			echo '</tbody></table>';
 		}
+		if ( isset( $_GET['linked'] ) ) { // phpcs:ignore
+			echo '<div class="notice notice-success"><p>' . implode( '<br>', array_map( 'esc_html', (array) get_option( 'mm_kc_link_log', array() ) ) ) . '</p></div>';
+		}
+		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin:1em 0">';
+		wp_nonce_field( 'mm_kc_link_catalog' );
+		echo '<input type="hidden" name="action" value="mm_kc_link_catalog"><button class="button" data-mmkc-link>Izveidot kontus kataloga konditoriem (bez e-pasta)</button></form>';
 		if ( class_exists( 'MarMar_KC_Box' ) ) {
 			MarMar_KC_Box::admin_section();
 		}
@@ -714,6 +844,65 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 		echo '</table>';
 		submit_button( 'Saglabāt' );
 		echo '</form></div>';
+	}
+
+	/**
+	 * Vienreizēji: katram publicētam kataloga konditoram — konts ar īpašām cenām (bez e-pasta).
+	 * Ja konts ar šo e-pastu jau ir — tikai sasaistām un apstiprinām.
+	 */
+	public static function admin_link_catalog() {
+		if ( ! current_user_can( 'manage_woocommerce' ) || ! check_admin_referer( 'mm_kc_link_catalog' ) ) {
+			wp_die( 'Nav atļauts.' );
+		}
+		$log = array();
+		$ids = get_posts( array( 'post_type' => 'mm_konditors', 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids' ) );
+		foreach ( $ids as $pid ) {
+			$email = sanitize_email( (string) get_post_meta( $pid, '_mmk_email', true ) );
+			$title = get_the_title( $pid );
+			if ( ! is_email( $email ) ) {
+				$log[] = $title . ': nav e-pasta';
+				continue;
+			}
+			$u = get_user_by( 'email', $email );
+			if ( $u ) {
+				$uid = $u->ID;
+				$was = 'esošs konts';
+			} else {
+				$uid = wp_insert_user( array( 'user_login' => self::unique_login( $email ), 'user_email' => $email, 'user_pass' => wp_generate_password( 20 ), 'first_name' => $title, 'role' => 'customer' ) );
+				if ( is_wp_error( $uid ) ) {
+					$log[] = $title . ': kļūda — ' . $uid->get_error_message();
+					continue;
+				}
+				$u   = get_userdata( $uid );
+				$was = 'jauns konts';
+			}
+			update_user_meta( $uid, 'mm_kc_catalog', $pid );
+			update_post_meta( $pid, '_mmk_user', $uid );
+			if ( ! self::is_konditor( $uid ) ) {
+				$u->add_role( self::ROLE );
+				update_user_meta( $uid, self::U_STATUS, 'approved' );
+				if ( ! get_user_meta( $uid, self::U_DATA, true ) ) {
+					$ig = (string) get_post_meta( $pid, '_mmk_instagram', true );
+					update_user_meta( $uid, self::U_DATA, array( 'name' => $title, 'brand' => $title, 'email' => $email, 'phone' => (string) get_post_meta( $pid, '_mmk_phone', true ), 'insta' => $ig ? '@' . $ig : (string) get_post_meta( $pid, '_mmk_website', true ), 'city' => (string) get_post_meta( $pid, '_mmk_city', true ), 'msg' => 'No kataloga (konts izveidots automātiski, e-pasts nav sūtīts)', 'catalog' => 'yes', 'date' => current_time( 'mysql' ) ) );
+				}
+				$log[] = $title . ': ' . $was . ', īpašas cenas ieslēgtas';
+			} else {
+				$log[] = $title . ': ' . $was . ' (jau konditors), sasaistīts';
+			}
+		}
+		update_option( 'mm_kc_link_log', $log, false );
+		wp_safe_redirect( admin_url( 'admin.php?page=mm-konditoru-cenas&linked=1' ) );
+		exit;
+	}
+
+	private static function catalog_cell( $uid ) {
+		$cat = self::catalog_post( $uid );
+		if ( ! $cat ) {
+			return '—';
+		}
+		$st = get_post_status( $cat );
+		$lb = array( 'publish' => 'publicēta', 'pending' => 'gaida', 'draft' => 'melnraksts' );
+		return '<a href="' . esc_url( admin_url( 'post.php?post=' . $cat . '&action=edit' ) ) . '">' . esc_html( $lb[ $st ] ?? $st ) . '</a>';
 	}
 
 	public static function admin_save_settings() {
@@ -745,17 +934,30 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 		if ( 'approve' === $do ) {
 			$u->add_role( self::ROLE );
 			update_user_meta( $uid, self::U_STATUS, 'approved' );
+			$cat      = self::catalog_post( $uid );
+			$cat_line = '';
+			if ( $cat ) {
+				update_post_meta( $cat, '_mmk_notified', 'via-konditoru-cenas' );
+				if ( 'publish' !== get_post_status( $cat ) ) {
+					wp_update_post( array( 'ID' => $cat, 'post_status' => 'publish' ) );
+				}
+				$cat_line = "\nTava kartīte ir publicēta konditoru katalogā: " . home_url( '/lv/konditori/' ) . "\n";
+			}
 			$key  = get_password_reset_key( $u );
 			$link = is_wp_error( $key ) ? wc_get_page_permalink( 'myaccount' ) : add_query_arg( array( 'key' => $key, 'id' => $uid ), wc_get_endpoint_url( 'lost-password', '', wc_get_page_permalink( 'myaccount' ) ) );
 			$name = $u->first_name ? $u->first_name : $u->display_name;
 			wp_mail(
 				$u->user_email,
 				'MarMar Candles: tavs konditora konts ir apstiprināts 🎂',
-				"Sveiki, {$name}!\n\nTavs konditora konts ir apstiprināts. Pēc pieslēgšanās veikalā redzēsi konditoru cenas.\n\nPieslēgties: " . wc_get_page_permalink( 'myaccount' ) . "\nJa vēl neesi iestatījis paroli, iestati to šeit: {$link}\n\nMinimālais pasūtījums — " . (int) self::settings()['min_order'] . " € (bez piegādes). Rēķins pienāks automātiski uz e-pastu.\n\nAr cieņu,\nAlīna, MarMar Candles"
+				"Sveiki, {$name}!\n\nTavs konditora konts ir apstiprināts. Pēc pieslēgšanās veikalā redzēsi īpašās cenas kūku svecēm un ciparu svecēm.\n{$cat_line}\nIestati paroli: {$link}\nPieslēgties: " . wc_get_page_permalink( 'myaccount' ) . "\n\nMinimālais pasūtījums — " . (int) self::settings()['min_order'] . " € (bez piegādes). Piegāde uz pakomātu 2,50 €, no 50 € — bez maksas. Rēķins pienāks automātiski uz e-pastu, iepriekšējo pasūtījumu vari atkārtot ar vienu klikšķi sadaļā «Mans konts».\n\nAr cieņu,\nMarMar Candles\nhttps://marmarcandles.com"
 			);
 		} elseif ( 'reject' === $do ) {
 			$u->remove_role( self::ROLE );
 			update_user_meta( $uid, self::U_STATUS, 'rejected' );
+			$cat = self::catalog_post( $uid );
+			if ( $cat && 'pending' === get_post_status( $cat ) ) {
+				wp_update_post( array( 'ID' => $cat, 'post_status' => 'draft' ) );
+			}
 		}
 		wp_safe_redirect( admin_url( 'admin.php?page=mm-konditoru-cenas&done=1' ) );
 		exit;
