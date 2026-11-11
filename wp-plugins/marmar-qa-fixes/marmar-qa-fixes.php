@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.20
+ * Version:           1.9.21
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -208,6 +208,7 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 
 	/** Teksti ar «5 €» par minimālo pasūtījumu citos spraudņos/snipetos → 10 €. Steidzamības «+5 €» netiek skarts. */
 	public static function min_order_texts( $html ) {
+		$html = str_replace( '— ar pārskaitījumu pēc rēķina.', '— uzreiz internetbankā, ar karti, Apple Pay vai Google Pay (Paysera) vai ar pārskaitījumu pēc rēķina.', $html );
 		if ( self::is_kc() ) {
 			return $html;
 		}
