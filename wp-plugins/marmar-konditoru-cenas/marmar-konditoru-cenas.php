@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.6.7
+ * Version:           1.6.8
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.6.7';
+	const VER       = '1.6.8';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -987,7 +987,7 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 			'button_label' => 'Iestatīt paroli',
 			'button_hint'  => 'Saite paroles iestatīšanai ir personīga. Pēc tam pieslēdzies sadaļā <a href="' . esc_url( wc_get_page_permalink( 'myaccount' ) ) . '" style="color:#B9605F;">«Mans konts»</a>.',
 			'items'        => array( 'Īpašas cenas kūku svecēm un ciparu svecēm', 'Minimālais pasūtījums — ' . $min . ' € (bez piegādes)', 'Piegāde uz pakomātu 2,50 €, no 50 € — bez maksas', 'Rēķins automātiski pienāk uz e-pastu', 'Iepriekšējo pasūtījumu var atkārtot ar vienu klikšķi' ),
-			'note'         => 'Ja ir jautājumi — raksti mums Instagram <a href="https://www.instagram.com/marmar.candles" style="color:#B9605F;">@marmar.candles</a>.',
+			'note'         => 'Ja ir jautājumi — raksti mums uz <a href="mailto:info@marmarcandles.lv" style="color:#B9605F;">info@marmarcandles.lv</a>.',
 		);
 	}
 

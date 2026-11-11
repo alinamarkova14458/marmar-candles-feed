@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.11.2
+ * Version:           1.12.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.11.2';
+	const VER = '1.12.0';
 
 	/** Preces, kuras nerādām blokā “Bieži pērk kopā” (pakalpojumi, papildinājumi). */
 	const TOGETHER_EXCLUDE = array( 11691, 11024 ); // Dzintara putekļi, Individuālā dizaina izstrāde
@@ -24,6 +24,7 @@ final class MarMar_Design {
 		// trust_row nav vajadzīga: produkta lapā jau ir MarMar UX informācijas bloks.
 		add_action( 'wp_footer', array( __CLASS__, 'reveal_inline' ), 1 );
 		add_action( 'wp_footer', array( __CLASS__, 'sticky_bar' ), 20 );
+		add_action( 'wp_footer', array( __CLASS__, 'whatsapp' ), 21 );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'theme_mod_header_placements', array( __CLASS__, 'one_logo' ), 20 );
 		add_action( 'woocommerce_before_add_to_cart_button', array( __CLASS__, 'express_checkbox' ), 30 );
@@ -223,6 +224,21 @@ final class MarMar_Design {
 		if ( is_readable( $f ) ) {
 			echo '<script id="marmar-design-reveal">' . file_get_contents( $f ) . '</script>' . "\n"; // phpcs:ignore
 		}
+	}
+
+	/** WhatsApp poga (aizstāj veco čatu). Produkta lapā ziņā jau ir preces nosaukums. */
+	const WHATSAPP = '37129710414';
+
+	public static function whatsapp() {
+		if ( is_admin() || ( function_exists( 'is_checkout' ) && is_checkout() ) ) {
+			return;
+		}
+		$text = 'Sveiki! Man ir jautājums';
+		if ( function_exists( 'is_product' ) && is_product() ) {
+			$text .= ' par: ' . get_the_title( get_queried_object_id() ) . ' (' . get_permalink( get_queried_object_id() ) . ')';
+		}
+		$url = 'https://wa.me/' . self::WHATSAPP . '?text=' . rawurlencode( $text );
+		echo '<a class="mmd-wa" href="' . esc_url( $url ) . '" target="_blank" rel="noopener" aria-label="Rakstīt WhatsApp"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="#fff" d="M16.04 3C8.86 3 3.03 8.82 3.03 15.99c0 2.29.6 4.53 1.74 6.5L3 29l6.68-1.75a13 13 0 0 0 6.35 1.62h.01c7.17 0 13-5.83 13-13S23.2 3 16.04 3zm0 23.68h-.01a10.8 10.8 0 0 1-5.5-1.5l-.4-.24-3.96 1.04 1.06-3.86-.26-.4a10.77 10.77 0 0 1-1.65-5.73c0-5.96 4.85-10.81 10.82-10.81 2.89 0 5.6 1.13 7.64 3.17a10.73 10.73 0 0 1 3.16 7.65c0 5.96-4.85 10.8-10.9 10.8zm5.93-8.09c-.33-.16-1.93-.95-2.23-1.06-.3-.11-.52-.16-.73.17-.22.32-.84 1.05-1.03 1.27-.19.22-.38.24-.7.08-.33-.16-1.38-.51-2.62-1.62-.97-.86-1.62-1.93-1.81-2.25-.19-.33-.02-.5.14-.66.15-.15.33-.38.49-.57.16-.19.22-.33.33-.54.11-.22.05-.41-.03-.57-.08-.16-.73-1.77-1-2.42-.27-.64-.54-.55-.73-.56h-.62c-.22 0-.57.08-.87.41-.3.32-1.14 1.11-1.14 2.71s1.17 3.15 1.33 3.36c.16.22 2.3 3.51 5.57 4.92.78.34 1.39.54 1.86.69.78.25 1.49.21 2.05.13.63-.09 1.93-.79 2.2-1.55.27-.76.27-1.41.19-1.55-.08-.13-.3-.21-.62-.37z"/></svg><span>WhatsApp</span></a>';
 	}
 
 	public static function sticky_bar() {

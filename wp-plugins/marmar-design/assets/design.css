@@ -394,3 +394,10 @@ body.mmd .wc-block-components-checkout-step__heading .wc-block-components-title 
 .mmd-vacbar { background: var(--mmd-plum, #735360); color: #fff; text-align: center; font-size: 13px; line-height: 1.4; padding: 8px 16px; }
 .mmd-vacbar[hidden] { display: none; }
 @media (max-width: 689px) { .mmd-vacbar { font-size: 12px; padding: 7px 12px; } }
+
+/* WhatsApp poga (aizstāj čatu) */
+.mmd-wa { position: fixed; right: 18px; bottom: 18px; z-index: 9990; display: flex; align-items: center; gap: 8px; padding: 12px 16px 12px 13px; border-radius: 999px; background: #25D366; color: #fff !important; font: 600 15px/1 var(--mmd-body, Arial, sans-serif); text-decoration: none !important; box-shadow: 0 6px 18px rgba(0,0,0,.18); transition: transform .2s, box-shadow .2s; }
+.mmd-wa:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.22); }
+body.mmd-has-sticky .mmd-wa { bottom: 84px; }
+@media (max-width: 689px) { .mmd-wa { right: 14px; bottom: 14px; padding: 12px; } .mmd-wa span { display: none; } body.mmd-has-sticky .mmd-wa { bottom: 80px; } }
+@media print { .mmd-wa { display: none; } }
