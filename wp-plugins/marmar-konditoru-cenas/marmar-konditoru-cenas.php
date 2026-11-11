@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.6.4
+ * Version:           1.6.6
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.6.4';
+	const VER       = '1.6.6';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -328,7 +328,11 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 .mmkc-steps li{display:flex;flex-direction:column;align-items:center;gap:.45em;padding:1em .7em;border-radius:16px;background:#fff;border:1px solid #F0D9D6;font-size:.95em;line-height:1.35}
 .mmkc-steps b{display:flex;align-items:center;justify-content:center;width:2em;height:2em;border-radius:50%;background:#B9605F;color:#fff;font-size:1em}
 .mmkc-terms{margin:.2em 0 1.2em 1.1em}
-.mmkc-form select{width:100%;padding:.65em .8em;border:1px solid #E3C9C5;border-radius:10px;background:#fff;font-size:16px}
+.mmkc-form select{width:100%;height:auto!important;min-height:46px;padding:.6em .8em!important;line-height:1.4!important;border:1px solid #E3C9C5;border-radius:10px;background-color:#fff;font-size:16px;box-sizing:border-box}
+.mmkc-jump{max-width:900px;margin:0 auto 2em;padding:1em 1.3em;border-radius:18px;background:#FBF3F2;border:1px solid #F0D9D6;display:flex;align-items:center;justify-content:center;gap:.8em 1.4em;flex-wrap:wrap;text-align:center;font-size:1em;line-height:1.45}
+.mmkc-jump .mmkc-btn{font-size:.95em}
+@media(max-width:689px){.mmkc-jump{padding:.9em 1em}.mmkc-jump .mmkc-btn{width:100%;text-align:center}}
+.mmkc-uni{margin-top:3em}
 .mmkc-form .mmkc-cat{padding:.8em 1em;border-radius:12px;background:#fff;border:1px solid #E3C9C5}
 .mmkc-catfields{display:flex;flex-direction:column;gap:.8em}
 .mmkc-catfields[hidden]{display:none}
