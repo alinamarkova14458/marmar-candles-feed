@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.15
+ * Version:           1.9.25
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -118,6 +118,9 @@ final class MarMar_QA_Fixes {
 	public static function init() {
 		add_action( 'template_redirect', array( __CLASS__, 'redirects' ), 1 );
 		add_filter( 'gettext', array( __CLASS__, 'gettext' ), 20, 3 );
+		add_filter( 'woocommerce_email_enabled_customer_on_hold_order', array( __CLASS__, 'no_onhold_mail_paysera' ), 10, 2 );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'season_eta_js' ), 41 );
+		add_action( 'woocommerce_email_before_order_table', array( __CLASS__, 'season_email_note' ), 5, 4 );
 		add_filter( 'rank_math/frontend/title', array( __CLASS__, 'title_404' ), 20 );
 		add_filter( 'pre_get_document_title', array( __CLASS__, 'title_404' ), 20 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'checkout_i18n' ), 100 );
@@ -207,16 +210,17 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 
 	/** Teksti ar «5 €» par minimālo pasūtījumu citos spraudņos/snipetos → 10 €. Steidzamības «+5 €» netiek skarts. */
 	public static function min_order_texts( $html ) {
+		$html = str_replace( '— ar pārskaitījumu pēc rēķina.', '— uzreiz internetbankā (Paysera) vai ar pārskaitījumu pēc rēķina.', $html );
 		if ( self::is_kc() ) {
 			return $html;
 		}
 		$m    = self::MIN_ORDER;
 		$html = preg_replace(
 			'~Minimāl\w*\s+pasūtījum\w*(?:\s+summa)?\s*(?:—|–|-|ir)?\s*(<b>|<strong>)?(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)(</b>|</strong>)?~u',
-			'Pasūtījumiem zem ${1}' . $m . '$2$3 — piemaksa līdz ' . $m . ' €',
+			'Minimālais pasūtījums ${1}' . $m . '$2$3 — ja mazāk, starpību pieskaitām',
 			$html
 		);
-		return preg_replace( '~Min\.\s*pasūtījums\s*(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)~u', 'Zem ' . $m . '$1 — piemaksa', $html );
+		return preg_replace( '~Min\.\s*pasūtījums\s*(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)~u', 'Min. pasūtījums ' . $m . '$1 (ja mazāk — pieskaitām starpību)', $html );
 	}
 
 	public static function per_page() {
@@ -253,6 +257,10 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 	/** Poga «uz augšu» (#fab-stt) bija zem čata pogas apakšējā labajā stūrī — paceļam virs tās. */
 	public static function css() {
 		echo '<style id="mm-qa-css">#fab-stt{bottom:88px!important;right:22px!important}'
+			. '.paysera-hosted-box__methods{display:none!important}'
+			. '.woocommerce-columns--addresses .woocommerce-column{width:auto!important;max-width:none!important;flex:none!important;float:none!important;min-width:0}'
+			. '.woocommerce-columns--addresses .woocommerce-column address{width:auto!important;word-break:normal;overflow-wrap:anywhere}'
+			. '@media(max-width:689px){.woocommerce-columns--addresses{grid-template-columns:1fr!important;gap:20px}}'
 			. 'ul.products li.product{position:relative}.mm-badge-colors{position:absolute;top:12px;right:12px;z-index:5;background:rgba(255,255,255,.92);color:#5a4a4a;font-size:12px;font-weight:600;line-height:1;padding:7px 10px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.08);pointer-events:none}'
 			. '.single-product table.variations tr.mm-single,.single-product table.variations tr:has(ul.variable-items-wrapper>li.variable-item:only-child){display:none!important}</style>';
 	}
@@ -285,6 +293,7 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 			return $html;
 		}
 		$html = self::delay_clarity( $html );
+		$html = self::season_topbar( $html );
 		$html = self::min_order_texts( $html );
 		// Steidzamības izvēle produkta lapā tagad ir augstāk par termiņa bloku.
 		$html = str_replace( 'Steidzami — 1–2 dienās (+5 €), atzīmējiet zemāk.', 'Steidzami — 1–2 dienās (+5 €): atzīmējiet «Steidzams pasūtījums» augstāk.', $html );
@@ -343,8 +352,231 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 		return $translation;
 	}
 
+	/* ---------------- Svētku termiņi un atvaļinājums (Alīnas lēmums 11.11.2026) ---------------- */
+
+	const PAUSE_FROM = '2026-11-26';   // atvaļinājums: pasūtījumus pieņem, neizgatavo
+	const PAUSE_TO   = '2026-12-03';   // izgatavošana atsākas 4.12
+	const PAUSE_SHOW = '2026-11-19';   // paziņojumu rāda nedēļu iepriekš
+
+	private static function today() {
+		return wp_date( 'Y-m-d' );
+	}
+
+	private static function pause_msg_on( $d = null ) {
+		$d = $d ? $d : self::today();
+		return $d >= self::PAUSE_SHOW && $d <= self::PAUSE_TO;
+	}
+
+	/** @return string[] Svētku termiņu teksti pēc datuma (pirmais — svarīgākais). */
+	private static function season_lines( $d = null ) {
+		$d = $d ? $d : self::today();
+		if ( $d > '2026-12-31' ) {
+			return array();
+		}
+		if ( $d <= '2026-12-13' ) {
+			return array( 'Ziemassvētkiem — pasūti līdz 13.12', 'Steidzami (+5 €) — līdz 17.12' );
+		}
+		if ( $d <= '2026-12-17' ) {
+			return array( 'Ziemassvētkiem — steidzami (+5 €) līdz 17.12', 'Jaunajam gadam — līdz 18.12' );
+		}
+		if ( $d <= '2026-12-18' ) {
+			return array( 'Jaunajam gadam — pasūti līdz 18.12', 'Steidzami (+5 €) — līdz 22.12' );
+		}
+		if ( $d <= '2026-12-22' ) {
+			return array( 'Jaunajam gadam — steidzami (+5 €) līdz 22.12', 'Bezmaksas piegāde no 50 €' );
+		}
+		return array( 'Pasūtījumus pēc 22.12 līdz svētkiem nepiegādāsim', 'Bezmaksas piegāde no 50 €' );
+	}
+
+	/** Augšējā josla (MarMar Design): „Gatavs 5–7 dienās” / „Steidzami 1–2 dienās” → termiņi un atvaļinājums. */
+	public static function season_topbar( $html ) {
+		if ( false === strpos( $html, 'mmd-topbar' ) ) {
+			return $html;
+		}
+		$lines = self::season_lines();
+		if ( self::pause_msg_on() ) {
+			$lines = array( 'Atvaļinājums 26.11–3.12 — izgatavošana no 4.12', $lines ? $lines[0] : 'Steidzami 1–2 dienās' );
+		}
+		if ( ! $lines ) {
+			return $html;
+		}
+		$html = str_replace( '<span>Gatavs 5–7 dienās</span>', '<span>' . esc_html( $lines[0] ) . '</span>', $html );
+		return str_replace( '<span class="mmd-d">Steidzami 1–2 dienās</span>', '<span class="mmd-d">' . esc_html( $lines[1] ) . '</span>', $html );
+	}
+
+	/** Darbdienas pēc MarMar Checkout loģikas (brīvdienas + LV svētki). */
+	private static function add_workdays_lv( DateTimeImmutable $d, $n ) {
+		$h = array();
+		foreach ( array( (int) $d->format( 'Y' ), (int) $d->format( 'Y' ) + 1 ) as $y ) {
+			foreach ( array( '01-01', '05-01', '05-04', '06-23', '06-24', '11-18', '12-24', '12-25', '12-26', '12-31' ) as $md ) {
+				$h[] = $y . '-' . $md;
+			}
+		}
+		while ( $n > 0 ) {
+			$d = $d->modify( '+1 day' );
+			if ( (int) $d->format( 'N' ) < 6 && ! in_array( $d->format( 'Y-m-d' ), $h, true ) ) {
+				$n--;
+			}
+		}
+		return $d;
+	}
+
+	/** Izgatavošana kalendārajās dienās, izlaižot atvaļinājuma dienas. */
+	private static function make_done( DateTimeImmutable $now, $days ) {
+		$from = new DateTimeImmutable( self::PAUSE_FROM, wp_timezone() );
+		$to   = ( new DateTimeImmutable( self::PAUSE_TO, wp_timezone() ) )->modify( '+1 day' ); // 4.12 00:00
+		$d    = $now;
+		if ( $d >= $from && $d < $to ) {
+			$d = $to;
+		}
+		$end = $d->modify( '+' . (int) $days . ' days' );
+		if ( $d < $from && $end >= $from ) {
+			$end = $end->modify( '+' . (int) $from->diff( $to )->days . ' days' );
+		}
+		return $end;
+	}
+
+	private static function lv_range2( DateTimeImmutable $f, DateTimeImmutable $t ) {
+		$m = array( 1 => 'janvārī', 'februārī', 'martā', 'aprīlī', 'maijā', 'jūnijā', 'jūlijā', 'augustā', 'septembrī', 'oktobrī', 'novembrī', 'decembrī' );
+		if ( $f->format( 'm' ) === $t->format( 'm' ) ) {
+			return $f->format( 'j' ) . '.–' . $t->format( 'j' ) . '. ' . $m[ (int) $t->format( 'n' ) ];
+		}
+		return $f->format( 'j' ) . '. ' . $m[ (int) $f->format( 'n' ) ] . ' – ' . $t->format( 'j' ) . '. ' . $m[ (int) $t->format( 'n' ) ];
+	}
+
+	/** Kases „Saņemsiet ~…” ņem vērā atvaļinājumu (pārraksta MarMar Checkout aprēķinu). */
+	public static function season_eta_js() {
+		if ( ! wp_script_is( 'marmar-checkout', 'enqueued' ) || wp_date( 'Y-m-d' ) > self::PAUSE_TO ) {
+			return;
+		}
+		$now  = new DateTimeImmutable( 'now', wp_timezone() );
+		$cfg  = class_exists( 'MarMar_Checkout' ) ? MarMar_Checkout::cfg() : array( 'make_days' => array( 5, 7 ), 'make_days_express' => array( 1, 2 ), 'ship_days' => array( 1, 2 ) );
+		$out  = array();
+		foreach ( array( 'estimate' => $cfg['make_days'], 'estimateFast' => $cfg['make_days_express'] ) as $k => $mk ) {
+			$f         = self::add_workdays_lv( self::make_done( $now, $mk[0] ), $cfg['ship_days'][0] );
+			$t         = self::add_workdays_lv( self::make_done( $now, $mk[1] ), $cfg['ship_days'][1] );
+			$out[ $k ] = self::lv_range2( $f, $t );
+		}
+		$js = 'if(window.MarMarCheckout){MarMarCheckout.estimate=' . wp_json_encode( $out['estimate'] ) . ';MarMarCheckout.estimateFast=' . wp_json_encode( $out['estimateFast'] ) . ';';
+		if ( self::pause_msg_on() ) {
+			$js .= 'if(MarMarCheckout.i18n){MarMarCheckout.i18n.etaNote="pēc apmaksas · 26.11–3.12 atvaļinājums, izgatavošana no 4.12";}';
+		}
+		wp_add_inline_script( 'marmar-checkout', $js . '}', 'before' );
+	}
+
+	/** Klienta e-pastos (apstrādē / gaida): atvaļinājums un svētku termiņi. */
+	/**
+	 * Pagaidu (līdz 31.12.2026): klienta e-pastos «Apstrādē» un «Gaida apmaksu» —
+	 * vai pasūtījums paspēs līdz Ziemassvētkiem / Jaunajam gadam + atvaļinājums.
+	 * Termiņi (Alīnas lēmums 11.11): Ziemassvētki — parasts līdz 13.12, steidzams līdz 17.12;
+	 * Jaunais gads — parasts līdz 18.12, steidzams līdz 22.12.
+	 */
+	public static function season_email_note( $order, $sent_to_admin, $plain_text, $email ) {
+		if ( $sent_to_admin || ! $order instanceof WC_Order || ! $email || ! in_array( $email->id, array( 'customer_processing_order', 'customer_on_hold_order' ), true ) ) {
+			return;
+		}
+		$created = $order->get_date_created() ? $order->get_date_created()->date_i18n( 'Y-m-d' ) : self::today();
+		if ( $created > '2026-12-31' ) {
+			return;
+		}
+		$unpaid  = 'customer_on_hold_order' === $email->id;
+		$d       = $unpaid ? self::today() : ( $order->get_date_paid() ? $order->get_date_paid()->date_i18n( 'Y-m-d' ) : $created );
+		$express = false;
+		foreach ( $order->get_fees() as $fee ) {
+			if ( false !== mb_stripos( $fee->get_name(), 'steidzam' ) ) {
+				$express = true;
+			}
+		}
+		$xmas = $express ? '2026-12-17' : '2026-12-13';
+		$ny   = $express ? '2026-12-22' : '2026-12-18';
+		$dm   = function ( $ymd ) {
+			return (int) substr( $ymd, 8, 2 ) . '.' . substr( $ymd, 5, 2 ) . '.';
+		};
+
+		$notes = array();
+		if ( self::pause_msg_on( $created ) ) {
+			$notes[] = '🕯️ No 26.11 līdz 3.12 esam atvaļinājumā: pasūtījumus pieņemam, izgatavot sākam no 4.12.';
+		}
+		if ( $created >= '2026-11-11' ) {
+			if ( $unpaid ) { // gaida apmaksu: termiņš skaitās no apmaksas dienas
+				if ( $d <= $xmas ) {
+					$notes[] = '🎄 Ja apmaksāsiet līdz ' . $dm( $xmas ) . ', sveces būs pie jums vēl pirms Ziemassvētkiem.';
+				} elseif ( $d <= $ny ) {
+					$notes[] = '🥂 Līdz Ziemassvētkiem diemžēl vairs nepaspēsim, bet, ja apmaksāsiet līdz ' . $dm( $ny ) . ', sveces paspēs līdz Jaunajam gadam.';
+				} else {
+					$notes[] = '🕯️ Lūdzu, ņemiet vērā: līdz svētkiem šo pasūtījumu piegādāt vairs nepaspēsim.';
+				}
+			} elseif ( $d <= $xmas ) {
+				$notes[] = '🎄 Jūsu sveces būs pie jums vēl pirms Ziemassvētkiem.';
+			} elseif ( $d <= $ny ) {
+				$notes[] = '🥂 Līdz Ziemassvētkiem diemžēl nepaspēsim, bet līdz Jaunajam gadam sveces būs pie jums.';
+			} else {
+				$notes[] = '🕯️ Lūdzu, ņemiet vērā: līdz svētkiem šo pasūtījumu piegādāt nepaspēsim.';
+			}
+		}
+		foreach ( $notes as $n ) {
+			echo $plain_text ? "\n" . esc_html( $n ) . "\n" : '<p style="margin:0 0 16px;padding:12px 14px;background:#fbf3f1;border-radius:8px">' . esc_html( $n ) . '</p>';
+		}
+	}
+
+	/** Paysera „pending_settlement” liek pasūtījumu „Gaida apstrādi” — klientam nesūtām „gaidām apmaksu” vēstuli (viņš jau samaksāja). */
+	public static function no_onhold_mail_paysera( $enabled, $order ) {
+		if ( $order instanceof WC_Order && 0 === strpos( (string) $order->get_payment_method(), 'paysera' ) ) {
+			return false;
+		}
+		return $enabled;
+	}
+
 	/** WooCommerce e-pastu teksti, kam latviešu tulkojuma vēl nav (WC 9.8+ „email improvements"). */
 	const MAIL_LV = array(
+		// Konts, parole (WooCommerce lv tulkojumā trūkst; pievienots 11.11.2026).
+		'This password reset key is for a different user account. Please log out and try again.' => 'Šī paroles atjaunošanas saite ir citam kontam. Lūdzu, izrakstieties un mēģiniet vēlreiz.',
+		'Please wait a moment before requesting another link to change your password.' => 'Lūdzu, pagaidiet brīdi, pirms pieprasāt jaunu paroles maiņas saiti.',
+		'Sorry, we were unable to resend the link. Please try again.' => 'Diemžēl neizdevās nosūtīt saiti vēlreiz. Lūdzu, mēģiniet vēlreiz.',
+		'We have emailed you a new link to change your password.' => 'Mēs nosūtījām jums uz e-pastu jaunu saiti paroles maiņai.',
+		'Display name cannot be changed to email address due to privacy concern.' => 'Privātuma dēļ attēlojamo vārdu nevar mainīt uz e-pasta adresi.',
+		'An error occurred while saving account details: %s' => 'Saglabājot konta datus, radās kļūda: %s',
+		'Please choose product options for %1$s.' => 'Lūdzu, izvēlieties preces “%1$s” opcijas.',
+		'Please choose product options by visiting <a href="%1$s" title="%2$s">%2$s</a>.' => 'Lūdzu, izvēlieties preces opcijas: <a href="%1$s" title="%2$s">%2$s</a>.',
+		'Your account was created successfully and a password has been sent to your email address.' => 'Konts ir izveidots, un parole nosūtīta uz jūsu e-pastu.',
+		'Your account was created successfully. Your login details have been sent to your email address.' => 'Konts ir izveidots. Pieslēgšanās dati nosūtīti uz jūsu e-pastu.',
+		'Reset your password for {site_title}' => 'Paroles atjaunošana — {site_title}',
+		'%1$sResend%2$s' => '%1$sNosūtīt vēlreiz%2$s',
+		'Your account is using a temporary password. We emailed you a link to change your password.' => 'Jūsu kontam ir pagaidu parole. Mēs nosūtījām uz e-pastu saiti paroles maiņai.',
+		'Pay for order %s' => 'Apmaksāt pasūtījumu %s',
+		'View order %s' => 'Skatīt pasūtījumu %s',
+		'Cancel order %s' => 'Atcelt pasūtījumu %s',
+		'Please provide a valid account username.' => 'Lūdzu, norādiet derīgu lietotājvārdu.',
+		'If you didn’t make this request, just ignore this email. If you’d like to proceed, reset your password via the link below:' => 'Ja jūs to nepieprasījāt, vienkārši ignorējiet šo e-pastu. Lai turpinātu, atjaunojiet paroli, izmantojot saiti zemāk:',
+		'Reset your password' => 'Atjaunot paroli',
+		'From your account dashboard you can view your <a href="%1$s">recent orders</a>, manage your <a href="%2$s">billing address</a>, and <a href="%3$s">edit your password and account details</a>.' => 'Savā kontā varat apskatīt <a href="%1$s">pēdējos pasūtījumus</a>, mainīt <a href="%2$s">rēķina adresi</a> un <a href="%3$s">mainīt paroli un konta datus</a>.',
+		'This will be how your name will be displayed in the account section and in reviews' => 'Šādi jūsu vārds būs redzams kontā un atsauksmēs',
+		'This will be how your name will be displayed in the account section' => 'Šādi jūsu vārds būs redzams kontā',
+		'A link to set a new password will be sent to your email address.' => 'Saite jaunas paroles iestatīšanai tiks nosūtīta uz jūsu e-pastu.',
+		'View order number %s' => 'Skatīt pasūtījumu Nr. %s',
+		'%1$s order number %2$s' => '%1$s pasūtījumu Nr. %2$s',
+		'Your withdrawal has been submitted.' => 'Jūsu atteikums ir iesniegts.',
+		'We\'ve emailed an acknowledgment to %s with your details and the date and time of submission. Keep it as proof of your withdrawal.' => 'Mēs nosūtījām apstiprinājumu uz %s ar jūsu datiem un iesniegšanas laiku. Saglabājiet to kā atteikuma apliecinājumu.',
+		'We\'ll review your request and contact you about next steps, including any refund due.' => 'Mēs izskatīsim pieprasījumu un sazināsimies par turpmākajiem soļiem, tostarp par iespējamo naudas atmaksu.',
+		'Back to the shop' => 'Atpakaļ uz veikalu',
+		'Check your details before confirming.' => 'Pirms apstiprināšanas pārbaudiet datus.',
+		'Nothing has been sent yet. Your withdrawal is submitted when you select "Confirm withdrawal".' => 'Vēl nekas nav nosūtīts. Atteikums tiks iesniegts, kad nospiedīsiet «Apstiprināt atteikumu».',
+		'Order withdrawal progress' => 'Atteikuma soļi',
+		'Your details' => 'Jūsu dati',
+		'Review and confirm' => 'Pārbaudiet un apstipriniet',
+		'After you confirm, we\'ll email an acknowledgment to %s with these details and the date and time of submission. Keep it as proof of your withdrawal.' => 'Pēc apstiprināšanas nosūtīsim apstiprinājumu uz %s ar šiem datiem un iesniegšanas laiku. Saglabājiet to kā atteikuma apliecinājumu.',
+		'Confirm withdrawal' => 'Apstiprināt atteikumu',
+		'Edit details' => 'Labot datus',
+		'Tell us if you want to withdraw from an order placed on this store. You do not need to give a reason.' => 'Paziņojiet mums, ja vēlaties atteikties no šajā veikalā veikta pasūtījuma. Iemesls nav jānorāda.',
+		'Some items, like personalized products, may not be eligible. We review every request and reply by email.' => 'Uz dažām precēm, piemēram, personalizētām, atteikuma tiesības neattiecas. Katru pieprasījumu izskatām un atbildam e-pastā.',
+		'No reason needed. If you selected specific items, list them here.' => 'Iemesls nav jānorāda. Ja atsakāties tikai no dažām precēm, norādiet tās šeit.',
+		'Continue to review' => 'Turpināt',
+		'Awaiting confirmation' => 'Gaida apstiprinājumu',
+		'Stock notifications awaiting confirmation' => 'Paziņojumi par pieejamību, kas gaida apstiprinājumu',
+		'Active stock notifications' => 'Aktīvie paziņojumi par pieejamību',
+		'Date signed up' => 'Pieteikšanās datums',
+		'Product unavailable' => 'Prece nav pieejama',
+		'Resend verification' => 'Nosūtīt apstiprinājumu vēlreiz',
 		'We’re getting in touch to let you know that order #%1$s from %2$s has been cancelled.' => 'Informējam, ka pasūtījums #%1$s (%2$s) ir atcelts.',
 		'Notification to let you know — order #%1$s belonging to %2$s has been cancelled:'      => 'Informējam, ka pasūtījums #%1$s (%2$s) ir atcelts:',
 		'You’ve received a new order from %s:'                                                   => 'Saņemts jauns pasūtījums no %s:',
@@ -386,6 +618,23 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 			'Please select a %s'                => array( 'Lūdzu, izvēlieties: %s' ),
 		);
 		wp_add_inline_script( 'wp-i18n', 'wp.i18n.setLocaleData(' . wp_json_encode( $data ) . ',"woocommerce");' );
+		add_action( 'wp_footer', array( __CLASS__, 'paysera_text_js' ), 99 );
+	}
+
+	/** Paysera bloka apraksts kasē nāk angliski (JS) — aizvietojam latviski. */
+	public static function paysera_text_js() {
+		$map = array(
+			'You will be taken to the Paysera payment page to choose how you pay. Banks, cards, wallets and instalments, all in one place.'
+				=> 'Pēc pasūtījuma noformēšanas atvērsies drošā Paysera maksājumu lapa — tur izvēlieties savu banku.',
+			'Apmaksa ar rēķinu' => 'Apmaksa internetbankā vai ar rēķinu',
+		);
+		?>
+<script>
+(function(){var M=<?php echo wp_json_encode( $map ); ?>;
+function fix(root){var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),n;while((n=w.nextNode())){var t=n.nodeValue.trim();if(M[t]){n.nodeValue=n.nodeValue.replace(t,M[t]);}}}
+fix(document.body);new MutationObserver(function(m){m.forEach(function(r){r.addedNodes.forEach(function(x){if(x.nodeType===1)fix(x);else if(x.nodeType===3&&M[x.nodeValue.trim()])x.nodeValue=M[x.nodeValue.trim()];});});}).observe(document.body,{childList:true,subtree:true});})();
+</script>
+		<?php
 	}
 
 	/** Grozs, kase un konts ir noindex — sitemap tos nevajag. */

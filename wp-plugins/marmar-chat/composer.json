@@ -1,0 +1,15 @@
+{
+  "name": "marmar/chat",
+  "description": "MarMar Chat — Claude-powered shopping assistant for WooCommerce. Dependencies are prefixed with php-scoper at build time (see build.sh).",
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=8.1",
+    "anthropic-ai/sdk": "^1.6",
+    "guzzlehttp/guzzle": "^7.9"
+  },
+  "config": {
+    "preferred-install": "dist",
+    "optimize-autoloader": true,
+    "allow-plugins": { "php-http/discovery": false }
+  }
+}

@@ -1,0 +1,58 @@
+/* MarMar Checkout */
+.mmco-info, .mmco-free, .mmco-express, .mmco-eta, .mmco-trust { --mmco-accent: #c88a85; --mmco-dark: #a96f6a; --mmco-soft: #f8f2f1; --mmco-line: #eee3e1; --mmco-muted: #8a7f83; }
+
+/* Карточки условий над корзиной */
+.mmco-info { margin: 0 0 24px; }
+.mmco-chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+.mmco-chip { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; background: #fff; border: 1px solid var(--mmco-line); border-radius: 12px; font-size: 14px; line-height: 1.35; }
+.mmco-chip small { color: var(--mmco-muted); font-size: 12.5px; }
+.mmco-ico { font-size: 20px; line-height: 1; }
+.mmco-details { margin-top: 10px; font-size: 14px; }
+.mmco-details summary { cursor: pointer; color: var(--mmco-dark); font-weight: 600; list-style: none; display: inline-flex; align-items: center; gap: 6px; }
+.mmco-details summary::-webkit-details-marker { display: none; }
+.mmco-details summary::after { content: "▾"; transition: transform .2s; }
+.mmco-details[open] summary::after { transform: rotate(180deg); }
+.mmco-details ul { margin: 10px 0 0; padding-left: 18px; display: grid; gap: 4px; color: #4a4044; }
+@media (max-width: 689px) {
+	.mmco-chips { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 78%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; }
+	.mmco-chip { scroll-snap-align: start; }
+}
+
+/* Полоска до бесплатной доставки */
+.mmco-free { margin: 0 0 16px; padding: 12px 14px; background: var(--mmco-soft); border-radius: 12px; font-size: 14px; }
+.mmco-free-text { margin-bottom: 8px; font-weight: 600; color: #4a4044; }
+.mmco-free-track { height: 6px; background: #fff; border-radius: 3px; overflow: hidden; }
+.mmco-free-track span { display: block; height: 100%; background: var(--mmco-accent); border-radius: 3px; transition: width .4s ease; }
+.mmco-free.is-done .mmco-free-text { color: #3d7a4a; }
+.mmco-free.is-min { background: #fff4e5; border: 1.5px solid #f0c27b; }
+.mmco-free.is-min .mmco-free-text { color: #8a5a00; }
+.mmco-free.is-min .mmco-free-track span { background: #e3a33b; }
+@media (prefers-reduced-motion: reduce) { .mmco-free-track span { transition: none; } }
+
+/* Срочный заказ у кнопки «Tālāk» (перебиваем инлайн-стили сниппета) */
+.mmco-express { margin: 0 0 14px !important; padding: 12px 14px !important; background: #fff !important; border: 1.5px solid var(--mmco-line) !important; border-radius: 12px !important; }
+.mmco-express:has(input:checked) { border-color: var(--mmco-accent) !important; background: var(--mmco-soft) !important; }
+.mmco-express input { accent-color: var(--mmco-accent); width: 18px; height: 18px; }
+
+/* Поле промокода не нужно — скидок нет */
+.wc-block-components-totals-coupon, .wp-block-woocommerce-cart-order-summary-coupon-form-block, .wp-block-woocommerce-checkout-order-summary-coupon-form-block { display: none !important; }
+
+/* Оформление: срок и доверие */
+.mmco-eta { display: flex; gap: 8px; align-items: baseline; margin: 0 0 12px; padding: 12px 14px; background: var(--mmco-soft); border-radius: 12px; font-size: 14px; }
+.mmco-eta small { color: var(--mmco-muted); }
+.mmco-trust { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 12px 0 0; font-size: 13px; color: var(--mmco-muted); text-align: center; }
+.mmco-dot { opacity: .6; }
+
+/* Срочный заказ на оформлении */
+.mmco-fast { display: flex; gap: 12px; align-items: flex-start; margin: 0 0 14px; padding: 12px 14px; background: #fff; border: 1.5px solid var(--mmco-line, #eee3e1); border-radius: 12px; cursor: pointer; font-size: 14px; --mmco-accent: #c88a85; --mmco-soft: #f8f2f1; --mmco-muted: #8a7f83; }
+.mmco-fast input { accent-color: var(--mmco-accent); width: 20px; height: 20px; margin: 2px 0 0; flex: 0 0 auto; }
+.mmco-fast-text { display: grid; gap: 2px; }
+.mmco-fast small { color: var(--mmco-muted); }
+.mmco-fast.is-on { border-color: var(--mmco-accent); background: var(--mmco-soft); }
+.mmco-fast.is-busy { opacity: .6; pointer-events: none; }
+
+/* Комментарий к заказу — сразу поле ввода: прячем только квадратик галочки, подпись остаётся заголовком */
+.mmco-note-open .wc-block-components-checkbox__input, .mmco-note-open .wc-block-components-checkbox__mark { display: none !important; }
+.mmco-note-open .wc-block-components-checkbox label { padding-left: 0 !important; cursor: default; pointer-events: none; }
+.mmco-note-open .wc-block-components-checkbox__label { font-weight: 600; padding-left: 0 !important; margin-left: 0 !important; }
+.mmco-note-open textarea { margin-top: 8px; min-height: 90px; }
