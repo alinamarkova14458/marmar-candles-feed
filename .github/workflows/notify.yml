@@ -1,0 +1,33 @@
+name: Notify Alina
+
+# Sends Alina an email through GitHub: adds a comment to the issue "📬 Уведомления MarMar".
+# The comment is written by github-actions[bot], so GitHub emails the repo owner (her own
+# actions would not be emailed to her). Started by Claude sessions via workflow_dispatch.
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: "Text of the notification"
+        required: true
+
+permissions:
+  issues: write
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post the notification
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          MESSAGE: ${{ inputs.message }}
+        run: |
+          gh label create notify --color 7b2d3b --description "Уведомления для Алины на почту" 2>/dev/null || true
+          num=$(gh issue list --label notify --state open --json number --jq '.[0].number')
+          if [ -z "$num" ]; then
+            url=$(gh issue create --title "📬 Уведомления MarMar" --label notify \
+              --body "Сюда приходят уведомления: неделя постов готова, нужен ответ и т. п. GitHub присылает каждое письмом.")
+            num=${url##*/}
+          fi
+          printf '%s\n' "$MESSAGE" | gh issue comment "$num" --body-file -
