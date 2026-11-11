@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.6.6
+ * Version:           1.6.7
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.6.6';
+	const VER       = '1.6.7';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -56,6 +56,7 @@ final class MarMar_Konditoru_Cenas {
 		add_shortcode( 'marmar_konditoru_cenas', array( __CLASS__, 'shortcode' ) );
 		add_shortcode( 'marmar_konditori_pogas', array( __CLASS__, 'buttons' ) );
 		add_shortcode( 'marmar_konditori_promo', array( __CLASS__, 'promo' ) );
+		add_shortcode( 'marmar_konditori_reg', array( __CLASS__, 'reg_banner' ) );
 		add_action( 'init', array( __CLASS__, 'handle_application' ), 20 );
 
 		// Administrācija.
@@ -332,7 +333,13 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 .mmkc-jump{max-width:900px;margin:0 auto 2em;padding:1em 1.3em;border-radius:18px;background:#FBF3F2;border:1px solid #F0D9D6;display:flex;align-items:center;justify-content:center;gap:.8em 1.4em;flex-wrap:wrap;text-align:center;font-size:1em;line-height:1.45}
 .mmkc-jump .mmkc-btn{font-size:.95em}
 @media(max-width:689px){.mmkc-jump{padding:.9em 1em}.mmkc-jump .mmkc-btn{width:100%;text-align:center}}
-.mmkc-uni{margin-top:3em}
+.mmkc-uni{margin-top:0}
+.mmkc-reg{margin:0 0 2em}
+.mmkc-reg-body[hidden]{display:none}
+.mmkc-reg .mmkc-jump{margin-bottom:1.2em}
+.mmkc-toggle{border:0;cursor:pointer;font-size:.95em;font-family:inherit}
+.mmkc-toggle:after{content:"⌄";display:inline-block;margin-left:.45em;transform:translateY(-.15em);transition:transform .2s}
+.mmkc-toggle[aria-expanded=true]:after{transform:rotate(180deg) translateY(-.05em)}
 .mmkc-form .mmkc-cat{padding:.8em 1em;border-radius:12px;background:#fff;border:1px solid #E3C9C5}
 .mmkc-catfields{display:flex;flex-direction:column;gap:.8em}
 .mmkc-catfields[hidden]{display:none}
@@ -384,6 +391,21 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 	/** [marmar_konditori_pogas] — vecais nosaukums, tagad viena forma (agrāk divas pogas). */
 	public static function buttons() {
 		return self::unified();
+	}
+
+	/**
+	 * [marmar_konditori_reg] — plāksne lapas augšā; poga «Reģistrēties» atver formu turpat zem tās.
+	 * Pēc nosūtīšanas (mmkc / mmkc_err) vai ar #konditoru-cenas forma ir atvērta uzreiz.
+	 */
+	public static function reg_banner() {
+		$open = isset( $_GET['mmkc'] ) || isset( $_GET['mmkc_err'] ) || ( get_current_user_id() && ( self::is_konditor() || 'pending' === get_user_meta( get_current_user_id(), self::U_STATUS, true ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		$out  = '<div class="mmkc-reg" data-mmkc-reg>';
+		$out .= '<div class="mmkc-jump"><span>🎂 <strong>Esat konditors?</strong> Viena reģistrācija — īpašas cenas un vieta katalogā.</span> ';
+		$out .= '<button type="button" class="mmkc-btn mmkc-toggle" aria-expanded="' . ( $open ? 'true' : 'false' ) . '" aria-controls="konditoru-cenas" data-mmkc-toggle>Reģistrēties</button></div>';
+		$out .= '<div class="mmkc-reg-body" data-mmkc-body' . ( $open ? '' : ' hidden' ) . '>' . self::unified() . '</div>';
+		$out .= '</div>';
+		$out .= "<script>(function(){var w=document.querySelector('[data-mmkc-reg]');if(!w)return;var b=w.querySelector('[data-mmkc-toggle]'),c=w.querySelector('[data-mmkc-body]');function set(o,scroll){c.hidden=!o;b.setAttribute('aria-expanded',o?'true':'false');if(o&&scroll)setTimeout(function(){c.scrollIntoView({behavior:'smooth',block:'start'});},30);}b.addEventListener('click',function(){set(c.hidden,true);});function hash(){if(/^#(konditoru-cenas|mmkc-p-cenas|mmkc-p-katalogs|pieteikties)$/.test(location.hash))set(true,true);}hash();window.addEventListener('hashchange',hash);document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href*=\\'#konditoru-cenas\\']');if(a&&a.pathname===location.pathname){e.preventDefault();set(true,true);}});})();</script>";
+		return $out;
 	}
 
 	private static function err_msgs() {
