@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.6.3
+ * Version:           1.6.4
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.6.3';
+	const VER       = '1.6.4';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -940,10 +940,12 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 		$key  = get_password_reset_key( $u );
 		$link = is_wp_error( $key ) ? wc_get_page_permalink( 'myaccount' ) : add_query_arg( array( 'key' => $key, 'id' => $uid ), wc_get_endpoint_url( 'lost-password', '', wc_get_page_permalink( 'myaccount' ) ) );
 		$name = $u->first_name ? $u->first_name : $u->display_name;
-		wp_mail(
+		$cat     = self::catalog_post( $uid );
+		$catalog = $cat && 'publish' === get_post_status( $cat );
+		MarMar_KC_Mail::send(
 			$u->user_email,
 			$created ? 'MarMar Candles: tavs konditora konts ir izveidots 🎂' : 'MarMar Candles: tavs konditora konts ir apstiprināts 🎂',
-			"Sveiki, {$name}!\n\n" . ( $created ? 'Paldies, ka esi mūsu konditoru katalogā! Mēs izveidojām tev konditora kontu MarMar Candles veikalā — tagad vari pasūtīt kūku sveces un ciparu sveces par īpašām cenām. Cenas redzēsi pēc pieslēgšanās.' : 'Tavs konditora konts ir apstiprināts. Pēc pieslēgšanās veikalā redzēsi īpašās cenas kūku svecēm un ciparu svecēm.' ) . "\n{$cat_line}\nIestati paroli: {$link}\nPieslēgties: " . wc_get_page_permalink( 'myaccount' ) . "\n\nMinimālais pasūtījums — " . (int) self::settings()['min_order'] . " € (bez piegādes). Piegāde uz pakomātu 2,50 €, no 50 € — bez maksas. Rēķins pienāks automātiski uz e-pastu, iepriekšējo pasūtījumu vari atkārtot ar vienu klikšķi sadaļā «Mans konts».\n\nAr cieņu,\nMarMar Candles\nhttps://marmarcandles.com"
+			self::pretty_args( $name, $link, $created, $catalog && ! $created )
 		);
 	}
 
