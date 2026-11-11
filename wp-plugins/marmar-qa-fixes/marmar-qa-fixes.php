@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.23
+ * Version:           1.9.24
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -465,20 +465,57 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 	}
 
 	/** Klienta e-pastos (apstrādē / gaida): atvaļinājums un svētku termiņi. */
+	/**
+	 * Pagaidu (līdz 31.12.2026): klienta e-pastos «Apstrādē» un «Gaida apmaksu» —
+	 * vai pasūtījums paspēs līdz Ziemassvētkiem / Jaunajam gadam + atvaļinājums.
+	 * Termiņi (Alīnas lēmums 11.11): Ziemassvētki — parasts līdz 13.12, steidzams līdz 17.12;
+	 * Jaunais gads — parasts līdz 18.12, steidzams līdz 22.12.
+	 */
 	public static function season_email_note( $order, $sent_to_admin, $plain_text, $email ) {
 		if ( $sent_to_admin || ! $order instanceof WC_Order || ! $email || ! in_array( $email->id, array( 'customer_processing_order', 'customer_on_hold_order' ), true ) ) {
 			return;
 		}
-		$d     = $order->get_date_created() ? $order->get_date_created()->date_i18n( 'Y-m-d' ) : self::today();
-		$notes = array();
-		if ( self::pause_msg_on( $d ) ) {
-			$notes[] = 'No 26.11 līdz 3.12 esmu atvaļinājumā: pasūtījumus pieņemu, izgatavot sāku no 4.12.';
+		$created = $order->get_date_created() ? $order->get_date_created()->date_i18n( 'Y-m-d' ) : self::today();
+		if ( $created > '2026-12-31' ) {
+			return;
 		}
-		if ( $d >= '2026-12-23' && $d <= '2026-12-31' ) {
-			$notes[] = 'Lūdzu, ņemiet vērā: pasūtījumus, kas veikti pēc 22.12, līdz svētkiem piegādāt nevaram.';
+		$unpaid  = 'customer_on_hold_order' === $email->id;
+		$d       = $unpaid ? self::today() : ( $order->get_date_paid() ? $order->get_date_paid()->date_i18n( 'Y-m-d' ) : $created );
+		$express = false;
+		foreach ( $order->get_fees() as $fee ) {
+			if ( false !== mb_stripos( $fee->get_name(), 'steidzam' ) ) {
+				$express = true;
+			}
+		}
+		$xmas = $express ? '2026-12-17' : '2026-12-13';
+		$ny   = $express ? '2026-12-22' : '2026-12-18';
+		$dm   = function ( $ymd ) {
+			return (int) substr( $ymd, 8, 2 ) . '.' . substr( $ymd, 5, 2 ) . '.';
+		};
+
+		$notes = array();
+		if ( self::pause_msg_on( $created ) ) {
+			$notes[] = '🕯️ No 26.11 līdz 3.12 esam atvaļinājumā: pasūtījumus pieņemam, izgatavot sākam no 4.12.';
+		}
+		if ( $created >= '2026-11-11' ) {
+			if ( $unpaid ) { // gaida apmaksu: termiņš skaitās no apmaksas dienas
+				if ( $d <= $xmas ) {
+					$notes[] = '🎄 Ja apmaksāsiet līdz ' . $dm( $xmas ) . ', sveces paspēs līdz Ziemassvētkiem.';
+				} elseif ( $d <= $ny ) {
+					$notes[] = '🥂 Līdz Ziemassvētkiem diemžēl vairs nepaspēsim, bet, ja apmaksāsiet līdz ' . $dm( $ny ) . ', sveces paspēs līdz Jaunajam gadam.';
+				} else {
+					$notes[] = '🕯️ Lūdzu, ņemiet vērā: līdz svētkiem šo pasūtījumu piegādāt vairs nepaspēsim.';
+				}
+			} elseif ( $d <= $xmas ) {
+				$notes[] = '🎄 Jūsu pasūtījums paspēs līdz Ziemassvētkiem.';
+			} elseif ( $d <= $ny ) {
+				$notes[] = '🥂 Līdz Ziemassvētkiem diemžēl nepaspēsim, bet līdz Jaunajam gadam sveces būs pie jums.';
+			} else {
+				$notes[] = '🕯️ Lūdzu, ņemiet vērā: līdz svētkiem šo pasūtījumu piegādāt nepaspēsim.';
+			}
 		}
 		foreach ( $notes as $n ) {
-			echo $plain_text ? "\n" . esc_html( $n ) . "\n" : '<p style="margin:0 0 16px;padding:12px 14px;background:#fbf3f1;border-radius:8px">🕯️ ' . esc_html( $n ) . '</p>';
+			echo $plain_text ? "\n" . esc_html( $n ) . "\n" : '<p style="margin:0 0 16px;padding:12px 14px;background:#fbf3f1;border-radius:8px">' . esc_html( $n ) . '</p>';
 		}
 	}
 
