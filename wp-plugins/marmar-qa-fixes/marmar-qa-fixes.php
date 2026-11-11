@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.22
+ * Version:           1.9.23
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -492,6 +492,54 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 
 	/** WooCommerce e-pastu teksti, kam latviešu tulkojuma vēl nav (WC 9.8+ „email improvements"). */
 	const MAIL_LV = array(
+		// Konts, parole (WooCommerce lv tulkojumā trūkst; pievienots 11.11.2026).
+		'This password reset key is for a different user account. Please log out and try again.' => 'Šī paroles atjaunošanas saite ir citam kontam. Lūdzu, izrakstieties un mēģiniet vēlreiz.',
+		'Please wait a moment before requesting another link to change your password.' => 'Lūdzu, pagaidiet brīdi, pirms pieprasāt jaunu paroles maiņas saiti.',
+		'Sorry, we were unable to resend the link. Please try again.' => 'Diemžēl neizdevās nosūtīt saiti vēlreiz. Lūdzu, mēģiniet vēlreiz.',
+		'We have emailed you a new link to change your password.' => 'Mēs nosūtījām jums uz e-pastu jaunu saiti paroles maiņai.',
+		'Display name cannot be changed to email address due to privacy concern.' => 'Privātuma dēļ attēlojamo vārdu nevar mainīt uz e-pasta adresi.',
+		'An error occurred while saving account details: %s' => 'Saglabājot konta datus, radās kļūda: %s',
+		'Please choose product options for %1$s.' => 'Lūdzu, izvēlieties preces “%1$s” opcijas.',
+		'Please choose product options by visiting <a href="%1$s" title="%2$s">%2$s</a>.' => 'Lūdzu, izvēlieties preces opcijas: <a href="%1$s" title="%2$s">%2$s</a>.',
+		'Your account was created successfully and a password has been sent to your email address.' => 'Konts ir izveidots, un parole nosūtīta uz jūsu e-pastu.',
+		'Your account was created successfully. Your login details have been sent to your email address.' => 'Konts ir izveidots. Pieslēgšanās dati nosūtīti uz jūsu e-pastu.',
+		'Reset your password for {site_title}' => 'Paroles atjaunošana — {site_title}',
+		'%1$sResend%2$s' => '%1$sNosūtīt vēlreiz%2$s',
+		'Your account is using a temporary password. We emailed you a link to change your password.' => 'Jūsu kontam ir pagaidu parole. Mēs nosūtījām uz e-pastu saiti paroles maiņai.',
+		'Pay for order %s' => 'Apmaksāt pasūtījumu %s',
+		'View order %s' => 'Skatīt pasūtījumu %s',
+		'Cancel order %s' => 'Atcelt pasūtījumu %s',
+		'Please provide a valid account username.' => 'Lūdzu, norādiet derīgu lietotājvārdu.',
+		'If you didn’t make this request, just ignore this email. If you’d like to proceed, reset your password via the link below:' => 'Ja jūs to nepieprasījāt, vienkārši ignorējiet šo e-pastu. Lai turpinātu, atjaunojiet paroli, izmantojot saiti zemāk:',
+		'Reset your password' => 'Atjaunot paroli',
+		'From your account dashboard you can view your <a href="%1$s">recent orders</a>, manage your <a href="%2$s">billing address</a>, and <a href="%3$s">edit your password and account details</a>.' => 'Savā kontā varat apskatīt <a href="%1$s">pēdējos pasūtījumus</a>, mainīt <a href="%2$s">rēķina adresi</a> un <a href="%3$s">mainīt paroli un konta datus</a>.',
+		'This will be how your name will be displayed in the account section and in reviews' => 'Šādi jūsu vārds būs redzams kontā un atsauksmēs',
+		'This will be how your name will be displayed in the account section' => 'Šādi jūsu vārds būs redzams kontā',
+		'A link to set a new password will be sent to your email address.' => 'Saite jaunas paroles iestatīšanai tiks nosūtīta uz jūsu e-pastu.',
+		'View order number %s' => 'Skatīt pasūtījumu Nr. %s',
+		'%1$s order number %2$s' => '%1$s pasūtījumu Nr. %2$s',
+		'Your withdrawal has been submitted.' => 'Jūsu atteikums ir iesniegts.',
+		'We\'ve emailed an acknowledgment to %s with your details and the date and time of submission. Keep it as proof of your withdrawal.' => 'Mēs nosūtījām apstiprinājumu uz %s ar jūsu datiem un iesniegšanas laiku. Saglabājiet to kā atteikuma apliecinājumu.',
+		'We\'ll review your request and contact you about next steps, including any refund due.' => 'Mēs izskatīsim pieprasījumu un sazināsimies par turpmākajiem soļiem, tostarp par iespējamo naudas atmaksu.',
+		'Back to the shop' => 'Atpakaļ uz veikalu',
+		'Check your details before confirming.' => 'Pirms apstiprināšanas pārbaudiet datus.',
+		'Nothing has been sent yet. Your withdrawal is submitted when you select "Confirm withdrawal".' => 'Vēl nekas nav nosūtīts. Atteikums tiks iesniegts, kad nospiedīsiet «Apstiprināt atteikumu».',
+		'Order withdrawal progress' => 'Atteikuma soļi',
+		'Your details' => 'Jūsu dati',
+		'Review and confirm' => 'Pārbaudiet un apstipriniet',
+		'After you confirm, we\'ll email an acknowledgment to %s with these details and the date and time of submission. Keep it as proof of your withdrawal.' => 'Pēc apstiprināšanas nosūtīsim apstiprinājumu uz %s ar šiem datiem un iesniegšanas laiku. Saglabājiet to kā atteikuma apliecinājumu.',
+		'Confirm withdrawal' => 'Apstiprināt atteikumu',
+		'Edit details' => 'Labot datus',
+		'Tell us if you want to withdraw from an order placed on this store. You do not need to give a reason.' => 'Paziņojiet mums, ja vēlaties atteikties no šajā veikalā veikta pasūtījuma. Iemesls nav jānorāda.',
+		'Some items, like personalized products, may not be eligible. We review every request and reply by email.' => 'Uz dažām precēm, piemēram, personalizētām, atteikuma tiesības neattiecas. Katru pieprasījumu izskatām un atbildam e-pastā.',
+		'No reason needed. If you selected specific items, list them here.' => 'Iemesls nav jānorāda. Ja atsakāties tikai no dažām precēm, norādiet tās šeit.',
+		'Continue to review' => 'Turpināt',
+		'Awaiting confirmation' => 'Gaida apstiprinājumu',
+		'Stock notifications awaiting confirmation' => 'Paziņojumi par pieejamību, kas gaida apstiprinājumu',
+		'Active stock notifications' => 'Aktīvie paziņojumi par pieejamību',
+		'Date signed up' => 'Pieteikšanās datums',
+		'Product unavailable' => 'Prece nav pieejama',
+		'Resend verification' => 'Nosūtīt apstiprinājumu vēlreiz',
 		'We’re getting in touch to let you know that order #%1$s from %2$s has been cancelled.' => 'Informējam, ka pasūtījums #%1$s (%2$s) ir atcelts.',
 		'Notification to let you know — order #%1$s belonging to %2$s has been cancelled:'      => 'Informējam, ka pasūtījums #%1$s (%2$s) ir atcelts:',
 		'You’ve received a new order from %s:'                                                   => 'Saņemts jauns pasūtījums no %s:',
