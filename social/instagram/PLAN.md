@@ -18,6 +18,12 @@ _Страница обновляется сама при каждом запус
 | чт 19.11 12:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-st2.jpg" width="90"> | сторис |  | ⏳ запланирован |
 | сб 21.11 12:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-st3b.jpg" width="90"> | сторис |  | ⏳ запланирован |
 | сб 21.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-s1.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-s2.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-s3.jpg" width="90"> +1 | карусель (4) | Zemenes novembrī? Pie manis var 🍓😄 Šīs zemenītes ir sveces: tās nesabojājas, nenokrīt no tortes, un neviens t… | ⏳ запланирован |
+| чт 03.12 12:45 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gw-st1.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| вс 06.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gw-st2.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| чт 10.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gw-st3.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| чт 24.12 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-xmas-st1.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| пт 25.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-xmas-st2.jpg" width="90"> | сторис |  | ⏳ запланирован |
+| чт 31.12 20:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-ny-st.jpg" width="90"> | сторис |  | ⏳ запланирован |
 
 ## ✅ Уже вышло
 
