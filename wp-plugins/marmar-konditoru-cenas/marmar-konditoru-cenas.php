@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.5.4
+ * Version:           1.5.5
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.5.4';
+	const VER       = '1.5.5';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -378,7 +378,7 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 		$out .= '<p>Konditoriem un konditorejām man ir īpašas cenas <strong>kūku svecēm un ciparu svecēm</strong>.</p><ul>';
 		$out .= '<li>īpašas cenas, kas redzamas pēc pieslēgšanās;</li>';
 		$out .= '<li>minimālais pasūtījums — ' . esc_html( (int) $s['min_order'] ) . ' € (bez piegādes);</li>';
-		$out .= '<li>apmaksa uzreiz internetbankā vai ar karti (Paysera) vai pēc rēķina, kas pienāk uz e-pastu;</li>';
+		$out .= '<li>apmaksa uzreiz internetbankā (Paysera) vai pēc rēķina, kas pienāk uz e-pastu;</li>';
 		$out .= '<li>iepriekšējo pasūtījumu var atkārtot ar vienu klikšķi sadaļā «Mans konts»;</li>';
 		$out .= '<li>piegāde uz pakomātu 2,50 €, no 50 € — bez maksas.</li></ul>';
 		$out .= '<p>Piesakies — es apstiprināšu pieteikumu, un tu saņemsi e-pastu ar pieeju.</p>';
