@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Emails
  * Description:       Брошенные корзины (2 письма с восстановлением корзины) и просьба об отзыве в Google через N дней после статуса «Выполнен». Письма в стиле WooCommerce, ссылка «отписаться», статистика.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            MarMar CANDLES
  * Requires at least: 6.3
  * Requires PHP:      7.4
@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MARMAR_EMAILS_VERSION', '1.0.0' );
+define( 'MARMAR_EMAILS_VERSION', '1.1.0' );
 define( 'MARMAR_EMAILS_FILE', __FILE__ );
 define( 'MARMAR_EMAILS_DIR', plugin_dir_path( __FILE__ ) );
 
@@ -23,6 +23,7 @@ require_once MARMAR_EMAILS_DIR . 'includes/class-carts.php';
 require_once MARMAR_EMAILS_DIR . 'includes/class-reviews.php';
 require_once MARMAR_EMAILS_DIR . 'includes/class-optout.php';
 require_once MARMAR_EMAILS_DIR . 'includes/class-admin.php';
+require_once MARMAR_EMAILS_DIR . 'includes/class-design.php';
 
 register_activation_hook( __FILE__, array( 'MarMar_Emails_Install', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'MarMar_Emails_Install', 'deactivate' ) );
@@ -42,6 +43,7 @@ add_action( 'plugins_loaded', function () {
 	MarMar_Emails_Carts::init();
 	MarMar_Emails_Reviews::init();
 	MarMar_Emails_Optout::init();
+	MarMar_Emails_Design::init();
 	if ( is_admin() ) {
 		MarMar_Emails_Admin::init();
 	}

@@ -48,6 +48,9 @@ class MarMar_Emails_Admin {
 			'test'     => 'Тест и предпросмотр',
 		);
 		echo '<div class="wrap"><h1>MarMar Emails</h1>';
+		if ( class_exists( 'MarMar_Emails_Design' ) ) {
+			MarMar_Emails_Design::admin_box();
+		}
 		if ( isset( $_GET['marmar_msg'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( sanitize_text_field( wp_unslash( $_GET['marmar_msg'] ) ) ) . '</p></div>'; // phpcs:ignore WordPress.Security.NonceVerification
 		}

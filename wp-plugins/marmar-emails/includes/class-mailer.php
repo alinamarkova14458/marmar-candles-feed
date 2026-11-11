@@ -31,7 +31,10 @@ class MarMar_Emails_Mailer {
 		$vars['unsubscribe_url'] = MarMar_Emails_Optout::url( $to );
 
 		$content  = self::replace( $body, $vars );
-		$content .= '<p style="margin-top:32px;font-size:12px;color:#8a8a8a;">' . self::replace( (string) MarMar_Emails_Settings::get( 'unsubscribe_text' ), $vars ) . '</p>';
+		if ( class_exists( 'MarMar_Emails_Design' ) ) {
+			$content = MarMar_Emails_Design::buttons( $content );
+		}
+		$content .= '<p style="margin-top:28px;font-size:12px;color:#8A7F7C;">' . self::replace( (string) MarMar_Emails_Settings::get( 'unsubscribe_text' ), $vars ) . '</p>';
 
 		$mailer  = WC()->mailer();
 		$wrapped = $mailer->wrap_message( wp_strip_all_tags( self::replace( $heading, $vars ) ), wpautop( $content, false ) );
