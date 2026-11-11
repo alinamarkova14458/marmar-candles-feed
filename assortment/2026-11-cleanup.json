@@ -1,0 +1,139 @@
+{
+ "remove_interior": [
+  {
+   "id": 22816,
+   "name": "Dabīgā vaska galda spirālveida svece, | ICE BLUE ZILS | 18 cm"
+  },
+  {
+   "id": 22784,
+   "name": "Dabīgā vaska galda spirālveida svece, | GAIŠI ZAĻŠ | 18 cm"
+  },
+  {
+   "id": 22783,
+   "name": "Dabīgā vaska galda spirālveida svece, | GAIŠI ROZĀ | 18 cm"
+  },
+  {
+   "id": 22273,
+   "name": "Skaistumkopšanas dāvanu komplekts ar Bubble sveci"
+  },
+  {
+   "id": 21906,
+   "name": "Dabīgā vaska galda svece ar bumbiņu dizainu | 24 cm | Dažādas krāsas"
+  },
+  {
+   "id": 21429,
+   "name": "Dabīgā vaska spirālveida galda svece | 18 cm | 1 gab"
+  },
+  {
+   "id": 18828,
+   "name": "Dabīgā vaska stāvsvece, Burgundy krāsa"
+  },
+  {
+   "id": 18827,
+   "name": "Dabīgā vaska stāvsvece | Pūderrozā | 10 cm"
+  },
+  {
+   "id": 18826,
+   "name": "Stāvsvece no dabīgā vaska, Dzeltenā"
+  },
+  {
+   "id": 18822,
+   "name": "Dabīgā vaska svece ar rievotu dizainu, Lavandas | 10 cm"
+  },
+  {
+   "id": 15209,
+   "name": "Dabīgā vaska galda svece, 18 cm, rievota, Gaiši rozā ar zeltu"
+  },
+  {
+   "id": 11716,
+   "name": "Dabīgā vaska peonijas svece | Dekoratīva zieda formas svece"
+  },
+  {
+   "id": 11530,
+   "name": "Palo Santo kociņi, 50g"
+  },
+  {
+   "id": 10991,
+   "name": "Bubble sveču dāvanu komplekts ar zelta dekoru (3 gab.) ar sērkociņiem"
+  },
+  {
+   "id": 10987,
+   "name": "Bubble sveču dāvanu komplekts ar zelta dekoru (4 gab.) ar sērkociņiem"
+  },
+  {
+   "id": 10977,
+   "name": "Sojas vaska Bubble svece | Balta | Roku darbs"
+  },
+  {
+   "id": 10956,
+   "name": "Bubble svece ar zelta folijas akcentiem"
+  }
+ ],
+ "remove_giftcard_duplicates": [
+  {
+   "id": 19854,
+   "name": "Dāvanu karte 100 eur vērtībā"
+  },
+  {
+   "id": 19855,
+   "name": "Dāvanu karte 20 eur vērtībā"
+  },
+  {
+   "id": 19856,
+   "name": "Dāvanu karte 20 eur vērtībā"
+  },
+  {
+   "id": 19857,
+   "name": "Dāvanu karte 30 eur vērtībā"
+  },
+  {
+   "id": 19858,
+   "name": "Dāvanu karte 40 eur vērtībā"
+  },
+  {
+   "id": 19859,
+   "name": "Dāvanu karte 50 eur vērtībā"
+  }
+ ],
+ "keep_giftcards": [
+  {
+   "id": 19849,
+   "name": "Dāvanu karte 20 eur vērtībā"
+  },
+  {
+   "id": 19850,
+   "name": "Dāvanu karte 30 eur vērtībā"
+  },
+  {
+   "id": 19851,
+   "name": "Dāvanu karte 40 eur vērtībā"
+  },
+  {
+   "id": 19852,
+   "name": "Dāvanu karte 50 eur vērtībā"
+  },
+  {
+   "id": 19853,
+   "name": "Dāvanu karte 100 eur vērtībā"
+  }
+ ],
+ "rules": {
+  "cake_candles_min_pack": "10 gab (no single pieces), approved by Alina 07.11.2026",
+  "matches": "sold only in the stated pack, not per piece",
+  "sold_per_piece_ok": [
+   "Kūku svece, spirālveida, 1 gab (spiral)",
+   "Balonu formas kūku svece, 1 gab (balloon)",
+   "number candles",
+   "toppers",
+   "Svečturi kūku svecēm (holders accessory)"
+  ]
+ },
+ "konditori_wholesale": {
+  "display": "no 'packs' wording for konditors: choose number of candles with buttons 10 / 50 / 100 / 200 sveces; total price shown automatically",
+  "pricing": "0,50 €/svece (10–199), 0,45 €/svece from 200 (konditors only); numbers 2,50 €/gab any quantity; order min 30 €",
+  "implementation_note": "buttons set quantity of the 10-gab variation (x1, x5, x10, x20) and label shows candles + total; tier applied in cart",
+  "approved": "Alina 07.11.2026 (replaces previous pack-buttons idea)",
+  "build_with": "merged cake-candle cards",
+  "pack7_products": "Zigzag and Viļņota stay 7 gab in retail (Alina 07.11.2026). For konditors their buttons are 7 / 35 / 70 / 140 sveces (multiples of 7); Zigzag 0,70 €/svece, Viļņota 0,50 €/svece."
+ }
+}
