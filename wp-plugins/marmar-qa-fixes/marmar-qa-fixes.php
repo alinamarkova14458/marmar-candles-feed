@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.24
+ * Version:           1.9.25
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -500,14 +500,14 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 		if ( $created >= '2026-11-11' ) {
 			if ( $unpaid ) { // gaida apmaksu: termiņš skaitās no apmaksas dienas
 				if ( $d <= $xmas ) {
-					$notes[] = '🎄 Ja apmaksāsiet līdz ' . $dm( $xmas ) . ', sveces paspēs līdz Ziemassvētkiem.';
+					$notes[] = '🎄 Ja apmaksāsiet līdz ' . $dm( $xmas ) . ', sveces būs pie jums vēl pirms Ziemassvētkiem.';
 				} elseif ( $d <= $ny ) {
 					$notes[] = '🥂 Līdz Ziemassvētkiem diemžēl vairs nepaspēsim, bet, ja apmaksāsiet līdz ' . $dm( $ny ) . ', sveces paspēs līdz Jaunajam gadam.';
 				} else {
 					$notes[] = '🕯️ Lūdzu, ņemiet vērā: līdz svētkiem šo pasūtījumu piegādāt vairs nepaspēsim.';
 				}
 			} elseif ( $d <= $xmas ) {
-				$notes[] = '🎄 Jūsu pasūtījums paspēs līdz Ziemassvētkiem.';
+				$notes[] = '🎄 Jūsu sveces būs pie jums vēl pirms Ziemassvētkiem.';
 			} elseif ( $d <= $ny ) {
 				$notes[] = '🥂 Līdz Ziemassvētkiem diemžēl nepaspēsim, bet līdz Jaunajam gadam sveces būs pie jums.';
 			} else {

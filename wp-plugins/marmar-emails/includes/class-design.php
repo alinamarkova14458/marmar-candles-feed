@@ -15,6 +15,7 @@ class MarMar_Emails_Design {
 	const SETTINGS = array(
 		'woocommerce_email_header_image'          => self::LOGO,
 		'woocommerce_email_header_image_width'    => '230',
+		'woocommerce_email_header_alignment'      => 'center',
 		'woocommerce_email_base_color'            => '#B9605F',
 		'woocommerce_email_background_color'      => '#FAF3F0',
 		'woocommerce_email_body_background_color' => '#FFFFFF',
@@ -23,7 +24,7 @@ class MarMar_Emails_Design {
 		'woocommerce_email_footer_text'           => 'MarMar Candles · Roku darbs Rīgā<br><a href="https://marmarcandles.com/lv/">marmarcandles.com</a> · <a href="https://www.instagram.com/marmar.candles">@marmar.candles</a>',
 	);
 
-	const BUTTON = 'display:inline-block;background:#B9605F;color:#ffffff;padding:15px 34px;border-radius:999px;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;';
+	const BUTTON = 'display:inline-block;background:#B9605F;color:#ffffff !important;padding:15px 34px;border-radius:999px;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;';
 
 	public static function init() {
 		add_filter( 'woocommerce_email_styles', array( __CLASS__, 'css' ), 99 );
@@ -35,7 +36,8 @@ class MarMar_Emails_Design {
 	public static function css( $css ) {
 		return $css . '
 #wrapper{background-color:#FAF3F0!important;padding:28px 12px!important}
-#template_header_image{padding:4px 0 22px!important}
+#template_header_image,#template_header_image p,#template_header_image td{padding:4px 0 22px!important;text-align:center!important}
+#template_header_image img{margin:0 auto!important;display:inline-block!important}
 #template_header_image img{width:230px;max-width:70%;height:auto}
 #template_container{background-color:#FFFFFF!important;border:1px solid #F0D9D6!important;border-radius:22px!important;box-shadow:none!important;overflow:hidden}
 #template_header{background-color:#FFFFFF!important;color:#735360!important;border-radius:22px 22px 0 0!important;border-bottom:0!important}
@@ -51,7 +53,6 @@ table.td{background-color:#FBF3F2!important;border:0!important;border-radius:14p
 th.td{color:#B9605F!important}
 tfoot th.td{color:#504E4A!important}
 .address{border:0!important;background-color:#FBF3F2!important;border-radius:14px!important;padding:14px 16px!important;color:#504E4A!important}
-a{color:#B9605F!important}
 #template_footer #credit,#template_footer td{color:#8A7F7C!important;font-family:Arial,Helvetica,sans-serif!important;font-size:12px!important;line-height:19px!important;text-align:center!important;border:0!important}
 #template_footer a{color:#B9605F!important;text-decoration:none!important}
 ';
@@ -59,7 +60,7 @@ a{color:#B9605F!important}
 
 	/** Старые кнопки MarMar Emails (#d68684, квадратные) → новые розовые «пилюли» по центру. */
 	public static function buttons( $html ) {
-		$html = preg_replace( '/<p style="margin:28px 0;">(\s*<a [^>]*style="display:inline-block;background:#d68684[^"]*")/i', '<p style="margin:26px 0;text-align:center;">$1', $html );
+		$html = preg_replace( '/<p[^>]*>(\s*<a [^>]*style="display:inline-block;background:#d68684[^"]*")/i', '<p style="margin:26px 0;text-align:center;">$1', $html );
 		return preg_replace( '/style="display:inline-block;background:#d68684[^"]*"/i', 'style="' . self::BUTTON . '"', $html );
 	}
 

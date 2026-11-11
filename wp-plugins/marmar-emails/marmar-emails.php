@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Emails
  * Description:       Брошенные корзины (2 письма с восстановлением корзины) и просьба об отзыве в Google через N дней после статуса «Выполнен». Письма в стиле WooCommerce, ссылка «отписаться», статистика.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Author:            MarMar CANDLES
  * Requires at least: 6.3
  * Requires PHP:      7.4
@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MARMAR_EMAILS_VERSION', '1.1.0' );
+define( 'MARMAR_EMAILS_VERSION', '1.1.1' );
 define( 'MARMAR_EMAILS_FILE', __FILE__ );
 define( 'MARMAR_EMAILS_DIR', plugin_dir_path( __FILE__ ) );
 
