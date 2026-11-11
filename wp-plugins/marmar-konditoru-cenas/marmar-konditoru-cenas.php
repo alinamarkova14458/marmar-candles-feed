@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Konditoru cenas
  * Description:       Īpašas cenas konditoriem (tikai kūku sveces un ciparu sveces): loma «Konditors», pieteikums ar apstiprināšanu ([marmar_konditoru_cenas]), konditora cenas precēm un variācijām, minimālais pasūtījums konditoriem, informācija uz preces un kategorijā, «Mana mēneša kaste» (ikmēneša pasūtījums ar atgādinājumu).
- * Version:           1.6.0
+ * Version:           1.6.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * Text Domain:       marmar-konditoru-cenas
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Konditoru_Cenas {
 
-	const VER       = '1.6.0';
+	const VER       = '1.6.1';
 	const ROLE      = 'konditors';
 	const META      = '_mm_kc_price';   // konditora cena precei / variācijai
 	const META_HAS  = '_mm_kc_has';     // vecākpreces karodziņš: vismaz vienai variācijai ir konditora cena
@@ -831,7 +831,7 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 		}
 		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin:1em 0">';
 		wp_nonce_field( 'mm_kc_link_catalog' );
-		echo '<input type="hidden" name="action" value="mm_kc_link_catalog"><button class="button" data-mmkc-link>Izveidot kontus kataloga konditoriem (bez e-pasta)</button></form>';
+		echo '<input type="hidden" name="action" value="mm_kc_link_catalog"><button class="button" data-mmkc-link>Izveidot kontus kataloga konditoriem (jauniem — e-pasts ar paroles saiti)</button></form>';
 		if ( class_exists( 'MarMar_KC_Box' ) ) {
 			MarMar_KC_Box::admin_section();
 		}
@@ -883,7 +883,11 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 				update_user_meta( $uid, self::U_STATUS, 'approved' );
 				if ( ! get_user_meta( $uid, self::U_DATA, true ) ) {
 					$ig = (string) get_post_meta( $pid, '_mmk_instagram', true );
-					update_user_meta( $uid, self::U_DATA, array( 'name' => $title, 'brand' => $title, 'email' => $email, 'phone' => (string) get_post_meta( $pid, '_mmk_phone', true ), 'insta' => $ig ? '@' . $ig : (string) get_post_meta( $pid, '_mmk_website', true ), 'city' => (string) get_post_meta( $pid, '_mmk_city', true ), 'msg' => 'No kataloga (konts izveidots automātiski, e-pasts nav sūtīts)', 'catalog' => 'yes', 'date' => current_time( 'mysql' ) ) );
+					update_user_meta( $uid, self::U_DATA, array( 'name' => $title, 'brand' => $title, 'email' => $email, 'phone' => (string) get_post_meta( $pid, '_mmk_phone', true ), 'insta' => $ig ? '@' . $ig : (string) get_post_meta( $pid, '_mmk_website', true ), 'city' => (string) get_post_meta( $pid, '_mmk_city', true ), 'msg' => 'No kataloga (konts izveidots automātiski)', 'catalog' => 'yes', 'date' => current_time( 'mysql' ) ) );
+				}
+				if ( 'jauns konts' === $was ) {
+					self::approved_mail( $u, '', true );
+					$was .= ', e-pasts nosūtīts';
 				}
 				$log[] = $title . ': ' . $was . ', īpašas cenas ieslēgtas';
 			} else {
@@ -921,6 +925,19 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 		exit;
 	}
 
+	/** E-pasts: konts apstiprināts / izveidots — ar paroles saiti. */
+	public static function approved_mail( $u, $cat_line = '', $created = false ) {
+		$uid = $u->ID;
+		$key  = get_password_reset_key( $u );
+		$link = is_wp_error( $key ) ? wc_get_page_permalink( 'myaccount' ) : add_query_arg( array( 'key' => $key, 'id' => $uid ), wc_get_endpoint_url( 'lost-password', '', wc_get_page_permalink( 'myaccount' ) ) );
+		$name = $u->first_name ? $u->first_name : $u->display_name;
+		wp_mail(
+			$u->user_email,
+			$created ? 'MarMar Candles: tavs konditora konts ir izveidots 🎂' : 'MarMar Candles: tavs konditora konts ir apstiprināts 🎂',
+			"Sveiki, {$name}!\n\n" . ( $created ? 'Paldies, ka esi mūsu konditoru katalogā! Mēs izveidojām tev konditora kontu MarMar Candles veikalā — tagad vari pasūtīt kūku sveces un ciparu sveces par īpašām cenām. Cenas redzēsi pēc pieslēgšanās.' : 'Tavs konditora konts ir apstiprināts. Pēc pieslēgšanās veikalā redzēsi īpašās cenas kūku svecēm un ciparu svecēm.' ) . "\n{$cat_line}\nIestati paroli: {$link}\nPieslēgties: " . wc_get_page_permalink( 'myaccount' ) . "\n\nMinimālais pasūtījums — " . (int) self::settings()['min_order'] . " € (bez piegādes). Piegāde uz pakomātu 2,50 €, no 50 € — bez maksas. Rēķins pienāks automātiski uz e-pastu, iepriekšējo pasūtījumu vari atkārtot ar vienu klikšķi sadaļā «Mans konts».\n\nAr cieņu,\nMarMar Candles\nhttps://marmarcandles.com"
+		);
+	}
+
 	public static function admin_decide() {
 		$uid = isset( $_GET['user'] ) ? absint( $_GET['user'] ) : 0;
 		$do  = isset( $_GET['do'] ) ? sanitize_key( $_GET['do'] ) : '';
@@ -943,14 +960,7 @@ body.single-product .woo-variation-items-wrapper ul.image-variable-items-wrapper
 				}
 				$cat_line = "\nTava kartīte ir publicēta konditoru katalogā: " . home_url( '/lv/konditori/' ) . "\n";
 			}
-			$key  = get_password_reset_key( $u );
-			$link = is_wp_error( $key ) ? wc_get_page_permalink( 'myaccount' ) : add_query_arg( array( 'key' => $key, 'id' => $uid ), wc_get_endpoint_url( 'lost-password', '', wc_get_page_permalink( 'myaccount' ) ) );
-			$name = $u->first_name ? $u->first_name : $u->display_name;
-			wp_mail(
-				$u->user_email,
-				'MarMar Candles: tavs konditora konts ir apstiprināts 🎂',
-				"Sveiki, {$name}!\n\nTavs konditora konts ir apstiprināts. Pēc pieslēgšanās veikalā redzēsi īpašās cenas kūku svecēm un ciparu svecēm.\n{$cat_line}\nIestati paroli: {$link}\nPieslēgties: " . wc_get_page_permalink( 'myaccount' ) . "\n\nMinimālais pasūtījums — " . (int) self::settings()['min_order'] . " € (bez piegādes). Piegāde uz pakomātu 2,50 €, no 50 € — bez maksas. Rēķins pienāks automātiski uz e-pastu, iepriekšējo pasūtījumu vari atkārtot ar vienu klikšķi sadaļā «Mans konts».\n\nAr cieņu,\nMarMar Candles\nhttps://marmarcandles.com"
-			);
+			self::approved_mail( $u, $cat_line );
 		} elseif ( 'reject' === $do ) {
 			$u->remove_role( self::ROLE );
 			update_user_meta( $uid, self::U_STATUS, 'rejected' );
