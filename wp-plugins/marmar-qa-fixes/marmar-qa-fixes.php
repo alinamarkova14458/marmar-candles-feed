@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.18
+ * Version:           1.9.20
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -118,6 +118,7 @@ final class MarMar_QA_Fixes {
 	public static function init() {
 		add_action( 'template_redirect', array( __CLASS__, 'redirects' ), 1 );
 		add_filter( 'gettext', array( __CLASS__, 'gettext' ), 20, 3 );
+		add_filter( 'woocommerce_email_enabled_customer_on_hold_order', array( __CLASS__, 'no_onhold_mail_paysera' ), 10, 2 );
 		add_filter( 'rank_math/frontend/title', array( __CLASS__, 'title_404' ), 20 );
 		add_filter( 'pre_get_document_title', array( __CLASS__, 'title_404' ), 20 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'checkout_i18n' ), 100 );
@@ -253,6 +254,9 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 	/** Poga «uz augšu» (#fab-stt) bija zem čata pogas apakšējā labajā stūrī — paceļam virs tās. */
 	public static function css() {
 		echo '<style id="mm-qa-css">#fab-stt{bottom:88px!important;right:22px!important}'
+			. '.woocommerce-columns--addresses .woocommerce-column{width:auto!important;max-width:none!important;flex:none!important;float:none!important;min-width:0}'
+			. '.woocommerce-columns--addresses .woocommerce-column address{width:auto!important;word-break:normal;overflow-wrap:anywhere}'
+			. '@media(max-width:689px){.woocommerce-columns--addresses{grid-template-columns:1fr!important;gap:20px}}'
 			. 'ul.products li.product{position:relative}.mm-badge-colors{position:absolute;top:12px;right:12px;z-index:5;background:rgba(255,255,255,.92);color:#5a4a4a;font-size:12px;font-weight:600;line-height:1;padding:7px 10px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.08);pointer-events:none}'
 			. '.single-product table.variations tr.mm-single,.single-product table.variations tr:has(ul.variable-items-wrapper>li.variable-item:only-child){display:none!important}</style>';
 	}
@@ -341,6 +345,14 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 			return self::MAIL_LV[ $text ];
 		}
 		return $translation;
+	}
+
+	/** Paysera „pending_settlement” liek pasūtījumu „Gaida apstrādi” — klientam nesūtām „gaidām apmaksu” vēstuli (viņš jau samaksāja). */
+	public static function no_onhold_mail_paysera( $enabled, $order ) {
+		if ( $order instanceof WC_Order && 0 === strpos( (string) $order->get_payment_method(), 'paysera' ) ) {
+			return false;
+		}
+		return $enabled;
 	}
 
 	/** WooCommerce e-pastu teksti, kam latviešu tulkojuma vēl nav (WC 9.8+ „email improvements"). */
