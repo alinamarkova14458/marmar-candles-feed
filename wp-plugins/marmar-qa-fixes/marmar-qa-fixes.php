@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.17
+ * Version:           1.9.18
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -213,10 +213,10 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 		$m    = self::MIN_ORDER;
 		$html = preg_replace(
 			'~Minimāl\w*\s+pasūtījum\w*(?:\s+summa)?\s*(?:—|–|-|ir)?\s*(<b>|<strong>)?(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)(</b>|</strong>)?~u',
-			'Pasūtījumiem zem ${1}' . $m . '$2$3 — piemaksa līdz ' . $m . ' €',
+			'Minimālais pasūtījums ${1}' . $m . '$2$3 — ja mazāk, starpību pieskaitām',
 			$html
 		);
-		return preg_replace( '~Min\.\s*pasūtījums\s*(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)~u', 'Zem ' . $m . '$1 — piemaksa', $html );
+		return preg_replace( '~Min\.\s*pasūtījums\s*(?:5|10)((?:\s|&nbsp;|\x{00A0}|\x{202F})*€)~u', 'Min. pasūtījums ' . $m . '$1 (ja mazāk — pieskaitām starpību)', $html );
 	}
 
 	public static function per_page() {
