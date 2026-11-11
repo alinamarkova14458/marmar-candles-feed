@@ -38,7 +38,6 @@ _Страница обновляется сама при каждом запус
 | чт 24.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-xmas-card-v2.jpg" width="90"> | фото | Priecīgus Ziemassvētkus! 🕯️ Šis gads man bija pilns ar vaska smaržu, vēlām naktīm darbnīcā un jūsu siltajiem … | ⏳ запланирован |
 | чт 24.12 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-xmas-st1.jpg" width="90"> | сторис |  | ⏳ запланирован |
 | пт 25.12 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-xmas-st2.jpg" width="90"> | сторис |  | ⏳ запланирован |
-| чт 31.12 12:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-ny-card-v2.jpg" width="90"> | фото | Laimīgu Jauno 2027. gadu! ✨ Ko tu šovakar iedomāsies, aizdedzot sveci? Uzraksti vienu vārdu komentāros — es a… | ⏳ запланирован |
 | чт 31.12 20:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-ny-st.jpg" width="90"> | сторис |  | ⏳ запланирован |
 
 ## ✅ Уже вышло
