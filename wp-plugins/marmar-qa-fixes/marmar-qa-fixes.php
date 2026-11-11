@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.15
+ * Version:           1.9.17
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -386,6 +386,23 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 			'Please select a %s'                => array( 'Lūdzu, izvēlieties: %s' ),
 		);
 		wp_add_inline_script( 'wp-i18n', 'wp.i18n.setLocaleData(' . wp_json_encode( $data ) . ',"woocommerce");' );
+		add_action( 'wp_footer', array( __CLASS__, 'paysera_text_js' ), 99 );
+	}
+
+	/** Paysera bloka apraksts kasē nāk angliski (JS) — aizvietojam latviski. */
+	public static function paysera_text_js() {
+		$map = array(
+			'You will be taken to the Paysera payment page to choose how you pay. Banks, cards, wallets and instalments, all in one place.'
+				=> 'Pēc pasūtījuma noformēšanas atvērsies Paysera drošā maksājumu lapa — tur izvēlieties savu banku, karti, Apple Pay vai Google Pay.',
+			'Apmaksa ar rēķinu' => 'Apmaksa ar banku, karti vai rēķinu',
+		);
+		?>
+<script>
+(function(){var M=<?php echo wp_json_encode( $map ); ?>;
+function fix(root){var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),n;while((n=w.nextNode())){var t=n.nodeValue.trim();if(M[t]){n.nodeValue=n.nodeValue.replace(t,M[t]);}}}
+fix(document.body);new MutationObserver(function(m){m.forEach(function(r){r.addedNodes.forEach(function(x){if(x.nodeType===1)fix(x);else if(x.nodeType===3&&M[x.nodeValue.trim()])x.nodeValue=M[x.nodeValue.trim()];});});}).observe(document.body,{childList:true,subtree:true});})();
+</script>
+		<?php
 	}
 
 	/** Grozs, kase un konts ir noindex — sitemap tos nevajag. */
