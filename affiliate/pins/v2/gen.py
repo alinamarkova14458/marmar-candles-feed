@@ -9,7 +9,7 @@ brand = "jalina.art" plaque (pill, DM Serif 42px) bottom centre, readable at 236
   python3 gen.py D <set-id> [mockup 1-4] [--title T]   "in use": one real mockup as hero + strip of elements
   python3 gen.py S <set-id> [--n 6..12] [--title T] [--size 1000x1500|1000x2000] [--paper 1|2|3]
                                                 product sheet: 9 (tall 12) big set elements on cotton paper
-  python3 gen.py R <set-id> [--title T]         replica of Alina's reference "Coffee" pin (8 items, 3x3, caps line in the centre)
+  python3 gen.py R <set-id> [--title T] [--theme light|dark|auto]  DEFAULT for own sets: replica of Alina's reference "Coffee" pin (8 items, 3x3, caps line in the centre)
   python3 gen.py list <set-id>                  show element indices of a set
 
 Writes v2-<T>-<id>.html here; render with `node shot.js` -> out/*.jpg.
@@ -488,8 +488,42 @@ R_MID_Y = (440, 870, 1280)
 R_SLATE = '#7D8CAB'
 
 
-def tmpl_r(sid, title=None):
+def set_theme(sid):
+    """'dark' when the set's own paint is dark (median luminance of opaque element pixels < 0.4, e.g. moody
+    burgundy florals; pastel/white/bright sets are 0.67-0.85), else 'light'."""
+    import numpy as np
+    from PIL import Image
+    px = []
+    for e in set_elements(sid):
+        a = np.asarray(Image.open(e[1]).convert('RGBA').resize((80, 80))).reshape(-1, 4)
+        px.append(a[a[:, 3] > 160][:, :3])
+    p = np.concatenate(px) / 255.
+    lum = 0.2126 * p[:, 0] + 0.7152 * p[:, 1] + 0.0722 * p[:, 2]
+    return 'dark' if np.median(lum) < 0.4 else 'light'
+
+
+def defringed(e):
+    """Dark theme: copy of the element with a 1px-eroded alpha and darkened semi-transparent edge pixels,
+    so no light halo shows on the wine wash (cached next to the other sizes)."""
+    import numpy as np
+    from PIL import Image, ImageFilter
+    out = e[2].replace('/1000/', '/1000d/')
+    if os.path.exists(out):
+        return out
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    im = Image.open(e[2]).convert('RGBA')
+    a2 = im.getchannel('A').filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(0.6))
+    A = np.asarray(a2).astype(np.float32) / 255
+    C = np.asarray(im.convert('RGB')).astype(np.float32) * (0.55 + 0.45 * np.clip(A * 1.4, 0, 1))[..., None]
+    Image.fromarray(np.dstack([C.clip(0, 255), A * 255]).astype(np.uint8), 'RGBA').save(out)
+    return out
+
+
+def tmpl_r(sid, title=None, theme='auto'):
     s = SHOP[sid]
+    if theme == 'auto':
+        theme = set_theme(sid)
+    dark = theme == 'dark'
     els = pick_showcase(set_elements(sid), 9)  # the reference shows 9 items (8 around + 1 under the caps line)
     title = title or s['name']
     mid = f'{s["count"]} PNG · 300 DPI'
@@ -512,7 +546,7 @@ def tmpl_r(sid, title=None):
         if c == 1 and r == 1:
             y = max(y, 705)  # below the middle caps line
         body += (f'<div class=abs style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{h:.0f}px">'
-                 f'<img src="file://{e[2]}"></div>')
+                 f'<img src="file://{defringed(e) if dark else e[2]}"></div>')
         used.append(e[0])
     bm = os.path.join(FONT_DIR, 'BodoniModa-VariableFont_opsz,wght.ttf')
     css = f'''@font-face{{font-family:B;src:url("file://{bm}")}}
@@ -525,6 +559,16 @@ font-family:B;font-variant-ligatures:none;font-kerning:normal}}
 .studio{{top:32px;font-size:40px;font-weight:450;font-variation-settings:'opsz' 24;color:{R_SLATE};letter-spacing:.01em}}
 .ttl{{top:84px;font-size:84px;font-weight:450;font-variation-settings:'opsz' 40;color:#3C3C3C;letter-spacing:.005em}}
 .mid{{top:651px;left:3px;font-size:29px;font-weight:500;font-variation-settings:'opsz' 28;color:{R_SLATE};letter-spacing:.01em}}'''
+    if dark:  # wine-to-black wash (dark_wash.py), ivory title, muted gold caps, gold rule with a diamond, soft shadows
+        css += f'''
+body{{background:#12060A url(file://{os.path.join(HERE, 'assets', 'wine-wash.jpg')}) 0 0/1000px 1500px no-repeat}}
+.abs img{{mix-blend-mode:normal;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55))}}
+.studio{{color:#B39A6A}} .ttl{{color:#F3E9DA}} .mid{{color:#C4A56B}}
+.rule{{position:absolute;left:380px;top:174px;width:240px;height:14px}}'''
+        body = body.replace('<div class=mid>', '<svg class=rule viewBox="0 0 240 14"><path d="M0 7H100M140 7H240" stroke="#c4a56b" '
+                            'stroke-width="1" opacity=".8"/><path d="M120 1 126 7 120 13 114 7Z" fill="none" stroke="#c4a56b" '
+                            'stroke-width="1"/><circle cx="106" cy="7" r="1.6" fill="#c4a56b"/><circle cx="134" cy="7" r="1.6" '
+                            'fill="#c4a56b"/></svg><div class=mid>', 1)
     doc = (f'<!doctype html><html data-w=1000 data-h=1500><head><meta charset=utf-8><style>{css}</style></head>'
            f'<body>{body}<script>document.fonts.ready.then(()=>{{const e=document.querySelector(".ttl");let s=84;const t=e.firstChild;'
            f'while(t.offsetWidth>940&&s>50){{s-=2;e.style.fontSize=s+"px"}}document.body.dataset.ready=1}})</script></body></html>')
@@ -597,6 +641,7 @@ def main():
     ap.add_argument('index', nargs='?', type=int)
     ap.add_argument('-n', '--n', type=int, default=None, help='A: number of elements (9-20, default 12); S: 6-12 (default 9, tall 12)')
     ap.add_argument('--size', default='1000x1500', help='S: 1000x1500 or 1000x2000')
+    ap.add_argument('--theme', choices=['light', 'dark', 'auto'], default='auto', help='R: light paper / dark wine wash (auto: by the set\'s own colours)')
     ap.add_argument('--paper', type=int, choices=[1, 2, 3], default=1, help='S: 1 cold-press, 2 smooth cotton, 3 creamy handmade')
     ap.add_argument('--title', help='A/C/D: override headline (keep it true: number = real count)')
     ap.add_argument('--text', help='B: 0-3 words over the hero ("" = no text)')
@@ -609,7 +654,7 @@ def main():
             print(f'{i:2d}  {e[0]}  (aspect {e[3]:.2f}){"  [skip: lettering]" if SKIP.search(e[0]) else ""}')
         return
     if a.template == 'R':
-        doc, used = tmpl_r(a.target, a.title)
+        doc, used = tmpl_r(a.target, a.title, a.theme)
         name = f'v2-R-{a.target}'
     elif a.template == 'S':
         sw, sh = map(int, a.size.lower().split('x'))
