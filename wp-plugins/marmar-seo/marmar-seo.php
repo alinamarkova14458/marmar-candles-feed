@@ -2,7 +2,7 @@
 /**
  * Plugin Name: MarMar SEO
  * Description: Один адрес для каждой страницы: 301 с www./http/area.lv на https://marmarcandles.com, canonical, og:url и карта сайта — на адреса с /lv/ (как их отдаёт GPTranslate).
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: MarMar Candles
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -18,6 +18,10 @@ final class MarMar_SEO {
 		add_filter( 'rank_math/frontend/canonical', array( __CLASS__, 'lv_url' ), 99 );
 		add_filter( 'rank_math/opengraph/url', array( __CLASS__, 'lv_url' ), 99 );
 		add_filter( 'rank_math/sitemap/entry', array( __CLASS__, 'sitemap_entry' ), 99, 3 );
+		// Не показываем посторонним имена для входа в админку.
+		add_filter( 'rest_endpoints', array( __CLASS__, 'hide_users_endpoint' ) );
+		add_filter( 'author_link', array( __CLASS__, 'author_link' ), 99 );
+		add_action( 'template_redirect', array( __CLASS__, 'block_author_pages' ), 0 );
 	}
 
 	/** www., marmarcandles.area.lv и http → https://marmarcandles.com (301). */
@@ -70,6 +74,35 @@ final class MarMar_SEO {
 			$entry['loc'] = self::lv_url( $entry['loc'] );
 		}
 		return $entry;
+	}
+
+	/** /wp-json/wp/v2/users отдавал всем имена для входа — оставляем только вошедшим. */
+	public static function hide_users_endpoint( $endpoints ) {
+		if ( is_user_logged_in() ) {
+			return $endpoints;
+		}
+		foreach ( array_keys( $endpoints ) as $route ) {
+			if ( 0 === strpos( $route, '/wp/v2/users' ) ) {
+				unset( $endpoints[ $route ] );
+			}
+		}
+		return $endpoints;
+	}
+
+	/** Ссылки «автор» в блоге вели на /author/<имя для входа>/ — ведём на главную. */
+	public static function author_link( $link ) {
+		return home_url( '/' );
+	}
+
+	/** /author/… и ?author=N → 301 на главную (иначе по ним можно узнать имя для входа). */
+	public static function block_author_pages() {
+		if ( is_admin() || is_user_logged_in() ) {
+			return;
+		}
+		if ( is_author() || isset( $_GET['author'] ) ) {
+			wp_safe_redirect( home_url( '/' ), 301, 'MarMar SEO' );
+			exit;
+		}
 	}
 }
 MarMar_SEO::init();

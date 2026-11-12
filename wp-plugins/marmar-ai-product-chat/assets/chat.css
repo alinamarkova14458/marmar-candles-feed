@@ -1,0 +1,31 @@
+#marmar-ai-root{position:fixed;right:20px;bottom:20px;z-index:99999;font-family:inherit}
+.marmar-ai-launch{width:56px;height:56px;border:0;border-radius:50%;cursor:pointer;font-weight:700;font-size:16px;background:#d68684 !important;color:#fff !important;box-shadow:0 6px 24px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;transition:transform .2s ease,box-shadow .2s ease}.marmar-ai-launch:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.22)}.marmar-ai-launch-icon{width:27px;height:27px;display:block;color:#fff !important}.marmar-ai-launch-icon path,.marmar-ai-launch-icon circle{stroke:#fff !important;fill:currentColor !important}
+.marmar-ai-window{width:360px;height:560px;background:#fff;border:1px solid #ddd;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.2);overflow:hidden;display:flex;flex-direction:column}
+.marmar-ai-header{height:54px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;box-sizing:border-box}
+.marmar-ai-close{border:0;background:transparent;font-size:26px;cursor:pointer}
+.marmar-ai-messages{flex:1;overflow:auto;padding:14px;background:#fafafa}
+.marmar-ai-msg{max-width:85%;padding:10px 12px;margin:0 0 10px;border-radius:14px;white-space:pre-wrap;line-height:1.4;font-size:14px}
+.marmar-ai-msg.user{margin-left:auto;background:#eee}
+.marmar-ai-msg.assistant{background:#fff;border:1px solid #eee}
+.marmar-ai-form{display:flex;padding:10px;border-top:1px solid #eee;background:#fff}
+.marmar-ai-input{flex:1;min-width:0;border:1px solid #ddd;border-radius:10px;padding:10px 12px}
+.marmar-ai-form button{margin-left:8px;width:44px;border:0;border-radius:10px;cursor:pointer}
+.marmar-ai-products{display:flex;flex-direction:column;gap:8px;margin:4px 0 12px}
+.marmar-ai-product{display:flex;gap:10px;background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:8px}
+.marmar-ai-product img{width:62px;height:62px;object-fit:cover;border-radius:8px}
+.marmar-ai-product-info{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.marmar-ai-product-info span{font-weight:600}
+.marmar-ai-product-info a{font-size:12px;text-decoration:underline}
+.marmar-ai-product-info a:hover{opacity:.75}
+@media(max-width:480px){
+  #marmar-ai-root{right:10px;bottom:10px}
+  .marmar-ai-window{width:calc(100vw - 20px);height:70vh}
+}
+
+.marmar-ai-header-actions{display:flex;align-items:center;gap:4px}.marmar-ai-header-actions button{border:0;background:transparent;cursor:pointer;font-size:22px;line-height:1;padding:4px 6px}.marmar-ai-new{font-size:20px!important}
+
+.marmar-ai-product-info small{font-size:11px;opacity:.75;display:block}.marmar-ai-product-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.marmar-ai-product-actions a{font-size:12px;text-decoration:underline}.marmar-ai-add{border:0;border-radius:8px;padding:6px 9px;background:#d68684;color:#fff;cursor:pointer;font-size:12px;line-height:1.2}.marmar-ai-add:hover{opacity:.9}.marmar-ai-add:disabled{opacity:.65;cursor:default}.marmar-ai-add.is-added{background:#b9a1a3}.marmar-ai-cart-bar{margin:4px 0 10px;padding:10px 12px;border-radius:12px;background:#d68684;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px}.marmar-ai-cart-bar a{color:#fff;text-decoration:underline;font-weight:600;white-space:nowrap}
+
+.marmar-ai-save-item{border:0;border-radius:8px;padding:6px 9px;background:#f4e7e8;color:#7d5963;cursor:pointer;font-size:12px;line-height:1.2}.marmar-ai-selection-bar{margin:4px 0 10px;padding:10px 12px;border-radius:12px;background:#f4e7e8;color:#7d5963;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px}.marmar-ai-selection-bar button{border:0;background:transparent;color:#7d5963;text-decoration:underline;cursor:pointer;font-weight:600}.marmar-ai-selection-modal{position:absolute;inset:54px 0 0 0;background:rgba(255,255,255,.97);z-index:20;padding:18px;overflow:auto}.marmar-ai-selection-panel{background:#fff;border:1px solid #eadfe1;border-radius:16px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);position:relative}.marmar-ai-selection-panel p{font-size:13px;line-height:1.45;color:#666}.marmar-ai-selection-x{position:absolute;right:10px;top:8px;border:0;background:transparent;font-size:24px;cursor:pointer}.marmar-ai-selection-share,.marmar-ai-selection-copy,.marmar-ai-selection-email button,.marmar-ai-selection-cart{display:block;width:100%;box-sizing:border-box;margin-top:8px;padding:10px;border-radius:10px;border:0;text-align:center;text-decoration:none;background:#d68684;color:#fff;cursor:pointer}.marmar-ai-selection-copy{background:#f1e6e7;color:#7d5963}.marmar-ai-selection-email{display:flex;gap:6px;margin-top:8px}.marmar-ai-selection-email input{flex:1;min-width:0;border:1px solid #ddd;border-radius:10px;padding:10px}.marmar-ai-selection-email button{width:auto;white-space:nowrap;margin-top:0}.marmar-ai-selection-cart{background:#7d5963}.marmar-ai-selection-status{margin-top:10px;font-size:12px;color:#7d5963;min-height:16px}
+
+.marmar-ai-variation-selector{margin-top:4px;display:flex;flex-direction:column;gap:8px}.marmar-ai-variation-group{display:flex;flex-direction:column;gap:5px}.marmar-ai-variation-label{font-size:11px;font-weight:600;color:#6f555f}.marmar-ai-variation-options{display:flex;flex-wrap:wrap;gap:5px}.marmar-ai-variation-chip{border:1px solid #e3cfd2;border-radius:999px;padding:6px 9px;background:#fff;color:#6f555f;cursor:pointer;font-size:11px;line-height:1.2}.marmar-ai-variation-chip.is-selected{background:#d68684;color:#fff;border-color:#d68684}.marmar-ai-variation-chip:disabled{opacity:.35;cursor:default;text-decoration:line-through}.marmar-ai-variation-chip:focus-visible{outline:2px solid #d68684;outline-offset:1px}
