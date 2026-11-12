@@ -1,4 +1,5 @@
-// Render every *.html in this folder (or those starting with argv[2]) to out/<name>.jpg, 1000x1500.
+// Render every *.html in this folder (or those starting with argv[2]) to out/<name>.jpg.
+// Size: 1000x1500, or <html data-w data-h> (template S, e.g. 1000x2000).
 const { chromium } = require('playwright');
 const fs = require('fs'), path = require('path');
 (async () => {
@@ -8,6 +9,8 @@ const fs = require('fs'), path = require('path');
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1000, height: 1500 } });
   for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.html') && x.startsWith(only))) {
+    const m = fs.readFileSync(path.join(dir, f), 'utf8').match(/data-w=(\d+) data-h=(\d+)/);
+    await p.setViewportSize(m ? { width: +m[1], height: +m[2] } : { width: 1000, height: 1500 });
     await p.goto('file://' + path.join(dir, f));
     await p.waitForFunction(() => document.body.dataset.ready === '1', null, { timeout: 15000 }).catch(() => {});
     await p.evaluate(() => Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }))));

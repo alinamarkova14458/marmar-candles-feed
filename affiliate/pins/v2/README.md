@@ -15,6 +15,17 @@ the product. Layouts keep ~130 px free at the bottom for it.
 | **C** numbered list | blush background, headline "`<N> <topic>`", 2×4 grid of the post's numbered product images (max 8 shown, N = real item count), brand plaque | blog articles |
 | **D** in use | cream background, headline "`<count> <set name> PNG`", one real mockup of the set (`jalina-factory/ready/<set>/mockup-N.jpg`, shown whole in a rounded card), strip of 3 set elements under it, brand plaque. No price, no dark blocks | own sets → `/shop/<slug>/` or Payhip |
 
+**S** product sheet (Nov 12 2026, modelled on Alina's favourite top pins, e.g. "LITTLE COQUETTES", "COFFEE LOVE VOL.2"):
+the whole pin is the product. Up to 25 of the set's own PNGs (lettering and very wide garlands skipped) are packed
+edge to edge in rows: the densest 3 elements are heroes (larger), the sparsest quarter are small accents. Sizes are
+scaled so each element's painted area matches its weight. Nothing overlaps and nothing is cropped. The best of 1500 random orders is
+chosen by fill, low wasted space and even rows. Background: procedural cold-press cotton watercolor paper
+(`assets/cotton-paper.jpg`, made by `paper.py`, no downloaded images), elements drawn with `multiply` so the tooth
+shows through like print. Title: set name in spaced DM Serif caps (no thin Didone is available locally).
+Subtitle: Manrope spaced caps `WATERCOLOR CLIPART · <count> PNG · 300 DPI`, or `CRAYON` when the shop.json desc
+says crayon. Count comes from shop.json. Brand: plain `jalina.art` 32 px at the bottom centre, with no plaque. Sizes 1000x1500
+or 1000x2000 (`-tall`). Try another `--seed` if a sheet looks unbalanced.
+
 ## Usage
 ```bash
 export PINS_CACHE=/path/to/scratch   # optional; set ZIPs are unpacked+trimmed+downscaled here once
@@ -25,7 +36,9 @@ python3 gen.py B post:christmas-tumbler-wrap 2   # 2nd product image of a post, 
 python3 gen.py C christmas-tumbler-wrap      # list pin (--title "8 Christmas Tumbler Wraps" to override)
 python3 gen.py D 21-dino-birthday 2          # mockup-2 as hero -> v2-D-21-dino-birthday-m2.html
                                              # --title "Make your own dino party toppers" --strip 0|3|4 --kicker "..."
-node shot.js [prefix]                        # renders *.html -> out/*.jpg
+python3 gen.py S 05-pastel-christmas --size 1000x2000   # -> v2-S-05-pastel-christmas-tall.html (--n 16..30, --title, --script)
+python3 paper.py                             # regenerate assets/cotton-paper.jpg (--seed)
+node shot.js [prefix]                        # renders *.html -> out/*.jpg (size from <html data-w data-h>, default 1000x1500)
 ```
 - Headlines for A/B come from `jalina-blog/src/shop.json` (`name`, `count`); C counts the post's
   `## N. Title` sections that have an image. Keep overrides true (number = real count), no prices.
