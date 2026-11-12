@@ -24,8 +24,9 @@ few BIG elements (9 by default, 12 on 1000x2000 `-tall`, `--n 6..12`) in an orga
 - **Guarantees:** bounding boxes never overlap, and nothing is cropped or touches the header.
 
 The picks are the most recognisable elements of the set. No lettering, no garlands, no tiny scatters (confetti, petals, footprints, clusters). Solid, dense objects come first, with one per subject type so the sheet stays varied.
-Background: procedural cold-press cotton watercolor paper, `assets/cotton-paper.jpg`, made by `paper.py`. It uses
-multi-octave pebble height map, Lambert light from the upper left, cool #F4F2EE, even light and no downloads. Elements use `multiply` so the paper
+Background: real CC0 paper scans from ambientCG (`assets/paper-1..3.jpg`, built by `paper_real.py`; sources and licence are in
+`assets/LICENSES.md`). `--paper 1` (the default) is cold-press watercolor paper, near-white. `2` is smooth warm cotton, very subtle. `3` is creamy
+handmade paper with faint fibres. Elements use `multiply` so the paper
 shows through like print. Header: studio line `JALINA.ART` (Manrope spaced caps, muted), set name big in DM Serif
 Display, `<count> PNG · 300 DPI` (count from shop.json). No bottom brand: the studio line carries jalina.art.
 
@@ -40,7 +41,7 @@ python3 gen.py C christmas-tumbler-wrap      # list pin (--title "8 Christmas Tu
 python3 gen.py D 21-dino-birthday 2          # mockup-2 as hero -> v2-D-21-dino-birthday-m2.html
                                              # --title "Make your own dino party toppers" --strip 0|3|4 --kicker "..."
 python3 gen.py S 05-pastel-christmas --size 1000x2000   # -> v2-S-05-pastel-christmas-tall.html (--n 6..12, --title)
-python3 paper.py                             # regenerate assets/cotton-paper.jpg (--seed)
+python3 paper_real.py <Paper001 Color.jpg> <Paper006 Color.jpg>   # rebuild assets/paper-1..3.jpg (see assets/LICENSES.md)
 node shot.js [prefix]                        # renders *.html -> out/*.jpg (size from <html data-w data-h>, default 1000x1500)
 ```
 - Headlines for A/B come from `jalina-blog/src/shop.json` (`name`, `count`); C counts the post's

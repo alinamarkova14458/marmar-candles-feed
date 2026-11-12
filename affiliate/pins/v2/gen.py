@@ -7,7 +7,7 @@ brand = "jalina.art" plaque (pill, DM Serif 42px) bottom centre, readable at 236
   python3 gen.py B post:<slug> [index]          one hero = n-th product image of a blog post (white bg)
   python3 gen.py C <post-slug> [--title T]      numbered list pin from a blog post
   python3 gen.py D <set-id> [mockup 1-4] [--title T]   "in use": one real mockup as hero + strip of elements
-  python3 gen.py S <set-id> [--n 6..12] [--title T] [--size 1000x1500|1000x2000]
+  python3 gen.py S <set-id> [--n 6..12] [--title T] [--size 1000x1500|1000x2000] [--paper 1|2|3]
                                                 product sheet: 9 (tall 12) big set elements on cotton paper
   python3 gen.py list <set-id>                  show element indices of a set
 
@@ -239,7 +239,8 @@ def tmpl_d(sid, m, title=None, kicker=None, strip=3):
 # ---------- S: product sheet (Nov 12 2026, after Alina's favourite top pins) ----------
 # v2 (Alina's feedback): few BIG elements (default 9 = 3x3, tall 12 = 4x3) in a loose grid on visible
 # cold-press cotton paper; studio line "JALINA.ART" on top, set name big in DM Serif, "N PNG · 300 DPI".
-PAPER = os.path.join(HERE, 'assets', 'cotton-paper.jpg')  # made by paper.py (procedural, 1000x2000)
+# real CC0 paper scans (ambientCG, assets/LICENSES.md), prepared by paper_real.py: 1 cold-press, 2 smooth cotton, 3 creamy handmade
+PAPERS = {1: ('paper-1.jpg', '#F6F5F2'), 2: ('paper-2.jpg', '#F8F5F0'), 3: ('paper-3.jpg', '#F7F0E4')}
 # tiny bits / scatters that read badly when shown large
 TINY = re.compile(r'confetti|petals|dots|sprinkles|scatter|footprint|bone|crumbs|sparkle|cluster', re.I)
 
@@ -434,7 +435,7 @@ def organic_layout(ars, ds, bw, bh, gap, masks=None, seeds=16):
     return [(cx[i] - W_[i] / 2, cy[i] - H_[i] / 2, W_[i], H_[i]) for i in range(n)]
 
 
-def tmpl_s(sid, n, title=None, size=(1000, 1500)):
+def tmpl_s(sid, n, title=None, size=(1000, 1500), paper=1):
     w_, h_ = size
     s = SHOP[sid]
     n = n or (12 if h_ > 1600 else 9)
@@ -456,7 +457,7 @@ def tmpl_s(sid, n, title=None, size=(1000, 1500)):
 @font-face{{font-family:M;src:url(file://{FONTS}/Manrope-400-latin.woff2)}}
 *{{box-sizing:border-box;margin:0;padding:0}}
 html,body{{width:{w_}px;height:{h_}px;overflow:hidden}}
-body{{position:relative;background:#F4F2EE url(file://{PAPER}) 0 0/{w_}px {h_}px no-repeat;color:#3E3D3C}}
+body{{position:relative;background:{PAPERS[paper][1]} url(file://{os.path.join(HERE, 'assets', PAPERS[paper][0])}) 0 0/{w_}px {h_}px no-repeat;color:#3E3D3C}}
 .abs{{position:absolute}} .abs img{{width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:multiply}}
 .studio{{position:absolute;top:50px;left:0;right:0;text-align:center;font-family:M;font-size:25px;
 letter-spacing:.34em;padding-left:.34em;color:#8E8A93}}
@@ -540,6 +541,7 @@ def main():
     ap.add_argument('index', nargs='?', type=int)
     ap.add_argument('-n', '--n', type=int, default=None, help='A: number of elements (9-20, default 12); S: 6-12 (default 9, tall 12)')
     ap.add_argument('--size', default='1000x1500', help='S: 1000x1500 or 1000x2000')
+    ap.add_argument('--paper', type=int, choices=[1, 2, 3], default=1, help='S: 1 cold-press, 2 smooth cotton, 3 creamy handmade')
     ap.add_argument('--title', help='A/C/D: override headline (keep it true: number = real count)')
     ap.add_argument('--text', help='B: 0-3 words over the hero ("" = no text)')
     ap.add_argument('--strip', type=int, default=3, help='D: set elements under the mockup (0 = none, 3-4)')
@@ -552,8 +554,8 @@ def main():
         return
     if a.template == 'S':
         sw, sh = map(int, a.size.lower().split('x'))
-        doc, used = tmpl_s(a.target, a.n and max(6, min(12, a.n)), a.title, (sw, sh))
-        name = f'v2-S-{a.target}' + ('-tall' if sh > 1600 else '')
+        doc, used = tmpl_s(a.target, a.n and max(6, min(12, a.n)), a.title, (sw, sh), a.paper)
+        name = f'v2-S-{a.target}' + ('-tall' if sh > 1600 else '') + (f'-paper{a.paper}' if a.paper != 1 else '')
     elif a.template == 'A':
         doc, used = tmpl_a(a.target, max(9, min(20, a.n or 12)), a.title)
         name = f'v2-A-{a.target}'
