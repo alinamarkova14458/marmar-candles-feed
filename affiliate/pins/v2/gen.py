@@ -267,62 +267,190 @@ def noun(fname):
     return re.sub(r'(es|s)$', '', w[-1]) if w else fname
 
 
+HERO_RX = [r'bouquet|arrangement', r'(?<!cup)cake', r'house|village', r'wreath', r'christmas-tree|-tree\b', r'truck|sleigh']
+LARGE_RX = re.compile(r'cake|bouquet|arrangement|house|wreath|tree|truck|stack|volcano|vase|hugging|peony|rose\b', re.I)
+SMALL_RX = re.compile(r'mitten|candy|star|bud|leaf|sprig|hat\b|heart|horn|bone|cupcake|snowflake|berry|butterfly|moth|'
+                      r'olive|bauble|ornament|balloon|grapes|anemone|dahlia|calla', re.I)
+
+
 def pick_showcase(els, n):
-    """Most attractive elements: no lettering/garlands/tiny bits, dense (solid objects) first,
-    one per subject type while possible, then spread back into the set's (alphabetical) order."""
+    """Hero (most iconic: bouquet / cake / house / wreath / tree...) + the most recognisable rest:
+    no lettering/garlands/tiny bits, dense (solid) objects first, one per subject type while possible."""
     ok = [e for e in els if not SKIP.search(e[0]) and not TINY.search(e[0]) and 0.5 <= e[3] <= 1.8]
     if len(ok) < n:
         ok += [e for e in els if e not in ok and not SKIP.search(e[0]) and 0.4 <= e[3] <= 2.4]
     ranked = sorted(ok, key=lambda e: -ink(e[1]))
-    out, seen = [], set()
+    hero = next((e for rx in HERO_RX for e in ranked if re.search(rx, e[0], re.I)), ranked[0])
+    out, seen = [hero], {noun(hero[0])}
     for e in ranked:
-        if noun(e[0]) not in seen:
-            out.append(e); seen.add(noun(e[0]))
         if len(out) == n:
             break
+        if e not in out and noun(e[0]) not in seen:
+            out.append(e); seen.add(noun(e[0]))
     for e in ranked:
         if len(out) == n:
             break
         if e not in out:
             out.append(e)
-    # interleave so neighbours differ (alternate from both ends of the density ranking)
-    out.sort(key=lambda e: -ink(e[1]))
-    mixed = []
-    while out:
-        mixed.append(out.pop(0))
-        if out:
-            mixed.append(out.pop(len(out) // 2))
-    return mixed
+    return out  # out[0] = hero
+
+
+def sheet_sizes(els):
+    """Relative 'diameter' per element: hero 1.85, 2-3 naturally large ones 1.3, small things 0.86,
+    rest 1.0; sparse paintings get a little more room. Largest/smallest capped at 2.3."""
+    fills = [ink(e[1]) for e in els]
+    tier = [1.0] * len(els)
+    tier[0] = 1.85
+    big = [i for i in range(1, len(els)) if LARGE_RX.search(els[i][0])]
+    big = (big + sorted((i for i in range(1, len(els)) if i not in big), key=lambda i: -fills[i]))[:3 if len(els) >= 9 else 2]
+    for i in big:
+        tier[i] = 1.3
+    for i in range(1, len(els)):
+        if i not in big and SMALL_RX.search(els[i][0]):
+            tier[i] = 0.86
+    d = [t / fills[i] ** 0.2 for i, t in enumerate(tier)]
+    lo = max(d) / 2.3
+    return [max(x, lo) for x in d]
+
+
+def organic_layout(ars, ds, bw, bh, gap, masks=None, seeds=16):
+    """Curated-sheet placement inside a bw x bh box: hero (index 0) centred a little above the middle,
+    the others (largest first) at the sampled spot with the most clearance, then relaxed. Bounding boxes
+    never overlap (>= gap apart) and stay inside the box. The global size is binary-searched per seed;
+    the winner has the biggest elements, then the most even whitespace (smallest large holes)."""
+    import numpy as np
+    n = len(ars)
+    order = [0] + sorted(range(1, n), key=lambda i: -ds[i])
+    gx, gy = np.meshgrid(np.arange(0, bw, 22) + 11, np.arange(0, bh, 22) + 11)
+    gx, gy = gx.ravel(), gy.ravel()
+    # painted cells of each element (16x16 alpha grid) -> whitespace is measured to real paint, not bboxes
+    mk = [np.argwhere(m) for m in masks] if masks is not None else [np.argwhere(np.ones((16, 16), bool))] * n
+
+    def mhole(cx, cy, W_, H_):
+        px = np.concatenate([cx[i] - W_[i] / 2 + (mk[i][:, 1] + .5) / 16 * W_[i] for i in range(n)])
+        py = np.concatenate([cy[i] - H_[i] / 2 + (mk[i][:, 0] + .5) / 16 * H_[i] for i in range(n)])
+        d = np.sqrt((gx[:, None] - px[None]) ** 2 + (gy[:, None] - py[None]) ** 2).min(1)
+        return np.percentile(d, 97)
+
+    def dims(i, s):
+        return ds[i] * s * math.sqrt(ars[i]), ds[i] * s / math.sqrt(ars[i])
+
+    def place(s, rng):
+        W_ = np.array([dims(i, s)[0] for i in range(n)]); H_ = np.array([dims(i, s)[1] for i in range(n)])
+        if W_.max() > bw or H_.max() > bh:
+            return None
+        cx = np.full(n, np.nan); cy = np.full(n, np.nan)
+        h0 = order[0]
+        cx[h0] = bw / 2 + rng.uniform(-0.06, 0.06) * bw
+        cy[h0] = bh * rng.uniform(0.36, 0.5)
+        cx[h0] = min(max(cx[h0], W_[h0] / 2), bw - W_[h0] / 2); cy[h0] = min(max(cy[h0], H_[h0] / 2), bh - H_[h0] / 2)
+
+        def clear(i, x, y, done):
+            # gap between rect i at (x,y) and each placed rect (negative = overlap)
+            j = np.array(done)
+            sx = np.abs(x[:, None] - cx[j][None]) - (W_[i] + W_[j][None]) / 2
+            sy = np.abs(y[:, None] - cy[j][None]) - (H_[i] + H_[j][None]) / 2
+            return np.maximum(sx, sy).min(1)
+
+        done = [h0]
+        for i in order[1:]:
+            x = rng.uniform(W_[i] / 2, bw - W_[i] / 2, 1500); y = rng.uniform(H_[i] / 2, bh - H_[i] / 2, 1500)
+            c = clear(i, x, y, done)
+            k = int(np.argmax(c))
+            if c[k] < gap:
+                return None
+            cx[i], cy[i] = x[k], y[k]; done.append(i)
+        for _ in range(25):  # relax: nudge each non-hero element toward more clearance
+            for i in order[1:]:
+                oth = [j for j in done if j != i]
+                x = np.clip(cx[i] + rng.normal(0, 18, 30), W_[i] / 2, bw - W_[i] / 2)
+                y = np.clip(cy[i] + rng.normal(0, 18, 30), H_[i] / 2, bh - H_[i] / 2)
+                x = np.append(x, cx[i]); y = np.append(y, cy[i])
+                k = int(np.argmax(clear(i, x, y, oth)))
+                cx[i], cy[i] = x[k], y[k]
+        return cx, cy, W_, H_
+
+    best = None
+    for seed in range(seeds):
+        rng = np.random.default_rng(seed)
+        lo, hi, got = 50, 900, None
+        for _ in range(11):
+            s = (lo + hi) / 2
+            r = None
+            for _ in range(6):
+                r = place(s, rng)
+                if r: break
+            if r: lo, got = s, r
+            else: hi = s
+        if not got:
+            continue
+        cx, cy, W_, H_ = got
+        # whitespace evenness: distance from each free grid point to the nearest element
+        hole = mhole(cx, cy, W_, H_)
+        # vertical balance: painted mass centre near the box centre
+        cm = (cy * W_ * H_).sum() / (W_ * H_).sum()
+        score = lo * 1.0 - 1.5 * hole - 0.25 * abs(cm - bh / 2)
+        if best is None or score > best[0]:
+            best = (score, (cx.copy(), cy.copy(), W_.copy(), H_.copy()))
+    cx, cy, W_, H_ = best[1]
+    def holes():
+        return None, mhole(cx, cy, W_, H_)
+
+    def ok_at(i, x, y):
+        j = np.array([k for k in range(n) if k != i])
+        return np.maximum(np.abs(x - cx[j]) - (W_[i] + W_[j]) / 2, np.abs(y - cy[j]) - (H_[i] + H_[j]) / 2).min() >= gap
+
+    # re-seat each non-hero element (smallest first) where it best evens out the whitespace
+    rng = np.random.default_rng(99)
+    for _ in range(2):
+        for i in sorted(range(1, n), key=lambda i: W_[i] * H_[i]):
+            best_h, best_xy = holes()[1], (cx[i], cy[i])
+            ox, oy = cx[i], cy[i]
+            for x, y in zip(rng.uniform(W_[i] / 2, bw - W_[i] / 2, 70), rng.uniform(H_[i] / 2, bh - H_[i] / 2, 70)):
+                if not ok_at(i, x, y):
+                    continue
+                cx[i], cy[i] = x, y
+                h = holes()[1]
+                if h < best_h - 1:
+                    best_h, best_xy = h, (x, y)
+                cx[i], cy[i] = ox, oy
+            cx[i], cy[i] = best_xy
+    # grow: let each element take up to +30% where its neighbourhood has room (fills holes organically)
+    base = W_.copy()
+    for _ in range(40):
+        changed = False
+        for i in range(n):
+            f = 1.03
+            w, h = W_[i] * f, H_[i] * f
+            if w > base[i] * 1.3 or w > bw or h > bh:
+                continue
+            x = min(max(cx[i], w / 2), bw - w / 2); y = min(max(cy[i], h / 2), bh - h / 2)
+            j = np.array([k for k in range(n) if k != i])
+            g = np.maximum(np.abs(x - cx[j]) - (w + W_[j]) / 2, np.abs(y - cy[j]) - (h + H_[j]) / 2).min()
+            if g >= gap:
+                cx[i], cy[i], W_[i], H_[i] = x, y, w, h; changed = True
+        if not changed:
+            break
+    return [(cx[i] - W_[i] / 2, cy[i] - H_[i] / 2, W_[i], H_[i]) for i in range(n)]
 
 
 def tmpl_s(sid, n, title=None, size=(1000, 1500)):
     w_, h_ = size
     s = SHOP[sid]
-    cols = 3
     n = n or (12 if h_ > 1600 else 9)
     els = pick_showcase(set_elements(sid), n)
-    n = len(els)
-    rows = math.ceil(n / cols)
     title = title or s['name']
     sub = f'{s["count"]} PNG · 300 DPI'
-    top, bottom, side = 262, 50, 26
-    cw, ch = (w_ - 2 * side) / cols, (h_ - top - bottom) / rows
-    stagger = ch * 0.10  # middle column sits a little lower, like a hand-laid sheet
-    top_adj = top - stagger / 2
+    top, bottom, side = 268, 34, 30
+    bw, bh = w_ - 2 * side, h_ - top - bottom
+    from PIL import Image
+    import numpy as np
+    masks = [np.asarray(Image.open(e[1]).getchannel('A').resize((16, 16))) > 60 for e in els]
+    pos = organic_layout([e[3] for e in els], sheet_sizes(els), bw, bh, 14, masks)
     body = (f'<div class=studio>JALINA.ART</div><div class=ttl data-fit=96>{esc(title)}</div>'
             f'<div class=sub>{esc(sub)}</div>')
-    for k, e in enumerate(els):
-        r, c = divmod(k, cols)
-        in_row = min(cols, n - r * cols)
-        cx0 = side + (cols - in_row) * cw / 2  # centre a short last row
-        fill = ink(e[1])
-        # visual weight: sparse elements (sprigs, wreaths) may use more of the cell than solid ones
-        frac = 0.86 if fill > 0.55 else 0.92
-        bw_, bh_ = cw * frac, ch * frac * 0.92
-        w, h = (bw_, bw_ / e[3]) if bw_ / e[3] <= bh_ else (bh_ * e[3], bh_)
-        x = cx0 + c * cw + (cw - w) / 2
-        y = top_adj + r * ch + (ch - h) / 2 + (stagger if c == 1 and in_row == cols else 0)
-        body += (f'<div class=abs style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{h:.0f}px">'
+    for e, (x, y, w, h) in zip(els, pos):
+        body += (f'<div class=abs style="left:{side+x:.0f}px;top:{top+y:.0f}px;width:{w:.0f}px;height:{h:.0f}px">'
                  f'<img src="file://{e[2]}"></div>')
     css = f'''@font-face{{font-family:S;src:url(file://{FONTS}/DMSerifDisplay-400-latin.woff2)}}
 @font-face{{font-family:M;src:url(file://{FONTS}/Manrope-400-latin.woff2)}}

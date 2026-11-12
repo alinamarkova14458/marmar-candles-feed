@@ -16,10 +16,14 @@ the product. Layouts keep ~130 px free at the bottom for it.
 | **D** in use | cream background, headline "`<count> <set name> PNG`", one real mockup of the set (`jalina-factory/ready/<set>/mockup-N.jpg`, shown whole in a rounded card), strip of 3 set elements under it, brand plaque. No price, no dark blocks | own sets → `/shop/<slug>/` or Payhip |
 
 **S** product sheet (Nov 12 2026, after Alina's feedback and her favourite reference "Coffee" by a watercolor studio):
-few BIG elements in a loose 3-column grid: 9 by default (3x3), 12 on 1000x2000 (`-tall`), `--n 6..12`. The middle column
-sits slightly lower, like a hand-laid sheet. Picks the most recognisable elements of the set: no lettering, no garlands,
-no tiny scatters (confetti, petals, footprints, clusters); solid, dense objects come first, with one per subject type
-(gift, tree/plant, ornament, cake, drink, vehicle, house...) so the sheet stays varied.
+few BIG elements (9 by default, 12 on 1000x2000 `-tall`, `--n 6..12`) in an organic curated composition rather than a grid.
+- **Hero:** 1 element, about 1.85x the base size, placed centre or upper-middle. It is the most iconic one: bouquet > cake > house > wreath > tree > truck.
+- **Mediums:** 2–3 naturally large items at 1.3x. Small things (mittens, hats, ornaments, butterflies) get 0.86x. Largest to smallest is capped at 2.3x.
+- **Placement:** each element goes to the sampled spot with the most clearance, then the layout is relaxed. Elements are re-seated to even out whitespace, measured to the real paint (alpha), not bounding boxes. Finally they grow by up to 30% where there is room.
+- **Seeds:** 16 seeds are tried; the winner has the biggest elements, the smallest empty holes and a balanced mass.
+- **Guarantees:** bounding boxes never overlap, and nothing is cropped or touches the header.
+
+The picks are the most recognisable elements of the set. No lettering, no garlands, no tiny scatters (confetti, petals, footprints, clusters). Solid, dense objects come first, with one per subject type so the sheet stays varied.
 Background: procedural cold-press cotton watercolor paper, `assets/cotton-paper.jpg`, made by `paper.py`. It uses
 multi-octave pebble height map, Lambert light from the upper left, cool #F4F2EE, even light and no downloads. Elements use `multiply` so the paper
 shows through like print. Header: studio line `JALINA.ART` (Manrope spaced caps, muted), set name big in DM Serif
