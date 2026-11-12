@@ -1,11 +1,12 @@
 """Pinterest pin templates v2 for jalina.art (1000x1500), based on the Nov 2026 top-pin research:
 product itself, light background, little/no text, no price, number only inside a short headline,
-brand = tiny "jalina.art" at the bottom.
+brand = "jalina.art" plaque (pill, DM Serif 42px) bottom centre, readable at 236 px feed width.
 
   python3 gen.py A <set-id> [-n 12]             set sheet: grid of the set's own elements
   python3 gen.py B <set-id> [index] [--text T]  one hero element (1-based index, see `gen.py list <set-id>`)
   python3 gen.py B post:<slug> [index]          one hero = n-th product image of a blog post (white bg)
   python3 gen.py C <post-slug> [--title T]      numbered list pin from a blog post
+  python3 gen.py D <set-id> [mockup 1-4] [--title T]   "in use": one real mockup as hero + strip of elements
   python3 gen.py list <set-id>                  show element indices of a set
 
 Writes v2-<T>-<id>.html here; render with `node shot.js` -> out/*.jpg.
@@ -30,7 +31,9 @@ CSS = f'''@font-face{{font-family:S;src:url(file://{FONTS}/DMSerifDisplay-400-la
 *{{box-sizing:border-box;margin:0;padding:0}}
 html,body{{width:{W}px;height:{H}px;overflow:hidden}}
 body{{position:relative;font-family:M;color:#2B1418}}
-.brand{{position:absolute;left:0;right:0;bottom:32px;text-align:center;font-family:M;font-size:24px;letter-spacing:2px;color:#8A7470}}
+.brand{{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);padding:6px 30px 9px;border-radius:999px;
+background:rgba(255,255,255,.82);border:2px solid rgba(158,27,50,.16);box-shadow:0 3px 10px rgba(43,20,24,.07);
+font-family:S;font-size:42px;line-height:1.1;letter-spacing:.5px;color:#6E2A36;white-space:nowrap}}
 .hl{{position:absolute;left:60px;right:60px;text-align:center;font-family:S;font-weight:400;line-height:1.02;color:#2B1418;text-wrap:balance}}
 .hl .n{{color:#9E1B32}}
 .abs{{position:absolute}}
@@ -148,7 +151,7 @@ def tmpl_a(sid, n, title=None):
     s = SHOP[sid]
     els = pick_for_sheet(set_elements(sid), n)
     title = title or f'{s["count"]} {s["name"]} PNG'
-    box = (44, 240, W - 88, H - 240 - 96)  # x, y, w, h
+    box = (44, 240, W - 88, H - 240 - 135)  # x, y, w, h
     pos = justified([e[3] for e in els], box[2], box[3], 26)
     body = headline_html(title, 70, 84, 170)
     for e, (x, y, w, h) in zip(els, pos):
@@ -179,12 +182,56 @@ def tmpl_b(target, idx, text=None):
             words = s['name'].split()
             text = s['name'] if len(words) <= 3 else ' '.join(words[-3:])
     top = 230 if text else 110
-    bw, bh = W - 120, H - top - 130
+    bw, bh = W - 120, H - top - 150
     w, h = (bw, bw / ar) if bw / ar <= bh else (bh * ar, bh)
     x, y = (W - w) / 2, top + (bh - h) / 2
     body = (headline_html(text, 80, 78, 110) if text else '')
     body += f'<div class=abs style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{h:.0f}px"><img src="file://{img}"></div>'
     return page(body, bg), [label]
+
+
+# mockup-N.jpg in jalina-factory/ready/<set>/ (1200x800): 1 sticker sheet, 2 toppers + tags, 3 tote, 4 tee + bodysuit
+
+
+def tmpl_d(sid, m, title=None, kicker=None, strip=3):
+    from PIL import Image
+    s = SHOP[sid]
+    mp = f'{FACTORY}/{sid}/mockup-{m}.jpg'
+    if not os.path.exists(mp):
+        sys.exit(f'no {mp}')
+    mw, mh = Image.open(mp).size
+    title = title or f'{s["count"]} {s["name"]} PNG'
+    kicker = kicker or ''  # mockups already carry their own use label; kicker only on request
+    body = ''
+    top = 64
+    if kicker:
+        body += f'<div class=kick style="top:{top}px">{esc(kicker)}</div>'
+        top += 66
+    body += headline_html(title, top, 80, 170)
+    # hero mockup: whole image, never cropped, rounded card; stack hero + strip centred
+    # between the headline (2 lines max) and the brand plaque
+    hw = W - 2 * 24
+    hh = hw * mh / mw
+    y0, y1 = top + 180, H - 120
+    els = pick_for_sheet(set_elements(sid), strip) if strip > 0 else []
+    ars = [e[3] for e in els]
+    gap = 40
+    sh = 0 if not els else min(320, (W - 100 - gap * (len(els) - 1)) / sum(ars), max(0, y1 - y0 - hh - 90))
+    g = (y1 - y0 - hh - sh) / (3 if sh >= 140 else 2)
+    hy = y0 + g
+    body += f'<div class="abs hero" style="left:24px;top:{hy:.0f}px;width:{hw:.0f}px;height:{hh:.0f}px"><img src="file://{mp}"></div>'
+    used = [os.path.basename(mp)]
+    if sh >= 140:  # strip of 3-4 set elements under the mockup
+        x = (W - (sum(ars) * sh + gap * (len(els) - 1))) / 2
+        y = hy + hh + g
+        for e in els:
+            w = e[3] * sh
+            body += f'<div class=abs style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{sh:.0f}px"><img src="file://{e[1]}"></div>'
+            x += w + gap
+        used += [e[0] for e in els]
+    extra = ('.hero{border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(43,20,24,.13)}'
+             '.kick{position:absolute;left:0;right:0;text-align:center;font-family:C;font-size:54px;color:#9E1B32;line-height:1}')
+    return page(body, '#FBF6EE', extra), used
 
 
 # ---------- blog posts ----------
@@ -229,7 +276,7 @@ def tmpl_c(slug, title=None, bg='#FCEFEA'):
     shown = items[:8] if len(items) >= 8 else items[:6] if len(items) >= 6 else items
     cols = 1 if len(shown) <= 2 else 2
     rows = math.ceil(len(shown) / cols)
-    top, bottom, gap, side = 250, 100, 18, 50
+    top, bottom, gap, side = 250, 135, 18, 50
     th = (H - top - bottom - gap * (rows - 1)) / rows
     tw = min((W - 2 * side - gap * (cols - 1)) / cols, th * 1.5)
     th = tw / 1.5
@@ -248,12 +295,14 @@ def tmpl_c(slug, title=None, bg='#FCEFEA'):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('template', choices=['A', 'B', 'C', 'list'])
+    ap.add_argument('template', choices=['A', 'B', 'C', 'D', 'list'])
     ap.add_argument('target')
     ap.add_argument('index', nargs='?', type=int)
     ap.add_argument('-n', type=int, default=12, help='A: number of elements (9-20)')
-    ap.add_argument('--title', help='A/C: override headline (keep it true: number = real count)')
+    ap.add_argument('--title', help='A/C/D: override headline (keep it true: number = real count)')
     ap.add_argument('--text', help='B: 0-3 words over the hero ("" = no text)')
+    ap.add_argument('--strip', type=int, default=3, help='D: set elements under the mockup (0 = none, 3-4)')
+    ap.add_argument('--kicker', help='D: small Caveat line above the headline ("" = none)')
     ap.add_argument('--bg', default='#FCEFEA', help='C: light/pastel background')
     a = ap.parse_args()
     if a.template == 'list':
@@ -266,6 +315,10 @@ def main():
     elif a.template == 'B':
         doc, used = tmpl_b(a.target, a.index, a.text)
         name = f'v2-B-{a.target.replace("post:", "post-")}' + (f'-{a.index}' if a.index else '')
+    elif a.template == 'D':
+        m = a.index or 1
+        doc, used = tmpl_d(a.target, m, a.title, a.kicker, a.strip)
+        name = f'v2-D-{a.target}-m{m}'
     else:
         doc, used = tmpl_c(a.target, a.title, a.bg)
         name = f'v2-C-{a.target}'
