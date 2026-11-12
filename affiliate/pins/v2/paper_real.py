@@ -1,6 +1,6 @@
 """Build the 3 pin backgrounds (1000x2000 JPG) from REAL CC0 paper scans (ambientCG, see assets/LICENSES.md).
 
-  python3 paper_real.py <Paper001_2K-JPG_Color.jpg> <Paper006_2K-JPG_Color.jpg>
+  python3 paper_real.py <Paper001_2K-JPG_Color.jpg> <Paper006_2K-JPG_Color.jpg> [<Paper001_2K-JPG_Displacement.jpg>]
 
 Each texture is flattened (large-scale shading / vignette removed with a wide blur high-pass), its fine
 detail is kept at a chosen strength and laid over an even near-white tone:
@@ -39,8 +39,25 @@ def save(name, base, d, amp):
     print(out, os.path.getsize(out) // 1024, 'KB')
 
 
+def relief(disp_path, sx=2.0, sy=2.8, k=2.5, amp=3.9, base=(248, 248, 246)):
+    """paper-r.jpg for template R: the scan's real height map (Paper001 Displacement) enlarged to the
+    reference's grain size and lit from the left (Lambert), near-white neutral, even (no falloff)."""
+    im = Image.open(disp_path).convert('L')
+    im = im.resize((round(im.width * sx), round(im.height * sy)), Image.BICUBIC)
+    x0, y0 = (im.width - W) // 2, (im.height - H) // 2
+    im = im.crop((x0, y0, x0 + W, y0 + H)).filter(ImageFilter.GaussianBlur(1.0))
+    a = np.asarray(im, float) - np.asarray(im.filter(ImageFilter.GaussianBlur(25)), float)
+    gy, gx = np.gradient(a * k / (a.std() + 1e-9))
+    nz = 1 / np.sqrt(gx ** 2 + gy ** 2 + 1)
+    L = np.array([-0.9, -0.15, 0.45]); L /= np.linalg.norm(L)
+    lam = (-gx * L[0] - gy * L[1] + L[2]) * nz
+    save('paper-r.jpg', base, (lam - lam.mean()) / lam.std(), amp)
+
+
 if __name__ == '__main__':
     p1, p6 = sys.argv[1], sys.argv[2]
+    if len(sys.argv) > 3:  # Paper001_2K-JPG_Displacement.jpg
+        relief(sys.argv[3])
     d1 = detail(p1, rotate=True)
     d6 = detail(p6, scale=1.0)
     save('paper-1.jpg', (246, 245, 242), d1, 4.6)                    # cold-press, near-white

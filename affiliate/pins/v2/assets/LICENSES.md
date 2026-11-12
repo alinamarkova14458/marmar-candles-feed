@@ -11,3 +11,13 @@ All three backgrounds are built by `paper_real.py` from real paper scans by **am
 | `paper-3.jpg` (creamy handmade) | Paper 001 + Paper 006 (as above) | as above | both details mixed, ×3.4 over cream #F7F0E4 |
 
 No tiling: each texture covers 1000x2000 from a single scan (no seams). Source ZIPs are not committed.
+
+## Template R paper (`paper-r.jpg`)
+Built by `paper_real.py` (third argument) from the **height map** of the same CC0 asset, Paper 001 (https://ambientcg.com/view?id=Paper001):
+`Paper001_2K-JPG_Displacement.jpg` from https://ambientcg.com/get?file=Paper001_2K-JPG.zip, enlarged 2.0×/2.8× to the grain size of
+Alina's reference pin, lit from the left (Lambert), near-white #F8F8F6, even. Licence: CC0 1.0 (as above).
+
+## Fonts (`fonts/`)
+- **Bodoni Moda** (variable, opsz + wght), `BodoniModa-VariableFont_opsz,wght.ttf`. Copyright 2020 The Bodoni Moda Project Authors.
+  **SIL Open Font License 1.1**, full text in `fonts/OFL-BodoniModa.txt`, so commercial use and embedding in images are allowed.
+  Source: https://github.com/google/fonts/tree/main/ofl/bodonimoda (downloaded 12.11.2026).

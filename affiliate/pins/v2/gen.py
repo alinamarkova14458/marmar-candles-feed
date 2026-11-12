@@ -9,6 +9,7 @@ brand = "jalina.art" plaque (pill, DM Serif 42px) bottom centre, readable at 236
   python3 gen.py D <set-id> [mockup 1-4] [--title T]   "in use": one real mockup as hero + strip of elements
   python3 gen.py S <set-id> [--n 6..12] [--title T] [--size 1000x1500|1000x2000] [--paper 1|2|3]
                                                 product sheet: 9 (tall 12) big set elements on cotton paper
+  python3 gen.py R <set-id> [--title T]         replica of Alina's reference "Coffee" pin (8 items, 3x3, caps line in the centre)
   python3 gen.py list <set-id>                  show element indices of a set
 
 Writes v2-<T>-<id>.html here; render with `node shot.js` -> out/*.jpg.
@@ -475,6 +476,61 @@ SHEET_FIT = ('<script>document.fonts.ready.then(()=>{const e=document.querySelec
              'document.body.dataset.ready=1})</script>')
 
 
+# ---------- R: one-to-one replica of Alina's reference "Coffee" pin (Nov 12 2026) ----------
+# Measured on the 1000x1500 reference: studio caps y40-67 (x305-701), title cap y97-156, 3x3 grid with the
+# middle cell of row 2 replaced by a small caps line (y658-677); side columns centred at x~165 / ~830,
+# middle column x~500 and ~75 px LOWER than the sides in every row; items fill ~310x340 by their own shape;
+# outer items 14-40 px from the edges. 9 items (the middle one of row 2 sits under the caps line). Fonts: Bodoni Moda (OFL, assets/fonts). Paper: assets/paper-r.jpg.
+FONT_DIR = os.path.join(HERE, 'assets', 'fonts')
+R_COLS = (165, 503, 830)
+R_SIDE_Y = (362, 792, 1214)
+R_MID_Y = (440, 870, 1280)
+R_SLATE = '#7D8CAB'
+
+
+def tmpl_r(sid, title=None):
+    s = SHOP[sid]
+    els = pick_showcase(set_elements(sid), 9)  # the reference shows 9 items (8 around + 1 under the caps line)
+    title = title or s['name']
+    mid = f'{s["count"]} PNG · 300 DPI'
+    # middle-column cells hold the reference's tall/square items; give them the least wide picks
+    mids = sorted(range(len(els)), key=lambda i: els[i][3])[:3]
+    order = mids + [i for i in range(len(els)) if i not in mids]
+    slots = [(1, 0), (1, 1), (1, 2), (0, 0), (2, 0), (0, 1), (2, 1), (0, 2), (2, 2)]
+    body = (f'<div class=studio>JALINA.ART</div><div class=ttl><span>{esc(title)}</span></div>'
+            f'<div class=mid>{esc(mid)}</div>')
+    used = []
+    for i, (c, r) in zip(order, slots):
+        e = els[i]
+        bw_, bh_ = (325, 350) if c != 1 else (315, 318 if r == 1 else 335)
+        k = min(bw_ / e[3], bh_)  # height that fits the box
+        h = k; w = k * e[3]
+        cx = R_COLS[c]
+        cy = R_MID_Y[r] if c == 1 else R_SIDE_Y[r]
+        x = min(max(cx - w / 2, 14), 1000 - 14 - w)
+        y = cy - h / 2
+        if c == 1 and r == 1:
+            y = max(y, 705)  # below the middle caps line
+        body += (f'<div class=abs style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{h:.0f}px">'
+                 f'<img src="file://{e[2]}"></div>')
+        used.append(e[0])
+    bm = os.path.join(FONT_DIR, 'BodoniModa-VariableFont_opsz,wght.ttf')
+    css = f'''@font-face{{font-family:B;src:url("file://{bm}")}}
+*{{box-sizing:border-box;margin:0;padding:0}}
+html,body{{width:1000px;height:1500px;overflow:hidden}}
+body{{position:relative;background:#F7F7F6 url(file://{os.path.join(HERE, 'assets', 'paper-r.jpg')}) 0 0/1000px 2000px no-repeat;
+font-family:B;font-variant-ligatures:none;font-kerning:normal}}
+.abs{{position:absolute}} .abs img{{width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:multiply}}
+.studio,.ttl,.mid{{position:absolute;left:0;right:0;text-align:center;white-space:nowrap;line-height:1}}
+.studio{{top:32px;font-size:40px;font-weight:450;font-variation-settings:'opsz' 24;color:{R_SLATE};letter-spacing:.01em}}
+.ttl{{top:84px;font-size:84px;font-weight:450;font-variation-settings:'opsz' 40;color:#3C3C3C;letter-spacing:.005em}}
+.mid{{top:651px;left:3px;font-size:29px;font-weight:500;font-variation-settings:'opsz' 28;color:{R_SLATE};letter-spacing:.01em}}'''
+    doc = (f'<!doctype html><html data-w=1000 data-h=1500><head><meta charset=utf-8><style>{css}</style></head>'
+           f'<body>{body}<script>document.fonts.ready.then(()=>{{const e=document.querySelector(".ttl");let s=84;const t=e.firstChild;'
+           f'while(t.offsetWidth>940&&s>50){{s-=2;e.style.fontSize=s+"px"}}document.body.dataset.ready=1}})</script></body></html>')
+    return doc, used
+
+
 # ---------- blog posts ----------
 def post_items(slug):
     md = open(f'{BLOG}/src/content/posts/{slug}.md').read()
@@ -536,7 +592,7 @@ def tmpl_c(slug, title=None, bg='#FCEFEA'):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('template', choices=['A', 'B', 'C', 'D', 'S', 'list'])
+    ap.add_argument('template', choices=['A', 'B', 'C', 'D', 'S', 'R', 'list'])
     ap.add_argument('target')
     ap.add_argument('index', nargs='?', type=int)
     ap.add_argument('-n', '--n', type=int, default=None, help='A: number of elements (9-20, default 12); S: 6-12 (default 9, tall 12)')
@@ -552,7 +608,10 @@ def main():
         for i, e in enumerate(set_elements(a.target), 1):
             print(f'{i:2d}  {e[0]}  (aspect {e[3]:.2f}){"  [skip: lettering]" if SKIP.search(e[0]) else ""}')
         return
-    if a.template == 'S':
+    if a.template == 'R':
+        doc, used = tmpl_r(a.target, a.title)
+        name = f'v2-R-{a.target}'
+    elif a.template == 'S':
         sw, sh = map(int, a.size.lower().split('x'))
         doc, used = tmpl_s(a.target, a.n and max(6, min(12, a.n)), a.title, (sw, sh), a.paper)
         name = f'v2-S-{a.target}' + ('-tall' if sh > 1600 else '') + (f'-paper{a.paper}' if a.paper != 1 else '')

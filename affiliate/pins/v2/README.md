@@ -30,6 +30,12 @@ handmade paper with faint fibres. Elements use `multiply` so the paper
 shows through like print. Header: studio line `JALINA.ART` (Manrope spaced caps, muted), set name big in DM Serif
 Display, `<count> PNG · 300 DPI` (count from shop.json). No bottom brand: the studio line carries jalina.art.
 
+**R** replica (Nov 12 2026): a one-to-one copy of Alina's favourite reference pin "Coffee" (Crystal Sea Studio), with the content swapped for our set.
+- **Measured layout:** studio caps y≈40–67, title cap y≈97–156, a 3×3 grid of 9 items. The middle column sits ~75 px lower in every row, and the centre of row 2 has a small caps line (`<count> PNG · 300 DPI`) with an item under it. Items fill ~325×350 by their own shape; outer items sit 14–40 px from the edges.
+- **Fonts:** Bodoni Moda (OFL, `assets/fonts/`) in slate #7D8CAB for the studio line `JALINA.ART` and the middle line, #3C3C3C for the set name in Title Case.
+- **Paper:** `assets/paper-r.jpg`, the relief of the CC0 Paper001 scan.
+- `samples/cmp-R-*.jpg` shows the reference and ours side by side.
+
 ## Usage
 ```bash
 export PINS_CACHE=/path/to/scratch   # optional; set ZIPs are unpacked+trimmed+downscaled here once
@@ -42,6 +48,7 @@ python3 gen.py D 21-dino-birthday 2          # mockup-2 as hero -> v2-D-21-dino-
                                              # --title "Make your own dino party toppers" --strip 0|3|4 --kicker "..."
 python3 gen.py S 05-pastel-christmas --size 1000x2000   # -> v2-S-05-pastel-christmas-tall.html (--n 6..12, --title)
 python3 paper_real.py <Paper001 Color.jpg> <Paper006 Color.jpg>   # rebuild assets/paper-1..3.jpg (see assets/LICENSES.md)
+python3 gen.py R 14-moody-florals            # -> v2-R-14-moody-florals.html (--title to override)
 node shot.js [prefix]                        # renders *.html -> out/*.jpg (size from <html data-w data-h>, default 1000x1500)
 ```
 - Headlines for A/B come from `jalina-blog/src/shop.json` (`name`, `count`); C counts the post's
