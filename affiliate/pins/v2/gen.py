@@ -7,8 +7,8 @@ brand = "jalina.art" plaque (pill, DM Serif 42px) bottom centre, readable at 236
   python3 gen.py B post:<slug> [index]          one hero = n-th product image of a blog post (white bg)
   python3 gen.py C <post-slug> [--title T]      numbered list pin from a blog post
   python3 gen.py D <set-id> [mockup 1-4] [--title T]   "in use": one real mockup as hero + strip of elements
-  python3 gen.py S <set-id> [--n 16..30] [--title T] [--size 1000x1500|1000x2000] [--script W] [--seed K]
-                                                product sheet: 16-25 set elements on cotton paper (Alina's favourite look)
+  python3 gen.py S <set-id> [--n 6..12] [--title T] [--size 1000x1500|1000x2000]
+                                                product sheet: 9 (tall 12) big set elements on cotton paper
   python3 gen.py list <set-id>                  show element indices of a set
 
 Writes v2-<T>-<id>.html here; render with `node shot.js` -> out/*.jpg.
@@ -237,149 +237,113 @@ def tmpl_d(sid, m, title=None, kicker=None, strip=3):
 
 
 # ---------- S: product sheet (Nov 12 2026, after Alina's favourite top pins) ----------
-# The whole pin IS the product: 16-25 set elements packed edge to edge on cotton watercolor paper,
-# thin spaced-caps serif title, tiny "WATERCOLOR CLIPART · N PNG · 300 DPI" line, small jalina.art.
+# v2 (Alina's feedback): few BIG elements (default 9 = 3x3, tall 12 = 4x3) in a loose grid on visible
+# cold-press cotton paper; studio line "JALINA.ART" on top, set name big in DM Serif, "N PNG · 300 DPI".
 PAPER = os.path.join(HERE, 'assets', 'cotton-paper.jpg')  # made by paper.py (procedural, 1000x2000)
+# tiny bits / scatters that read badly when shown large
+TINY = re.compile(r'confetti|petals|dots|sprinkles|scatter|footprint|bone|crumbs|sparkle|cluster', re.I)
 
 
 def ink(path):
-    """Fraction of the trimmed bbox covered by paint (alpha) -> sparse items get a bigger slot."""
-    from PIL import Image
+    """Fraction of the trimmed bbox covered by paint (alpha): dense = solid, recognisable object."""
     import numpy as np
+    from PIL import Image
     a = np.asarray(Image.open(path).getchannel('A').resize((64, 64)))
-    return max(0.25, min(0.95, float((a > 40).mean())))
+    return max(0.2, min(0.95, float((a > 40).mean())))
 
 
-def sheet_layout(items, bw, bh, gap, seed=1, tries=1500):
-    """items: [(aspect, rel_height, fill, is_hero)]. Random orders x greedy rows, each row justified
-    to bw (stretch capped), global scale binary-searched to fill bh; best-scoring order wins.
-    Returns positions [(x,y,w,h)] in item order (box coordinates)."""
-    import random
-    rnd = random.Random(seed)
-    n = len(items)
-    best = None
-
-    def rows_at(order, k):
-        rows, cur, cw = [], [], 0
-        for i in order:
-            w = items[i][0] * items[i][1] * k
-            if cur and cw + gap + w > bw:
-                rows.append(cur); cur, cw = [], 0
-            cur.append(i); cw += (gap if len(cur) > 1 else 0) + w
-        rows.append(cur)
-        out, th = [], 0
-        for row in rows:
-            nat = sum(items[i][0] * items[i][1] * k for i in row)
-            sc = min(1.18, (bw - gap * (len(row) - 1)) / nat)
-            rh = max(items[i][1] * k * sc for i in row)
-            out.append((row, sc, rh)); th += rh
-        return out, th + gap * (len(rows) - 1)
-
-    for _ in range(tries):
-        order = list(range(n)); rnd.shuffle(order)
-        # rows chosen at width-scale k; if they are too tall, the whole sheet is scaled down to fit
-        for k in (bw * f / 6 for f in (0.8, 0.88, 0.96, 1.04, 1.12, 1.2, 1.3, 1.4, 1.5, 1.65)):
-            rows, th = rows_at(order, k)
-            if len(rows) < 3 or any(len(r) > 6 for r, _, _ in rows):
-                continue
-            fit = min(1.0, bh / th)
-            sz = lambda i, sc: items[i][1] * k * sc * fit
-            area = sum(items[i][0] * sz(i, sc) ** 2 * items[i][2] for row, sc, _ in rows for i in row)
-            empty = sum(bw - sum(items[i][0] * sz(i, sc) for i in row) for row, sc, _ in rows)
-            waste = sum(items[i][0] * sz(i, sc) * (rh * fit - sz(i, sc)) for row, sc, rh in rows for i in row)
-            heroes = [sum(1 for i in row if items[i][3]) for row, _, _ in rows]
-            cnt = [len(r) for r, _, _ in rows]
-            uneven = sum(abs(c - sum(cnt) / len(cnt)) for c in cnt) / len(cnt)
-            score = (area / (bw * bh) - 0.03 * uneven - 0.04 * empty / bw - 0.7 * waste / (bw * bh) - 0.15 * (1 - th * fit / bh)
-                     - 0.08 * sum(max(0, h - 1) for h in heroes) - 0.1 * sum(1 for r, _, _ in rows if len(r) == 1))
-            if best is None or score > best[0]:
-                best = (score, rows, th, k, fit)
-    _, rows, th, k, fit = best
-    nr = len(rows)
-    th *= fit
-    vgap = gap * fit
-    vgap = min(gap * 2.4, vgap + (bh - th) / max(1, nr - 1))
-    used = th + (vgap - gap * fit) * (nr - 1)
-    y = (bh - used) / 2
-    pos = [None] * n
-    for row, sc, rh in rows:
-        rh *= fit
-        ws = [items[i][0] * items[i][1] * k * sc * fit for i in row]
-        free = bw - sum(ws)
-        if len(row) == 1:
-            g, x = 0, free / 2
-        elif free / (len(row) - 1) > gap * 2.2:  # narrow row: spread with outer margins
-            g = free / (len(row) + 1); x = g
-        else:
-            g, x = free / (len(row) - 1), 0
-        for i, w in zip(row, ws):
-            h = items[i][1] * k * sc * fit
-            pos[i] = (x, y + (rh - h) / 2, w, h)
-            x += w + g
-        y += rh + vgap
-    return pos
+KINDS = [('vehicle', r'truck|car\\b|sleigh'), ('house', r'house|village'), ('plant', r'tree|fern|palm|plant|bush|leaves'), ('gift', r'gift|present|box'), ('ornament', r'bauble|ornament'),
+         ('cake', r'cake|cupcake|cookie'), ('balloon', r'balloon'), ('hat', r'hat\b|party-hat'),
+         ('wreath', r'wreath'), ('drink', r'mug|cup|cocoa|coffee|tea'), ('bouquet', r'bouquet|posy|arrangement'),
+         ('egg', r'egg')]
 
 
-def sheet_style(s):
-    d = (s.get('desc', '') + ' ' + s['name']).lower()
-    return 'crayon clipart' if 'crayon' in d else 'watercolor clipart'
+def noun(fname):
+    """Subject type of an element (tree, gift, ornament...; else the last word of its name), for variety."""
+    for k, rx in KINDS:
+        if re.search(rx, fname, re.I):
+            return k
+    w = pretty(fname).split()
+    return re.sub(r'(es|s)$', '', w[-1]) if w else fname
 
 
-SHEET_FIT = ('<script>document.fonts.ready.then(()=>{const e=document.querySelector(".ttl");let s=+e.dataset.fit;'
-             'e.style.fontSize=s+"px";while(e.scrollWidth>e.clientWidth&&s>34){s-=2;e.style.fontSize=s+"px"}'
-             'document.body.dataset.ready=1})</script>')
+def pick_showcase(els, n):
+    """Most attractive elements: no lettering/garlands/tiny bits, dense (solid objects) first,
+    one per subject type while possible, then spread back into the set's (alphabetical) order."""
+    ok = [e for e in els if not SKIP.search(e[0]) and not TINY.search(e[0]) and 0.5 <= e[3] <= 1.8]
+    if len(ok) < n:
+        ok += [e for e in els if e not in ok and not SKIP.search(e[0]) and 0.4 <= e[3] <= 2.4]
+    ranked = sorted(ok, key=lambda e: -ink(e[1]))
+    out, seen = [], set()
+    for e in ranked:
+        if noun(e[0]) not in seen:
+            out.append(e); seen.add(noun(e[0]))
+        if len(out) == n:
+            break
+    for e in ranked:
+        if len(out) == n:
+            break
+        if e not in out:
+            out.append(e)
+    # interleave so neighbours differ (alternate from both ends of the density ranking)
+    out.sort(key=lambda e: -ink(e[1]))
+    mixed = []
+    while out:
+        mixed.append(out.pop(0))
+        if out:
+            mixed.append(out.pop(len(out) // 2))
+    return mixed
 
 
-def tmpl_s(sid, n, title=None, size=(1000, 1500), script=None, seed=1):
+def tmpl_s(sid, n, title=None, size=(1000, 1500)):
     w_, h_ = size
     s = SHOP[sid]
-    els = [e for e in set_elements(sid) if not SKIP.search(e[0])]
-    flat = [e for e in els if 0.45 <= e[3] <= 2.2]  # no very wide garlands unless needed
-    if n is None:
-        n = min(25, len(flat)) if len(flat) >= 16 else min(25, len(els))
-    if len(flat) >= n:
-        els = flat
-    if len(els) > n:  # spread the pick over the alphabetical list -> variety
-        step = len(els) / n
-        els = [els[int(i * step)] for i in range(n)]
-    fills = [ink(e[1]) for e in els]
-    # visual weight: densest 3 (cakes, wreaths, houses) = heroes, sparsest quarter = small accents
-    rank = sorted(range(len(els)), key=lambda i: -fills[i])
-    hero = set(rank[:3]); small = set(rank[-max(1, len(els) // 4):])
-    items = []
-    for i, e in enumerate(els):
-        T = 1.8 if i in hero else 0.6 if i in small else 1.0
-        items.append((e[3], math.sqrt(T / (e[3] * fills[i])), fills[i], i in hero))
-    title = (title or s['name']).upper()
-    sub = f'{sheet_style(s)} · {s["count"]} PNG · 300 DPI'.upper()
-    ttop = 128 if script else 70
-    top = ttop + 150
-    side, bottom = 46, 100
-    bw, bh = w_ - 2 * side, h_ - top - bottom
-    pos = sheet_layout(items, bw, bh, 24, seed)
-    body = f'<div class=scr>{esc(script)}</div>' if script else ''
-    body += f'<div class=ttl data-fit=62>{esc(title)}</div><div class=sub>{esc(sub)}</div>'
-    for e, (x, y, w, h) in zip(els, pos):
-        p = 0.03 * min(w, h)
-        body += (f'<div class=abs style="left:{side+x+p:.0f}px;top:{top+y+p:.0f}px;width:{w-2*p:.0f}px;'
-                 f'height:{h-2*p:.0f}px"><img src="file://{e[2]}"></div>')
+    cols = 3
+    n = n or (12 if h_ > 1600 else 9)
+    els = pick_showcase(set_elements(sid), n)
+    n = len(els)
+    rows = math.ceil(n / cols)
+    title = title or s['name']
+    sub = f'{s["count"]} PNG · 300 DPI'
+    top, bottom, side = 262, 50, 26
+    cw, ch = (w_ - 2 * side) / cols, (h_ - top - bottom) / rows
+    stagger = ch * 0.10  # middle column sits a little lower, like a hand-laid sheet
+    top_adj = top - stagger / 2
+    body = (f'<div class=studio>JALINA.ART</div><div class=ttl data-fit=96>{esc(title)}</div>'
+            f'<div class=sub>{esc(sub)}</div>')
+    for k, e in enumerate(els):
+        r, c = divmod(k, cols)
+        in_row = min(cols, n - r * cols)
+        cx0 = side + (cols - in_row) * cw / 2  # centre a short last row
+        fill = ink(e[1])
+        # visual weight: sparse elements (sprigs, wreaths) may use more of the cell than solid ones
+        frac = 0.86 if fill > 0.55 else 0.92
+        bw_, bh_ = cw * frac, ch * frac * 0.92
+        w, h = (bw_, bw_ / e[3]) if bw_ / e[3] <= bh_ else (bh_ * e[3], bh_)
+        x = cx0 + c * cw + (cw - w) / 2
+        y = top_adj + r * ch + (ch - h) / 2 + (stagger if c == 1 and in_row == cols else 0)
+        body += (f'<div class=abs style="left:{x:.0f}px;top:{y:.0f}px;width:{w:.0f}px;height:{h:.0f}px">'
+                 f'<img src="file://{e[2]}"></div>')
     css = f'''@font-face{{font-family:S;src:url(file://{FONTS}/DMSerifDisplay-400-latin.woff2)}}
-@font-face{{font-family:C;src:url(file://{FONTS}/Caveat-700-latin.woff2)}}
 @font-face{{font-family:M;src:url(file://{FONTS}/Manrope-400-latin.woff2)}}
 *{{box-sizing:border-box;margin:0;padding:0}}
 html,body{{width:{w_}px;height:{h_}px;overflow:hidden}}
-body{{position:relative;background:#FAF7F1 url(file://{PAPER}) 0 0/{w_}px {h_}px no-repeat;color:#3A2C28}}
+body{{position:relative;background:#F4F2EE url(file://{PAPER}) 0 0/{w_}px {h_}px no-repeat;color:#3E3D3C}}
 .abs{{position:absolute}} .abs img{{width:100%;height:100%;object-fit:contain;display:block;mix-blend-mode:multiply}}
-.scr{{position:absolute;top:56px;left:0;right:0;text-align:center;font-family:C;font-size:50px;color:#A0525E;line-height:1}}
-.ttl{{position:absolute;top:{ttop}px;left:50px;right:50px;text-align:center;font-family:S;line-height:1.05;
-letter-spacing:.2em;padding-left:.2em;white-space:nowrap;color:#3B2D29}}
-.sub{{position:absolute;top:{ttop+96}px;left:0;right:0;text-align:center;font-family:M;font-size:19px;
-letter-spacing:.32em;padding-left:.32em;color:#7D6A64}}
-.brand{{position:absolute;left:0;right:0;bottom:34px;text-align:center;font-family:S;font-size:32px;
-letter-spacing:.06em;color:#6B5550}}'''
+.studio{{position:absolute;top:50px;left:0;right:0;text-align:center;font-family:M;font-size:25px;
+letter-spacing:.34em;padding-left:.34em;color:#8E8A93}}
+.ttl{{position:absolute;top:88px;left:40px;right:40px;text-align:center;font-family:S;line-height:1.08;
+white-space:nowrap;color:#3E3D3C;letter-spacing:.01em}}
+.sub{{position:absolute;top:202px;left:0;right:0;text-align:center;font-family:M;font-size:19px;
+letter-spacing:.3em;padding-left:.3em;color:#8E8A93}}'''
     doc = (f'<!doctype html><html data-w={w_} data-h={h_}><head><meta charset=utf-8><style>{css}</style></head>'
-           f'<body>{body}<div class=brand>jalina.art</div>{SHEET_FIT}</body></html>')
+           f'<body>{body}{SHEET_FIT}</body></html>')
     return doc, [e[0] for e in els]
+
+
+SHEET_FIT = ('<script>document.fonts.ready.then(()=>{const e=document.querySelector(".ttl");let s=+e.dataset.fit;'
+             'e.style.fontSize=s+"px";while(e.scrollWidth>e.clientWidth&&s>40){s-=2;e.style.fontSize=s+"px"}'
+             'document.body.dataset.ready=1})</script>')
 
 
 # ---------- blog posts ----------
@@ -446,10 +410,8 @@ def main():
     ap.add_argument('template', choices=['A', 'B', 'C', 'D', 'S', 'list'])
     ap.add_argument('target')
     ap.add_argument('index', nargs='?', type=int)
-    ap.add_argument('-n', '--n', type=int, default=None, help='A: number of elements (9-20, default 12); S: 16-30 (default: all non-lettering, non-garland elements, max 25)')
+    ap.add_argument('-n', '--n', type=int, default=None, help='A: number of elements (9-20, default 12); S: 6-12 (default 9, tall 12)')
     ap.add_argument('--size', default='1000x1500', help='S: 1000x1500 or 1000x2000')
-    ap.add_argument('--script', help='S: optional small script word above the title')
-    ap.add_argument('--seed', type=int, default=1, help='S: layout seed (try another if a sheet looks off)')
     ap.add_argument('--title', help='A/C/D: override headline (keep it true: number = real count)')
     ap.add_argument('--text', help='B: 0-3 words over the hero ("" = no text)')
     ap.add_argument('--strip', type=int, default=3, help='D: set elements under the mockup (0 = none, 3-4)')
@@ -462,7 +424,7 @@ def main():
         return
     if a.template == 'S':
         sw, sh = map(int, a.size.lower().split('x'))
-        doc, used = tmpl_s(a.target, a.n and max(16, min(30, a.n)), a.title, (sw, sh), a.script, a.seed)
+        doc, used = tmpl_s(a.target, a.n and max(6, min(12, a.n)), a.title, (sw, sh))
         name = f'v2-S-{a.target}' + ('-tall' if sh > 1600 else '')
     elif a.template == 'A':
         doc, used = tmpl_a(a.target, max(9, min(20, a.n or 12)), a.title)
