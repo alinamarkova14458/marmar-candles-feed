@@ -30,9 +30,17 @@ handmade paper with faint fibres. Elements use `multiply` so the paper
 shows through like print. Header: studio line `JALINA.ART` (Manrope spaced caps, muted), set name big in DM Serif
 Display, `<count> PNG · 300 DPI` (count from shop.json). No bottom brand: the studio line carries jalina.art.
 
-**R is THE default pin template for our own sets (Alina, 12.11.2026).** `--theme auto` (the default) picks by the set's own paint: if the median luminance of opaque element pixels is < 0.4 (moody burgundy florals 0.21; pastel, wedding and dino sets are 0.67–0.85), the theme is **dark**, otherwise **light**.
+**R is THE default pin template for our own sets (Alina, 12.11.2026).** `--theme auto` (the default) picks the theme from the set's own paint, measured on its opaque element pixels:
+- **dark:** median luminance < 0.4 (moody florals 0.21);
+- **blue:** median CIE76 ΔE vs the light paper #F7F7F6 < 30, i.e. white/ivory elements that would vanish on white (elegant wedding 21.6, while pastel christmas is 33.1 and dino 70.7);
+- **light:** everything else.
+
+What each theme looks like:
 - **Light:** cotton paper, slate caps lines, dark-grey title.
-- **Dark:** a wine-to-black watercolor wash (`assets/wine-wash.jpg`, made by `dark_wash.py` with grain from the CC0 paper scan), ivory title, muted gold caps, a thin gold rule with a small diamond under the title, defringed elements (no light halo; cached as `<set>/1000d/`) and a soft drop shadow.
+- **Dark:** wine-to-black watercolor wash (`assets/wine-wash.jpg`, `dark_wash.py`), ivory title, muted gold caps, a thin gold rule with a diamond, defringed elements with a soft shadow.
+- **Blue:** dusty blue silk (`assets/blue-silk.jpg`, `blue_silk.py`), ivory title, pale gold `N PNG · 300 DPI`, defringed elements with a soft blue-tinted shadow.
+
+Force a theme with `--theme light|dark|blue`.
 
 **R** replica (Nov 12 2026): a one-to-one copy of Alina's favourite reference pin "Coffee" (Crystal Sea Studio), with the content swapped for our set.
 - **Measured layout:** studio caps y≈40–67, title cap y≈97–156, a 3×3 grid of 9 items. The middle column sits ~75 px lower in every row, and the centre of row 2 has a small caps line (`<count> PNG · 300 DPI`) with an item under it. Items fill ~325×350 by their own shape; outer items sit 14–40 px from the edges.
@@ -53,8 +61,8 @@ python3 gen.py D 21-dino-birthday 2          # mockup-2 as hero -> v2-D-21-dino-
 python3 gen.py S 05-pastel-christmas --size 1000x2000   # -> v2-S-05-pastel-christmas-tall.html (--n 6..12, --title)
 python3 paper_real.py <Paper001 Color.jpg> <Paper006 Color.jpg>   # rebuild assets/paper-1..3.jpg (see assets/LICENSES.md)
 python3 gen.py R 14-moody-florals            # DEFAULT for own sets -> v2-R-14-moody-florals.html (auto -> dark)
-python3 gen.py R 05-pastel-christmas --theme light   # force a theme (light|dark|auto); --title to override the set name
-python3 dark_wash.py                         # regenerate assets/wine-wash.jpg
+python3 gen.py R 05-pastel-christmas --theme light   # force a theme (light|dark|blue|auto); --title to override the set name
+python3 dark_wash.py; python3 blue_silk.py   # regenerate assets/wine-wash.jpg, assets/blue-silk.jpg
 node shot.js [prefix]                        # renders *.html -> out/*.jpg (size from <html data-w data-h>, default 1000x1500)
 ```
 - Headlines for A/B come from `jalina-blog/src/shop.json` (`name`, `count`); C counts the post's
