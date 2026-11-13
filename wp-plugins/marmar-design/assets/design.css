@@ -406,3 +406,6 @@ body.mmd-has-sticky .mmd-wa { bottom: 84px; }
 #account-modal .login-remember { display: flex; justify-content: space-between; align-items: center; gap: 8px 16px; flex-wrap: wrap; }
 #account-modal .login-remember > span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 #account-modal .login-remember a { white-space: nowrap; }
+
+/* Foto, uz kurām var spiest (palielināt / atvērt kolekciju) */
+.woocommerce-product-gallery .flexy-item img, .mmh-hero img, .mmh-xmas img { cursor: pointer; }
