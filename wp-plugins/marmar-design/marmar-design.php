@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.12.0
+ * Version:           1.12.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.12.0';
+	const VER = '1.12.1';
 
 	/** Preces, kuras nerādām blokā “Bieži pērk kopā” (pakalpojumi, papildinājumi). */
 	const TOGETHER_EXCLUDE = array( 11691, 11024 ); // Dzintara putekļi, Individuālā dizaina izstrāde
@@ -25,6 +25,7 @@ final class MarMar_Design {
 		add_action( 'wp_footer', array( __CLASS__, 'reveal_inline' ), 1 );
 		add_action( 'wp_footer', array( __CLASS__, 'sticky_bar' ), 20 );
 		add_action( 'wp_footer', array( __CLASS__, 'whatsapp' ), 21 );
+		add_filter( 'gettext', array( __CLASS__, 'blocksy_lv' ), 20, 3 );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'theme_mod_header_placements', array( __CLASS__, 'one_logo' ), 20 );
 		add_action( 'woocommerce_before_add_to_cart_button', array( __CLASS__, 'express_checkbox' ), 30 );
@@ -224,6 +225,33 @@ final class MarMar_Design {
 		if ( is_readable( $f ) ) {
 			echo '<script id="marmar-design-reveal">' . file_get_contents( $f ) . '</script>' . "\n"; // phpcs:ignore
 		}
+	}
+
+	/** Blocksy Companion (pieteikšanās logs galvenē) nav latviešu tulkojuma. */
+	const BLOCKSY_LV = array(
+		'Username or Email Address' => 'Lietotājvārds vai e-pasts',
+		'Password'                  => 'Parole',
+		'Remember Me'               => 'Atcerēties mani',
+		'Forgot Password?'          => 'Aizmirsāt paroli?',
+		'Log In'                    => 'Pieslēgties',
+		'Login'                     => 'Pieslēgties',
+		'Sign Up'                   => 'Reģistrēties',
+		'Register'                  => 'Reģistrēties',
+		'Username'                  => 'Lietotājvārds',
+		'Email'                     => 'E-pasts',
+		'Registration confirmation will be emailed to you.' => 'Reģistrācijas apstiprinājumu nosūtīsim uz e-pastu.',
+		'A link to set a new password will be sent to your email address.' => 'Saite jaunas paroles iestatīšanai tiks nosūtīta uz jūsu e-pastu.',
+		'Get New Password'          => 'Saņemt jaunu paroli',
+		'Back to login'             => 'Atpakaļ uz pieslēgšanos',
+		'Account modal'             => 'Konta logs',
+		'Close account modal'       => 'Aizvērt konta logu',
+	);
+
+	public static function blocksy_lv( $translation, $text, $domain ) {
+		if ( 'blocksy-companion' === $domain && $translation === $text && isset( self::BLOCKSY_LV[ $text ] ) ) {
+			return self::BLOCKSY_LV[ $text ];
+		}
+		return $translation;
 	}
 
 	/** WhatsApp poga (aizstāj veco čatu). Produkta lapā ziņā jau ir preces nosaukums. */
