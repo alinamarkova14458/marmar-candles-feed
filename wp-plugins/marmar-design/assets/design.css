@@ -401,3 +401,8 @@ body.mmd .wc-block-components-checkout-step__heading .wc-block-components-title 
 body.mmd-has-sticky .mmd-wa { bottom: 84px; }
 @media (max-width: 689px) { .mmd-wa { right: 14px; bottom: 14px; padding: 12px; } .mmd-wa span { display: none; } body.mmd-has-sticky .mmd-wa { bottom: 80px; } }
 @media print { .mmd-wa { display: none; } }
+
+/* Pieteikšanās logs: «Atcerēties mani» un «Aizmirsāt paroli?» vienā rindā */
+#account-modal .login-remember { display: flex; justify-content: space-between; align-items: center; gap: 8px 16px; flex-wrap: wrap; }
+#account-modal .login-remember > span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+#account-modal .login-remember a { white-space: nowrap; }
