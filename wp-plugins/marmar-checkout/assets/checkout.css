@@ -56,3 +56,15 @@
 .mmco-note-open .wc-block-components-checkbox label { padding-left: 0 !important; cursor: default; pointer-events: none; }
 .mmco-note-open .wc-block-components-checkbox__label { font-weight: 600; padding-left: 0 !important; margin-left: 0 !important; }
 .mmco-note-open textarea { margin-top: 8px; min-height: 90px; }
+
+/* Kopsumma zem pogas «Noformēt pasūtījumu» */
+.mmco-sum { margin: 12px 0 4px; text-align: center; font-size: 15px; line-height: 1.5; color: #504E4A; }
+.mmco-sum strong { color: #735360; font-size: 17px; }
+.mmco-sum .mmco-dot { margin: 0 6px; opacity: .6; }
+
+/* Paskaidrojums virs adreses: pakomātam adresi prasa piegādes sistēma */
+.wc-block-checkout__shipping-fields .wc-block-components-checkout-step__content::before {
+	content: "Adresi prasa piegādes sistēma — sūtījums nonāks jūsu izvēlētajā pakomātā.";
+	display: block; margin: 0 0 12px; padding: 10px 14px; border-radius: 12px;
+	background: #FBF3F2; border: 1px solid #F0D9D6; font-size: 14px; line-height: 1.45; color: #504E4A;
+}

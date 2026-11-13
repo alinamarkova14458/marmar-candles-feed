@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.2.5
+ * Version:           1.2.6
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.2.5';
+	const VERSION = '1.2.6';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -29,11 +29,18 @@ final class MarMar_Checkout {
 		);
 	}
 
+	public static function hide_state_lv( $locale ) {
+		$locale['LV']['state'] = array_merge( isset( $locale['LV']['state'] ) ? (array) $locale['LV']['state'] : array(), array( 'required' => false, 'hidden' => true ) );
+		return $locale;
+	}
+
 	public static function init() {
 		add_shortcode( 'marmar_cart_info', array( __CLASS__, 'cart_info' ) );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ), 30 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'i18n' ), 5 );
 		add_filter( 'gettext_woocommerce', array( __CLASS__, 'gettext' ), 10, 2 );
+		// Latvijā lauks «Novads» nav vajadzīgs (nav obligāts) — paslēpjam, lai forma īsāka.
+		add_filter( 'woocommerce_get_country_locale', array( __CLASS__, 'hide_state_lv' ) );
 		// Минимальный заказ (заменяет сниппет WPCode «Minimum Order 5 EUR»).
 		add_action( 'woocommerce_check_cart_items', array( __CLASS__, 'check_minimum' ) );
 		add_action( 'woocommerce_checkout_process', array( __CLASS__, 'check_minimum' ) );
@@ -220,6 +227,7 @@ final class MarMar_Checkout {
 					'eta'       => 'Saņemsiet ~%s',
 					'etaNote'   => 'pēc apmaksas saņemšanas',
 					'handmade'  => 'Roku darbs Latvijā',
+					'total'     => 'Kopā apmaksai:',
 					'invoice'   => 'Apmaksa ar rēķinu',
 					'noteLabel' => 'Komentārs pasūtījumam (nav obligāts)',
 					'noteHint'  => 'Piemēram: vārds vai cipars uz sveces, vēlamais saņemšanas datums vai cita svarīga informācija',

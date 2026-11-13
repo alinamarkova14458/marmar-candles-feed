@@ -54,6 +54,16 @@
 	/* ---------- Оформление: срок получения и строка доверия ---------- */
 	var eta = el('div', 'mmco-eta');
 	var trust = el('div', 'mmco-trust');
+	var sum = el('div', 'mmco-sum');
+	function updateSum() {
+		var st = store(); var t = st && st.getCartTotals && st.getCartTotals();
+		if (!t || t.total_price === undefined) return;
+		var n = cartNumbers();
+		var total = parseInt(t.total_price, 10) / Math.pow(10, t.currency_minor_unit || 2);
+		var range = n && n.express ? C.estimateFast : C.estimate;
+		var html = C.i18n.total + ' <strong>' + money(total) + '</strong><span class="mmco-dot" aria-hidden="true">·</span>' + C.i18n.eta.replace('%s', range);
+		if (sum.innerHTML !== html) sum.innerHTML = html;
+	}
 	function updateEta() {
 		var n = cartNumbers();
 		var range = n && n.express ? C.estimateFast : C.estimate;
@@ -114,10 +124,12 @@
 			if (actions) {
 				document.querySelectorAll('.mmco-eta').forEach(function (n) { if (n !== eta) n.remove(); });
 				document.querySelectorAll('.mmco-trust').forEach(function (n) { if (n !== trust) n.remove(); });
+				document.querySelectorAll('.mmco-sum').forEach(function (n) { if (n !== sum) n.remove(); });
 				document.querySelectorAll('.mmco-fast').forEach(function (n) { if (n !== fast) n.remove(); });
 				if (actions.previousElementSibling !== fast) actions.parentNode.insertBefore(fast, actions);
 				if (fast.previousElementSibling !== eta) actions.parentNode.insertBefore(eta, fast);
-				if (actions.nextElementSibling !== trust) actions.parentNode.insertBefore(trust, actions.nextSibling);
+				if (actions.nextElementSibling !== sum) actions.parentNode.insertBefore(sum, actions.nextSibling);
+				if (sum.nextElementSibling !== trust) actions.parentNode.insertBefore(trust, sum.nextSibling);
 			}
 		}
 	}
@@ -130,7 +142,7 @@
 
 	// Наш код никогда не должен ронять корзину WooCommerce: любые ошибки гасим здесь.
 	function safe(fn) { try { fn(); } catch (err) { if (window.console) console.warn('MarMar Checkout:', err); } }
-	function refresh() { safe(updateBar); safe(updateEta); if (C.page === 'checkout') safe(updateFast); }
+	function refresh() { safe(updateBar); safe(updateEta); if (C.page === 'checkout') { safe(updateFast); safe(updateSum); } }
 	if (window.wp && wp.data && wp.data.subscribe) wp.data.subscribe(refresh);
 	safe(place); refresh();
 })();
