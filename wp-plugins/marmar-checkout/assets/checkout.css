@@ -62,9 +62,22 @@
 .mmco-sum strong { color: #735360; font-size: 17px; }
 .mmco-sum .mmco-dot { margin: 0 6px; opacity: .6; }
 
-/* Paskaidrojums virs adreses: pakomātam adresi prasa piegādes sistēma */
-.wc-block-checkout__shipping-fields .wc-block-components-checkout-step__content::before {
-	content: "Adresi prasa piegādes sistēma — sūtījums nonāks jūsu izvēlētajā pakomātā.";
-	display: block; margin: 0 0 12px; padding: 10px 14px; border-radius: 12px;
-	background: #FBF3F2; border: 1px solid #F0D9D6; font-size: 14px; line-height: 1.45; color: #504E4A;
-}
+
+
+/* Apmaksas veids — divas skaidras kartītes (13.11.2026) */
+.wp-block-woocommerce-checkout-payment-block .paysera-gateway-label__container { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.wp-block-woocommerce-checkout-payment-block .paysera-gateway-label__text { font-weight: 600; }
+.wp-block-woocommerce-checkout-payment-block .paysera-gateway-label__text::before { content: "🏦 "; }
+.wp-block-woocommerce-checkout-payment-block .paysera-gateway-label__text::after { content: "Swedbank · SEB · Citadele · Luminor · Revolut"; display: block; margin-top: 2px; font-weight: 400; font-size: 13px; color: #8A7F7C; }
+.wp-block-woocommerce-checkout-payment-block .paysera-gateway-label__logo { max-height: 16px; width: auto; opacity: .85; }
+.wp-block-woocommerce-checkout-payment-block .paysera-hosted-box__subtitle { font-size: 14px !important; line-height: 1.45 !important; margin: 0 0 8px !important; }
+.wp-block-woocommerce-checkout-payment-block .paysera-hosted-box p:not(.paysera-hosted-box__subtitle),
+.wp-block-woocommerce-checkout-payment-block .paysera-hosted-box__terms { font-size: 12px !important; line-height: 1.4 !important; color: #8A7F7C !important; margin: 0 !important; }
+.wp-block-woocommerce-checkout-payment-block label[for$="-bacs"] .wc-block-components-radio-control__label { font-weight: 600; }
+.wp-block-woocommerce-checkout-payment-block label[for$="-bacs"] .wc-block-components-radio-control__label::before { content: "🧾 "; }
+.wp-block-woocommerce-checkout-payment-block #radio-control-wc-payment-method-options-bacs__content { font-size: 14px; line-height: 1.45; }
+.wp-block-woocommerce-checkout-payment-block .paysera-customer-consent,
+.wp-block-woocommerce-checkout-payment-block .paysera-customer-consent p { font-size: 12px !important; line-height: 1.4 !important; color: #8A7F7C !important; margin: 4px 0 0 !important; }
+/* Adreses vairs nav — liekās rindas prom */
+.wc-block-checkout__use-address-for-billing:has(input:checked) { display: none; }
+.wc-block-checkout__guest-checkout-notice { display: none; }

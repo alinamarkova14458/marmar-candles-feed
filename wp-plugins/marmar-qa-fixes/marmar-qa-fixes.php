@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.25
+ * Version:           1.9.27
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -625,7 +625,16 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 	public static function paysera_text_js() {
 		$map = array(
 			'You will be taken to the Paysera payment page to choose how you pay. Banks, cards, wallets and instalments, all in one place.'
-				=> 'Pēc pasūtījuma noformēšanas atvērsies drošā Paysera maksājumu lapa — tur izvēlieties savu banku.',
+				=> 'Pēc noformēšanas atvērsies droša Paysera lapa — izvēlieties savu banku un apmaksājiet.',
+			'Pēc pasūtījuma noformēšanas atvērsies drošā Paysera maksājumu lapa — tur izvēlieties savu banku.'
+				=> 'Pēc noformēšanas atvērsies droša Paysera lapa — izvēlieties savu banku un apmaksājiet.',
+			'Internetbanka — Swedbank, SEB, Citadele, Luminor, Revolut' => 'Internetbanka',
+			'Pārskaitījums ar rēķinu' => 'Rēķins uz e-pastu',
+			'Select Venipak pickup point:' => 'Izvēlieties Venipak pakomātu:',
+			'Piegādes adrese' => 'Saņēmējs',
+			'Select pickup point' => 'Izvēlieties pakomātu',
+			'DPD Pickup points' => 'DPD pakomāts',
+			'Pasūtījuma izpilde tiek uzsākta pēc maksājuma saņemšanas mūsu bankas kontā.' => 'Rēķinu nosūtīsim uz e-pastu. Izgatavošanu sākam pēc apmaksas saņemšanas.',
 			'Apmaksa ar rēķinu' => 'Apmaksa internetbankā vai ar rēķinu',
 		);
 		?>

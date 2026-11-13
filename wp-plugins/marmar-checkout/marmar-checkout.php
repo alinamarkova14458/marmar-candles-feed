@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.2.8
+ * Version:           1.3.3
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.2.8';
+	const VERSION = '1.3.3';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -29,9 +29,78 @@ final class MarMar_Checkout {
 		);
 	}
 
+	/**
+	 * Visi piegādes veidi ir pakomāti vai saņemšana darbnīcā (kurjera nav) — adrese, pilsēta, indekss un novads
+	 * nav vajadzīgi. Paslēpjam tos visām valstīm (LV, LT, EE). Kontaktiem paliek e-pasts, vārds, uzvārds, tālrunis.
+	 * Atslēgt: MarMar Checkout iestatījumos nav — vienkārši izņemt šo filtru (vai MMCO_NEED_ADDRESS = true).
+	 */
 	public static function hide_state_lv( $locale ) {
-		$locale['LV']['state'] = array_merge( isset( $locale['LV']['state'] ) ? (array) $locale['LV']['state'] : array(), array( 'required' => false, 'hidden' => true ) );
+		if ( defined( 'MMCO_NEED_ADDRESS' ) && MMCO_NEED_ADDRESS ) {
+			return $locale;
+		}
+		$keys = array( 'address_1', 'address_2', 'city', 'state', 'postcode' );
+		foreach ( array( 'LV', 'LT', 'EE' ) as $cc ) {
+			foreach ( $keys as $k ) {
+				$locale[ $cc ][ $k ] = array_merge( isset( $locale[ $cc ][ $k ] ) ? (array) $locale[ $cc ][ $k ] : array(), array( 'required' => false, 'hidden' => true ) );
+			}
+		}
 		return $locale;
+	}
+
+	/** Pakomāta adrese → pasūtījuma piegādes (un tukšā rēķina) adrese. Nekad nepārraksta jau aizpildītu adresi. */
+	public static function fill_address( $order ) {
+		$order = $order instanceof WC_Order ? $order : wc_get_order( $order );
+		if ( ! $order || '' !== trim( (string) $order->get_shipping_address_1() ) ) {
+			return;
+		}
+		$a = array( 'address_1' => '', 'address_2' => '', 'city' => '', 'postcode' => '' );
+
+		$uni = (string) $order->get_meta( '_woo_lithuaniapost_lpexpress_terminal' );
+		$ven = $order->get_meta( '_venipak_pickup_point_data' );
+		$dpd = (string) $order->get_meta( 'wc_shipping_dpd_parcels_terminal_name' );
+		if ( '' === $dpd ) {
+			$dpd = (string) $order->get_meta( '_wc_shipping_dpd_parcels_terminal_name' );
+		}
+		if ( '' !== $uni ) { // "Nosaukums - Iela 1, Pilsēta"
+			$parts          = explode( ' - ', $uni, 2 );
+			$street_city    = isset( $parts[1] ) ? $parts[1] : $uni;
+			$pos            = strrpos( $street_city, ',' );
+			$a['address_1'] = trim( false !== $pos ? substr( $street_city, 0, $pos ) : $street_city );
+			$a['city']      = trim( false !== $pos ? substr( $street_city, $pos + 1 ) : '' );
+			$a['address_2'] = 'Unisend: ' . trim( $parts[0] );
+		} elseif ( $ven ) {
+			$v              = is_string( $ven ) ? json_decode( $ven, true ) : (array) $ven;
+			$a['address_1'] = isset( $v['address'] ) ? (string) $v['address'] : '';
+			$a['city']      = isset( $v['city'] ) ? (string) $v['city'] : '';
+			$a['postcode']  = isset( $v['zip'] ) && '' !== (string) $v['zip'] ? ( ctype_digit( (string) $v['zip'] ) ? 'LV-' . $v['zip'] : (string) $v['zip'] ) : '';
+			$a['address_2'] = 'Venipak: ' . ( isset( $v['display_name'] ) ? (string) $v['display_name'] : '' );
+		} elseif ( '' !== $dpd ) { // "Nosaukums,IELA 1"
+			$parts          = explode( ',', $dpd, 2 );
+			$a['address_1'] = trim( isset( $parts[1] ) ? $parts[1] : $dpd );
+			$a['address_2'] = 'DPD: ' . trim( $parts[0] );
+		} else {
+			foreach ( $order->get_shipping_methods() as $m ) {
+				if ( false !== strpos( $m->get_method_id(), 'free_shipping' ) || false !== stripos( $m->get_name(), 'Iļģuciem' ) ) {
+					$a = array( 'address_1' => 'Jaunsaules iela 7a', 'address_2' => 'Saņemšana darbnīcā', 'city' => 'Rīga', 'postcode' => '' );
+				} elseif ( '' === $a['address_1'] ) {
+					$a['address_1'] = $m->get_name();
+				}
+			}
+		}
+		if ( '' === $a['address_1'] ) {
+			return;
+		}
+		foreach ( $a as $k => $v ) {
+			$order->{'set_shipping_' . $k}( $v );
+			if ( '' === trim( (string) $order->{'get_billing_' . $k}() ) && 'address_2' !== $k ) {
+				$order->{'set_billing_' . $k}( $v );
+			}
+		}
+		if ( ! $order->get_shipping_country() ) {
+			$order->set_shipping_country( 'LV' );
+		}
+		$order->add_order_note( 'MarMar: adrese aizpildīta no izvēlētā pakomāta / saņemšanas vietas.' );
+		$order->save();
 	}
 
 	public static function init() {
@@ -41,6 +110,11 @@ final class MarMar_Checkout {
 		add_filter( 'gettext_woocommerce', array( __CLASS__, 'gettext' ), 10, 2 );
 		// Latvijā lauks «Novads» nav vajadzīgs (nav obligāts) — paslēpjam, lai forma īsāka.
 		add_filter( 'woocommerce_get_country_locale', array( __CLASS__, 'hide_state_lv' ) );
+		// Adrese oformēšanā paslēpta — pasūtījumā ierakstām izvēlētā pakomāta adresi (uzlīmei un rēķinam).
+		add_action( 'woocommerce_store_api_checkout_order_processed', array( __CLASS__, 'fill_address' ), 999 );
+		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'fill_address' ), 999 );
+		add_action( 'woocommerce_order_status_on-hold', array( __CLASS__, 'fill_address' ), 5 );
+		add_action( 'woocommerce_order_status_processing', array( __CLASS__, 'fill_address' ), 5 );
 		// Минимальный заказ (заменяет сниппет WPCode «Minimum Order 5 EUR»).
 		add_action( 'woocommerce_check_cart_items', array( __CLASS__, 'check_minimum' ) );
 		add_action( 'woocommerce_checkout_process', array( __CLASS__, 'check_minimum' ) );
