@@ -75,3 +75,23 @@ node shot.js [prefix]                        # renders *.html -> out/*.jpg (size
   shop.json/LISTING.md.
 - Light/ivory elements: prefer A (cream) over B (checkerboard) if they get lost.
 - `samples/` — reference renders. `out/`, `*.html` are not committed (HTML points to the local cache).
+
+## Article pins (`article.py`, Nov 13 2026)
+Pins for blog posts in the R family: `JALINA.ART` on top, big Bodoni Moda title (fits ≤2 lines, C ≤3; checked at 236 px wide
+in `article-samples/_sheet-236.jpg`), short caps subline ("Guide · …", "Free tool · …", "8 sets · …"), large imagery from the post itself
+(product images cropped to cut their own text off, or Alina's set elements), paper background. No plaques, badges, price or "affiliate".
+Theme `--theme auto`: set elements take their set's R theme (`gen.set_theme`); otherwise measured on the pin's imagery
+(dark if median luminance < 0.4; blue only for white/ivory cut-outs; photos never go on blue).
+- **A hero:** one big image (photo card or cut-out) centred, title + subline at the bottom. `hero_fx`: `checker-split`
+  (painted checkerboard behind the left half, labelled fake/real) or `measure` (real pixel width from the set ZIP and size at 300 DPI).
+- **B stack:** 2–3 large overlapping, slightly tilted images under the title. `stack_fx: scale` = one element at its real print
+  width for 300/240/150 DPI (tool pins).
+- **C title-led:** big title on top (own `c_title`/`c_sub`), one large cut-out element under it.
+```bash
+python3 article.py presets                               # png-not-transparent, christmas-gift-tags-printable, tools/print-size-calculator
+python3 article.py png-not-transparent --render          # A B C -> article-samples/art-png-not-transparent-[ABC].jpg
+python3 article.py my-post.json A C --theme light --render   # spec: slug,title,sub,hero,hero_fx,stack,stack_fx,b_sub,cutout,c_title,c_sub
+python3 article.py sheet                                 # article-samples/_sheet.jpg (labelled) + _sheet-236.jpg (feed size)
+```
+Image refs: `/img/<file>` (jalina-blog/public/img), `set:<set-id>/<element>` (needs the set ZIP pulled from LFS),
+`{"src": ref, "crop": [l, t, r, b]}`. Keep titles/sublines true to the post (counts = real counts).
