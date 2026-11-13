@@ -131,6 +131,61 @@
 				if (actions.nextElementSibling !== sum) actions.parentNode.insertBefore(sum, actions.nextSibling);
 				if (sum.nextElementSibling !== trust) actions.parentNode.insertBefore(trust, sum.nextSibling);
 			}
+			safe(placeWho);
+			safe(translateMisc);
+		}
+	}
+
+	/* ---------- Privātpersona / Uzņēmums ---------- */
+	var BIZ = ['company', 'marmar/reg-nr', 'marmar/pvn-nr', 'marmar/jur-adrese'];
+	var bizOn = null;
+	var who = el('div', 'mmco-who', '<label><input type="radio" name="mmco-who" value="p"> Privātpersona</label>' +
+		'<label><input type="radio" name="mmco-who" value="b"> Uzņēmums</label>');
+	function bizWraps(form) {
+		return BIZ.map(function (k) {
+			var i = form.querySelector('[id$="-' + k.replace('/', '\\/') + '"]') || form.querySelector('[id$="-' + k.replace('/', '-') + '"]');
+			if (!i) return null;
+			while (i.parentNode && i.parentNode !== form) i = i.parentNode; // tiešais formas bērns — tad strādā CSS «order»
+			return i.parentNode === form ? i : null;
+		}).filter(Boolean);
+	}
+	function placeWho() {
+		var form = document.querySelector('#shipping .wc-block-components-address-form, .wc-block-checkout__shipping-fields .wc-block-components-address-form');
+		if (!form) return;
+		var wraps = bizWraps(form);
+		if (!wraps.length) return;
+		wraps.forEach(function (w) { w.classList.add('mmco-biz'); });
+		document.querySelectorAll('.mmco-who').forEach(function (n) { if (n !== who) n.remove(); });
+		if (who.parentNode !== form) form.appendChild(who);
+		if (bizOn === null) {
+			var s = store(), a = s && s.getCustomerData && s.getCustomerData().shippingAddress;
+			bizOn = !!(a && a.company);
+		}
+		form.classList.toggle('mmco-is-biz', bizOn);
+		who.querySelector('input[value="' + (bizOn ? 'b' : 'p') + '"]').checked = true;
+	}
+	who.addEventListener('change', function (e) {
+		bizOn = e.target.value === 'b';
+		var form = who.parentNode; if (form) form.classList.toggle('mmco-is-biz', bizOn);
+		if (bizOn) { var f = form && form.querySelector('.mmco-biz input'); if (f) setTimeout(function () { f.focus(); }, 50); return; }
+		// Privātpersona — notīram uzņēmuma laukus, lai tie nenonāk pasūtījumā.
+		var d = window.wp && wp.data && wp.data.dispatch('wc/store/cart');
+		if (!d) return;
+		var empty = {}; BIZ.forEach(function (k) { empty[k] = ''; });
+		safe(function () { d.setShippingAddress(empty); });
+		safe(function () { d.setBillingAddress(empty); });
+	});
+
+	function translateMisc() {
+		document.querySelectorAll('.mp-please-select-location').forEach(function (n) {
+			if (/pickup location/i.test(n.textContent)) n.textContent = 'Izvēlieties pakomātu';
+		});
+		// Paysera juridiskais teksts — īsāk, saite uz noteikumiem paliek.
+		var c = document.querySelector('.paysera-customer-consent p');
+		if (c && !c.dataset.mmco) {
+			var a = c.querySelector('a');
+			c.dataset.mmco = '1';
+			c.innerHTML = 'Maksājumu nodrošina Paysera. Turpinot jūs piekrītat ' + (a ? '<a href="' + a.getAttribute('href') + '" target="_blank" rel="noopener">Paysera noteikumiem</a>' : 'Paysera noteikumiem') + '.';
 		}
 	}
 

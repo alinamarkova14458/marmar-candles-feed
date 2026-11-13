@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.3.4
+ * Version:           1.4.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.3.4';
+	const VERSION = '1.4.2';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -131,6 +131,59 @@ final class MarMar_Checkout {
 		add_action( 'woocommerce_checkout_process', array( __CLASS__, 'check_minimum' ) );
 		// Переключатель срочного заказа на оформлении: обновление корзины без перезагрузки (Store API).
 		add_action( 'woocommerce_blocks_loaded', array( __CLASS__, 'register_express_update' ) );
+		// Pircējs-uzņēmums: rekvizītu lauki (parādās tikai, ja izvēlēts «Uzņēmums»).
+		add_action( 'woocommerce_init', array( __CLASS__, 'register_company_fields' ) );
+		add_action( 'wpo_wcpdf_after_billing_address', array( __CLASS__, 'invoice_company' ), 10, 2 );
+		// Pēc atjaunināšanas vienreiz atjaunojam piegādes cenas sesijās (lai Omniva pazūd arī vecajos grozos).
+		add_action( 'init', array( __CLASS__, 'bust_shipping_cache' ), 20 );
+	}
+
+	const BIZ_FIELDS = array(
+		'marmar/reg-nr'     => 'Reģistrācijas nr.',
+		'marmar/pvn-nr'     => 'PVN nr. (ja ir)',
+		'marmar/jur-adrese' => 'Juridiskā adrese',
+	);
+
+	public static function register_company_fields() {
+		if ( ! function_exists( 'woocommerce_register_additional_checkout_field' ) ) {
+			return;
+		}
+		foreach ( self::BIZ_FIELDS as $id => $label ) {
+			woocommerce_register_additional_checkout_field(
+				array(
+					'id'       => $id,
+					'label'    => $label,
+					'location' => 'address',
+					'type'     => 'text',
+					'required' => false,
+				)
+			);
+		}
+	}
+
+	/** Rekvizīti PDF rēķinā (WooCommerce PDF Invoices). */
+	public static function invoice_company( $type, $order ) {
+		if ( ! is_a( $order, 'WC_Order' ) ) {
+			return;
+		}
+		$out = array();
+		foreach ( self::BIZ_FIELDS as $id => $label ) {
+			$v = $order->get_meta( '_wc_billing/' . $id ) ?: $order->get_meta( '_wc_shipping/' . $id );
+			if ( '' !== (string) $v ) {
+				$out[] = esc_html( str_replace( ' (ja ir)', '', $label ) . ': ' . $v );
+			}
+		}
+		if ( $out ) {
+			echo '<br>' . implode( '<br>', $out ); // phpcs:ignore
+		}
+	}
+
+	public static function bust_shipping_cache() {
+		if ( get_option( 'mmco_ship_bust' ) === self::VERSION || ! class_exists( 'WC_Cache_Helper' ) ) {
+			return;
+		}
+		WC_Cache_Helper::get_transient_version( 'shipping', true );
+		update_option( 'mmco_ship_bust', self::VERSION, false );
 	}
 
 	private static function on_cart_or_checkout() {
