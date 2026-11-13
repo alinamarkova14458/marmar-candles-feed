@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.3.3
+ * Version:           1.3.4
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.3.3';
+	const VERSION = '1.3.4';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -48,6 +48,15 @@ final class MarMar_Checkout {
 	}
 
 	/** Pakomāta adrese → pasūtījuma piegādes (un tukšā rēķina) adrese. Nekad nepārraksta jau aizpildītu adresi. */
+	public static function hide_omniva( $rates ) {
+		foreach ( (array) $rates as $id => $rate ) {
+			if ( 0 === strpos( (string) $id, 'omnivalt' ) ) {
+				unset( $rates[ $id ] );
+			}
+		}
+		return $rates;
+	}
+
 	public static function fill_address( $order ) {
 		$order = $order instanceof WC_Order ? $order : wc_get_order( $order );
 		if ( ! $order || '' !== trim( (string) $order->get_shipping_address_1() ) ) {
@@ -110,6 +119,8 @@ final class MarMar_Checkout {
 		add_filter( 'gettext_woocommerce', array( __CLASS__, 'gettext' ), 10, 2 );
 		// Latvijā lauks «Novads» nav vajadzīgs (nav obligāts) — paslēpjam, lai forma īsāka.
 		add_filter( 'woocommerce_get_country_locale', array( __CLASS__, 'hide_state_lv' ) );
+		// Omniva paslēpta (13.11.2026): tās pakomātu saraksts nelādējas (omnivalt_get_terminals atbild 0). Atgriezt: izņemt šo rindu.
+		add_filter( 'woocommerce_package_rates', array( __CLASS__, 'hide_omniva' ), 100 );
 		// Adrese oformēšanā paslēpta — pasūtījumā ierakstām izvēlētā pakomāta adresi (uzlīmei un rēķinam).
 		add_action( 'woocommerce_store_api_checkout_order_processed', array( __CLASS__, 'fill_address' ), 999 );
 		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'fill_address' ), 999 );
