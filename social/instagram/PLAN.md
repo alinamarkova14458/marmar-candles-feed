@@ -10,7 +10,6 @@ _Страница обновляется сама при каждом запус
 
 | Когда (Рига) | Фото | Тип | Подпись | Статус |
 |---|---|---|---|---|
-| пт 13.11 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-paysera-story.jpg" width="90"> | сторис |  | ⏳ запланирован |
 | сб 14.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/2026-11-14-atsauksmes-1.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/2026-11-14-atsauksmes-2.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/2026-11-14-atsauksmes-3.jpg" width="90"> +4 | карусель (7) | Šie ir īsti vārdi no jums, mani mīļie klienti 🥹 Es tos krāju savos Highlights un pārlasu, kad rokas ir vaskā … | ⏳ запланирован |
 | вс 15.11 20:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-grid-ny-1.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-grid-ny-2.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-grid-ny-3.jpg" width="90"> | карусель (3) | Mana Ziemassvētku kolekcija vienā kadrā ✨ Bumba — 9 €, bumba dāvanu kastītē — 15 €, figūriņas — 5 €. Katru sv… | ⏳ запланирован |
 | пн 16.11 12:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/w47-st1d.jpg" width="90"> | сторис |  | ⏳ запланирован |
@@ -52,4 +51,5 @@ _Страница обновляется сама при каждом запус
 
 | Когда (Рига) | Фото | Тип | Подпись | Статус |
 |---|---|---|---|---|
+| пт 13.11 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-paysera-story.jpg" width="90"> | сторис |  | ✅ [опубликован](https://www.instagram.com/stories/marmar.candles/4029440280831182859) |
 | чт 12.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/2026-11-12-piparkuku-svece.jpg" width="90"> | фото | Šis ir vienīgais piparkūku vīriņš, kuru neviens neapēdīs 😄🎄 Es viņu izlēju ar mīlestību un ieliku kraftpapīra… | ✅ [опубликован](https://www.instagram.com/p/DfpdHXpFLTv/) |
