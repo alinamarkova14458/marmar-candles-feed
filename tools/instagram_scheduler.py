@@ -33,6 +33,8 @@ QUEUE_GLOB = os.path.join(ROOT, "social", "instagram", "queue", "*.json")
 STATE_PATH = os.path.join(ROOT, "social", "instagram", "published.json")
 API = "https://graph.facebook.com/v27.0"  # new apps get unified login, not graph.instagram.com
 
+# GitHub starts the cron only every ~4-5 h; a run waits for a post due before the next run.
+WAIT_AHEAD = timedelta(hours=5, minutes=20)
 MAX_LATE = timedelta(hours=24)   # GitHub cron runs hours late; later than this -> skipped
 MAX_HASHTAGS = 5                 # Alina's brand rule
 MAX_CAPTION = 2200               # Instagram limit
@@ -135,8 +137,29 @@ class Api:
         return self.call("POST", f"{uid}/media_publish", creation_id=c)["id"]
 
 
+def next_wait(items: list[dict], state: dict, now: datetime) -> timedelta | None:
+    """Time until the next unpublished post, if it is due within WAIT_AHEAD."""
+    ahead = [it["_when"] - now for it in items if post_id(it) not in state and it["_when"] > now]
+    soonest = min(ahead, default=None)
+    return soonest if soonest is not None and soonest <= WAIT_AHEAD else None
+
+
 def main() -> int:
     dry = os.environ.get("DRY_RUN") == "1"
+    failed = False
+    while True:
+        failed |= run_once(dry)
+        if dry:
+            return 0
+        wait = next_wait(load_queue(QUEUE_GLOB), load_state(STATE_PATH), datetime.now(timezone.utc))
+        if wait is None:
+            return 1 if failed else 0
+        print(f"  waiting {wait} for the next post, to publish it on time")
+        time.sleep(wait.total_seconds() + 5)
+
+
+def run_once(dry: bool) -> bool:
+    """Publish everything due now. Returns True if a post failed."""
     now = datetime.now(timezone.utc)
     state = load_state(STATE_PATH)
     to_publish, to_skip = plan(load_queue(QUEUE_GLOB), state, now)
@@ -157,7 +180,7 @@ def main() -> int:
             print(f"  token OK: @{acc.get('username')} (id {acc['id']})")
         for it in to_publish:
             print(f"  WOULD {it['_id']} {it['date']} {it.get('type', 'image')} {it.get('caption', '')[:60]!r}")
-        return 0
+        return False
 
     token = os.environ["IG_ACCESS_TOKEN"]
     mask(token)
@@ -177,7 +200,7 @@ def main() -> int:
             print(f"  FAIL {it['_id']} {e}")
         state[it["_id"]] = rec  # failures are recorded, never retried blindly (no double posts)
     save_state(state, STATE_PATH)
-    return 1 if any("error" in state[it["_id"]] for it in to_publish) else 0
+    return any("error" in state[it["_id"]] for it in to_publish)
 
 
 if __name__ == "__main__":
