@@ -1,0 +1,201 @@
+{
+ "id": 24298,
+ "slug": "contact-form-1",
+ "title": "Contact form 1",
+ "locale": "en_US",
+ "properties": {
+  "form": {
+   "content": "<label>Vārds *</label>\n[text* your-name autocomplete:name]\n\n<label>E-pasts *</label>\n[email* your-email autocomplete:email]\n\n<label>Kāzu datums *</label>\n[date* wedding-date]\n\n<label>Izvēlieties sveču veidu *</label>\n\n[radio candle-type \"Mini sveces burciņās\" \"Mini burbuļsveces\"]\n\n<label>Daudzums *</label>\n[number* quantity min:10 placeholder \"Minimums 10 gab.\"]\n\n<label>Jūsu vēlmes</label>\n[textarea your-message placeholder \"Pastāstiet par ielūguma dizainu, krāsu paleti, tekstu uz etiķetes vai citām vēlmēm.\"]\n\n[submit \"Saņemt individuālu piedāvājumu\"]",
+   "fields": [
+    {
+     "type": "text*",
+     "basetype": "text",
+     "name": "your-name",
+     "options": [
+      "autocomplete:name"
+     ],
+     "raw_values": [],
+     "labels": [],
+     "values": [],
+     "pipes": [],
+     "content": ""
+    },
+    {
+     "type": "email*",
+     "basetype": "email",
+     "name": "your-email",
+     "options": [
+      "autocomplete:email"
+     ],
+     "raw_values": [],
+     "labels": [],
+     "values": [],
+     "pipes": [],
+     "content": ""
+    },
+    {
+     "type": "date*",
+     "basetype": "date",
+     "name": "wedding-date",
+     "options": [],
+     "raw_values": [],
+     "labels": [],
+     "values": [],
+     "pipes": [],
+     "content": ""
+    },
+    {
+     "type": "radio",
+     "basetype": "radio",
+     "name": "candle-type",
+     "options": [],
+     "raw_values": [
+      "Mini sveces burciņās",
+      "Mini burbuļsveces"
+     ],
+     "labels": [
+      "Mini sveces burciņās",
+      "Mini burbuļsveces"
+     ],
+     "values": [
+      "Mini sveces burciņās",
+      "Mini burbuļsveces"
+     ],
+     "pipes": [
+      [
+       "Mini sveces burciņās",
+       "Mini sveces burciņās"
+      ],
+      [
+       "Mini burbuļsveces",
+       "Mini burbuļsveces"
+      ]
+     ],
+     "content": ""
+    },
+    {
+     "type": "number*",
+     "basetype": "number",
+     "name": "quantity",
+     "options": [
+      "min:10",
+      "placeholder"
+     ],
+     "raw_values": [
+      "Minimums 10 gab."
+     ],
+     "labels": [
+      "Minimums 10 gab."
+     ],
+     "values": [
+      "Minimums 10 gab."
+     ],
+     "pipes": [
+      [
+       "Minimums 10 gab.",
+       "Minimums 10 gab."
+      ]
+     ],
+     "content": ""
+    },
+    {
+     "type": "textarea",
+     "basetype": "textarea",
+     "name": "your-message",
+     "options": [
+      "placeholder"
+     ],
+     "raw_values": [
+      "Pastāstiet par ielūguma dizainu, krāsu paleti, tekstu uz etiķetes vai citām vēlmēm."
+     ],
+     "labels": [
+      "Pastāstiet par ielūguma dizainu, krāsu paleti, tekstu uz etiķetes vai citām vēlmēm."
+     ],
+     "values": [
+      "Pastāstiet par ielūguma dizainu, krāsu paleti, tekstu uz etiķetes vai citām vēlmēm."
+     ],
+     "pipes": [
+      [
+       "Pastāstiet par ielūguma dizainu, krāsu paleti, tekstu uz etiķetes vai citām vēlmēm.",
+       "Pastāstiet par ielūguma dizainu, krāsu paleti, tekstu uz etiķetes vai citām vēlmēm."
+      ]
+     ],
+     "content": ""
+    },
+    {
+     "type": "submit",
+     "basetype": "submit",
+     "name": "",
+     "options": [],
+     "raw_values": [
+      "Saņemt individuālu piedāvājumu"
+     ],
+     "labels": [
+      "Saņemt individuālu piedāvājumu"
+     ],
+     "values": [
+      "Saņemt individuālu piedāvājumu"
+     ],
+     "pipes": [
+      [
+       "Saņemt individuālu piedāvājumu",
+       "Saņemt individuālu piedāvājumu"
+      ]
+     ],
+     "content": ""
+    }
+   ]
+  },
+  "mail": {
+   "active": true,
+   "subject": "Jauns pieprasījums par kāzu svecēm",
+   "sender": "MarMar Candles <wordpress@marmarcandles.com>",
+   "recipient": "info@marmarcandles.lv",
+   "body": "Vārds:\n[your-name]\n\nE-pasts:\n[your-email]\n\nKāzu datums:\n[wedding-date]\n\nSveču veids:\n[candle-type]\n\nDaudzums:\n[quantity]\n\nVēlmes:\n[your-message]",
+   "additional_headers": "Reply-To: [your-email]",
+   "attachments": "",
+   "use_html": true,
+   "exclude_blank": true
+  },
+  "mail_2": {
+   "active": false,
+   "subject": "[_site_title] \"[your-subject]\"",
+   "sender": "[_site_title] <wordpress@marmarcandles.com>",
+   "recipient": "[your-email]",
+   "body": "Message Body:\n[your-message]\n\n-- \nThis email is a receipt for your contact form submission on our website ([_site_title] [_site_url]) in which your email address was used. If that was not you, please ignore this message.",
+   "additional_headers": "Reply-To: [_site_admin_email]",
+   "attachments": "",
+   "use_html": true,
+   "exclude_blank": true
+  },
+  "messages": {
+   "mail_sent_ok": "Paldies! Esam saņēmuši jūsu pieprasījumu un drīzumā ar jums sazināsimies.",
+   "mail_sent_ng": "Radās kļūda, nosūtot jūsu ziņojumu. Lūdzu, mēģiniet vēlreiz pēc brīža.",
+   "validation_error": "One or more fields have an error. Please check and try again.",
+   "spam": "There was an error trying to send your message. Please try again later.",
+   "accept_terms": "You must accept the terms and conditions before sending your message.",
+   "invalid_required": "Please fill out this field.",
+   "invalid_too_long": "This field has a too long input.",
+   "invalid_too_short": "This field has a too short input.",
+   "upload_failed": "There was an unknown error uploading the file.",
+   "upload_file_type_invalid": "You are not allowed to upload files of this type.",
+   "upload_file_too_large": "The uploaded file is too large.",
+   "upload_failed_php_error": "There was an error uploading the file.",
+   "invalid_date": "Please enter a date in YYYY-MM-DD format.",
+   "date_too_early": "This field has a too early date.",
+   "date_too_late": "This field has a too late date.",
+   "invalid_number": "Please enter a number.",
+   "number_too_small": "This field has a too small number.",
+   "number_too_large": "This field has a too large number.",
+   "quiz_answer_not_correct": "The answer to the quiz is incorrect.",
+   "invalid_email": "Please enter an email address.",
+   "invalid_url": "Please enter a URL.",
+   "invalid_tel": "Please enter a telephone number.",
+   "captcha_not_match": "Your entered code is incorrect."
+  },
+  "additional_settings": {
+   "content": "",
+   "settings": []
+  }
+ }
+}

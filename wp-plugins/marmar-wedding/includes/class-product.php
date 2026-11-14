@@ -15,6 +15,10 @@ class MarMar_Wedding_Product {
 		add_filter( 'woocommerce_loop_add_to_cart_args', array( __CLASS__, 'loop_button_args' ), 20, 2 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'assets' ) );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
+		add_action( 'woocommerce_after_add_to_cart_button', array( __CLASS__, 'after_button' ), 20 );
+		add_action( 'woocommerce_after_add_to_cart_form', array( __CLASS__, 'reviews' ), 20 );
+		add_filter( 'woocommerce_product_tabs', array( __CLASS__, 'tabs' ), 99 );
+		add_action( 'woocommerce_after_single_product_summary', array( __CLASS__, 'cross' ), 12 );
 	}
 
 	private static function current() {
@@ -38,6 +42,8 @@ class MarMar_Wedding_Product {
 			array(
 				'tiers'     => MarMar_Wedding_Settings::tiers(),
 				'minQty'    => MarMar_Wedding_Settings::min_qty(),
+				'nextTier'  => 'Vēl %n gab. — un cena būs %p / gab.',
+				'bestTier'  => 'Zemākā cena par gabalu.',
 				'upload'    => WC_AJAX::get_endpoint( 'marmar_wedding_upload' ),
 				'maxFiles'  => MarMar_Wedding_Uploads::MAX_FILES,
 				'maxBytes'  => MarMar_Wedding_Uploads::MAX_BYTES,
@@ -67,6 +73,10 @@ class MarMar_Wedding_Product {
 			$min                 = MarMar_Wedding_Settings::min_qty();
 			$args['min_value']   = $min;
 			$args['input_value'] = max( $min, (int) ( $args['input_value'] ?? $min ) );
+			// На странице конструктора стартуем с типичного количества гостей.
+			if ( is_product() && ! isset( $_POST['quantity'] ) && (int) $args['input_value'] === $min ) { // phpcs:ignore WordPress.Security.NonceVerification
+				$args['input_value'] = MarMar_Wedding_Settings::default_qty();
+			}
 			$args['step']        = 1;
 		}
 		return $args;
@@ -85,7 +95,12 @@ class MarMar_Wedding_Product {
 			return $html;
 		}
 		$min = min( $tiers );
-		return 'no ' . self::money( $min ) . ' <span class="mmw-unit">/ gab.</span>';
+		$max = max( $tiers );
+		if ( $max > $min ) {
+			// Честный диапазон: нижняя цена действует только для больших заказов.
+			return self::money( $min ) . ' – ' . self::money( $max ) . ' <span class="mmw-unit">/ gab.</span>';
+		}
+		return self::money( $min ) . ' <span class="mmw-unit">/ gab.</span>';
 	}
 
 	/* В каталоге кнопка ведёт на страницу конструктора, а не кладёт товар в корзину. */
@@ -125,6 +140,7 @@ class MarMar_Wedding_Product {
 				<legend><span class="mmw-n">1</span> Svece</legend>
 				<div class="mmw-cards">
 					<?php $timgs = MarMar_Wedding_Settings::type_images(); ?>
+					<?php $tnotes = MarMar_Wedding_Settings::type_notes(); ?>
 					<?php foreach ( $types as $i => $t ) : ?>
 						<label class="mmw-card<?php echo ! empty( $timgs[ $t ] ) ? ' mmw-card--img' : ''; ?>">
 							<?php if ( ! empty( $timgs[ $t ] ) ) : ?>
@@ -134,16 +150,22 @@ class MarMar_Wedding_Product {
 								<input type="radio" name="mmw_type" value="<?php echo esc_attr( $t ); ?>" <?php checked( $posted( 'mmw_type', $types[0] ?? '' ), $t ); ?> required>
 								<span><?php echo esc_html( $t ); ?></span>
 							</span>
+							<?php if ( ! empty( $tnotes[ $t ] ) ) : ?>
+								<small class="mmw-card-note"><?php echo esc_html( $tnotes[ $t ] ); ?></small>
+							<?php endif; ?>
 						</label>
 					<?php endforeach; ?>
 				</div>
+				<?php if ( $s['facts'] ) : ?>
+					<p class="mmw-help"><?php echo esc_html( $s['facts'] ); ?></p>
+				<?php endif; ?>
 			</fieldset>
 
 			<fieldset class="mmw-step">
 				<legend><span class="mmw-n">2</span> Daudzums</legend>
 				<div class="mmw-qty">
 					<button type="button" class="mmw-qty-btn" data-step="-1" aria-label="Mazāk">−</button>
-					<input type="number" id="mmw_qty" inputmode="numeric" min="<?php echo (int) MarMar_Wedding_Settings::min_qty(); ?>" step="1" value="<?php echo (int) max( MarMar_Wedding_Settings::min_qty(), (int) $posted( 'quantity', MarMar_Wedding_Settings::min_qty() ) ); ?>" aria-label="Daudzums, gab.">
+					<input type="number" id="mmw_qty" inputmode="numeric" min="<?php echo (int) MarMar_Wedding_Settings::min_qty(); ?>" step="1" value="<?php echo (int) max( MarMar_Wedding_Settings::min_qty(), (int) $posted( 'quantity', MarMar_Wedding_Settings::default_qty() ) ); ?>" aria-label="Daudzums, gab.">
 					<button type="button" class="mmw-qty-btn" data-step="1" aria-label="Vairāk">+</button>
 					<span class="mmw-qty-unit">gab.</span>
 				</div>
@@ -159,7 +181,11 @@ class MarMar_Wedding_Product {
 						</tr>
 					<?php endforeach; ?>
 				</table>
-				<p class="mmw-help">Minimālais daudzums — <?php echo (int) MarMar_Wedding_Settings::min_qty(); ?> gab.</p>
+				<p class="mmw-next" aria-live="polite"></p>
+				<p class="mmw-help">Minimālais daudzums — <?php echo (int) MarMar_Wedding_Settings::min_qty(); ?> gab. Lentīte, iepakojums un personalizācija ir iekļauta cenā.</p>
+				<?php if ( $s['ship_note'] ) : ?>
+					<p class="mmw-ship"><?php echo esc_html( $s['ship_note'] ); ?></p>
+				<?php endif; ?>
 			</fieldset>
 
 			<fieldset class="mmw-step">
@@ -252,5 +278,79 @@ class MarMar_Wedding_Product {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/** Под кнопкой: свадебные сроки (вместо общего «Saņemsiet…») и вопрос в WhatsApp. */
+	public static function after_button() {
+		global $product;
+		if ( ! $product || ! MarMar_Wedding_Settings::is_wedding( $product ) ) {
+			return;
+		}
+		$terms = MarMar_Wedding_Settings::list_of( 'terms' );
+		if ( $terms ) {
+			echo '<ul class="mmw-terms">';
+			foreach ( $terms as $t ) {
+				echo '<li>' . esc_html( $t ) . '</li>';
+			}
+			echo '</ul>';
+		}
+		$wa = preg_replace( '/\D+/', '', (string) MarMar_Wedding_Settings::get( 'whatsapp' ) );
+		if ( $wa ) {
+			$text = 'Labdien! Man ir jautājums par kāzu svecēm viesiem.';
+			echo '<p class="mmw-ask">Neesat pārliecināti? <a href="' . esc_url( 'https://wa.me/' . $wa . '?text=' . rawurlencode( $text ) ) . '" target="_blank" rel="noopener">Uzrakstiet mums WhatsApp</a> — atsūtīsim piemērus un palīdzēsim izvēlēties.</p>';
+		}
+	}
+
+	/** Отзывы невест под конструктором. */
+	public static function reviews() {
+		global $product;
+		if ( ! $product || ! MarMar_Wedding_Settings::is_wedding( $product ) ) {
+			return;
+		}
+		$reviews = MarMar_Wedding_Settings::list_of( 'reviews' );
+		if ( ! $reviews ) {
+			return;
+		}
+		echo '<div class="mmw-reviews"><p class="mmw-reviews-title">Ko saka līgavas, saņemot pasūtījumu</p>';
+		foreach ( $reviews as $r ) {
+			echo '<blockquote class="mmw-review">«' . esc_html( $r ) . '»</blockquote>';
+		}
+		echo '</div>';
+	}
+
+	/** Вкладка «Piegāde un termiņi»: для свадебных заказов свои сроки, без «5–7 дней» и срочного заказа. */
+	public static function tabs( $tabs ) {
+		if ( self::current() && isset( $tabs['mmd_delivery'] ) ) {
+			$tabs['mmd_delivery']['callback'] = array( __CLASS__, 'tab_delivery' );
+		}
+		return $tabs;
+	}
+
+	public static function tab_delivery() {
+		echo '<ul class="mmd-list">';
+		foreach ( MarMar_Wedding_Settings::list_of( 'terms' ) as $t ) {
+			echo '<li>' . esc_html( $t ) . '.</li>';
+		}
+		echo '<li>Piegāde uz pakomātiem visā Latvijā: Unisend un Venipak — bez maksas pasūtījumiem no 50 €; DPD — 4,00 €, Omniva — 5,00 €. Parasti 1–2 darba dienās.</li>';
+		echo '<li>Saņemšana Rīgā, Iļģuciemā — saskaņojot laiku.</li>';
+		echo '<li>Apmaksa — uzreiz internetbankā (Paysera) vai ar pārskaitījumu pēc rēķina.</li>';
+		echo '</ul>';
+	}
+
+	/** Под конструктором: свечи для свадебного торта. */
+	public static function cross() {
+		if ( ! self::current() ) {
+			return;
+		}
+		$ids = array_filter( array_map( 'absint', explode( ',', (string) MarMar_Wedding_Settings::get( 'cross_ids' ) ) ) );
+		if ( ! $ids ) {
+			return;
+		}
+		$grid = do_shortcode( '[products ids="' . implode( ',', $ids ) . '" columns="4" orderby="post__in"]' );
+		if ( false === strpos( $grid, 'product' ) ) {
+			return;
+		}
+		echo '<section class="mmw-cross"><h2 class="mmw-cross-title">Sveces kāzu tortei</h2>' . $grid; // phpcs:ignore WordPress.Security.EscapeOutput
+		echo '<p class="mmw-cross-more"><a href="' . esc_url( home_url( '/product-category/tortes-sveces/' ) ) . '">Visas tortes sveces →</a></p></section>';
 	}
 }
