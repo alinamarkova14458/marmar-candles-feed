@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.4.3
+ * Version:           1.4.4
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.4.3';
+	const VERSION = '1.4.4';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -38,11 +38,13 @@ final class MarMar_Checkout {
 		if ( defined( 'MMCO_NEED_ADDRESS' ) && MMCO_NEED_ADDRESS ) {
 			return $locale;
 		}
-		$keys = array( 'address_1', 'address_2', 'city', 'state', 'postcode' );
+		$keys = array( 'address_1', 'address_2', 'city', 'state', 'postcode', 'last_name' );
 		foreach ( array( 'LV', 'LT', 'EE' ) as $cc ) {
 			foreach ( $keys as $k ) {
 				$locale[ $cc ][ $k ] = array_merge( isset( $locale[ $cc ][ $k ] ) ? (array) $locale[ $cc ][ $k ] : array(), array( 'required' => false, 'hidden' => true ) );
 			}
+			// Vārds un uzvārds vienā laukā (14.11.2026); pasūtījumā sadalām split_name().
+			$locale[ $cc ]['first_name'] = array_merge( isset( $locale[ $cc ]['first_name'] ) ? (array) $locale[ $cc ]['first_name'] : array(), array( 'label' => 'Vārds, uzvārds', 'required' => true ) );
 		}
 		return $locale;
 	}
@@ -55,6 +57,28 @@ final class MarMar_Checkout {
 			}
 		}
 		return $rates;
+	}
+
+	/** «Vārds, uzvārds» vienā laukā → pirmais vārds = vārds, pārējais = uzvārds (rēķinam, pakomāta SMS, e-pastiem). */
+	public static function split_name( $order ) {
+		$order = $order instanceof WC_Order ? $order : wc_get_order( $order );
+		if ( ! $order ) {
+			return;
+		}
+		$changed = false;
+		foreach ( array( 'shipping', 'billing' ) as $t ) {
+			$first = trim( preg_replace( '/\s+/u', ' ', (string) $order->{'get_' . $t . '_first_name'}() ) );
+			$last  = trim( (string) $order->{'get_' . $t . '_last_name'}() );
+			if ( '' === $last && false !== strpos( $first, ' ' ) ) {
+				list( $f, $l ) = explode( ' ', $first, 2 );
+				$order->{'set_' . $t . '_first_name'}( $f );
+				$order->{'set_' . $t . '_last_name'}( $l );
+				$changed = true;
+			}
+		}
+		if ( $changed ) {
+			$order->save();
+		}
 	}
 
 	public static function fill_address( $order ) {
@@ -122,6 +146,8 @@ final class MarMar_Checkout {
 		// Omniva paslēpta (13.11.2026): tās pakomātu saraksts nelādējas (omnivalt_get_terminals atbild 0). Atgriezt: izņemt šo rindu.
 		add_filter( 'woocommerce_package_rates', array( __CLASS__, 'hide_omniva' ), 100 );
 		// Adrese oformēšanā paslēpta — pasūtījumā ierakstām izvēlētā pakomāta adresi (uzlīmei un rēķinam).
+		add_action( 'woocommerce_store_api_checkout_order_processed', array( __CLASS__, 'split_name' ), 1 );
+		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'split_name' ), 1 );
 		add_action( 'woocommerce_store_api_checkout_order_processed', array( __CLASS__, 'fill_address' ), 999 );
 		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'fill_address' ), 999 );
 		add_action( 'woocommerce_order_status_on-hold', array( __CLASS__, 'fill_address' ), 5 );
