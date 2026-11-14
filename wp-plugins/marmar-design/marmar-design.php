@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.12.0
+ * Version:           1.13.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.12.0';
+	const VER = '1.13.2';
 
 	/** Preces, kuras nerādām blokā “Bieži pērk kopā” (pakalpojumi, papildinājumi). */
 	const TOGETHER_EXCLUDE = array( 11691, 11024 ); // Dzintara putekļi, Individuālā dizaina izstrāde
@@ -25,6 +25,9 @@ final class MarMar_Design {
 		add_action( 'wp_footer', array( __CLASS__, 'reveal_inline' ), 1 );
 		add_action( 'wp_footer', array( __CLASS__, 'sticky_bar' ), 20 );
 		add_action( 'wp_footer', array( __CLASS__, 'whatsapp' ), 21 );
+		// Sīkdatņu josla (Blocksy) — kartīte zīmola krāsās, «Nē, paldies» kā saite (14.11.2026).
+		add_action( 'wp_footer', array( __CLASS__, 'cookie_banner' ), 999 );
+		add_filter( 'gettext', array( __CLASS__, 'blocksy_lv' ), 20, 3 );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'theme_mod_header_placements', array( __CLASS__, 'one_logo' ), 20 );
 		add_action( 'woocommerce_before_add_to_cart_button', array( __CLASS__, 'express_checkbox' ), 30 );
@@ -226,8 +229,67 @@ final class MarMar_Design {
 		}
 	}
 
+	/** Blocksy Companion (pieteikšanās logs galvenē) nav latviešu tulkojuma. */
+	const BLOCKSY_LV = array(
+		'Username or Email Address' => 'Lietotājvārds vai e-pasts',
+		'Password'                  => 'Parole',
+		'Remember Me'               => 'Atcerēties mani',
+		'Forgot Password?'          => 'Aizmirsāt paroli?',
+		'Log In'                    => 'Pieslēgties',
+		'Login'                     => 'Pieslēgties',
+		'Sign Up'                   => 'Reģistrēties',
+		'Register'                  => 'Reģistrēties',
+		'Username'                  => 'Lietotājvārds',
+		'Email'                     => 'E-pasts',
+		'Registration confirmation will be emailed to you.' => 'Reģistrācijas apstiprinājumu nosūtīsim uz e-pastu.',
+		'A link to set a new password will be sent to your email address.' => 'Saite jaunas paroles iestatīšanai tiks nosūtīta uz jūsu e-pastu.',
+		'Get New Password'          => 'Saņemt jaunu paroli',
+		'Back to login'             => 'Atpakaļ uz pieslēgšanos',
+		'Account modal'             => 'Konta logs',
+		'Close account modal'       => 'Aizvērt konta logu',
+	);
+
+	public static function blocksy_lv( $translation, $text, $domain ) {
+		if ( 'blocksy-companion' === $domain && $translation === $text && isset( self::BLOCKSY_LV[ $text ] ) ) {
+			return self::BLOCKSY_LV[ $text ];
+		}
+		return $translation;
+	}
+
 	/** WhatsApp poga (aizstāj veco čatu). Produkta lapā ziņā jau ir preces nosaukums. */
 	const WHATSAPP = '37129710414';
+
+	public static function cookie_banner() {
+		$flame = '<svg class="mm-ck-flame" viewBox="0 0 18 24" aria-hidden="true"><path d="M9 1C11 6 15 8 15 14a6 6 0 0 1-12 0c0-3 2-5 3-6 0 3 1 4 2 4C8 9 7 5 9 1z" fill="#D68684"/><path d="M9 11c1 2 3 3 3 5a3 3 0 0 1-6 0c0-1.5 1-2.5 1.5-3 .3 1 .8 1.5 1.5 1.5-.3-1.3-.5-2.3 0-3.5z" fill="#FAF3F0"/></svg>';
+		$text  = $flame . '<span class="mm-ck-title">Sīkdatnes</span>Tās palīdz vietnei darboties ērti un mums saprast, kuras sveces jums patīk, lai rādītu tieši tās.';
+		?>
+<style id="mm-cookie-banner">
+.cookie-notification{left:12px!important;right:12px!important;bottom:12px!important;width:auto!important;max-width:460px;margin:0 auto;background:#FAF3F0!important;border:1px solid #eee3e1;border-radius:20px!important;box-shadow:0 10px 30px rgba(115,83,96,.18)!important;padding:18px 18px 12px!important}
+.cookie-notification .container{display:block!important;padding:0!important;max-width:none!important;background:transparent!important;box-shadow:none!important}
+.cookie-notification .ct-cookies-content{font-size:15px!important;line-height:1.45!important;color:#504E4A!important;margin:0 0 14px!important;text-align:center!important;width:100%!important;max-width:none!important}
+.cookie-notification .mm-ck-title{display:block;font-family:Marcellus,serif;text-transform:uppercase;letter-spacing:.06em;color:#735360;font-size:16px;margin-bottom:6px}
+.cookie-notification .mm-ck-flame{display:block;width:18px;height:24px;margin:0 auto 6px}
+.cookie-notification .ct-button-group{display:flex!important;flex-direction:column;gap:4px!important;width:100%}
+.cookie-notification .ct-cookies-accept-button{width:100%!important;min-height:48px;border-radius:999px!important;background:#B9605F!important;color:#fff!important;font-size:15px!important;letter-spacing:.08em}
+.cookie-notification .ct-cookies-decline-button{width:100%!important;background:none!important;border:0!important;color:#735360!important;text-decoration:underline;text-underline-offset:3px;font-size:14px!important;letter-spacing:0!important;text-transform:none!important;min-height:40px}
+</style>
+<script id="mm-cookie-banner-js">
+(function () {
+	var TEXT = <?php echo wp_json_encode( $text ); ?>, NO = 'Nē, paldies';
+	function fix(root) {
+		if (!root) return;
+		var c = root.querySelector('.ct-cookies-content'), d = root.querySelector('.ct-cookies-decline-button');
+		if (c && !c.querySelector('.mm-ck-title')) c.innerHTML = TEXT;
+		if (d && d.textContent.trim() !== NO) d.textContent = NO;
+	}
+	var t = document.getElementById('ct-cookies-consent-template');
+	if (t && t.content) fix(t.content);
+	fix(document.querySelector('.cookie-notification'));
+	new MutationObserver(function () { var n = document.querySelector('.cookie-notification'); if (n) fix(n); }).observe(document.body, { childList: true });
+})();
+</script>
+		<?php
+	}
 
 	public static function whatsapp() {
 		if ( is_admin() || ( function_exists( 'is_checkout' ) && is_checkout() ) ) {

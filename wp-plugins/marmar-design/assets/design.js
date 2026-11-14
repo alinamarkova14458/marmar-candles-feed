@@ -110,3 +110,26 @@
 		}, { passive: true });
 	} catch (e) { /* nav kritiski */ }
 })();
+
+/* «Tukšie» klikšķi (Clarity, 13.11.2026): foto, uz kurām cilvēki spiež, bet nekas nenotiek. */
+(function () {
+	'use strict';
+	document.addEventListener('click', function (e) {
+		var t = e.target;
+		if (!t || !t.closest) { return; }
+		// Preces galerija: spiediens uz foto atver palielinājumu (tāpat kā lupas ikona).
+		var fig = t.closest('.woocommerce-product-gallery .flexy-item, .woocommerce-product-gallery .ct-media-container');
+		if (fig && !t.closest('a,button')) {
+			var trig = document.querySelector('.woocommerce-product-gallery__trigger');
+			if (trig) { e.preventDefault(); trig.click(); }
+			return;
+		}
+		// Sākumlapa: foto banerī un Ziemassvētku blokā ved tur pat, kur sadaļas poga.
+		// Baneris (bumbu foto) ved uzreiz uz bumbu preci — hits; poga «Ziemassvētku kolekcija» paliek uz kategoriju.
+		var sec = t.closest('.mmh-hero, .mmh-xmas');
+		if (sec && !t.closest('a,button,.mmh-hero-text,.mmh-xmas-text') && t.closest('picture,img,figure')) {
+			var a = sec.classList.contains('mmh-hero') ? { href: '/lv/product/ziemassvetku-bumbas-formas-svece/' } : sec.querySelector('a[href]');
+			if (a) { window.location.href = a.href; }
+		}
+	});
+})();
