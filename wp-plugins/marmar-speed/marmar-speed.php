@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Speed
  * Description:       Ātruma uzlabojumi: galvenā attēla (LCP) priekšielāde, bez Google Montserrat (aizstāj Figtree), produktu video ielādējas tikai pēc “play”; piegādes, CF7 un WPForms faili tikai tur, kur vajag.
- * Version:           1.3.0
+ * Version:           1.3.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -19,6 +19,33 @@ final class MarMar_Speed {
 		add_action( 'wp_print_styles', array( __CLASS__, 'drop_shipping_assets' ), 9999 );
 		add_filter( 'style_loader_tag', array( __CLASS__, 'drop_style_tag' ), 99, 4 );
 		add_action( 'wp_head', array( __CLASS__, 'montserrat_alias' ), 2 );
+		add_filter( 'script_loader_tag', array( __CLASS__, 'drop_script_tag' ), 99, 2 );
+		add_action( 'wp_footer', array( __CLASS__, 'voice_stub' ), 1 );
+	}
+
+	/**
+	 * GPTranslate “lasītājs” (balss) ir izslēgts (chatgptEnableReader = 0), bet tā faili
+	 * ielādējās katrā lapā: responsivevoice.js (~106 KB), Bootstrap toast + dom.min.js un
+	 * bootstrap.min.css (~230 KB). Tie vajadzīgi tikai lasītājam. Tulkošanu un valodu
+	 * pārslēdzēju (gptranslate.js, jsonrepair) neaiztiekam.
+	 * Ja lasītāju kādreiz ieslēgs — izņemt šos rokturus no saraksta.
+	 */
+	const GPT_READER_SCRIPTS = array( 'gptranslate-responsivevoice', 'gptranslate-bstoast' );
+	const GPT_READER_STYLES  = array( 'bootstrap-css' );
+
+	public static function drop_script_tag( $tag, $handle ) {
+		if ( ! is_admin() && in_array( $handle, self::GPT_READER_SCRIPTS, true ) ) {
+			return '';
+		}
+		return $tag;
+	}
+
+	/** Drošībai: ja gptranslate.js tomēr pieskaras responsiveVoice, lai nav kļūdas. */
+	public static function voice_stub() {
+		if ( is_admin() ) {
+			return;
+		}
+		echo '<script id="marmar-speed-voice-stub">window.responsiveVoice=window.responsiveVoice||{setDefaultVoice:function(){},speak:function(){},cancel:function(){}};</script>' . "\n";
 	}
 
 	/**
@@ -29,7 +56,7 @@ final class MarMar_Speed {
 		if ( is_admin() ) {
 			return $tag;
 		}
-		if ( 'stackable-google-fonts' === $handle ) {
+		if ( 'stackable-google-fonts' === $handle || in_array( $handle, self::GPT_READER_STYLES, true ) ) {
 			return '';
 		}
 		if ( in_array( $handle, self::ASYNC_CSS, true ) && self::async_css_ok() && false === strpos( $tag, 'onload=' ) ) {
