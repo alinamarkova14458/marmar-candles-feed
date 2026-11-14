@@ -18,6 +18,7 @@ class MarMar_Wedding_Product {
 		add_action( 'woocommerce_after_add_to_cart_button', array( __CLASS__, 'after_button' ), 20 );
 		add_action( 'woocommerce_after_add_to_cart_form', array( __CLASS__, 'reviews' ), 20 );
 		add_filter( 'woocommerce_product_tabs', array( __CLASS__, 'tabs' ), 99 );
+		add_action( 'woocommerce_after_single_product_summary', array( __CLASS__, 'cross' ), 12 );
 	}
 
 	private static function current() {
@@ -334,5 +335,22 @@ class MarMar_Wedding_Product {
 		echo '<li>Saņemšana Rīgā, Iļģuciemā — saskaņojot laiku.</li>';
 		echo '<li>Apmaksa — uzreiz internetbankā (Paysera) vai ar pārskaitījumu pēc rēķina.</li>';
 		echo '</ul>';
+	}
+
+	/** Под конструктором: свечи для свадебного торта. */
+	public static function cross() {
+		if ( ! self::current() ) {
+			return;
+		}
+		$ids = array_filter( array_map( 'absint', explode( ',', (string) MarMar_Wedding_Settings::get( 'cross_ids' ) ) ) );
+		if ( ! $ids ) {
+			return;
+		}
+		$grid = do_shortcode( '[products ids="' . implode( ',', $ids ) . '" columns="4" orderby="post__in"]' );
+		if ( false === strpos( $grid, 'product' ) ) {
+			return;
+		}
+		echo '<section class="mmw-cross"><h2 class="mmw-cross-title">Sveces kāzu tortei</h2>' . $grid; // phpcs:ignore WordPress.Security.EscapeOutput
+		echo '<p class="mmw-cross-more"><a href="' . esc_url( home_url( '/product-category/tortes-sveces/' ) ) . '">Visas tortes sveces →</a></p></section>';
 	}
 }

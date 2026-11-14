@@ -25,6 +25,8 @@ class MarMar_Wedding_Settings {
 			'terms'    => "Maketu atsūtīsim 3 darba dienu laikā pēc apmaksas\nIzgatavošana — ap 2 nedēļām pēc maketa apstiprināšanas\nIesakām pasūtīt 4–8 nedēļas pirms kāzām",
 			// Отзывы под конструктором, по одному в строке.
 			'reviews'  => "Vienkārši nevarēju nociesties pateikt milzīgu PALDIES par ko tik skaistu, īpašu un smalku! Tā izcili iederēsies mūsu svinībās.\nLiels paldies, dāvaniņas izskatās burvīgi!\nSveiki. Šodien saņēmām svecītes. Superīgas! Paldies!",
+			// Товары «к свадебному торту» под конструктором: ID через запятую; пусто — блок не показываем.
+			'cross_ids' => '22782,21156,18802,11212',
 			// Номер WhatsApp для вопросов (только цифры); пусто — строку не показываем.
 			'whatsapp' => '37129710414',
 			// Примеры персонализации: «tag | URL» и «sticker | URL».

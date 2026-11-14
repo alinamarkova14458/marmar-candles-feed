@@ -92,3 +92,9 @@
 	.mmw-product .flexy-pills[data-type="thumbs"] ol::-webkit-scrollbar { display: none; }
 	.mmw-product .flexy-pills[data-type="thumbs"] li { flex: 0 0 22% !important; }
 }
+
+/* 1.4.0 — свечи для свадебного торта под конструктором */
+.mmw-cross { clear: both; margin: 40px 0 10px; }
+.mmw-cross-title { text-align: center; margin: 0 0 20px; }
+.mmw-cross-more { text-align: center; margin: 16px 0 0; }
+.mmw-cross-more a { font-weight: 600; text-decoration: underline; }

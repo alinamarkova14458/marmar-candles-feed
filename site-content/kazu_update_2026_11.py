@@ -159,6 +159,19 @@ def fix_gallery_images(src):
 
 pers = fix_gallery_images(pers)
 works = fix_gallery_images(works)
+# Новые настоящие фото от Алины (имена пар оставляем — её разрешение 14.11.2026) — в начало галереи.
+NEW_WORKS = [
+    (28176, 'https://marmarcandles.com/wp-content/uploads/2026/11/kazu-svece-viesiem-birka-ar-vardiem-zala-lente.jpg',
+     'Kāzu svece viesiem ar tumši zaļu lentīti un birku ar jaunā pāra vārdiem'),
+    (28177, 'https://marmarcandles.com/wp-content/uploads/2026/11/kazu-svece-viesiem-birka-roza-lente.jpg',
+     'Kāzu svece viesiem ar rozā lentīti un birku ar pateicības tekstu un datumu'),
+]
+new_imgs = '\n\n'.join(
+    f'<!-- wp:image {{"id":{i},"aspectRatio":"1","sizeSlug":"full","linkDestination":"none","lightbox":{{"enabled":true}}}} -->\n'
+    f'<figure class="wp-block-image size-full"><img src="{u}" alt="{a}" class="wp-image-{i}" style="aspect-ratio:1"/></figure>\n<!-- /wp:image -->'
+    for i, u, a in NEW_WORKS)
+_m = re.search(r'(<figure class="wp-block-gallery[^>]*>)', works)
+works = works[:_m.end()] + new_imgs + '\n\n' + works[_m.end():]
 works = works[:works.rindex('</div>')] + '\n\n' + btn('Izveidot savas sveces →') + '</div>\n<!-- /wp:group -->'
 
 # ---------- отзывы невест (вместо общего списка «Kāpēc pāri izvēlas») ----------

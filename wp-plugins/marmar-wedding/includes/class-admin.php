@@ -69,6 +69,7 @@ class MarMar_Wedding_Admin {
 						'ship_note'   => sanitize_textarea_field( $in['ship_note'] ?? '' ),
 						'terms'       => sanitize_textarea_field( $in['terms'] ?? '' ),
 						'reviews'     => sanitize_textarea_field( $in['reviews'] ?? '' ),
+						'cross_ids'   => implode( ',', array_filter( array_map( 'absint', explode( ',', (string) ( $in['cross_ids'] ?? '' ) ) ) ) ),
 						'whatsapp'    => preg_replace( '/\D+/', '', (string) ( $in['whatsapp'] ?? '' ) ),
 					);
 				},
@@ -85,6 +86,7 @@ class MarMar_Wedding_Admin {
 		echo '<tr><th>Минимальное количество</th><td><input type="number" min="1" name="' . esc_attr( $o ) . '[min_qty]" value="' . esc_attr( $s['min_qty'] ) . '" class="small-text"></td></tr>';
 		echo '<tr><th>Количество при открытии страницы</th><td><input type="number" min="1" name="' . esc_attr( $o ) . '[default_qty]" value="' . esc_attr( $s['default_qty'] ) . '" class="small-text"></td></tr>';
 		echo '<tr><th>WhatsApp для вопросов</th><td><input type="text" name="' . esc_attr( $o ) . '[whatsapp]" value="' . esc_attr( $s['whatsapp'] ) . '" class="regular-text"><p class="description">Только цифры, с кодом страны. Пусто — строка не показывается.</p></td></tr>';
+		echo '<tr><th>Товары «к свадебному торту»</th><td><input type="text" name="' . esc_attr( $o ) . '[cross_ids]" value="' . esc_attr( $s['cross_ids'] ) . '" class="regular-text"><p class="description">ID товаров через запятую — показываются под конструктором. Пусто — блок скрыт.</p></td></tr>';
 		$areas = array(
 			'tiers'   => array( 'Цены по количеству', 'Формат: «от N шт.: цена за штуку», по одному в строке. Например: 50: 3.5' ),
 			'types'   => array( 'Виды свечей', 'По одному в строке: «Название | ссылка на картинку» (картинка необязательна).' ),
