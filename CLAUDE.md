@@ -146,3 +146,4 @@
 - Ничего не публиковать и не отправлять от моего имени без моего подтверждения, пока я явно не разрешу автопубликацию.
 - **Исключение (разрешено 01.11.2026):** для jalina.art (статьи блога, пины Pinterest аккаунта jalinaart) Claude публикует и ставит в Metricool сам, без подтверждения, и потом сообщает, что сделал. На MarMar Candles (Instagram, сайт) это не распространяется.
 - 13.11.2026 jalina.art (новый режим 1+1): новая https://jalina.art/png-not-transparent/ (экспертный гайд, 0 CF), доработка https://jalina.art/christmas-gift-tags-printable/; пины: 0 новых (429 на jalina.art 12.11 утром, стоят Payhip-пины до 16.11).
+- 14.11.2026 jalina.art: новая https://jalina.art/free-fonts-for-commercial-use/ (гайд по лицензиям + 10 шрифтов OFL, 0 CF), доработка https://jalina.art/christmas-digital-paper/ (исправлены факты 3 товаров); пины: 0 новых (12.11 — 429, пины на jalina.art ждут 17.11).
