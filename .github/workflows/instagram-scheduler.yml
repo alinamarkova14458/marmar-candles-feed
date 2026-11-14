@@ -27,7 +27,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 345   # a run may wait up to 5 h 20 min for the next post (public repo: free)
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

@@ -136,3 +136,31 @@ def test_story_image_and_video(monkeypatch):
     calls.clear()
     api.publish("U", post("2026-11-20T17:00:00", type="story", media=["https://x/v.MP4"]))
     assert calls[0] == ("U/media", {"media_type": "STORIES", "video_url": "https://x/v.MP4"})
+
+
+def test_next_wait_only_for_posts_soon():
+    soon, later = post("2026-11-20T21:00:00"), post("2026-11-21T09:00:00", media=[JPG + "?x"])
+    assert ig.next_wait([later, soon], {}, NOW) == ig.parse_date("2026-11-20T21:00:00") - NOW
+    assert ig.next_wait([later], {}, NOW) is None  # 15 h ahead: the next cron run will handle it
+    assert ig.next_wait([soon], {ig.post_id(soon): {"media_id": "1"}}, NOW) is None
+    assert ig.next_wait([post("2026-11-20T17:00:00")], {}, NOW) is None  # already due, not "ahead"
+
+
+def test_main_waits_then_publishes_once(monkeypatch):
+    runs, sleeps, state = [], [], {}
+    due = post("2026-11-20T18:30:00")
+
+    def fake_run(dry):
+        runs.append(dry)
+        if len(runs) == 2:
+            state[ig.post_id(due)] = {"media_id": "1"}  # second run publishes it
+        return False
+
+    monkeypatch.setattr(ig, "run_once", fake_run)
+    monkeypatch.setattr(ig, "load_queue", lambda _g: [dict(due)])
+    monkeypatch.setattr(ig, "load_state", lambda _p: state)
+    monkeypatch.setattr(ig, "datetime", type("D", (), {"now": staticmethod(lambda tz=None: NOW)}))
+    monkeypatch.setattr(ig.time, "sleep", sleeps.append)
+    monkeypatch.delenv("DRY_RUN", raising=False)
+    assert ig.main() == 0
+    assert len(runs) == 2 and sleeps == [30 * 60 + 5]
