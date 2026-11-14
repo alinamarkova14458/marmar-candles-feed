@@ -10,4 +10,4 @@ Instagram highlight «ATSAUKSMES II», 12.07.2025 (`atsauksmes-highlight-2025-07
 4. «Paldies, sūtījums saņemts! Ļoti skaisti!»
 5. «Labdien, super, liels paldies!»
 
-Nav zināms, kuras no tām ir par kāzu pasūtījumiem — jānoskaidro pie Alinas.
+Alina apstiprināja 14.11.2026: visas šīs atsauksmes ir par kāzu pasūtījumiem. Lapā parakstīt kā līgavu atsauksmes, bez vārdiem.
