@@ -9,7 +9,9 @@ SEO={ '25166':('Ziemassvētku dāvana skolotājai un audzinātājai no 5 € | M
       '25167':('Slepenā Santas dāvanas līdz 5 un 10 eur — idejas kolēģiem | MarMar Candles','Dāvanas līdz 5 eur un līdz 10 eur Slepenajam Santam: rokām lietas sveces dāvanu kastītē. Der kolēģiem, draugiem un klasesbiedriem. Piegāde uz pakomātu.'),
       '25153':('Korporatīvās dāvanas Ziemassvētkos — sveces ar uzņēmuma nosaukumu | MarMar Candles','Korporatīvās Ziemassvētku dāvanas kolēģiem un klientiem: rokām lietas sveces dāvanu iepakojumā. No 50 gab. — ar uzņēmuma nosaukumu uz birkas. Izgatavots Rīgā.'),
       '25142':('Ziemassvētku dāvanas līdz 10 € un 20 € kolēģiem, draugiem, ģimenei | MarMar Candles','Mazas Ziemassvētku dāvanas kolēģiem, draugiem un ģimenei: rokām lietas sveces līdz 10 € un 20 €. Dāvanu kastītes, piegāde uz pakomātu visā Latvijā.') }
-def grid(ids): return '<!-- wp:shortcode -->\n[products ids="%s" columns="4" orderby="post__in"]\n<!-- /wp:shortcode -->' % ','.join(map(str,ids))
+from fix_style_css import NEW as _CSS
+STYLE = '<!-- wp:html -->\n' + _CSS + '\n<!-- /wp:html -->\n\n'
+def grid(ids): return STYLE + '<!-- wp:shortcode -->\n[products ids="%s" columns="4" orderby="post__in" class="mm-post-grid"]\n<!-- /wp:shortcode -->' % ','.join(map(str,ids))
 def build(pid):
     raw=posts[pid]['content']['raw']
     assert '[products ' not in raw
