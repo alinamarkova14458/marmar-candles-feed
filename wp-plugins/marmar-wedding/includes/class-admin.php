@@ -63,6 +63,13 @@ class MarMar_Wedding_Admin {
 						'intro'     => sanitize_textarea_field( $in['intro'] ?? '' ),
 						'lead_time' => sanitize_textarea_field( $in['lead_time'] ?? '' ),
 						'process'   => sanitize_textarea_field( $in['process'] ?? '' ),
+						'default_qty' => max( 1, (int) ( $in['default_qty'] ?? 30 ) ),
+						'type_notes'  => sanitize_textarea_field( $in['type_notes'] ?? '' ),
+						'facts'       => sanitize_textarea_field( $in['facts'] ?? '' ),
+						'ship_note'   => sanitize_textarea_field( $in['ship_note'] ?? '' ),
+						'terms'       => sanitize_textarea_field( $in['terms'] ?? '' ),
+						'reviews'     => sanitize_textarea_field( $in['reviews'] ?? '' ),
+						'whatsapp'    => preg_replace( '/\D+/', '', (string) ( $in['whatsapp'] ?? '' ) ),
 					);
 				},
 			)
@@ -76,6 +83,8 @@ class MarMar_Wedding_Admin {
 		settings_fields( 'marmar_wedding' );
 		echo '<table class="form-table">';
 		echo '<tr><th>Минимальное количество</th><td><input type="number" min="1" name="' . esc_attr( $o ) . '[min_qty]" value="' . esc_attr( $s['min_qty'] ) . '" class="small-text"></td></tr>';
+		echo '<tr><th>Количество при открытии страницы</th><td><input type="number" min="1" name="' . esc_attr( $o ) . '[default_qty]" value="' . esc_attr( $s['default_qty'] ) . '" class="small-text"></td></tr>';
+		echo '<tr><th>WhatsApp для вопросов</th><td><input type="text" name="' . esc_attr( $o ) . '[whatsapp]" value="' . esc_attr( $s['whatsapp'] ) . '" class="regular-text"><p class="description">Только цифры, с кодом страны. Пусто — строка не показывается.</p></td></tr>';
 		$areas = array(
 			'tiers'   => array( 'Цены по количеству', 'Формат: «от N шт.: цена за штуку», по одному в строке. Например: 50: 3.5' ),
 			'types'   => array( 'Виды свечей', 'По одному в строке: «Название | ссылка на картинку» (картинка необязательна).' ),
@@ -84,9 +93,14 @@ class MarMar_Wedding_Admin {
 			'intro'     => array( 'Текст над конструктором', 'Можно оставить пустым.' ),
 			'lead_time' => array( 'Подсказка о сроках', 'Показывается под полем «Vēlamais saņemšanas datums».' ),
 			'process'   => array( 'Шаги «Kā notiek pasūtījums»', 'По одному шагу в строке.' ),
+			'type_notes' => array( 'Подписи под видами свечей', 'Строки «Название | подпись» (размер, время горения).' ),
+			'facts'      => array( 'Строка о свечах', 'Под карточками свечей: воск, аромат.' ),
+			'ship_note'  => array( 'Строка о доставке', 'Под таблицей цен.' ),
+			'terms'      => array( 'Сроки под кнопкой', 'По одной строке. Заменяют общий блок «Saņemsiet…» и срочный заказ.' ),
+			'reviews'    => array( 'Отзывы', 'По одному отзыву в строке, без имён.' ),
 		);
 		foreach ( $areas as $k => $a ) {
-			echo '<tr><th>' . esc_html( $a[0] ) . '</th><td><textarea name="' . esc_attr( $o ) . '[' . esc_attr( $k ) . ']" rows="' . ( in_array( $k, array( 'intro', 'lead_time' ), true ) ? 3 : 7 ) . '" class="large-text">' . esc_textarea( $s[ $k ] ) . '</textarea>' . ( $a[1] ? '<p class="description">' . esc_html( $a[1] ) . '</p>' : '' ) . '</td></tr>';
+			echo '<tr><th>' . esc_html( $a[0] ) . '</th><td><textarea name="' . esc_attr( $o ) . '[' . esc_attr( $k ) . ']" rows="' . ( in_array( $k, array( 'intro', 'lead_time', 'facts', 'ship_note' ), true ) ? 3 : 7 ) . '" class="large-text">' . esc_textarea( $s[ $k ] ) . '</textarea>' . ( $a[1] ? '<p class="description">' . esc_html( $a[1] ) . '</p>' : '' ) . '</td></tr>';
 		}
 		echo '</table>';
 		submit_button( 'Сохранить' );

@@ -37,6 +37,12 @@
 		var u = unitFor(n);
 		unitEl.textContent = n + ' gab. × ' + money(u);
 		totalEl.textContent = C.i18n.total + ': ' + money(u * n);
+		var nextEl = root.querySelector('.mmw-next');
+		if (nextEl) {
+			var nt = null;
+			tiers.forEach(function (t) { if (nt === null && t > n) nt = t; });
+			nextEl.textContent = nt ? C.nextTier.replace('%n', nt - n).replace('%p', money(Number(C.tiers[nt]))) : C.bestTier;
+		}
 		root.querySelectorAll('.mmw-tiers tr').forEach(function (tr, i) {
 			var from = Number(tr.dataset.from), next = tiers[i + 1] || Infinity;
 			tr.classList.toggle('is-active', n >= from && n < next);
@@ -63,6 +69,16 @@
 	}
 	form.addEventListener('change', function (e) { if (e.target.name === 'mmw_pers') persToggle(); });
 	persToggle();
+
+	// Дату свадьбы подставляем в текст на бирке, если поле ещё пустое.
+	var wd = root.querySelector('#mmw_wedding_date'), td = root.querySelector('#mmw_text_date');
+	if (wd && td) {
+		wd.addEventListener('change', function () {
+			var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(wd.value);
+			if (m && (!td.value || td.dataset.auto === '1')) { td.value = m[3] + '.' + m[2] + '.' + m[1]; td.dataset.auto = '1'; }
+		});
+		td.addEventListener('input', function () { td.dataset.auto = ''; });
+	}
 
 	// Загрузка файлов: сразу на сервер, в форму — только токены.
 	var fileInput = root.querySelector('#mmw_file');

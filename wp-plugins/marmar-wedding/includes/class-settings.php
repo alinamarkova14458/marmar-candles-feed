@@ -13,6 +13,20 @@ class MarMar_Wedding_Settings {
 			'tiers'    => "10: 5\n20: 4.5\n30: 4\n50: 3.5\n100: 3",
 			// «Название | URL картинки», по одному в строке.
 			'types'    => "Svece burciņā (20 ml)\nMini Bubble svecīte",
+			// Количество, которое стоит в конструкторе при открытии страницы.
+			'default_qty' => 30,
+			// «Название | короткая подпись под карточкой», по одному в строке.
+			'type_notes' => "Svece burciņā (20 ml) | Stikla burciņa ar vāciņu · deg ~1 stundu\nMini Bubble svecīte | ~3 × 4 cm · deg ~1 stundu",
+			// Общая строка под карточками свечей.
+			'facts'    => 'Dabīgs vasks, bez aromāta. Katru sveci lejam ar rokām Rīgā.',
+			// Строка о доставке под таблицей цен.
+			'ship_note' => 'Piegāde uz Unisend vai Venipak pakomātu šim pasūtījumam — bez maksas.',
+			// Сроки под кнопкой «в корзину».
+			'terms'    => "Maketu atsūtīsim 3 darba dienu laikā pēc apmaksas\nIzgatavošana — ap 2 nedēļām pēc maketa apstiprināšanas\nIesakām pasūtīt 4–8 nedēļas pirms kāzām",
+			// Отзывы под конструктором, по одному в строке.
+			'reviews'  => "Vienkārši nevarēju nociesties pateikt milzīgu PALDIES par ko tik skaistu, īpašu un smalku! Tā izcili iederēsies mūsu svinībās.\nLiels paldies, dāvaniņas izskatās burvīgi!\nSveiki. Šodien saņēmām svecītes. Superīgas! Paldies!",
+			// Номер WhatsApp для вопросов (только цифры); пусто — строку не показываем.
+			'whatsapp' => '37129710414',
 			// Примеры персонализации: «tag | URL» и «sticker | URL».
 			'pers_images' => '',
 			// «Название: #цвет», по одному в строке.
@@ -20,7 +34,7 @@ class MarMar_Wedding_Settings {
 			'intro'    => '', // краткое описание товара уже объясняет конструктор
 			'lead_time' => 'Izgatavošana parasti aizņem 2 nedēļas pēc maketa apstiprināšanas. Norādiet, līdz kuram datumam vēlaties saņemt sveces, — vadīsimies pēc tā.',
 			// Шаги «Kā notiek pasūtījums», по одному в строке.
-			'process'  => "Noformējiet pasūtījumu — mēs atsūtīsim rēķinu e-pastā.\n3 darba dienu laikā pēc apmaksas atsūtīsim birkas vai uzlīmes maketu, lai Jūs redzētu gatavo dizainu.\nJūs apskatāt maketu un to apstiprināt vai lūdzat labojumus.\nPēc apstiprināšanas izgatavojam sveces (parasti 2 nedēļās) un nosūtām uz izvēlēto pakomātu.",
+			'process'  => "Noformējiet pasūtījumu un apmaksājiet uzreiz internetbankā vai ar pārskaitījumu pēc rēķina.\n3 darba dienu laikā pēc apmaksas atsūtīsim birkas vai uzlīmes maketu, lai Jūs redzētu gatavo dizainu.\nJūs apskatāt maketu un to apstiprināt vai lūdzat labojumus.\nPēc apstiprināšanas izgatavojam sveces (parasti 2 nedēļās) un nosūtām uz izvēlēto pakomātu.",
 		);
 	}
 
@@ -52,6 +66,26 @@ class MarMar_Wedding_Settings {
 
 	public static function min_qty() {
 		return max( 1, (int) self::get( 'min_qty' ) );
+	}
+
+	public static function default_qty() {
+		return max( self::min_qty(), (int) self::get( 'default_qty' ) );
+	}
+
+	/** @return array<string,string> название вида => подпись */
+	public static function type_notes() {
+		$out = array();
+		foreach ( self::lines( 'type_notes' ) as $l ) {
+			$p = array_map( 'trim', explode( '|', $l, 2 ) );
+			if ( isset( $p[1] ) ) {
+				$out[ $p[0] ] = $p[1];
+			}
+		}
+		return $out;
+	}
+
+	public static function list_of( $key ) {
+		return self::lines( $key );
 	}
 
 	public static function unit_price( $qty ) {
