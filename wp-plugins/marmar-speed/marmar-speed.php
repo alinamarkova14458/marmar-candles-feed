@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       MarMar Speed
- * Description:       Ātruma uzlabojumi: galvenā attēla (LCP) priekšielāde, bez Google Montserrat (aizstāj Figtree), produktu video ielādējas tikai pēc “play”; piegādes, CF7 un WPForms faili tikai tur, kur vajag.
- * Version:           1.3.1
+ * Description:       Ātruma uzlabojumi: galvenā attēla (LCP) priekšielāde, Montserrat no sava servera (nevis Google), produktu video ielādējas tikai pēc “play”; piegādes, CF7 un WPForms faili tikai tur, kur vajag.
+ * Version:           1.3.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -128,17 +128,22 @@ final class MarMar_Speed {
 		return '<style id="' . esc_attr( $handle ) . '-css" data-marmar-inline' . ( 'all' !== $media ? ' media="' . esc_attr( $media ) . '"' : '' ) . '>' . $css . "</style>\n";
 	}
 
-	/** Kur vēl palicis font-family: Montserrat (tēma, vecie bloki), rāda vietnes Figtree (no sava servera). */
+	/**
+	 * Montserrat (pogas un vecie bloki tēmā) — no sava servera, nevis no Google
+	 * (Stackable saite bija bloķējoša un ar 18 variantiem). Mainīgais fonts 100–900,
+	 * tie paši faili, ko deva Google (SIL Open Font License).
+	 * Nevar aizstāt ar Figtree: citāda burtu metrika — pogu teksts nobīdās.
+	 */
 	public static function montserrat_alias() {
-		if ( is_admin() || ! wp_style_is( 'marmar-design-fonts', 'enqueued' ) ) {
+		if ( is_admin() ) {
 			return;
 		}
-		$base = plugins_url( 'marmar-design/assets/fonts/' );
+		$base = plugins_url( 'assets/fonts/', __FILE__ );
 		$ext  = 'U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF';
 		$lat  = 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD';
 		echo "<style id=\"marmar-speed-montserrat\">"
-			. "@font-face{font-family:Montserrat;font-style:normal;font-weight:100 900;font-display:swap;src:url(" . esc_url( $base . 'figtree-latin-ext.woff2' ) . ") format('woff2');unicode-range:{$ext}}"
-			. "@font-face{font-family:Montserrat;font-style:normal;font-weight:100 900;font-display:swap;src:url(" . esc_url( $base . 'figtree-latin.woff2' ) . ") format('woff2');unicode-range:{$lat}}"
+			. "@font-face{font-family:Montserrat;font-style:normal;font-weight:100 900;font-display:swap;src:url(" . esc_url( $base . 'montserrat-latin-ext.woff2' ) . ") format('woff2');unicode-range:{$ext}}"
+			. "@font-face{font-family:Montserrat;font-style:normal;font-weight:100 900;font-display:swap;src:url(" . esc_url( $base . 'montserrat-latin.woff2' ) . ") format('woff2');unicode-range:{$lat}}"
 			. "</style>\n";
 	}
 
