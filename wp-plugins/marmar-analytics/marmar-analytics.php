@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Analytics
  * Description:       Дополняет GA4 (Site Kit) событиями воронки: view_item, add_to_cart со страницы товара, view_cart, begin_checkout. Подключает Microsoft Clarity с учётом выбора в баннере cookies.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -18,6 +18,8 @@ final class MarMar_Analytics {
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue' ), 20 );
 		add_action( 'wp_head', array( __CLASS__, 'clarity' ), 5 );
+		// Google Consent Mode v2 (14.11.2026, Alīnas lēmums: variants 1) — pirms Site Kit gtag.
+		add_action( 'wp_head', array( __CLASS__, 'consent_mode' ), 1 );
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register' ) );
 	}
@@ -121,6 +123,32 @@ final class MarMar_Analytics {
 	}
 
 	/* ---------------- Настройки ---------------- */
+
+	/**
+	 * Google Consent Mode v2.
+	 * Reklāma (ad_storage, ad_user_data, ad_personalization) — tikai pēc «Piekrītu» Blocksy sīkdatņu joslā.
+	 * Statistika (analytics_storage) — atļauta kā līdz šim (Alīnas izvēle, variants 1).
+	 */
+	public static function consent_mode() {
+		?>
+<script id="marmar-consent-mode">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted', wait_for_update: 500 });
+gtag('set', 'ads_data_redaction', true);
+(function () {
+	var ADS = { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' };
+	var NO = { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' };
+	if (/(?:^|;\s*)blocksy_cookies_consent_accepted=true(?:;|$)/.test(document.cookie)) gtag('consent', 'update', ADS);
+	document.addEventListener('click', function (e) {
+		if (!e.target.closest) return;
+		if (e.target.closest('.ct-cookies-accept-button')) gtag('consent', 'update', ADS);
+		if (e.target.closest('.ct-cookies-decline-button')) gtag('consent', 'update', NO);
+	}, true);
+})();
+</script>
+		<?php
+	}
 
 	public static function register() {
 		register_setting( 'marmar_analytics', self::OPTION, array( 'type' => 'string', 'sanitize_callback' => function ( $v ) { return preg_replace( '/[^a-z0-9]/i', '', (string) $v ); } ) );
