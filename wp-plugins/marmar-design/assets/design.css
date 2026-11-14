@@ -101,6 +101,8 @@ body.mmd [data-products] .ct-woo-card-actions .button {
 }
 body.mmd [data-products] .ct-woo-card-actions .button::before {
 	content: '' !important; display: block !important; width: 17px; height: 17px; flex: 0 0 auto; background: #FFFFFF !important; opacity: 1 !important; position: static !important; transform: none !important;
+	/* Blocksy 2.1.61 pogu ēnai izmanto to pašu ::before (blur 11px, z-index -1, inset) — ikona kļuva neredzama, teksts nobīdījās pa labi. */
+	filter: none !important; z-index: auto !important; inset: auto !important; transition: none !important;
 	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z'/%3E%3Cpath d='M9 8V6a3 3 0 0 1 6 0v2'/%3E%3C/svg%3E") center / contain no-repeat;
 	        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z'/%3E%3Cpath d='M9 8V6a3 3 0 0 1 6 0v2'/%3E%3C/svg%3E") center / contain no-repeat;
 }
