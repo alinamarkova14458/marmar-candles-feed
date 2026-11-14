@@ -106,3 +106,7 @@
 .wc-block-checkout .select2-container .select2-selection--single { height: auto !important; min-height: 48px; display: flex; align-items: center; }
 .wc-block-checkout .select2-container .select2-selection--single .select2-selection__rendered { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; line-height: 1.3 !important; padding-top: 10px; padding-bottom: 10px; }
 @media (max-width: 480px) { .wp-block-woocommerce-checkout-payment-block .paysera-gateway-label__logo { display: none !important; } }
+/* 1.4.3 — abas pogas vienādā izmērā */
+.mmco-who label { box-sizing: border-box !important; height: 44px !important; min-height: 0 !important; padding: 0 12px !important; margin: 0 !important; font-weight: 400 !important; font-size: 15px !important; white-space: nowrap; }
+.mmco-who label:has(input:checked) { font-weight: 600 !important; }
+.mmco-who input[type="radio"] { -webkit-appearance: auto !important; appearance: auto !important; box-sizing: border-box !important; flex: 0 0 16px !important; width: 16px !important; height: 16px !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; border: 0 !important; }
