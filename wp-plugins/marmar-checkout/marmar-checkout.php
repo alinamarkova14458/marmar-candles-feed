@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.4.5
+ * Version:           1.4.7
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.4.5';
+	const VERSION = '1.4.7';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -59,6 +59,18 @@ final class MarMar_Checkout {
 		return $rates;
 	}
 
+	public static function bacs_email( $order, $sent_to_admin, $plain_text = false, $email = null ) {
+		$gws = WC()->payment_gateways() ? WC()->payment_gateways()->payment_gateways() : array();
+		if ( isset( $gws['bacs'] ) ) {
+			remove_action( 'woocommerce_email_before_order_table', array( $gws['bacs'], 'email_instructions' ), 10 );
+		}
+		if ( $sent_to_admin || ! is_a( $order, 'WC_Order' ) || 'bacs' !== $order->get_payment_method() || ! $order->has_status( 'on-hold' ) ) {
+			return;
+		}
+		$text = 'Rēķins ir pievienots šim e-pastam (PDF). Lūdzu, apmaksājiet to, maksājuma mērķī norādot pasūtījuma numuru. Izgatavošanu sākam pēc apmaksas saņemšanas.';
+		echo $plain_text ? "\n" . $text . "\n\n" : '<p>' . esc_html( $text ) . '</p>'; // phpcs:ignore
+	}
+
 	/** «Vārds, uzvārds» vienā laukā → pirmais vārds = vārds, pārējais = uzvārds (rēķinam, pakomāta SMS, e-pastiem). */
 	public static function split_name( $order ) {
 		$order = $order instanceof WC_Order ? $order : wc_get_order( $order );
@@ -88,37 +100,40 @@ final class MarMar_Checkout {
 		}
 		$a = array( 'address_1' => '', 'address_2' => '', 'city' => '', 'postcode' => '' );
 
+		// Izvēlamies pēc piegādes veida (sesijā var palikt cita pārvadātāja vecie dati, piem. DPD «,»).
+		$mid = '';
+		$mname = '';
+		foreach ( $order->get_shipping_methods() as $m ) {
+			$mid   = (string) $m->get_method_id();
+			$mname = (string) $m->get_name();
+		}
 		$uni = (string) $order->get_meta( '_woo_lithuaniapost_lpexpress_terminal' );
 		$ven = $order->get_meta( '_venipak_pickup_point_data' );
 		$dpd = (string) $order->get_meta( 'wc_shipping_dpd_parcels_terminal_name' );
 		if ( '' === $dpd ) {
 			$dpd = (string) $order->get_meta( '_wc_shipping_dpd_parcels_terminal_name' );
 		}
-		if ( '' !== $uni ) { // "Nosaukums - Iela 1, Pilsēta"
+		if ( false !== strpos( $mid, 'free_shipping' ) || false !== stripos( $mname, 'Iļģuciem' ) ) {
+			$a = array( 'address_1' => 'Jaunsaules iela 7a', 'address_2' => 'Saņemšana darbnīcā', 'city' => 'Rīga', 'postcode' => '' );
+		} elseif ( false !== strpos( $mid, 'lithuaniapost' ) && '' !== $uni ) { // "Nosaukums - Iela 1, Pilsēta"
 			$parts          = explode( ' - ', $uni, 2 );
 			$street_city    = isset( $parts[1] ) ? $parts[1] : $uni;
 			$pos            = strrpos( $street_city, ',' );
 			$a['address_1'] = trim( false !== $pos ? substr( $street_city, 0, $pos ) : $street_city );
 			$a['city']      = trim( false !== $pos ? substr( $street_city, $pos + 1 ) : '' );
 			$a['address_2'] = 'Unisend: ' . trim( $parts[0] );
-		} elseif ( $ven ) {
+		} elseif ( false !== strpos( $mid, 'venipak' ) && $ven ) {
 			$v              = is_string( $ven ) ? json_decode( $ven, true ) : (array) $ven;
 			$a['address_1'] = isset( $v['address'] ) ? (string) $v['address'] : '';
 			$a['city']      = isset( $v['city'] ) ? (string) $v['city'] : '';
 			$a['postcode']  = isset( $v['zip'] ) && '' !== (string) $v['zip'] ? ( ctype_digit( (string) $v['zip'] ) ? 'LV-' . $v['zip'] : (string) $v['zip'] ) : '';
 			$a['address_2'] = 'Venipak: ' . ( isset( $v['display_name'] ) ? (string) $v['display_name'] : '' );
-		} elseif ( '' !== $dpd ) { // "Nosaukums,IELA 1"
+		} elseif ( false !== strpos( $mid, 'dpd' ) && '' !== trim( $dpd, ', ' ) ) { // "Nosaukums,IELA 1"
 			$parts          = explode( ',', $dpd, 2 );
 			$a['address_1'] = trim( isset( $parts[1] ) ? $parts[1] : $dpd );
 			$a['address_2'] = 'DPD: ' . trim( $parts[0] );
-		} else {
-			foreach ( $order->get_shipping_methods() as $m ) {
-				if ( false !== strpos( $m->get_method_id(), 'free_shipping' ) || false !== stripos( $m->get_name(), 'Iļģuciem' ) ) {
-					$a = array( 'address_1' => 'Jaunsaules iela 7a', 'address_2' => 'Saņemšana darbnīcā', 'city' => 'Rīga', 'postcode' => '' );
-				} elseif ( '' === $a['address_1'] ) {
-					$a['address_1'] = $m->get_name();
-				}
-			}
+		} elseif ( '' !== $mname ) {
+			$a['address_1'] = $mname;
 		}
 		if ( '' === $a['address_1'] ) {
 			return;
@@ -146,6 +161,8 @@ final class MarMar_Checkout {
 		// Omniva paslēpta (13.11.2026): tās pakomātu saraksts nelādējas (omnivalt_get_terminals atbild 0). Atgriezt: izņemt šo rindu.
 		add_filter( 'woocommerce_package_rates', array( __CLASS__, 'hide_omniva' ), 100 );
 		// Adrese oformēšanā paslēpta — pasūtījumā ierakstām izvēlētā pakomāta adresi (uzlīmei un rēķinam).
+		// E-pastā bez bankas rekvizītiem — tie ir pievienotajā PDF rēķinā (14.11.2026, Alīnas lēmums).
+		add_action( 'woocommerce_email_before_order_table', array( __CLASS__, 'bacs_email' ), 1, 4 );
 		add_action( 'woocommerce_store_api_checkout_order_processed', array( __CLASS__, 'split_name' ), 1 );
 		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'split_name' ), 1 );
 		add_action( 'woocommerce_store_api_checkout_order_processed', array( __CLASS__, 'fill_address' ), 999 );
