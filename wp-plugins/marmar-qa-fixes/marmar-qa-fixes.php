@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.27
+ * Version:           1.9.28
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -13,18 +13,29 @@ final class MarMar_QA_Fixes {
 
 	/** Vecās / demo adreses → jaunā vieta (301). Ceļš bez valodas prefiksa. */
 	const REDIRECTS = array(
+		'product/dabiga-vaska-galda-svece-21cm' => '/lv/product-category/interjera-sveces/', // 22818 (15.11 galda sveces izņemtas)
+		'product/kremkrasas-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22817 (15.11 galda sveces izņemtas)
+		'product/lavandas-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22785 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm' => '/lv/product-category/interjera-sveces/', // 15444 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-sarkans-ar-zelta-foliju' => '/lv/product-category/interjera-sveces/', // 15443 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-foliju' => '/lv/product-category/interjera-sveces/', // 15442 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-balts-ar-zeltu' => '/lv/product-category/interjera-sveces/', // 15441 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-spidumiem' => '/lv/product-category/interjera-sveces/', // 15428 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-lavandas-ar-zeltu' => '/lv/product-category/interjera-sveces/', // 15210 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-gaisi-zils-ar-zeltu' => '/lv/product-category/interjera-sveces/', // 13397 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svecu-komplekts-23cm' => '/lv/product-category/interjera-sveces/', // 22301 (15.11 galda sveces izņemtas)
 		'about-us' => '/lv/',
-		'product/spiralveida-galda-svece-ice-blue' => '/lv/product-category/interjera-sveces/galda-sveces/', // 22816 (08.11 ассортимент)
-		'product/gaisi-zala-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/galda-sveces/', // 22784 (08.11 ассортимент)
-		'product/gaisi-roza-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/galda-sveces/', // 22783 (08.11 ассортимент)
+		'product/spiralveida-galda-svece-ice-blue' => '/lv/product-category/interjera-sveces/', // 22816 (08.11 ассортимент)
+		'product/gaisi-zala-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22784 (08.11 ассортимент)
+		'product/gaisi-roza-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22783 (08.11 ассортимент)
 		'product/skaistumkopsanas-davanu-komplekts-ar-bubble-sveci-2' => '/lv/product-category/davanas/sveces-davanai/', // 22273 (08.11 ассортимент)
-		'product/dabiga-vaska-galda-svece-25-cm-bumbinas' => '/lv/product-category/interjera-sveces/galda-sveces/', // 21906 (08.11 ассортимент)
-		'product/dabiga-vaska-galda-spiralveida-svece-18-cm-dazadas-krasas' => '/lv/product-category/interjera-sveces/galda-sveces/', // 21429 (08.11 ассортимент)
+		'product/dabiga-vaska-galda-svece-25-cm-bumbinas' => '/lv/product-category/interjera-sveces/', // 21906 (08.11 ассортимент)
+		'product/dabiga-vaska-galda-spiralveida-svece-18-cm-dazadas-krasas' => '/lv/product-category/interjera-sveces/', // 21429 (08.11 ассортимент)
 		'product/dabiga-vaska-stavsvece-burgundy-krasa' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 18828 (08.11 ассортимент)
 		'product/eleganta-roku-darba-stavsvece-puderroza' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 18827 (08.11 ассортимент)
 		'product/stavsvece-no-dabiga-vaska-dzeltena' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 18826 (08.11 ассортимент)
 		'product/dabiga-vaska-svece-ar-rievotu-dizainu-lavandas' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 18822 (08.11 ассортимент)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-gaisi-roza-ar-zeltu' => '/lv/product-category/interjera-sveces/galda-sveces/', // 15209 (08.11 ассортимент)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-gaisi-roza-ar-zeltu' => '/lv/product-category/interjera-sveces/', // 15209 (08.11 ассортимент)
 		'product/dabiga-vaska-peonijas-svece-dekorativa-zieda-formas-svece' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 11716 (08.11 ассортимент)
 		'product/palo-santo-kocini-50g' => '/lv/product-category/davanas/sveces-davanai/', // 11530 (08.11 ассортимент)
 		'product/bubble-svecu-davanu-komplekts-ar-zelta-dekoru-3-gab-ar-serkociniem' => '/lv/product-category/davanas/sveces-davanai/', // 10991 (08.11 ассортимент)
@@ -331,6 +342,11 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 	}
 
 	public static function redirects() {
+		// Sadaļa «Galda sveces» izņemta (15.11.2026, Alīnas lēmums) — 301 uz «Interjera sveces».
+		if ( function_exists( 'is_product_category' ) && is_product_category( 'galda-sveces' ) ) {
+			wp_safe_redirect( home_url( '/lv/product-category/interjera-sveces/' ), 301 );
+			exit;
+		}
 		if ( ! is_404() ) {
 			return;
 		}
