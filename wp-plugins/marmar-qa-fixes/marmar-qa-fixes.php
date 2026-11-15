@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.28
+ * Version:           1.9.29
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -12,6 +12,20 @@ defined( 'ABSPATH' ) || exit;
 final class MarMar_QA_Fixes {
 
 	/** Vecās / demo adreses → jaunā vieta (301). Ceļš bez valodas prefiksa. */
+	/** Vecās Mozello adreses (vēl Google un Facebook) — 404 → 301 pēc prefiksa (15.11.2026). Pirmā sakritība uzvar. */
+	const REDIRECT_PREFIXES = array(
+		'shop/category/candle-making-supplies' => '/lv/shop-2/',
+		'shop/item/candle-making-supplies'     => '/lv/shop-2/',
+		'veikals/category/materiali-svecu'     => '/lv/shop-2/',
+		'shop/item/pillar-candles'             => '/lv/product-category/interjera-sveces/',
+		'shop/'                                => '/lv/shop-2/',
+		'veikals/'                             => '/lv/shop-2/',
+		'blog-2/'                              => '/lv/blogs/',
+		'basket'                               => '/lv/cart/',
+		'noformesana'                          => '/lv/cart/',
+		'Iv/'                                  => '/lv/',
+	);
+
 	const REDIRECTS = array(
 		'product/dabiga-vaska-galda-svece-21cm' => '/lv/product-category/interjera-sveces/', // 22818 (15.11 galda sveces izņemtas)
 		'product/kremkrasas-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22817 (15.11 galda sveces izņemtas)
@@ -355,6 +369,16 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 		if ( isset( self::REDIRECTS[ $path ] ) ) {
 			wp_safe_redirect( home_url( self::REDIRECTS[ $path ] ), 301 );
 			exit;
+		}
+		if ( false !== strpos( $path, 'dzintara-putekli' ) ) {
+			wp_safe_redirect( home_url( '/lv/product/personalizetas-kazu-sveces-viesiem-izveidojiet-savas/' ), 301 );
+			exit;
+		}
+		foreach ( self::REDIRECT_PREFIXES as $prefix => $to ) {
+			if ( 0 === strpos( $path, $prefix ) ) {
+				wp_safe_redirect( home_url( $to ), 301 );
+				exit;
+			}
 		}
 	}
 
