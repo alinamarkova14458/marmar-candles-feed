@@ -1,0 +1,46 @@
+{
+ "slug": "watercolor-christmas-clipart",
+ "title": "Watercolor Christmas Clipart",
+ "sub": "8 sets for cards & prints",
+ "hero": {
+  "src": "/img/wc-santa-friends.webp",
+  "crop": [
+   0,
+   0,
+   480,
+   800
+  ]
+ },
+ "stack": [
+  {
+   "src": "/img/wc-cozy.webp",
+   "crop": [
+    0,
+    0,
+    1200,
+    560
+   ]
+  },
+  {
+   "src": "/img/wc-vintage.webp",
+   "crop": [
+    850,
+    0,
+    1200,
+    800
+   ]
+  },
+  {
+   "src": "/img/wc-flowers.webp",
+   "crop": [
+    0,
+    0,
+    1200,
+    250
+   ]
+  }
+ ],
+ "cutout": "set:15-vintage-christmas/watercolor-vintage-christmas-red-truck-with-tree",
+ "c_title": "Watercolor Christmas Clipart Sets",
+ "c_sub": "8 sets + printing tips"
+}

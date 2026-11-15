@@ -1,0 +1,46 @@
+{
+ "slug": "winter-wonderland-clipart",
+ "title": "Winter Wonderland Clipart",
+ "sub": "6 PNG sets · snowflakes & cottages",
+ "hero": {
+  "src": "/img/ww-crystal.webp",
+  "crop": [
+   0,
+   0,
+   640,
+   800
+  ]
+ },
+ "stack": [
+  {
+   "src": "/img/ww-pink.webp",
+   "crop": [
+    0,
+    0,
+    1200,
+    500
+   ]
+  },
+  {
+   "src": "/img/ww-festive.webp",
+   "crop": [
+    560,
+    0,
+    1150,
+    700
+   ]
+  },
+  {
+   "src": "/img/ww-celestial.webp",
+   "crop": [
+    560,
+    0,
+    1200,
+    620
+   ]
+  }
+ ],
+ "cutout": "set:17-cozy-winter-wonderland/watercolor-nordic-winter-snowy-cabin",
+ "c_title": "Snowy Winter Wonderland Clipart",
+ "c_sub": "6 sets · animals & cottages"
+}

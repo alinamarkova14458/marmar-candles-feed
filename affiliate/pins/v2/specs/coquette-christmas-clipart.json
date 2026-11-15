@@ -1,0 +1,46 @@
+{
+ "slug": "coquette-christmas-clipart",
+ "title": "Coquette Christmas Clipart",
+ "sub": "9 bow sets · pick by color",
+ "hero": {
+  "src": "/img/cq-pinkmas.webp",
+  "crop": [
+   560,
+   0,
+   1200,
+   800
+  ]
+ },
+ "stack": [
+  {
+   "src": "/img/cq-belle.webp",
+   "crop": [
+    0,
+    0,
+    1200,
+    380
+   ]
+  },
+  {
+   "src": "/img/cq-tree.webp",
+   "crop": [
+    0,
+    0,
+    1200,
+    600
+   ]
+  },
+  {
+   "src": "/img/cq-red.webp",
+   "crop": [
+    640,
+    0,
+    1200,
+    800
+   ]
+  }
+ ],
+ "cutout": "set:05-pastel-christmas/watercolor-mistletoe-with-ribbon",
+ "c_title": "How to Pick Coquette Christmas Bows",
+ "c_sub": "9 PNG sets compared"
+}

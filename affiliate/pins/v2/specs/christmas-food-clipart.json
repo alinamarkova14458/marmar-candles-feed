@@ -1,0 +1,46 @@
+{
+ "slug": "christmas-food-clipart",
+ "title": "Christmas Food Clipart",
+ "sub": "31 sets · gingerbread to cocoa",
+ "hero": {
+  "src": "/img/cc-35.webp",
+  "crop": [
+   600,
+   0,
+   1200,
+   800
+  ]
+ },
+ "stack": [
+  {
+   "src": "/img/gb-watercolor.webp",
+   "crop": [
+    930,
+    0,
+    1200,
+    800
+   ]
+  },
+  {
+   "src": "/img/cocoa-watercolor.webp",
+   "crop": [
+    80,
+    120,
+    1100,
+    800
+   ]
+  },
+  {
+   "src": "/img/ck-watercolor.webp",
+   "crop": [
+    0,
+    0,
+    470,
+    800
+   ]
+  }
+ ],
+ "cutout": "set:05-pastel-christmas/watercolor-gingerbread-house",
+ "c_title": "Gingerbread, Cookies & Cocoa Clipart",
+ "c_sub": "31 PNG sets compared"
+}

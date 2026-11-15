@@ -1,0 +1,46 @@
+{
+ "slug": "christmas-digital-paper",
+ "title": "Christmas Digital Paper",
+ "sub": "7 seamless packs · wrap & cards",
+ "hero": {
+  "src": "/img/dp-forest.webp",
+  "crop": [
+   0,
+   0,
+   560,
+   600
+  ]
+ },
+ "stack": [
+  {
+   "src": "/img/dp-watercolor14.webp",
+   "crop": [
+    0,
+    0,
+    1200,
+    560
+   ]
+  },
+  {
+   "src": "/img/dp-moonlit.webp",
+   "crop": [
+    0,
+    330,
+    1200,
+    800
+   ]
+  },
+  {
+   "src": "/img/dp-20.webp",
+   "crop": [
+    0,
+    0,
+    1200,
+    330
+   ]
+  }
+ ],
+ "cutout": "set:05-pastel-christmas/watercolor-gift-box-with-pine",
+ "c_title": "Seamless Christmas Papers",
+ "c_sub": "7 packs + how to test a repeat"
+}

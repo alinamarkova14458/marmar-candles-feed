@@ -1,0 +1,38 @@
+{
+ "slug": "new-years-eve-clipart",
+ "title": "New Year's Eve Clipart",
+ "sub": "7 PNG sets · champagne & clocks",
+ "hero": "/img/ny-elegant.webp",
+ "stack": [
+  {
+   "src": "/img/ny-65.webp",
+   "crop": [
+    0,
+    0,
+    420,
+    800
+   ]
+  },
+  {
+   "src": "/img/ny-frosty.webp",
+   "crop": [
+    880,
+    0,
+    1200,
+    800
+   ]
+  },
+  {
+   "src": "/img/ny-black40.webp",
+   "crop": [
+    0,
+    430,
+    450,
+    800
+   ]
+  }
+ ],
+ "cutout": "set:25-new-years-eve/watercolor-artdeco-disco-ball",
+ "c_title": "New Year's Eve Clipart for 2027",
+ "c_sub": "7 sets compared"
+}

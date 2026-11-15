@@ -1,0 +1,15 @@
+{
+ "slug": "clipart-blurry-when-printed",
+ "title": "Why Clipart Prints Blurry",
+ "sub": "Guide · pixels, DPI & print size",
+ "hero": "/img/blurry-3600px-vs-500px-simulation.webp",
+ "stack": [
+  "set:17-cozy-winter-wonderland/watercolor-nordic-winter-wooden-sled"
+ ],
+ "stack_fx": "scale",
+ "b_sub": "Guide · one 3600 px file, 3 sizes",
+ "cutout": "set:05-pastel-christmas/watercolor-reindeer-flower-crown",
+ "c_title": "Why Does My Clipart Print Blurry?",
+ "c_sub": "Guide · pixels ÷ DPI = inches",
+ "scale_label3_above": true
+}

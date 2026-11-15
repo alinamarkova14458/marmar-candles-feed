@@ -1,0 +1,46 @@
+{
+ "slug": "hanukkah-clipart",
+ "title": "Hanukkah Clipart PNG",
+ "sub": "7 sets in blue, silver & gold",
+ "hero": {
+  "src": "/img/hk-watercolor.webp",
+  "crop": [
+   560,
+   0,
+   1200,
+   800
+  ]
+ },
+ "stack": [
+  {
+   "src": "/img/hk-whimsical.webp",
+   "crop": [
+    0,
+    0,
+    600,
+    800
+   ]
+  },
+  {
+   "src": "/img/hk-gnome.webp",
+   "crop": [
+    600,
+    0,
+    1200,
+    800
+   ]
+  },
+  {
+   "src": "/img/hk-blue.webp",
+   "crop": [
+    0,
+    0,
+    600,
+    800
+   ]
+  }
+ ],
+ "cutout": "set:26-hanukkah/watercolor-hanukkah-menorah-nine-candles",
+ "c_title": "Hanukkah Clipart in Blue & Gold",
+ "c_sub": "7 PNG sets compared"
+}

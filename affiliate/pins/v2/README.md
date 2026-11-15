@@ -62,6 +62,7 @@ python3 gen.py S 05-pastel-christmas --size 1000x2000   # -> v2-S-05-pastel-chri
 python3 paper_real.py <Paper001 Color.jpg> <Paper006 Color.jpg>   # rebuild assets/paper-1..3.jpg (see assets/LICENSES.md)
 python3 gen.py R 14-moody-florals            # DEFAULT for own sets -> v2-R-14-moody-florals.html (auto -> dark)
 python3 gen.py R 05-pastel-christmas --theme light   # force a theme (light|dark|blue|auto); --title to override the set name
+python3 gen.py R 15-vintage-christmas --variant 3    # other hero + other 9 picks (-> v2-R-<set>-v3.html), for several pins per set
 python3 dark_wash.py; python3 blue_silk.py   # regenerate assets/wine-wash.jpg, assets/blue-silk.jpg
 node shot.js [prefix]                        # renders *.html -> out/*.jpg (size from <html data-w data-h>, default 1000x1500)
 ```
@@ -92,6 +93,7 @@ python3 article.py presets                               # png-not-transparent, 
 python3 article.py png-not-transparent --render          # A B C -> article-samples/art-png-not-transparent-[ABC].jpg
 python3 article.py my-post.json A C --theme light --render   # spec: slug,title,sub,hero,hero_fx,stack,stack_fx,b_sub,cutout,c_title,c_sub
 python3 article.py sheet                                 # article-samples/_sheet.jpg (labelled) + _sheet-236.jpg (feed size)
+python3 article.py specs/hanukkah-clipart.json A B C     # specs/*.json: one per post (CSV plan Nov 2026), crops cut product-label text off
 ```
 Image refs: `/img/<file>` (jalina-blog/public/img), `set:<set-id>/<element>` (needs the set ZIP pulled from LFS),
-`{"src": ref, "crop": [l, t, r, b]}`. Keep titles/sublines true to the post (counts = real counts).
+`{"src": ref, "crop": [l, t, r, b]}`. B with `stack_fx: scale` and a wide element: `scale_label3_above: true` puts the 150 DPI label above the big copy. Keep titles/sublines true to the post (counts = real counts).

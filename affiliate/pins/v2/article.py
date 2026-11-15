@@ -16,7 +16,7 @@ Variants:
 Image refs in a spec: "/img/<file>" (jalina-blog/public/img), "set:<set-id>/<element-name>" (a PNG of Alina's set,
 from the ZIP in jalina-factory/ready), or {"src": ref, "crop": [l, t, r, b]} (source pixels, to cut text off
 product images). Spec keys: slug, title, sub, hero, hero_fx (checker-split | measure), stack, stack_fx (scale),
-cutout, c_title, c_sub. --render writes article-samples/art-<slug>-<V>.jpg via `node shot.js`.
+cutout, c_title, c_sub, scale_label3_above. --render writes article-samples/art-<slug>-<V>.jpg via `node shot.js`.
 """
 import argparse, hashlib, io, json, os, re, shutil, subprocess, sys, zipfile, glob
 
@@ -253,6 +253,8 @@ def variant_b(spec, theme):
         labels = [f'left:{60 + ws[0] + 30:.0f}px;top:{area_top + 50:.0f}px',
                   f'left:60px;top:{area_top + 20 + hs[0] + 40:.0f}px',
                   f'right:40px;top:{1460 - hs[2] * 0.45:.0f}px;text-align:right']
+        if spec.get('scale_label3_above'):  # wide elements fill the corner: put the 150 DPI label above the big copy
+            labels[2] = f'right:40px;top:{1460 - hs[2] - 84:.0f}px;text-align:right'
         for i, (d, wi) in enumerate(zip(dpis, inch)):
             x, y = boxes[i]
             body += (f'<div class=abs style="left:{x:.0f}px;top:{y:.0f}px;width:{ws[i]:.0f}px;height:{hs[i]:.0f}px;z-index:{i}">'

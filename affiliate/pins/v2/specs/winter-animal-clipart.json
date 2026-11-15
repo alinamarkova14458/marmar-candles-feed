@@ -1,0 +1,46 @@
+{
+ "slug": "winter-animal-clipart",
+ "title": "Winter Animal Clipart",
+ "sub": "8 sets · foxes, bears & penguins",
+ "hero": {
+  "src": "/img/wa-vintage.webp",
+  "crop": [
+   540,
+   0,
+   1200,
+   800
+  ]
+ },
+ "stack": [
+  {
+   "src": "/img/wa-foxes.webp",
+   "crop": [
+    0,
+    80,
+    1200,
+    800
+   ]
+  },
+  {
+   "src": "/img/wa-scarves.webp",
+   "crop": [
+    0,
+    190,
+    560,
+    800
+   ]
+  },
+  {
+   "src": "/img/wa-arctic.webp",
+   "crop": [
+    0,
+    0,
+    700,
+    800
+   ]
+  }
+ ],
+ "cutout": "set:17-cozy-winter-wonderland/watercolor-nordic-winter-fox-in-scarf",
+ "c_title": "Winter Animals in Scarves Clipart",
+ "c_sub": "8 PNG sets compared"
+}

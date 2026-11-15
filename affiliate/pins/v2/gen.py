@@ -275,14 +275,22 @@ SMALL_RX = re.compile(r'mitten|candy|star|bud|leaf|sprig|hat\b|heart|horn|bone|c
                       r'olive|bauble|ornament|balloon|grapes|anemone|dahlia|calla', re.I)
 
 
-def pick_showcase(els, n):
+def pick_showcase(els, n, variant=1):
     """Hero (most iconic: bouquet / cake / house / wreath / tree...) + the most recognisable rest:
-    no lettering/garlands/tiny bits, dense (solid) objects first, one per subject type while possible."""
+    no lettering/garlands/tiny bits, dense (solid) objects first, one per subject type while possible.
+    variant > 1 (R pins, CSV plan Nov 2026): rotate the ranking by 5 per step and take the variant-th hero
+    candidate, so the same set gets visibly different sheets (other hero, other picks, other order)."""
     ok = [e for e in els if not SKIP.search(e[0]) and not TINY.search(e[0]) and 0.5 <= e[3] <= 1.8]
     if len(ok) < n:
         ok += [e for e in els if e not in ok and not SKIP.search(e[0]) and 0.4 <= e[3] <= 2.4]
     ranked = sorted(ok, key=lambda e: -ink(e[1]))
-    hero = next((e for rx in HERO_RX for e in ranked if re.search(rx, e[0], re.I)), ranked[0])
+    if variant > 1:
+        k = (5 * (variant - 1)) % len(ranked)
+        ranked = ranked[k:] + ranked[:k]
+    heroes = [e for rx in HERO_RX for e in ranked if re.search(rx, e[0], re.I)]
+    heroes = list(dict.fromkeys(map(tuple, heroes)))
+    hero = list(heroes[(variant - 1) % len(heroes)]) if heroes else ranked[0]
+    hero = next(e for e in ranked if e[0] == hero[0])
     out, seen = [hero], {noun(hero[0])}
     for e in ranked:
         if len(out) == n:
@@ -535,13 +543,13 @@ def defringed(e):
     return out
 
 
-def tmpl_r(sid, title=None, theme='auto'):
+def tmpl_r(sid, title=None, theme='auto', variant=1):
     s = SHOP[sid]
     if theme == 'auto':
         theme = set_theme(sid)
     dark = theme == 'dark'
     blue = theme == 'blue'
-    els = pick_showcase(set_elements(sid), 9)  # the reference shows 9 items (8 around + 1 under the caps line)
+    els = pick_showcase(set_elements(sid), 9, variant)  # the reference shows 9 items (8 around + 1 under the caps line)
     title = title or s['name']
     mid = f'{s["count"]} PNG · 300 DPI'
     # middle-column cells hold the reference's tall/square items; give them the least wide picks
@@ -669,6 +677,7 @@ def main():
     ap.add_argument('--text', help='B: 0-3 words over the hero ("" = no text)')
     ap.add_argument('--strip', type=int, default=3, help='D: set elements under the mockup (0 = none, 3-4)')
     ap.add_argument('--kicker', help='D: small Caveat line above the headline ("" = none)')
+    ap.add_argument('--variant', type=int, default=1, help='R: 2, 3, ... = other hero + other element picks (1 = default)')
     ap.add_argument('--bg', default='#FCEFEA', help='C: light/pastel background')
     a = ap.parse_args()
     if a.template == 'list':
@@ -676,8 +685,8 @@ def main():
             print(f'{i:2d}  {e[0]}  (aspect {e[3]:.2f}){"  [skip: lettering]" if SKIP.search(e[0]) else ""}')
         return
     if a.template == 'R':
-        doc, used = tmpl_r(a.target, a.title, a.theme)
-        name = f'v2-R-{a.target}'
+        doc, used = tmpl_r(a.target, a.title, a.theme, a.variant)
+        name = f'v2-R-{a.target}' + (f'-v{a.variant}' if a.variant > 1 else '')
     elif a.template == 'S':
         sw, sh = map(int, a.size.lower().split('x'))
         doc, used = tmpl_s(a.target, a.n and max(6, min(12, a.n)), a.title, (sw, sh), a.paper)
