@@ -178,3 +178,50 @@
 		document.body.addEventListener('wc-blocks_added_to_cart', show);
 	} catch (e) { /* nav kritiski */ }
 })();
+
+/* Telefonā: maza galvene ar izvēlni, meklēšanu un grozu, kad lapa noritināta (16.11.2026). */
+(function () {
+	'use strict';
+	try {
+		if (!window.matchMedia('(max-width: 999px)').matches) { return; }
+		if (document.body.classList.contains('woocommerce-checkout')) { return; }
+		var head = document.querySelector('header#header');
+		var mob = head && head.querySelector('[data-device="mobile"]');
+		if (!mob) { return; }
+		var menuBtn = mob.querySelector('[data-toggle-panel="#offcanvas"]');
+		var searchBtn = mob.querySelector('[data-toggle-panel="#search-modal"]');
+		var logo = mob.querySelector('.site-logo-container img');
+		var bar = document.createElement('div');
+		bar.className = 'mmd-mini';
+		bar.setAttribute('aria-hidden', 'true');
+		bar.innerHTML =
+			'<button type="button" class="mmd-mini-btn mmd-mini-menu" aria-label="Izvēlne" tabindex="-1"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg></button>' +
+			'<a class="mmd-mini-logo" href="/lv/" tabindex="-1">' + (logo ? '<img src="' + (logo.currentSrc || logo.src) + '" alt="MarMar CANDLES">' : 'MARMAR CANDLES') + '</a>' +
+			'<button type="button" class="mmd-mini-btn mmd-mini-search" aria-label="Meklēt" tabindex="-1"><svg viewBox="0 0 24 24" width="21" height="21"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>' +
+			'<a class="mmd-mini-btn mmd-mini-cart" href="/lv/cart/" aria-label="Grozs" tabindex="-1"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/></svg><span class="mmd-mini-count"></span></a>';
+		document.body.appendChild(bar);
+		bar.querySelector('.mmd-mini-menu').addEventListener('click', function () { if (menuBtn) { menuBtn.click(); } });
+		bar.querySelector('.mmd-mini-search').addEventListener('click', function () { if (searchBtn) { searchBtn.click(); } });
+		var countEl = bar.querySelector('.mmd-mini-count');
+		function count() {
+			var src = document.querySelector('header#header [data-device="mobile"] .ct-dynamic-count-cart') || document.querySelector('.ct-dynamic-count-cart');
+			var n = src ? parseInt(src.getAttribute('data-count') || src.textContent, 10) || 0 : 0;
+			countEl.textContent = n > 0 ? String(n) : '';
+			countEl.style.display = n > 0 ? '' : 'none';
+		}
+		var shown = false;
+		function onScroll() {
+			var on = head.getBoundingClientRect().bottom < 0;
+			if (on !== shown) {
+				shown = on;
+				bar.classList.toggle('is-on', on);
+				bar.setAttribute('aria-hidden', on ? 'false' : 'true');
+				bar.querySelectorAll('a,button').forEach(function (el) { el.tabIndex = on ? 0 : -1; });
+				if (on) { count(); }
+			}
+		}
+		window.addEventListener('scroll', onScroll, { passive: true });
+		if (window.jQuery) { jQuery(document.body).on('added_to_cart removed_from_cart wc_fragments_refreshed wc_fragments_loaded', function () { setTimeout(count, 300); }); }
+		count(); onScroll();
+	} catch (e) { /* nav kritiski */ }
+})();
