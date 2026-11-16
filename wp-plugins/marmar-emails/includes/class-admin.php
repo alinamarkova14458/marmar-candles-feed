@@ -272,6 +272,14 @@ class MarMar_Emails_Admin {
 
 	private static function build( $type, $to ) {
 		$s = MarMar_Emails_Settings::all();
+		if ( 'reminder' === $type ) {
+			return array(
+				$s['review_reminder_subject'],
+				$s['review_reminder_heading'],
+				$s['review_reminder_body'],
+				array( 'first_name' => 'Anna', 'review_url' => $s['review_url'], 'order_number' => '12345' ),
+			);
+		}
 		if ( 'review' === $type ) {
 			return array(
 				$s['review_subject'],
@@ -297,7 +305,7 @@ class MarMar_Emails_Admin {
 
 	private static function render_test() {
 		$user = wp_get_current_user();
-		$types = array( 'cart1' => 'Корзина — письмо 1', 'cart2' => 'Корзина — письмо 2', 'review' => 'Просьба об отзыве' );
+		$types = array( 'cart1' => 'Корзина — письмо 1', 'cart2' => 'Корзина — письмо 2', 'review' => 'Просьба об отзыве', 'reminder' => 'Отзыв — второе письмо' );
 		echo '<p>Предпросмотр открывается в новой вкладке. Тестовое письмо приходит с примером: имя «Anna» и 2 товара из магазина. Ссылка в тестовом письме ведёт на обычное оформление заказа.</p>';
 		echo '<table class="widefat" style="max-width:720px"><tbody>';
 		foreach ( $types as $key => $label ) {
