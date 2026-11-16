@@ -58,6 +58,56 @@ class MarMar_Emails_Reviews {
 		foreach ( $rows as $row ) {
 			self::send_row( $row );
 		}
+		self::process_reminders();
+	}
+
+	const REMINDED_META = '_marmar_review_reminded';
+	const REMINDED_OPT  = 'marmar_review_reminded_emails';
+
+	/** Otrā (pēdējā) vēstule: N dienas pēc pirmās, ne vecākiem par 75 dienām, katram e-pastam tikai vienreiz. */
+	public static function process_reminders() {
+		global $wpdb;
+		if ( 'yes' !== MarMar_Emails_Settings::get( 'review_reminder_enabled' ) ) {
+			return;
+		}
+		$table = MarMar_Emails_Install::reviews_table();
+		$days  = max( 1, (int) MarMar_Emails_Settings::get( 'review_reminder_days' ) );
+		$rows  = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE status = 'sent' AND sent_at <= %s AND sent_at >= %s ORDER BY sent_at ASC LIMIT 40", gmdate( 'Y-m-d H:i:s', time() - $days * DAY_IN_SECONDS ), gmdate( 'Y-m-d H:i:s', time() - 75 * DAY_IN_SECONDS ) ) ); // phpcs:ignore
+		$done  = (array) get_option( self::REMINDED_OPT, array() );
+		$sent  = 0;
+		foreach ( $rows as $row ) {
+			if ( $sent >= 10 ) {
+				break; // pa 10 vēstulēm reizē — hostings jutīgs pret slodzi
+			}
+			$email = strtolower( $row->email );
+			$order = wc_get_order( $row->order_id );
+			if ( ! $order || $order->get_meta( self::REMINDED_META ) ) {
+				continue;
+			}
+			if ( in_array( $email, $done, true ) || 'completed' !== $order->get_status() || MarMar_Emails_Optout::is_opted_out( $email ) || MarMar_Emails_Settings::is_excluded( $email ) ) {
+				$order->update_meta_data( self::REMINDED_META, 'skip' );
+				$order->save_meta_data();
+				continue;
+			}
+			$ok = MarMar_Emails_Mailer::send(
+				$email,
+				MarMar_Emails_Settings::get( 'review_reminder_subject' ),
+				MarMar_Emails_Settings::get( 'review_reminder_heading' ),
+				MarMar_Emails_Settings::get( 'review_reminder_body' ),
+				array(
+					'first_name'   => $row->first_name ? $row->first_name : $order->get_billing_first_name(),
+					'review_url'   => MarMar_Emails_Settings::get( 'review_url' ),
+					'order_number' => $order->get_order_number(),
+				)
+			);
+			$order->update_meta_data( self::REMINDED_META, $ok ? gmdate( 'Y-m-d H:i:s' ) : 'failed' );
+			$order->save_meta_data();
+			if ( $ok ) {
+				$done[] = $email;
+				$sent++;
+			}
+		}
+		update_option( self::REMINDED_OPT, array_values( array_unique( $done ) ), false );
 	}
 
 	private static function send_row( $row ) {

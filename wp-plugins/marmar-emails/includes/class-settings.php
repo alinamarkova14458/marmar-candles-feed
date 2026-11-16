@@ -33,6 +33,13 @@ class MarMar_Emails_Settings {
 			'review_heading'     => 'Kā Jums patika sveces?',
 			'review_body'        => "<p>Sveiki{first_name_comma}!</p>\n<p>Paldies, ka izvēlējāties MarMar CANDLES! 🤍</p>\n<p>Ja Jums patika pasūtījums, mēs ļoti priecāsimies, ja veltīsiet minūti un atstāsiet atsauksmi Google. Tā palīdz citiem atrast mūsu sveces — un mums dod spārnus.</p>\n<p style=\"margin:28px 0;\"><a href=\"{review_url}\" style=\"$button\">⭐ Atstāt atsauksmi Google</a></p>\n<p>Paldies par atbalstu! ❤️</p>\n<p>Ar cieņu,<br>MarMar CANDLES</p>",
 
+			// Atgādinājums par atsauksmi (otrā un pēdējā vēstule) — 16.11.2026.
+			'review_reminder_enabled' => 'no',
+			'review_reminder_days'    => 7,
+			'review_reminder_subject' => 'Mazs lūgums no MarMar CANDLES 🕯️',
+			'review_reminder_heading' => 'Jūsu viedoklis mums ļoti palīdzētu',
+			'review_reminder_body'    => "<p>Sveiki{first_name_comma}!</p>\n<p>Ceram, ka sveces sagādāja prieku svētkos! 🕯️</p>\n<p>Mēs esam neliels roku darba zīmols, un katra atsauksme Google mums ir ļoti svarīga — tā palīdz citiem uzzināt par mums. Tas aizņems tikai minūti.</p>\n<p style=\"margin:28px 0;\"><a href=\"{review_url}\" style=\"$button\">⭐ Atstāt atsauksmi Google</a></p>\n<p>Ja jau esat atstājuši atsauksmi — liels paldies! Šī ir pēdējā vēstule par to.</p>\n<p>Ar cieņu,<br>MarMar CANDLES</p>",
+
 			'excluded_emails'    => '',
 			'unsubscribe_text'   => 'Nevēlaties saņemt šādus e-pastus? <a href="{unsubscribe_url}">Atteikties</a>.',
 			'unsubscribed_page'  => 'Jūs esat atteikušies no atgādinājumiem un atsauksmju lūgumiem. Pasūtījumu e-pastus joprojām saņemsiet.',

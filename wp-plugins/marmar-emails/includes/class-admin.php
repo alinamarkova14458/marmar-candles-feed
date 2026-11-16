@@ -193,6 +193,11 @@ class MarMar_Emails_Admin {
 		self::field_text( 'review_subject', 'Тема', $s );
 		self::field_text( 'review_heading', 'Заголовок', $s );
 		self::field_area( 'review_body', 'Текст (HTML)', $s );
+		self::field_check( 'review_reminder_enabled', 'Второе (последнее) письмо-напоминание', $s );
+		self::field_text( 'review_reminder_days', 'Через сколько дней после первого письма', $s, false );
+		self::field_text( 'review_reminder_subject', 'Напоминание — тема', $s );
+		self::field_text( 'review_reminder_heading', 'Напоминание — заголовок', $s );
+		self::field_area( 'review_reminder_body', 'Напоминание — текст (HTML)', $s );
 		echo '</table>';
 
 		echo '<h2>Общее</h2><table class="form-table">';
@@ -227,13 +232,13 @@ class MarMar_Emails_Admin {
 		$defaults = MarMar_Emails_Settings::defaults();
 		$out      = array();
 		foreach ( $defaults as $key => $default ) {
-			if ( in_array( $key, array( 'carts_enabled', 'reviews_enabled' ), true ) ) {
+			if ( in_array( $key, array( 'carts_enabled', 'reviews_enabled', 'review_reminder_enabled' ), true ) ) {
 				$out[ $key ] = isset( $in[ $key ] ) ? 'yes' : 'no';
 			} elseif ( ! isset( $in[ $key ] ) ) {
 				continue;
 			} elseif ( in_array( $key, array( 'cart_delay_1', 'cart_delay_2' ), true ) ) {
 				$out[ $key ] = max( 0.25, (float) str_replace( ',', '.', $in[ $key ] ) );
-			} elseif ( in_array( $key, array( 'cart_max_age', 'review_delay_days' ), true ) ) {
+			} elseif ( in_array( $key, array( 'cart_max_age', 'review_delay_days', 'review_reminder_days' ), true ) ) {
 				$out[ $key ] = max( 0, (int) $in[ $key ] );
 			} elseif ( 'review_url' === $key ) {
 				$out[ $key ] = esc_url_raw( $in[ $key ] );
