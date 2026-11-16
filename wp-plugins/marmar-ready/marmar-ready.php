@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Pieejams uzreiz
  * Description:       Gatavās sveces bez atsevišķām kartītēm: administratore atzīmē variantu un daudzumu → prece automātiski nonāk sadaļā «Pieejams uzreiz» ar plāksnīti; kad izpārdots — pazūd no sadaļas, bet paliek pārdošanā pēc pasūtījuma. Plāksnītes: «Pieejams uzreiz», «Populārs», «Dažādas krāsas».
- * Version:           1.3.7
+ * Version:           1.3.8
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -34,6 +34,12 @@ final class MarMar_Ready {
 		if ( ! wp_next_scheduled( 'mm_bestsellers_daily' ) ) {
 			wp_schedule_event( strtotime( 'tomorrow 03:17' ), 'daily', 'mm_bestsellers_daily' );
 		}
+	}
+
+	/** Atvaļinājums 26.11.–3.12.2026: gatavās preces izsūtām no 4.12. (pasūtījumi no 25.11.). */
+	public static function on_vacation() {
+		$d = wp_date( 'Y-m-d' );
+		return $d >= '2026-11-25' && $d <= '2026-12-03';
 	}
 
 	const OPT_BEST = 'marmar_bestsellers';
@@ -85,7 +91,7 @@ final class MarMar_Ready {
 		if ( ! $list ) {
 			return;
 		}
-		echo '<div class="mmr-box"><div class="mmr-t">⚡ Pieejams uzreiz — izsūtīsim 1–2 darba dienās</div><div class="mmr-l">';
+		echo '<div class="mmr-box"><div class="mmr-t">⚡ Pieejams uzreiz — ' . ( self::on_vacation() ? 'izsūtīsim 4. decembrī' : 'izsūtīsim 1–2 darba dienās' ) . '</div><div class="mmr-l">';
 		foreach ( $list as $r ) {
 			echo '<button type="button" class="mmr-i" data-attrs="' . esc_attr( wp_json_encode( $r['attrs'] ) ) . '">' . esc_html( ucfirst( mb_strtolower( (string) $r['label'] ) ) ) . ' <b>' . (int) $r['q'] . ' gab</b></button>';
 		}
@@ -165,7 +171,7 @@ final class MarMar_Ready {
 		}
 		$q = self::ready_qty( $p );
 		if ( $q > 0 ) {
-			return sprintf( '⚡ Pieejams uzreiz — %d gab. Izsūtīsim 1–2 darba dienās.', $q );
+			return sprintf( '⚡ Pieejams uzreiz — %d gab. ' . ( self::on_vacation() ? 'Izsūtīsim 4. decembrī.' : 'Izsūtīsim 1–2 darba dienās.' ), $q );
 		}
 		if ( $p->backorders_allowed() ) {
 			return 'Izgatavosim pēc pasūtījuma 5–7 dienās.';
@@ -296,7 +302,7 @@ final class MarMar_Ready {
 			return;
 		}
 		echo self::is_ready_now( $product )
-			? '<div class="mm-eta-line is-ready">Gatavs — izsūtīsim 1–2 d.</div>'
+			? '<div class="mm-eta-line is-ready">' . ( self::on_vacation() ? 'Gatavs — izsūtīsim 4.12.' : 'Gatavs — izsūtīsim 1–2 d.' ) . '</div>'
 			: '<div class="mm-eta-line">Izgatavojam 5–7 d.</div>';
 	}
 

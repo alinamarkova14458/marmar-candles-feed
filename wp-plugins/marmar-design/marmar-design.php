@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.13.2
+ * Version:           1.13.3
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.13.2';
+	const VER = '1.13.3';
 
 	/** Preces, kuras nerādām blokā “Bieži pērk kopā” (pakalpojumi, papildinājumi). */
 	const TOGETHER_EXCLUDE = array( 11691, 11024 ); // Dzintara putekļi, Individuālā dizaina izstrāde
@@ -39,7 +39,7 @@ final class MarMar_Design {
 	}
 
 	/** Dienas, kad mainās augšējās joslas teksti (marmar-qa-fixes season_lines / atvaļinājums) — tad iztīrām LiteSpeed kešu. */
-	const PURGE_DATES = array( '2026-11-19', '2026-11-26', '2026-12-04', '2026-12-14', '2026-12-18', '2026-12-19', '2026-12-23', '2027-01-01' );
+	const PURGE_DATES = array( '2026-11-19', '2026-11-25', '2026-11-26', '2026-12-04', '2026-12-14', '2026-12-18', '2026-12-19', '2026-12-23', '2027-01-01' );
 
 	public static function schedule_purge() {
 		if ( ! wp_next_scheduled( 'mmd_daily_purge' ) ) {
