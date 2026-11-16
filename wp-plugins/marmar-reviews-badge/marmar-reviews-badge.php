@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Reviews Badge
  * Description:       Свой виджет отзывов Google в стиле сайта: блок «Ko saka klienti» (шорткод [marmar_reviews]) и компактный блок под кнопкой «в корзину» на товаре. Рейтинг и число отзывов берутся из Trustindex (уже скачанные отзывы Google), без внешних скриптов. Можно задать вручную.
- * Version:           1.1.2
+ * Version:           1.1.6
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -17,6 +17,8 @@ final class MarMar_Reviews_Badge {
 		// 1.1.0: вместо строки под ценой — блок с отзывом под кнопкой «в корзину».
 		add_action( 'woocommerce_after_add_to_cart_form', array( __CLASS__, 'render_product' ), 15 );
 		add_shortcode( 'marmar_reviews', array( __CLASS__, 'section' ) );
+		// Polosa pod banerom na glavnoj: «· 18 Google atsauksmes» → aktualnoe chislo.
+		add_filter( 'the_content', array( __CLASS__, 'fix_counts' ), 30 );
 		add_action( 'wp_head', array( __CLASS__, 'css' ), 50 );
 		add_shortcode( 'marmar_google_rating', array( __CLASS__, 'shortcode' ) );
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
@@ -204,19 +206,21 @@ final class MarMar_Reviews_Badge {
 	private static function widget_css() {
 		return '<style id="mmrw">'
 			. '.mmrw{background:#FAF3F0;padding:40px 0 34px;margin:0 calc(50% - 50vw);width:100vw}'
-			. '.mmrw-in{max-width:1180px;margin:0 auto}'
+			. '.mmrw-in{max-width:1180px;margin:0 auto;position:relative}'
+			. '.mmrw-nav{display:none}@media(min-width:690px){.mmrw-nav{display:grid;place-items:center;position:absolute;top:50%;width:44px;height:44px;border-radius:50%;border:1px solid #efe2de;background:#fff;color:#735360;font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(115,83,96,.12);z-index:2;padding:0}.mmrw-prev{left:-24px}.mmrw-next{right:-24px}.mmrw-nav:hover{background:#B9605F;color:#fff}}'
+			. '.mmrw-dots i{cursor:pointer}'
 			. '.mmrw-head{text-align:center;padding:0 16px}'
 			. '.mmrw-flame{width:16px;height:22px;display:block;margin:0 auto 8px}'
 			. '.mmrw h2{font-family:Marcellus,serif!important;font-weight:400;font-size:24px!important;letter-spacing:.08em;text-transform:uppercase;color:#735360!important;margin:0 0 8px!important}'
 			. '.mmrw-sum{display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;font-size:15px;color:#504E4A}'
 			. '.mmrw-sum b{font-size:19px;color:#735360}.mmrw-st{color:#E0A84B;letter-spacing:1px}.mmrw-g{font-weight:600;color:#5f6368}'
-			. '.mmrw-track{display:flex;align-items:flex-start;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:22px 16px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}'
+			. '.mmrw-track{display:flex;align-items:stretch;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:22px 16px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}'
 			. '.mmrw-track::-webkit-scrollbar{display:none}'
-			. '.mmrw-card{flex:0 0 78%;max-width:340px;scroll-snap-align:start;background:#fff;border:1px solid #efe2de;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 4px 14px rgba(115,83,96,.06)}'
+			. '.mmrw-card{flex:0 0 78%;max-width:340px;scroll-snap-align:start;background:#fff;border:1px solid #efe2de;border-radius:18px;padding:16px;display:flex!important;flex-direction:column!important;gap:10px;box-shadow:0 4px 14px rgba(115,83,96,.06)}'
 			. '@media(min-width:690px){.mmrw-card{flex-basis:31%}}'
 			. '.mmrw-top{display:flex;justify-content:space-between;align-items:center}'
-			. '.mmrw-card p{margin:0;font-size:15px;line-height:1.5;color:#504E4A;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}'
-			. '.mmrw-who{display:flex;align-items:center;gap:10px;margin-top:4px;text-align:left!important}'
+			. '.mmrw-card p{flex:1 1 auto;margin:0!important;font-size:15px;line-height:1.5;color:#504E4A;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}'
+			. '.mmrw-who{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:4px;text-align:left!important}'
 			. '.mmrw-av{width:32px;height:32px;border-radius:50%;background:#f1dcd9;color:#735360;display:grid;place-items:center;font-weight:600;font-size:13px;flex:0 0 32px}'
 			. '.mmrw-who span{font-size:13.5px;line-height:1.25;color:#504E4A}.mmrw-who small{display:block;color:#9a8f8c;font-size:12px}'
 			. '.mmrw-dots{display:flex;justify-content:center;gap:6px;margin:10px 0 20px}.mmrw-dots i{width:6px;height:6px;border-radius:50%;background:#e2c9c6;transition:all .2s}.mmrw-dots i.on{background:#B9605F;width:16px;border-radius:4px}'
@@ -242,6 +246,17 @@ final class MarMar_Reviews_Badge {
 		return str_repeat( '★', max( 1, min( 5, (int) $n ) ) );
 	}
 
+	public static function fix_counts( $html ) {
+		if ( false === strpos( (string) $html, 'Google atsauksm' ) ) {
+			return $html;
+		}
+		$d = self::data();
+		if ( ! $d ) {
+			return $html;
+		}
+		return preg_replace( '/·\s*\d+\s+Google atsauksm\w*/u', '· ' . $d['count'] . ' Google ' . self::plural( $d['count'] ), $html );
+	}
+
 	/** Блок «Ko saka klienti» — шорткод [marmar_reviews]. */
 	public static function section( $atts = array() ) {
 		$d    = self::data();
@@ -259,10 +274,10 @@ final class MarMar_Reviews_Badge {
 				. '<p>' . esc_html( $r['text'] ) . '</p>'
 				. '<figcaption class="mmrw-who"><span class="mmrw-av" aria-hidden="true">' . esc_html( mb_substr( $name, 0, 1 ) ) . '</span><span>' . esc_html( $name ) . '<small>' . esc_html( self::month( $r['date'] ) ) . '</small></span></figcaption></figure>';
 		}
-		$h .= '</div><div class="mmrw-dots" aria-hidden="true">' . str_repeat( '<i></i>', count( $list ) ) . '</div>'
+		$h .= '</div><button type="button" class="mmrw-nav mmrw-prev" aria-label="Iepriekšējā atsauksme">←</button><button type="button" class="mmrw-nav mmrw-next" aria-label="Nākamā atsauksme">→</button><div class="mmrw-dots" aria-hidden="true">' . str_repeat( '<i></i>', count( $list ) ) . '</div>'
 			. '<div class="mmrw-acts"><a class="mmrw-b1" href="' . esc_url( self::review_url() ) . '" target="_blank" rel="noopener">⭐ Atstāt atsauksmi</a>'
 			. '<a class="mmrw-b2" href="' . esc_url( $d['url'] ) . '" target="_blank" rel="noopener">Lasīt visas atsauksmes Google →</a></div></div></section>'
-			. '<script>(function(){document.querySelectorAll(".mmrw").forEach(function(s){var t=s.querySelector(".mmrw-track"),d=s.querySelectorAll(".mmrw-dots i");if(!t||!d.length)return;function u(){var c=t.children[0],w=c?c.getBoundingClientRect().width+14:1,i=Math.round(t.scrollLeft/w);d.forEach(function(x,k){x.classList.toggle("on",k===Math.min(i,d.length-1));});}t.addEventListener("scroll",u,{passive:true});u();});})();</script>';
+			. '<script>(function(){document.querySelectorAll(".mmrw").forEach(function(s){var t=s.querySelector(".mmrw-track"),d=s.querySelectorAll(".mmrw-dots i");if(!t||!d.length)return;function u(){var c=t.children[0],w=c?c.getBoundingClientRect().width+14:1,i=Math.round(t.scrollLeft/w);d.forEach(function(x,k){x.classList.toggle("on",k===Math.min(i,d.length-1));});}t.addEventListener("scroll",u,{passive:true});u();function w(){var c=t.children[0];return c?c.getBoundingClientRect().width+14:300;}var pv=s.querySelector(".mmrw-prev"),nx=s.querySelector(".mmrw-next");if(pv)pv.addEventListener("click",function(){t.scrollBy({left:-w(),behavior:"smooth"});});if(nx)nx.addEventListener("click",function(){t.scrollBy({left:w(),behavior:"smooth"});});d.forEach(function(x,k){x.addEventListener("click",function(){t.scrollTo({left:k*w(),behavior:"smooth"});});});});})();</script>';
 		return $h;
 	}
 

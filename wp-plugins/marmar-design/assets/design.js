@@ -153,3 +153,28 @@
 		}, 4000);
 	} catch (e) { /* nav kritiski */ }
 })();
+
+/* Pievienots grozam — paziņojums apakšā (16.11.2026): telefonā groza ikona augšā nav redzama, kad lapa noritināta. */
+(function () {
+	'use strict';
+	try {
+		var box, timer;
+		function show() {
+			if (!box) {
+				box = document.createElement('div');
+				box.className = 'mmd-added';
+				box.setAttribute('role', 'status');
+				box.innerHTML = '<span class="mmd-added-t">✓ Pievienots grozam</span><a class="mmd-added-b" href="/lv/cart/">Skatīt grozu →</a><button type="button" class="mmd-added-x" aria-label="Aizvērt">×</button>';
+				document.body.appendChild(box);
+				box.querySelector('.mmd-added-x').addEventListener('click', function () { box.classList.remove('is-on'); });
+			}
+			box.classList.add('is-on');
+			clearTimeout(timer);
+			timer = setTimeout(function () { box.classList.remove('is-on'); }, 6000);
+		}
+		if (window.jQuery) {
+			jQuery(document.body).on('added_to_cart', show);
+		}
+		document.body.addEventListener('wc-blocks_added_to_cart', show);
+	} catch (e) { /* nav kritiski */ }
+})();
