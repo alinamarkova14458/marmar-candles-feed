@@ -450,8 +450,9 @@ body.mmd-has-sticky .mmd-added { bottom: 84px; }
 	.mmd-mini.is-on { transform: none; }
 	body.admin-bar .mmd-mini { top: 46px; }
 	.mmd-mini-btn { position: relative; display: grid; place-items: center; width: 44px; height: 44px; background: none; border: 0; padding: 0; color: #504E4A; cursor: pointer; }
-	.mmd-mini-logo { flex: 1 1 auto; display: flex; justify-content: center; }
-	.mmd-mini-logo img { height: 24px; width: auto; }
+	.mmd-mini-logo { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: block; line-height: 0; }
+	.mmd-mini-logo img { height: 26px; width: auto; max-width: 52vw; object-fit: contain; }
+	.mmd-mini-search { margin-left: auto; }
 	.mmd-mini-count { position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #B9605F; color: #fff; font-size: 11px; font-weight: 600; line-height: 18px; text-align: center; }
 	#fab-stt { display: none !important; }
 }
