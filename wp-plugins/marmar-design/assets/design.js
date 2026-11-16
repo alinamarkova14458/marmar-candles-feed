@@ -119,7 +119,8 @@
 		if (!t || !t.closest) { return; }
 		// Preces galerija: spiediens uz foto atver palielinājumu (tāpat kā lupas ikona).
 		var fig = t.closest('.woocommerce-product-gallery .flexy-item, .woocommerce-product-gallery .ct-media-container');
-		if (fig && !t.closest('a,button')) {
+		// Sīktēli (.flexy-pills) tikai pārslēdz galveno foto — tos neaiztiekam, citādi atvērās cits foto.
+		if (fig && !t.closest('a,button') && !t.closest('.flexy-pills')) {
 			var trig = document.querySelector('.woocommerce-product-gallery__trigger');
 			if (trig) { e.preventDefault(); trig.click(); }
 			return;
