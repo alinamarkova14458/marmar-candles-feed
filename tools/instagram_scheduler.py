@@ -20,6 +20,7 @@ from __future__ import annotations
 import hashlib
 import os
 import re
+import subprocess
 import sys
 import time
 from datetime import datetime, timedelta, timezone
@@ -34,7 +35,9 @@ STATE_PATH = os.path.join(ROOT, "social", "instagram", "published.json")
 API = "https://graph.facebook.com/v27.0"  # new apps get unified login, not graph.instagram.com
 
 # GitHub starts the cron only every ~4-5 h; a run waits for a post due before the next run.
-WAIT_AHEAD = timedelta(hours=5, minutes=20)
+WAIT_AHEAD = timedelta(hours=5, minutes=20)   # how long one run stays on duty
+HOLD_HORIZON = timedelta(hours=48)            # stay on duty only if a post is this close
+CHECK_EVERY = timedelta(minutes=15)
 MAX_LATE = timedelta(hours=24)   # GitHub cron runs hours late; later than this -> skipped
 MAX_HASHTAGS = 5                 # Alina's brand rule
 MAX_CAPTION = 2200               # Instagram limit
@@ -137,25 +140,40 @@ class Api:
         return self.call("POST", f"{uid}/media_publish", creation_id=c)["id"]
 
 
-def next_wait(items: list[dict], state: dict, now: datetime) -> timedelta | None:
-    """Time until the next unpublished post, if it is due within WAIT_AHEAD."""
-    ahead = [it["_when"] - now for it in items if post_id(it) not in state and it["_when"] > now]
-    soonest = min(ahead, default=None)
-    return soonest if soonest is not None and soonest <= WAIT_AHEAD else None
+def next_ahead(items: list[dict], state: dict, now: datetime) -> timedelta | None:
+    """Time until the next unpublished post that is still in the future."""
+    return min((it["_when"] - now for it in items if post_id(it) not in state and it["_when"] > now), default=None)
+
+
+def refresh_queue() -> None:
+    """Pick up posts merged to master while this run is on duty (Actions only)."""
+    if os.environ.get("GITHUB_ACTIONS"):
+        subprocess.run(["git", "pull", "-q", "--ff-only"], cwd=ROOT, check=False)
 
 
 def main() -> int:
+    """Publish due posts, then stay on duty while posts are coming (GitHub starts the cron
+    hours late, sometimes 8 h+). A run checks every CHECK_EVERY, publishes on time, and after
+    WAIT_AHEAD starts its successor (CHAIN_FILE for the workflow) so someone is always awake."""
     dry = os.environ.get("DRY_RUN") == "1"
-    failed = False
+    failed, start = False, datetime.now(timezone.utc)
     while True:
         failed |= run_once(dry)
         if dry:
             return 0
-        wait = next_wait(load_queue(QUEUE_GLOB), load_state(STATE_PATH), datetime.now(timezone.utc))
-        if wait is None:
+        refresh_queue()
+        now = datetime.now(timezone.utc)
+        ahead = next_ahead(load_queue(QUEUE_GLOB), load_state(STATE_PATH), now)
+        if ahead is None or ahead > HOLD_HORIZON:
             return 1 if failed else 0
-        print(f"  waiting {wait} for the next post, to publish it on time")
-        time.sleep(wait.total_seconds() + 5)
+        if now - start >= WAIT_AHEAD:
+            print(f"  next post in {ahead}: handing over to a new run")
+            if os.environ.get("CHAIN_FILE"):
+                open(os.environ["CHAIN_FILE"], "w").close()
+            return 1 if failed else 0
+        nap = min(ahead + timedelta(seconds=5), CHECK_EVERY, start + WAIT_AHEAD - now)
+        print(f"  on duty: next post in {ahead}, checking again in {nap}")
+        time.sleep(max(nap.total_seconds(), 1))
 
 
 def run_once(dry: bool) -> bool:

@@ -138,29 +138,58 @@ def test_story_image_and_video(monkeypatch):
     assert calls[0] == ("U/media", {"media_type": "STORIES", "video_url": "https://x/v.MP4"})
 
 
-def test_next_wait_only_for_posts_soon():
+def test_next_ahead():
     soon, later = post("2026-11-20T21:00:00"), post("2026-11-21T09:00:00", media=[JPG + "?x"])
-    assert ig.next_wait([later, soon], {}, NOW) == ig.parse_date("2026-11-20T21:00:00") - NOW
-    assert ig.next_wait([later], {}, NOW) is None  # 15 h ahead: the next cron run will handle it
-    assert ig.next_wait([soon], {ig.post_id(soon): {"media_id": "1"}}, NOW) is None
-    assert ig.next_wait([post("2026-11-20T17:00:00")], {}, NOW) is None  # already due, not "ahead"
+    assert ig.next_ahead([later, soon], {}, NOW) == ig.parse_date("2026-11-20T21:00:00") - NOW
+    assert ig.next_ahead([soon], {ig.post_id(soon): {"media_id": "1"}}, NOW) is None
+    assert ig.next_ahead([post("2026-11-20T17:00:00")], {}, NOW) is None  # due already, not ahead
 
 
-def test_main_waits_then_publishes_once(monkeypatch):
-    runs, sleeps, state = [], [], {}
-    due = post("2026-11-20T18:30:00")
+def _duty(monkeypatch, tmp_path, posts, publish_at=None):
+    """Run main() on a fake clock; returns (runs, chain file exists, elapsed)."""
+    clock = {"t": NOW}
+    state, runs = {}, []
 
     def fake_run(dry):
-        runs.append(dry)
-        if len(runs) == 2:
-            state[ig.post_id(due)] = {"media_id": "1"}  # second run publishes it
+        runs.append(clock["t"])
+        for it in posts:
+            if it["_when"] <= clock["t"]:
+                state[ig.post_id(it)] = {"media_id": "1"}
         return False
 
-    monkeypatch.setattr(ig, "run_once", fake_run)
-    monkeypatch.setattr(ig, "load_queue", lambda _g: [dict(due)])
-    monkeypatch.setattr(ig, "load_state", lambda _p: state)
-    monkeypatch.setattr(ig, "datetime", type("D", (), {"now": staticmethod(lambda tz=None: NOW)}))
-    monkeypatch.setattr(ig.time, "sleep", sleeps.append)
+    class D:
+        @staticmethod
+        def now(tz=None):
+            return clock["t"]
+
+    def sleep(sec):
+        clock["t"] += ig.timedelta(seconds=sec)
+
+    chain = tmp_path / "chain"
+    monkeypatch.setenv("CHAIN_FILE", str(chain))
     monkeypatch.delenv("DRY_RUN", raising=False)
+    monkeypatch.setattr(ig, "run_once", fake_run)
+    monkeypatch.setattr(ig, "load_queue", lambda _g: [dict(p) for p in posts])
+    monkeypatch.setattr(ig, "load_state", lambda _p: state)
+    monkeypatch.setattr(ig, "datetime", D)
+    monkeypatch.setattr(ig.time, "sleep", sleep)
     assert ig.main() == 0
-    assert len(runs) == 2 and sleeps == [30 * 60 + 5]
+    return runs, chain.exists(), clock["t"] - NOW, state
+
+
+def test_duty_publishes_on_time_then_stops(monkeypatch, tmp_path):
+    p = post("2026-11-20T18:40:00")  # 40 min ahead
+    runs, chained, elapsed, state = _duty(monkeypatch, tmp_path, [p])
+    assert ig.post_id(p) in state and not chained
+    assert ig.timedelta(minutes=40) <= elapsed <= ig.timedelta(minutes=41)  # published right at its time
+
+
+def test_duty_hands_over_when_next_post_is_far(monkeypatch, tmp_path):
+    p = post("2026-11-21T12:00:00")  # 18 h ahead, inside the 48 h horizon
+    runs, chained, elapsed, state = _duty(monkeypatch, tmp_path, [p])
+    assert chained and not state and elapsed == ig.WAIT_AHEAD
+
+
+def test_no_duty_without_posts_soon(monkeypatch, tmp_path):
+    runs, chained, elapsed, _ = _duty(monkeypatch, tmp_path, [post("2026-11-25T12:00:00")])
+    assert len(runs) == 1 and not chained and elapsed == ig.timedelta(0)
