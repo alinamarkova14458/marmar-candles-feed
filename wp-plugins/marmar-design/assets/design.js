@@ -134,3 +134,22 @@
 		}
 	});
 })();
+
+/* Augšējā josla telefonā: teksti pa vienam (16.11.2026). */
+(function () {
+	'use strict';
+	try {
+		var bar = document.querySelector('.mmd-topbar');
+		if (!bar || !window.matchMedia('(max-width: 689px)').matches) { return; }
+		var items = [].filter.call(bar.children, function (s) { return !s.classList.contains('mmd-sep') && s.textContent.trim(); });
+		if (items.length < 2) { return; }
+		var i = 0;
+		bar.classList.add('mmd-rot');
+		items[0].classList.add('mmd-on');
+		setInterval(function () {
+			items[i].classList.remove('mmd-on');
+			i = (i + 1) % items.length;
+			items[i].classList.add('mmd-on');
+		}, 4000);
+	} catch (e) { /* nav kritiski */ }
+})();

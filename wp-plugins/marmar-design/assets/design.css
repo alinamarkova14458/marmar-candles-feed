@@ -424,3 +424,12 @@ body.mmd-has-sticky .mmd-wa { bottom: 84px; }
 /* Poga «uz augšu» (#fab-stt, qa-fixes) virs WhatsApp arī produkta lapā ar lipīgo joslu (16.11.2026) */
 body.mmd-has-sticky #fab-stt { bottom: 150px !important; }
 @media (max-width: 689px) { body.mmd-has-sticky #fab-stt { bottom: 146px !important; } }
+
+/* Augšējā josla telefonā: pa vienam tekstam, mainās ik pēc 4 s (agrāk nesaietilpa un malas bija nogrieztas) — 16.11.2026 */
+@media (max-width: 689px) {
+	.mmd-topbar.mmd-rot { justify-content: center; overflow: hidden; }
+	.mmd-topbar.mmd-rot > span { display: none !important; }
+	.mmd-topbar.mmd-rot > span.mmd-on { display: inline !important; animation: mmdTopIn .45s ease; }
+}
+@keyframes mmdTopIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .mmd-topbar.mmd-rot > span.mmd-on { animation: none; } }
