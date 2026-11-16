@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.29
+ * Version:           1.9.30
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -146,6 +146,7 @@ final class MarMar_QA_Fixes {
 		add_filter( 'woocommerce_email_enabled_customer_on_hold_order', array( __CLASS__, 'no_onhold_mail_paysera' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'season_eta_js' ), 41 );
 		add_action( 'woocommerce_email_before_order_table', array( __CLASS__, 'season_email_note' ), 5, 4 );
+		add_action( 'woocommerce_email_before_order_table', array( __CLASS__, 'tracking_in_completed' ), 6, 4 );
 		add_filter( 'rank_math/frontend/title', array( __CLASS__, 'title_404' ), 20 );
 		add_filter( 'pre_get_document_title', array( __CLASS__, 'title_404' ), 20 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'checkout_i18n' ), 100 );
@@ -389,7 +390,64 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 		if ( 'woocommerce' === $domain && $translation === $text && isset( self::MAIL_LV[ $text ] ) ) {
 			return self::MAIL_LV[ $text ];
 		}
+		if ( 'woo-lithuaniapost' === $domain && isset( self::UNISEND_LV[ $text ] ) ) {
+			return self::UNISEND_LV[ $text ];
+		}
 		return $translation;
+	}
+
+	/* Unisend (woo-lithuaniapost) e-pasts «Your order has been sent» latviski (16.11.2026). */
+	const UNISEND_LV = array(
+		'Your order has been sent'  => 'Jūsu pasūtījums ir nosūtīts',
+		'Your order is on the way!' => 'Jūsu pasūtījums ir ceļā!',
+		'Order nr.'                 => 'Pasūtījuma nr.',
+		'Order date:'               => 'Pasūtījuma datums:',
+		'Tracking nr.'              => 'Sūtījuma nr.',
+		'TRACK PARCEL'              => 'SEKOT SŪTĪJUMAM',
+	);
+
+	/* Sūtījuma numurs un saite e-pastā «Pasūtījums izpildīts» (Unisend, Venipak). */
+	public static function tracking_in_completed( $order, $sent_to_admin, $plain_text, $email ) {
+		if ( $sent_to_admin || ! $email || 'customer_completed_order' !== $email->id || ! $order instanceof WC_Order ) {
+			return;
+		}
+		$nr = '';
+		$url = '';
+		$bc = trim( (string) $order->get_meta( '_woo_lithuaniapost_barcode' ) );
+		if ( $bc ) {
+			$nr  = $bc;
+			$url = 'https://www.post.lt/siuntu-sekimas?parcels=' . rawurlencode( $bc );
+		} else {
+			$vp = $order->get_meta( 'venipak_shipping_order_data' );
+			if ( is_string( $vp ) ) {
+				$vp = json_decode( $vp, true );
+			}
+			if ( is_array( $vp ) && ! empty( $vp['pack_numbers'][0] ) ) {
+				$nr  = (string) $vp['pack_numbers'][0];
+				$url = 'https://venipak.com/lv/tracking/track/' . rawurlencode( $nr ) . '/';
+			}
+		}
+		$unisend = false;
+		foreach ( $order->get_shipping_methods() as $m ) {
+			if ( 0 === strpos( $m->get_method_id(), 'woo_lithuaniapost' ) ) {
+				$unisend = true;
+			}
+		}
+		if ( ! $nr && ! $unisend ) {
+			return; // DPD, pašizņemšana u. c. — nekā nesolām
+		}
+		if ( $plain_text ) {
+			echo $nr ? "Sūtījuma nr.: $nr\nSekot sūtījumam: $url\n\n" : "Sūtījuma numuru atsūtīsim atsevišķā e-pastā, tiklīdz pakomātu sistēma to piešķirs.\n\n";
+			return;
+		}
+		if ( $nr ) {
+			echo '<div style="text-align:center;margin:0 0 24px;padding:16px;border:1px solid #f0e2dc;border-radius:12px;background:#FAF3F0">'
+				. '<p style="margin:0 0 12px">Sūtījuma nr.: <strong>' . esc_html( $nr ) . '</strong></p>'
+				. '<a href="' . esc_url( $url ) . '" style="display:inline-block;background:#B9605F;color:#fff;text-decoration:none;padding:12px 28px;border-radius:999px;font-weight:600">Sekot sūtījumam</a>'
+				. '</div>';
+		} else {
+			echo '<p>Sūtījuma numuru atsūtīsim atsevišķā e-pastā, tiklīdz pakomātu sistēma to piešķirs.</p>';
+		}
 	}
 
 	/* ---------------- Svētku termiņi un atvaļinājums (Alīnas lēmums 11.11.2026) ---------------- */
