@@ -443,7 +443,7 @@ a.mmd-added-b { flex: 0 0 auto; background: #B9605F; color: #fff !important; tex
 body.mmd-has-sticky .mmd-added { bottom: 84px; }
 @media (prefers-reduced-motion: reduce) { .mmd-added { transition: none; } }
 
-/* Telefonā: maza galvene noritinot + bez pogas «uz augšu» (16.11.2026) */
+/* Telefonā: maza galvene noritinot; poga «uz augšu» atpakaļ 17.11 (16.11.2026) */
 .mmd-mini { display: none; }
 @media (max-width: 999px) {
 	.mmd-mini { display: flex; align-items: center; gap: 4px; position: fixed; top: 0; left: 0; right: 0; z-index: 9995; height: 54px; padding: 0 8px; background: rgba(255,255,255,.97); box-shadow: 0 2px 12px rgba(115,83,96,.12); transform: translateY(-110%); transition: transform .25s ease; }
@@ -454,6 +454,6 @@ body.mmd-has-sticky .mmd-added { bottom: 84px; }
 	.mmd-mini-logo img { height: 26px; width: auto; max-width: 52vw; object-fit: contain; }
 	.mmd-mini-search { margin-left: auto; }
 	.mmd-mini-count { position: absolute; top: 4px; right: 2px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #B9605F; color: #fff; font-size: 11px; font-weight: 600; line-height: 18px; text-align: center; }
-	#fab-stt { display: none !important; }
 }
+@media (max-width: 600px) { body.admin-bar .mmd-mini { top: 0; } } /* WP admin josla telefonā aizritinās */
 @media (prefers-reduced-motion: reduce) { .mmd-mini { transition: none; } }
