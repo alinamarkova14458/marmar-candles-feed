@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Pieejams uzreiz
  * Description:       Gatavās sveces bez atsevišķām kartītēm: administratore atzīmē variantu un daudzumu → prece automātiski nonāk sadaļā «Pieejams uzreiz» ar plāksnīti; kad izpārdots — pazūd no sadaļas, bet paliek pārdošanā pēc pasūtījuma. Plāksnītes: «Pieejams uzreiz», «Populārs», «Dažādas krāsas».
- * Version:           1.3.9
+ * Version:           1.3.11
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -91,6 +91,19 @@ final class MarMar_Ready {
 		if ( ! $list ) {
 			return;
 		}
+		// Svečturi ir vienmēr (var izvēlēties ar vai bez) — sarakstā tos nerādām un apvienojam vienādas rindas.
+		$merged = array();
+		foreach ( $list as $r ) {
+			$parts = array_filter( array_map( 'trim', explode( '·', (string) $r['label'] ) ), function ( $x ) { return '' !== $x && false === mb_stripos( $x, 'svečtur' ); } );
+			$label = implode( ' · ', $parts );
+			$attrs = array_filter( (array) $r['attrs'], function ( $v ) { return false === mb_stripos( (string) $v, 'svečtur' ); } );
+			if ( isset( $merged[ $label ] ) ) {
+				$merged[ $label ]['q'] = max( $merged[ $label ]['q'], (int) $r['q'] );
+			} else {
+				$merged[ $label ] = array( 'label' => $label, 'attrs' => $attrs, 'q' => (int) $r['q'] );
+			}
+		}
+		$list = array_values( $merged );
 		echo '<div class="mmr-box"><div class="mmr-t">⚡ Pieejams uzreiz — ' . ( self::on_vacation() ? 'izsūtīsim 4. decembrī' : 'izsūtīsim 1–2 darba dienās' ) . '</div><div class="mmr-l">';
 		foreach ( $list as $r ) {
 			echo '<button type="button" class="mmr-i" data-attrs="' . esc_attr( wp_json_encode( $r['attrs'] ) ) . '">' . esc_html( ucfirst( mb_strtolower( (string) $r['label'] ) ) ) . ' <b>' . (int) $r['q'] . ' gab</b></button>';
@@ -207,15 +220,7 @@ final class MarMar_Ready {
 		}
 		$out = array();
 		if ( 'yes' === $product->get_meta( self::FLAG, true ) && (int) $product->get_meta( '_mm_ready_qty', true ) > 0 ) {
-			$list = (array) $product->get_meta( '_mm_ready_list', true );
-			if ( ! $product->is_type( 'variable' ) || ! $list ) {
-				$t = 'Pieejams uzreiz';
-			} elseif ( 1 === count( $list ) ) {
-				$first = explode( ' · ', (string) $list[0]['label'] );
-				$t     = 'Uzreiz: ' . $first[0];
-			} else {
-				$t = 'Uzreiz: ' . count( $list ) . ' varianti';
-			}
+			$t = 'Pieejams uzreiz'; // īsi, vienā rindā; kuri varianti — produkta lapā
 			$out[] = '<span class="mmb mmb-ready"><i class="mmb-dot"></i>' . esc_html( $t ) . '</span>';
 		}
 		if ( in_array( (int) $product->get_id(), self::bestsellers(), true ) ) {
@@ -310,7 +315,7 @@ final class MarMar_Ready {
 		echo '<style id="mm-ready-css">ul.products li.product{position:relative}.mmb-stack{position:absolute;top:12px;right:12px;z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:none}'
 			. '.mmb{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.93);color:#5a4a4a;font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;line-height:1;padding:7px 11px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);white-space:nowrap}'
 			. '.mmb-dot{width:7px;height:7px;border-radius:50%;background:#B85F5F;display:inline-block}.mmb-ready .mmb-dot{background:#3C9A5F}.mmb-pers .mmb-dot{background:#C8A46A}.mmb-ico{font-style:normal;font-size:12px;letter-spacing:0}'
-			. '.mmb-stack{left:12px}.mmb{max-width:100%;white-space:normal;text-align:right;line-height:1.25}@media(max-width:689px){.mmb{font-size:9.5px;letter-spacing:.06em;padding:6px 9px}}'
+			. '@media(max-width:689px){.mmb{font-size:9.5px;letter-spacing:.08em;padding:6px 9px}}'
 			. '.woocommerce .term-description{margin-top:48px;clear:both}'
 			. '.mmd-dots{display:flex;align-items:center;gap:5px;margin:6px 0 2px}.mmd-dots i{width:13px;height:13px;border-radius:50%;border:1px solid rgba(0,0,0,.12);box-shadow:inset 0 0 0 1.5px #fff}.mmd-dots span{font-size:11.5px;color:#8a7a7a;margin-left:2px}'
 			. '.mm-eta-line{font-size:12px;color:#8a7a7a;margin:2px 0 8px}.mm-eta-line.is-ready{color:#2f7d5b;font-weight:600}'

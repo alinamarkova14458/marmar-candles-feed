@@ -411,3 +411,16 @@ body.mmd-has-sticky .mmd-wa { bottom: 84px; }
 
 /* Foto, uz kurām var spiest (palielināt / atvērt kolekciju) */
 .woocommerce-product-gallery .flexy-item img, .mmh-hero img, .mmh-xmas img { cursor: pointer; }
+
+/* Produkta galerija telefonā: sīktēli vienā rindā ar ritināšanu, nevis milzīgs režģis (16.11.2026) */
+@media (max-width: 689px) {
+	body.mmd.single-product .flexy-pills { height: auto !important; max-height: none !important; }
+	body.mmd.single-product .flexy-pills > ol { display: flex !important; flex-wrap: nowrap !important; gap: 8px !important; overflow-x: auto !important; overflow-y: hidden; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; grid-template-columns: none !important; padding: 2px 0 6px !important; margin: 10px 0 0 !important; scrollbar-width: none; }
+	body.mmd.single-product .flexy-pills > ol::-webkit-scrollbar { display: none; }
+	body.mmd.single-product .flexy-pills > ol > li { flex: 0 0 62px !important; width: 62px !important; max-width: 62px !important; height: 62px !important; margin: 0 !important; scroll-snap-align: start; }
+	body.mmd.single-product .flexy-pills > ol > li .ct-media-container, body.mmd.single-product .flexy-pills > ol > li img { width: 62px !important; height: 62px !important; object-fit: cover; border-radius: 10px; }
+}
+
+/* Poga «uz augšu» (#fab-stt, qa-fixes) virs WhatsApp arī produkta lapā ar lipīgo joslu (16.11.2026) */
+body.mmd-has-sticky #fab-stt { bottom: 150px !important; }
+@media (max-width: 689px) { body.mmd-has-sticky #fab-stt { bottom: 146px !important; } }
