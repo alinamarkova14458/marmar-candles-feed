@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Speed
  * Description:       Ātruma uzlabojumi: galvenā attēla (LCP) priekšielāde, Montserrat no sava servera (nevis Google), produktu video ielādējas tikai pēc “play”; piegādes, CF7 un WPForms faili tikai tur, kur vajag.
- * Version:           1.3.2
+ * Version:           1.3.3
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -240,7 +240,7 @@ final class MarMar_Speed {
 			return $html;
 		}
 		$body = substr( $html, $head_end );
-		if ( ! preg_match( '~<img\b[^>]*\bfetchpriority=["\']high["\'][^>]*>~i', $body, $img, PREG_OFFSET_CAPTURE ) ) {
+		if ( ! self::find_lcp_img( $body, $img ) ) {
 			return $html;
 		}
 		$tag = $img[0][0];
@@ -294,11 +294,12 @@ final class MarMar_Speed {
 	private static function lazy_below_lcp( $html ) {
 		$head_end = stripos( $html, '</head>' );
 		$body     = substr( $html, $head_end );
-		if ( ! preg_match( '~<img\b[^>]*\bfetchpriority=["\']high["\'][^>]*>~i', $body, $m, PREG_OFFSET_CAPTURE ) ) {
+		if ( ! self::find_lcp_img( $body, $m ) ) {
 			return $html;
 		}
 		$start = $head_end + $m[0][1] + strlen( $m[0][0] );
-		$rest  = preg_replace_callback(
+		$rest  = self::outside_code(
+			substr( $html, $start ),
 			'~<img\b(?![^>]*\bloading=)(?![^>]*\bfetchpriority=["\']high)[^>]*>~i',
 			function ( $t ) {
 				$tag = $t[0];
@@ -306,8 +307,7 @@ final class MarMar_Speed {
 					$tag = preg_replace( '~^<img\b~i', '<img decoding="async"', $tag );
 				}
 				return preg_replace( '~^<img\b~i', '<img loading="lazy"', $tag );
-			},
-			substr( $html, $start )
+			}
 		);
 		return substr( $html, 0, $start ) . $rest;
 	}
@@ -348,6 +348,46 @@ final class MarMar_Speed {
 			. 'window.addEventListener("load",function(){setTimeout(go,5000)});'
 			. $loader . '})();</script>' . "\n";
 		return preg_replace( '~</body>~i', $js . '</body>', $html, 1 );
+	}
+
+	/** Pirmais <img fetchpriority="high"> ārpus skriptiem/stiliem; $m kā preg_match ar PREG_OFFSET_CAPTURE. */
+	private static function find_lcp_img( $body, &$m ) {
+		$parts = preg_split( '~(<(?:script|style|template|noscript|textarea)\b.*?</(?:script|style|template|noscript|textarea)\s*>)~is', $body, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_OFFSET_CAPTURE );
+		if ( ! is_array( $parts ) ) {
+			return false;
+		}
+		foreach ( $parts as $i => $part ) {
+			if ( 1 === $i % 2 ) {
+				continue; // koda bloks
+			}
+			if ( preg_match( '~<img\b[^>]*\bfetchpriority=["\']high["\'][^>]*>~i', $part[0], $x, PREG_OFFSET_CAPTURE ) ) {
+				$m = array( array( $x[0][0], $part[1] + $x[0][1] ) );
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * preg_replace_callback tikai ārpus <script>, <style>, <template>, <noscript>, <textarea>.
+	 * Skriptos <img …> mēdz būt JS/JSON virknēs — tur pievienotas pēdiņas salauztu kodu
+	 * ("Unexpected identifier 'lazy'").
+	 */
+	private static function outside_code( $html, $pattern, $callback ) {
+		$parts = preg_split( '~(<(script|style|template|noscript|textarea)\b.*?</\2\s*>)~is', $html, -1, PREG_SPLIT_DELIM_CAPTURE );
+		if ( ! is_array( $parts ) ) {
+			return $html; // regex kļūda (piem., backtrack limit) — labāk neko nemainīt
+		}
+		$out = '';
+		$n   = count( $parts );
+		for ( $i = 0; $i < $n; $i++ ) {
+			if ( 0 === $i % 3 ) {
+				$out .= preg_replace_callback( $pattern, $callback, $parts[ $i ] );
+			} elseif ( 1 === $i % 3 ) {
+				$out .= $parts[ $i ];
+			} // 2 — iekšējā grupa (taga nosaukums), izlaižam
+		}
+		return $out;
 	}
 
 	private static function attr( $tag, $name ) {
