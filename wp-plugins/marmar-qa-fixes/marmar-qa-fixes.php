@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.30
+ * Version:           1.9.31
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -147,6 +147,9 @@ final class MarMar_QA_Fixes {
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'season_eta_js' ), 41 );
 		add_action( 'woocommerce_email_before_order_table', array( __CLASS__, 'season_email_note' ), 5, 4 );
 		add_action( 'woocommerce_email_before_order_table', array( __CLASS__, 'tracking_in_completed' ), 6, 4 );
+		add_action( 'woo_lithuaniapost_send_tracking_email', array( __CLASS__, 'unisend_dup_start' ), 1 );
+		add_action( 'woo_lithuaniapost_send_tracking_email', array( __CLASS__, 'unisend_dup_end' ), 99 );
+		add_filter( 'pre_wp_mail', array( __CLASS__, 'unisend_dup_block' ), 10, 2 );
 		add_filter( 'rank_math/frontend/title', array( __CLASS__, 'title_404' ), 20 );
 		add_filter( 'pre_get_document_title', array( __CLASS__, 'title_404' ), 20 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'checkout_i18n' ), 100 );
@@ -406,6 +409,23 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 		'TRACK PARCEL'              => 'SEKOT SŪTĪJUMAM',
 	);
 
+	/* Unisend e-pastu nesūtām, ja numurs jau bija e-pastā «Pasūtījums izpildīts» (17.11.2026: klientiem nāca 2 e-pasti). */
+	private static $skip_unisend = false;
+
+	public static function unisend_dup_start( $order ) {
+		self::$skip_unisend = $order instanceof WC_Order
+			&& '' !== (string) $order->get_meta( '_marmar_tracking_in_mail' )
+			&& $order->get_meta( '_marmar_tracking_in_mail' ) === $order->get_meta( '_woo_lithuaniapost_barcode' );
+	}
+
+	public static function unisend_dup_end() {
+		self::$skip_unisend = false;
+	}
+
+	public static function unisend_dup_block( $null, $atts ) {
+		return self::$skip_unisend ? true : $null;
+	}
+
 	/* Sūtījuma numurs un saite e-pastā «Pasūtījums izpildīts» (Unisend, Venipak). */
 	public static function tracking_in_completed( $order, $sent_to_admin, $plain_text, $email ) {
 		if ( $sent_to_admin || ! $email || 'customer_completed_order' !== $email->id || ! $order instanceof WC_Order ) {
@@ -439,6 +459,10 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 		if ( $plain_text ) {
 			echo $nr ? "Sūtījuma nr.: $nr\nSekot sūtījumam: $url\n\n" : "Sūtījuma numuru atsūtīsim atsevišķā e-pastā, tiklīdz pakomātu sistēma to piešķirs.\n\n";
 			return;
+		}
+		if ( $nr && $bc ) {
+			$order->update_meta_data( '_marmar_tracking_in_mail', $bc );
+			$order->save_meta_data();
 		}
 		if ( $nr ) {
 			echo '<div style="text-align:center;margin:0 0 24px;padding:16px;border:1px solid #f0e2dc;border-radius:12px;background:#FAF3F0">'
