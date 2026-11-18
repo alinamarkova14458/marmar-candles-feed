@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.33
+ * Version:           1.9.34
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -49,7 +49,6 @@ final class MarMar_QA_Fixes {
 		'product/vannas-bumba-ar-svaigu-aromatu-1-gab' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
 		'product/vannas-bumba-ar-roza-limonades-smarzu-1-gab' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
 		'product/vannas-bumba-ar-kokosrieksta-aromatu-1-gab' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
-		'product/sojas-vaska-svecu-komplekts-vins-un-vina' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
 		'product/sojas-vaska-svece-bubble-love-ar-zelta-foliju' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
 		'product/sojas-vaska-svece-bubble-roza' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
 		'product/sniegavira-formas-dekorativa-svece' => '/lv/product-category/ziemassvetku-sveces/', // 14590 (18.11 sniegavīrs izņemts)
