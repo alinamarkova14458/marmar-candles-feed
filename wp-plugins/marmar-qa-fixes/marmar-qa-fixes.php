@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.34
+ * Version:           1.9.35
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -56,12 +56,6 @@ final class MarMar_QA_Fixes {
 		'product/kremkrasas-spiralveida-galda-svece' => '/lv/product-category/tortes-sveces/', // 22817 (15.11 galda sveces izņemtas)
 		'product/lavandas-spiralveida-galda-svece' => '/lv/product-category/tortes-sveces/', // 22785 (15.11 galda sveces izņemtas)
 		'product/dabiga-vaska-galda-svece-18-cm' => '/lv/product-category/tortes-sveces/', // 15444 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-sarkans-ar-zelta-foliju' => '/lv/product-category/tortes-sveces/', // 15443 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-foliju' => '/lv/product-category/tortes-sveces/', // 15442 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-balts-ar-zeltu' => '/lv/product-category/tortes-sveces/', // 15441 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-spidumiem' => '/lv/product-category/tortes-sveces/', // 15428 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-lavandas-ar-zeltu' => '/lv/product-category/tortes-sveces/', // 15210 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-gaisi-zils-ar-zeltu' => '/lv/product-category/tortes-sveces/', // 13397 (15.11 galda sveces izņemtas)
 		'product/dabiga-vaska-galda-svecu-komplekts-23cm' => '/lv/product-category/tortes-sveces/', // 22301 (15.11 galda sveces izņemtas)
 		'about-us' => '/lv/',
 		'product/spiralveida-galda-svece-ice-blue' => '/lv/product-category/tortes-sveces/', // 22816 (08.11 ассортимент)
@@ -387,7 +381,7 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 	public static function redirects() {
 		// Sadaļa «Galda sveces» izņemta (15.11.2026, Alīnas lēmums) — 301 uz «Interjera sveces».
 		// 18.11.2026: arī «Interjera sveces» un «Dizaina sveces» izņemtas — sortiments tikai tortēm + sezonā bumbas.
-		if ( function_exists( 'is_product_category' ) && is_product_category( array( 'galda-sveces', 'interjera-sveces', 'dizaina-sveces' ) ) ) {
+		if ( function_exists( 'is_product_category' ) && is_product_category( array( 'interjera-sveces', 'dizaina-sveces' ) ) ) {
 			wp_safe_redirect( home_url( '/lv/product-category/tortes-sveces/' ), 301 );
 			exit;
 		}
