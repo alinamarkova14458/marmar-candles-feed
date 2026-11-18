@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.37
+ * Version:           1.9.38
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -155,6 +155,7 @@ final class MarMar_QA_Fixes {
 	public static function init() {
 		add_action( 'template_redirect', array( __CLASS__, 'redirects' ), 1 );
 		add_filter( 'gettext', array( __CLASS__, 'gettext' ), 20, 3 );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'terms_i18n' ), 99 );
 		add_filter( 'woocommerce_email_enabled_customer_on_hold_order', array( __CLASS__, 'no_onhold_mail_paysera' ), 10, 2 );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'season_eta_js' ), 41 );
 		add_action( 'woocommerce_email_before_order_table', array( __CLASS__, 'season_email_note' ), 5, 4 );
@@ -410,6 +411,14 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 			return self::UNISEND_LV[ $text ];
 		}
 		return $translation;
+	}
+
+	/* Noformēšanas bloka kļūda par neatzīmētu noteikumu rūtiņu — latviski (18.11.2026, Paysera prasība). */
+	public static function terms_i18n() {
+		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+			return;
+		}
+		wp_add_inline_script( 'wp-i18n', 'wp.i18n.setLocaleData({"Please read and accept the terms and conditions.":["Lūdzu, atzīmējiet, ka piekrītat pirkuma noteikumiem un privātuma politikai."]},"woocommerce");', 'after' );
 	}
 
 	/* Unisend (woo-lithuaniapost) e-pasts «Your order has been sent» latviski (16.11.2026). */
