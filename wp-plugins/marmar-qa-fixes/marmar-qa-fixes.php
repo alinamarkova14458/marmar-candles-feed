@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.31
+ * Version:           1.9.32
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -27,6 +27,7 @@ final class MarMar_QA_Fixes {
 	);
 
 	const REDIRECTS = array(
+		'product/sniegavira-formas-dekorativa-svece' => '/lv/product-category/ziemassvetku-sveces/', // 14590 (18.11 sniegavīrs izņemts)
 		'product/dabiga-vaska-galda-svece-21cm' => '/lv/product-category/interjera-sveces/', // 22818 (15.11 galda sveces izņemtas)
 		'product/kremkrasas-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22817 (15.11 galda sveces izņemtas)
 		'product/lavandas-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22785 (15.11 galda sveces izņemtas)
