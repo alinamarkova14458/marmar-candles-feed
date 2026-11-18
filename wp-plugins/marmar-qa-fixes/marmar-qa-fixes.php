@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.35
+ * Version:           1.9.37
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -27,18 +27,11 @@ final class MarMar_QA_Fixes {
 	);
 
 	const REDIRECTS = array(
-		'product/ziemassvetku-svecu-davanu-komplekts' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
-		'product/lodveida-dekorativa-svece-davanu-iepakojuma-6-cm' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
-		'product/dekorativa-svece-vintage-kruzite-ar-apakstasiti' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
-		'product/sojas-vaska-svece-bez-aromata-200-ml' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
-		'product/aromatiska-sojas-vaska-svece-200-ml-ziemassvetkiem' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
-		'product/aromatiska-sojas-vaska-svece-karusela-kastite' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
 		'product/stavsvece-ar-smalku-fakturu-bruna' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
 		'product/ilgi-degosa-stavsvece-metra' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
 		'product/bubble-sojas-vaska-svecu-komplekts-maza-un-liela-izmera-2-gab' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
 		'product/dekorativas-formas-sojas-vaska-svecu-komplekts-lavandas' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
 		'product/dekorativas-formas-sojas-vaska-svecu-komplekts' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
-		'product/ziemassvetku-davanu-komplekts-dabiga-vaska-svecem' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
 		'product/davanu-karte-100-eur-vertiba' => '/lv/product/davanu-karte-20-eur-vertiba/', // 18.11 sortiments samazināts
 		'product/davanu-karte-50-eur-vertiba' => '/lv/product/davanu-karte-20-eur-vertiba/', // 18.11 sortiments samazināts
 		'product/davanu-karte-40-eur-vertiba' => '/lv/product/davanu-karte-20-eur-vertiba/', // 18.11 sortiments samazināts
