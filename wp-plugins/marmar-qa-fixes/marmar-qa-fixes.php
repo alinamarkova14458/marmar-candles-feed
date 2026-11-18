@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.32
+ * Version:           1.9.33
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -17,7 +17,7 @@ final class MarMar_QA_Fixes {
 		'shop/category/candle-making-supplies' => '/lv/shop-2/',
 		'shop/item/candle-making-supplies'     => '/lv/shop-2/',
 		'veikals/category/materiali-svecu'     => '/lv/shop-2/',
-		'shop/item/pillar-candles'             => '/lv/product-category/interjera-sveces/',
+		'shop/item/pillar-candles'             => '/lv/product-category/tortes-sveces/',
 		'shop/'                                => '/lv/shop-2/',
 		'veikals/'                             => '/lv/shop-2/',
 		'blog-2/'                              => '/lv/blogs/',
@@ -27,36 +27,61 @@ final class MarMar_QA_Fixes {
 	);
 
 	const REDIRECTS = array(
+		'product/ziemassvetku-svecu-davanu-komplekts' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
+		'product/lodveida-dekorativa-svece-davanu-iepakojuma-6-cm' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
+		'product/dekorativa-svece-vintage-kruzite-ar-apakstasiti' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
+		'product/sojas-vaska-svece-bez-aromata-200-ml' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
+		'product/aromatiska-sojas-vaska-svece-200-ml-ziemassvetkiem' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/aromatiska-sojas-vaska-svece-karusela-kastite' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
+		'product/stavsvece-ar-smalku-fakturu-bruna' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/ilgi-degosa-stavsvece-metra' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/bubble-sojas-vaska-svecu-komplekts-maza-un-liela-izmera-2-gab' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/dekorativas-formas-sojas-vaska-svecu-komplekts-lavandas' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/dekorativas-formas-sojas-vaska-svecu-komplekts' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/ziemassvetku-davanu-komplekts-dabiga-vaska-svecem' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
+		'product/davanu-karte-100-eur-vertiba' => '/lv/product/davanu-karte-20-eur-vertiba/', // 18.11 sortiments samazināts
+		'product/davanu-karte-50-eur-vertiba' => '/lv/product/davanu-karte-20-eur-vertiba/', // 18.11 sortiments samazināts
+		'product/davanu-karte-40-eur-vertiba' => '/lv/product/davanu-karte-20-eur-vertiba/', // 18.11 sortiments samazināts
+		'product/davanu-karte-30-eur-vertiba' => '/lv/product/davanu-karte-20-eur-vertiba/', // 18.11 sortiments samazināts
+		'product/puteklaina-roze-dabiga-vaska-stavsvece' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/rievota-dizaina-svece-no-dabiga-vaska-balta' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/ziemassvetku-svece-eglisu-bumbas-forma-tumsi-zals-ar-zelta-foliju' => '/lv/product-category/ziemassvetku-sveces/', // 18.11 sortiments samazināts
+		'product/vannas-bumba-ar-svaigu-aromatu-1-gab' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/vannas-bumba-ar-roza-limonades-smarzu-1-gab' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/vannas-bumba-ar-kokosrieksta-aromatu-1-gab' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/sojas-vaska-svecu-komplekts-vins-un-vina' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/sojas-vaska-svece-bubble-love-ar-zelta-foliju' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
+		'product/sojas-vaska-svece-bubble-roza' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
 		'product/sniegavira-formas-dekorativa-svece' => '/lv/product-category/ziemassvetku-sveces/', // 14590 (18.11 sniegavīrs izņemts)
-		'product/dabiga-vaska-galda-svece-21cm' => '/lv/product-category/interjera-sveces/', // 22818 (15.11 galda sveces izņemtas)
-		'product/kremkrasas-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22817 (15.11 galda sveces izņemtas)
-		'product/lavandas-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22785 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm' => '/lv/product-category/interjera-sveces/', // 15444 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-sarkans-ar-zelta-foliju' => '/lv/product-category/interjera-sveces/', // 15443 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-foliju' => '/lv/product-category/interjera-sveces/', // 15442 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-balts-ar-zeltu' => '/lv/product-category/interjera-sveces/', // 15441 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-spidumiem' => '/lv/product-category/interjera-sveces/', // 15428 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-lavandas-ar-zeltu' => '/lv/product-category/interjera-sveces/', // 15210 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-gaisi-zils-ar-zeltu' => '/lv/product-category/interjera-sveces/', // 13397 (15.11 galda sveces izņemtas)
-		'product/dabiga-vaska-galda-svecu-komplekts-23cm' => '/lv/product-category/interjera-sveces/', // 22301 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-21cm' => '/lv/product-category/tortes-sveces/', // 22818 (15.11 galda sveces izņemtas)
+		'product/kremkrasas-spiralveida-galda-svece' => '/lv/product-category/tortes-sveces/', // 22817 (15.11 galda sveces izņemtas)
+		'product/lavandas-spiralveida-galda-svece' => '/lv/product-category/tortes-sveces/', // 22785 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm' => '/lv/product-category/tortes-sveces/', // 15444 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-sarkans-ar-zelta-foliju' => '/lv/product-category/tortes-sveces/', // 15443 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-foliju' => '/lv/product-category/tortes-sveces/', // 15442 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-balts-ar-zeltu' => '/lv/product-category/tortes-sveces/', // 15441 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-spidumiem' => '/lv/product-category/tortes-sveces/', // 15428 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-lavandas-ar-zeltu' => '/lv/product-category/tortes-sveces/', // 15210 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-gaisi-zils-ar-zeltu' => '/lv/product-category/tortes-sveces/', // 13397 (15.11 galda sveces izņemtas)
+		'product/dabiga-vaska-galda-svecu-komplekts-23cm' => '/lv/product-category/tortes-sveces/', // 22301 (15.11 galda sveces izņemtas)
 		'about-us' => '/lv/',
-		'product/spiralveida-galda-svece-ice-blue' => '/lv/product-category/interjera-sveces/', // 22816 (08.11 ассортимент)
-		'product/gaisi-zala-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22784 (08.11 ассортимент)
-		'product/gaisi-roza-spiralveida-galda-svece' => '/lv/product-category/interjera-sveces/', // 22783 (08.11 ассортимент)
+		'product/spiralveida-galda-svece-ice-blue' => '/lv/product-category/tortes-sveces/', // 22816 (08.11 ассортимент)
+		'product/gaisi-zala-spiralveida-galda-svece' => '/lv/product-category/tortes-sveces/', // 22784 (08.11 ассортимент)
+		'product/gaisi-roza-spiralveida-galda-svece' => '/lv/product-category/tortes-sveces/', // 22783 (08.11 ассортимент)
 		'product/skaistumkopsanas-davanu-komplekts-ar-bubble-sveci-2' => '/lv/product-category/davanas/sveces-davanai/', // 22273 (08.11 ассортимент)
-		'product/dabiga-vaska-galda-svece-25-cm-bumbinas' => '/lv/product-category/interjera-sveces/', // 21906 (08.11 ассортимент)
-		'product/dabiga-vaska-galda-spiralveida-svece-18-cm-dazadas-krasas' => '/lv/product-category/interjera-sveces/', // 21429 (08.11 ассортимент)
-		'product/dabiga-vaska-stavsvece-burgundy-krasa' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 18828 (08.11 ассортимент)
-		'product/eleganta-roku-darba-stavsvece-puderroza' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 18827 (08.11 ассортимент)
-		'product/stavsvece-no-dabiga-vaska-dzeltena' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 18826 (08.11 ассортимент)
-		'product/dabiga-vaska-svece-ar-rievotu-dizainu-lavandas' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 18822 (08.11 ассортимент)
-		'product/dabiga-vaska-galda-svece-18-cm-rievota-gaisi-roza-ar-zeltu' => '/lv/product-category/interjera-sveces/', // 15209 (08.11 ассортимент)
-		'product/dabiga-vaska-peonijas-svece-dekorativa-zieda-formas-svece' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 11716 (08.11 ассортимент)
+		'product/dabiga-vaska-galda-svece-25-cm-bumbinas' => '/lv/product-category/tortes-sveces/', // 21906 (08.11 ассортимент)
+		'product/dabiga-vaska-galda-spiralveida-svece-18-cm-dazadas-krasas' => '/lv/product-category/tortes-sveces/', // 21429 (08.11 ассортимент)
+		'product/dabiga-vaska-stavsvece-burgundy-krasa' => '/lv/product-category/tortes-sveces/', // 18828 (08.11 ассортимент)
+		'product/eleganta-roku-darba-stavsvece-puderroza' => '/lv/product-category/tortes-sveces/', // 18827 (08.11 ассортимент)
+		'product/stavsvece-no-dabiga-vaska-dzeltena' => '/lv/product-category/tortes-sveces/', // 18826 (08.11 ассортимент)
+		'product/dabiga-vaska-svece-ar-rievotu-dizainu-lavandas' => '/lv/product-category/tortes-sveces/', // 18822 (08.11 ассортимент)
+		'product/dabiga-vaska-galda-svece-18-cm-rievota-gaisi-roza-ar-zeltu' => '/lv/product-category/tortes-sveces/', // 15209 (08.11 ассортимент)
+		'product/dabiga-vaska-peonijas-svece-dekorativa-zieda-formas-svece' => '/lv/product-category/tortes-sveces/', // 11716 (08.11 ассортимент)
 		'product/palo-santo-kocini-50g' => '/lv/product-category/davanas/sveces-davanai/', // 11530 (08.11 ассортимент)
 		'product/bubble-svecu-davanu-komplekts-ar-zelta-dekoru-3-gab-ar-serkociniem' => '/lv/product-category/davanas/sveces-davanai/', // 10991 (08.11 ассортимент)
 		'product/bubble-svecu-davanu-komplekts-ar-zelta-dekoru-4-gab-ar-serkociniem' => '/lv/product-category/davanas/sveces-davanai/', // 10987 (08.11 ассортимент)
-		'product/dekorativa-bubble-svece-minimalisma-interjera-svece' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 10977 (08.11 ассортимент)
-		'product/bubble-svece-ar-zelta-folijas-akcentiem' => '/lv/product-category/interjera-sveces/dizaina-sveces/', // 10956 (08.11 ассортимент)
+		'product/dekorativa-bubble-svece-minimalisma-interjera-svece' => '/lv/product-category/tortes-sveces/', // 10977 (08.11 ассортимент)
+		'product/bubble-svece-ar-zelta-folijas-akcentiem' => '/lv/product-category/tortes-sveces/', // 10956 (08.11 ассортимент)
 		'product/davanu-karte-100-eur-vertiba-2' => '/lv/product/davanu-karte-100-eur-vertiba/', // 19854 (08.11 ассортимент)
 		'product/davanu-karte-20-eur-vertiba-2' => '/lv/product/davanu-karte-20-eur-vertiba/', // 19855 (08.11 ассортимент)
 		'product/davanu-karte-20-eur-vertiba-3' => '/lv/product/davanu-karte-20-eur-vertiba/', // 19856 (08.11 ассортимент)
@@ -362,8 +387,9 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 
 	public static function redirects() {
 		// Sadaļa «Galda sveces» izņemta (15.11.2026, Alīnas lēmums) — 301 uz «Interjera sveces».
-		if ( function_exists( 'is_product_category' ) && is_product_category( 'galda-sveces' ) ) {
-			wp_safe_redirect( home_url( '/lv/product-category/interjera-sveces/' ), 301 );
+		// 18.11.2026: arī «Interjera sveces» un «Dizaina sveces» izņemtas — sortiments tikai tortēm + sezonā bumbas.
+		if ( function_exists( 'is_product_category' ) && is_product_category( array( 'galda-sveces', 'interjera-sveces', 'dizaina-sveces' ) ) ) {
+			wp_safe_redirect( home_url( '/lv/product-category/tortes-sveces/' ), 301 );
 			exit;
 		}
 		if ( ! is_404() ) {
