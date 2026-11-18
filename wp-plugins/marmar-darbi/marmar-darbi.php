@@ -2,7 +2,7 @@
 /**
  * Plugin Name: MarMar Darbi
  * Description: WooCommerce → «Ko izgatavot»: kas jāizgatavo un jānosūta — kopsavilkums pa precēm, krāsām un dizainiem + pasūtījumi pēc termiņa. Tikai administratoram, atjaunojas pati.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: MarMar Candles
  */
 defined( 'ABSPATH' ) || exit;
@@ -104,6 +104,9 @@ final class MarMar_Darbi {
 					}
 				}
 				$name    = $item->get_name();
+				// Variācijas (piem. bumbas pēc krāsas) grupējam zem viena produkta, lai redzams kopējais skaits.
+				$parent  = $item->get_variation_id() ? wc_get_product( $item->get_product_id() ) : null;
+				$group   = $parent ? $parent->get_name() : $name;
 				$variant = array();
 				foreach ( $meta as $k => $v ) {
 					if ( preg_match( '/krās|dizain|variant|svece|lentes|daudzums|personaliz/iu', $k ) ) {
@@ -112,11 +115,14 @@ final class MarMar_Darbi {
 				}
 				$vkey = $variant ? implode( ' · ', $variant ) : '—';
 				$st   = $o->get_status();
-				if ( ! isset( $sum[ $st ][ $name ][ $vkey ] ) ) {
-					$sum[ $st ][ $name ][ $vkey ] = array( 'qty' => 0, 'orders' => array() );
+				if ( '—' === $vkey && $group !== $name ) {
+					$vkey = trim( str_replace( $group, '', $name ), " -–" );
 				}
-				$sum[ $st ][ $name ][ $vkey ]['qty']     += $item->get_quantity();
-				$sum[ $st ][ $name ][ $vkey ]['orders'][] = '#' . $o->get_order_number();
+				if ( ! isset( $sum[ $st ][ $group ][ $vkey ] ) ) {
+					$sum[ $st ][ $group ][ $vkey ] = array( 'qty' => 0, 'orders' => array() );
+				}
+				$sum[ $st ][ $group ][ $vkey ]['qty']     += $item->get_quantity();
+				$sum[ $st ][ $group ][ $vkey ]['orders'][] = '#' . $o->get_order_number();
 				$items[] = array( 'qty' => $item->get_quantity(), 'name' => $name, 'meta' => $meta );
 			}
 			$deadline = $wish ? $wish : $due; // kāzām u.c. — klienta vēlamais saņemšanas datums
