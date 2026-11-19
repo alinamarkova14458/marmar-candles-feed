@@ -69,3 +69,11 @@ Built by `build_csv.py`, checked by `check_csv.py`. Times in the CSV are UTC (Ri
 Payhip pins per set: 05-pastel-christmas ×16, 14-moody-florals ×16, 15-vintage-christmas ×15, 17-cozy-winter-wonderland ×18, 25-new-years-eve ×22, 26-hanukkah ×17
 
 jalina.art pins per URL: `/tools/print-size-calculator/` ×11, `/tools/png-transparency-checker/` ×10, `/clipart-blurry-when-printed/` ×10, `/free-fonts-for-commercial-use/` ×10, `/christmas-gift-tags-printable/` ×10, `/png-not-transparent/` ×10, `/canva-font-pairings/` ×9, `/winter-wonderland-clipart/` ×9, `/my-art-sold-on-temu/` ×9, `/christmas-fonts-for-canva/` ×9, `/free-christmas-fonts/` ×9, `/new-year-fonts/` ×9, `/new-years-eve-clipart/` ×8, `/christmas-food-clipart/` ×8, `/christmas-digital-paper/` ×8, `/christmas-planner-stickers/` ×7, `/christmas-card-fonts/` ×7, `/hanukkah-clipart/` ×7, `/watercolor-christmas-clipart/` ×7, `/christmas-stocking-name-fonts/` ×6, `/winter-animal-clipart/` ×6, `/christmas-tumbler-wrap/` ×6, `/coquette-christmas-clipart/` ×6, `/lunar-new-year-clipart/` ×4, `/shop/cozy-winter-wonderland/` ×4, `/shop/new-years-eve/` ×3, `/shop/pastel-christmas/` ×3, `/shop/vintage-christmas/` ×3
+
+## Payhip-only version (Alina, 19.11.2026)
+Pinterest blocks every jalina.art link ("may lead to spam") since 10.11. All Metricool pins with jalina.art links for 19.11–02.12 (25) were moved to draft on 19.11.
+New files (built with `PAYHIP_ONLY=1 python3 build_csv.py`, checked with `PAYHIP_ONLY=1 python3 check_csv.py`):
+- `jalina-payhip-2026-11-20_12-02.csv` — 44 pins, 20.11–02.12, 2–4/day
+- `jalina-payhip-2026-12-03_12-18.csv` — 46 pins, 03.12–18.12, 2–4/day
+Only own sets → payhip.com/b/<code> (utm_campaign=own-payhip), board "Watercolor Birthday & Holiday Clipart"; 6 in-season sets; one link ≤1/day and ≤4 per 7 days. Images stay on jalina.art/pins/csv/ (images from jalina.art pass; the test pins on 17–18.11 worked).
+The original files with jalina.art article pins are kept for after the block is lifted (dates will need rebuilding).

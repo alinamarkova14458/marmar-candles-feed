@@ -40,7 +40,15 @@ EXISTING = {
 }
 
 
+PAYHIP_ONLY = os.environ.get('PAYHIP_ONLY') == '1'  # Alina 19.11: jalina.art blocked by Pinterest (spam) -> Payhip pins only
+if PAYHIP_ONLY:
+    EXISTING = {}  # all Metricool jalina.art pins 19.11-02.12 moved to draft on 19.11.2026
+    D0 = dt.date(2026, 11, 20)
+
+
 def jal_cap(day):
+    if PAYHIP_ONLY:
+        return 0
     return 3 if day == d(11, 19) else 5 if day <= d(11, 22) else 8
 
 
@@ -529,7 +537,9 @@ def build():
                 if vi is None:
                     continue
                 since = min((day - max(h)).days, 6) if h else 6
-                sc = w * since + rnd.random() * 0.01
+                if PAYHIP_ONLY and sum(1 for x in h if 0 <= (day - x).days < 7) >= 4:
+                    continue  # one Payhip link ≤4 times per 7 days, to avoid looking repetitive
+                sc = w * since * (0.05 if PAYHIP_ONLY and since < 2 else 1) + rnd.random() * 0.01
                 if not best or sc > best[0]:
                     best = (sc, sid, vi)
             if not best:
@@ -596,15 +606,16 @@ def build():
 
 def main():
     rows = build()
-    files = {'jalina-2026-11-19_12-02.csv': [r for r in rows if r['Publish date'] < SPLIT.isoformat()],
-             'jalina-2026-12-03_12-18.csv': [r for r in rows if r['Publish date'] >= SPLIT.isoformat()]}
+    pre = 'jalina-payhip-2026-11-20' if PAYHIP_ONLY else 'jalina-2026-11-19'
+    files = {pre + '_12-02.csv': [r for r in rows if r['Publish date'] < SPLIT.isoformat()],
+             pre.replace('11-20', '12-03').replace('11-19', '12-03') + '_12-18.csv': [r for r in rows if r['Publish date'] >= SPLIT.isoformat()]}
     for name, rs in files.items():
         with open(os.path.join(HERE, name), 'w', newline='', encoding='utf-8') as f:
             w = csv.DictWriter(f, fieldnames=COLS, extrasaction='ignore', lineterminator='\n')
             w.writeheader()
             w.writerows(rs)
         print(name, len(rs), 'rows')
-    json.dump(rows, open(os.path.join(HERE, 'plan.json'), 'w'), indent=1, ensure_ascii=False)
+    json.dump(rows, open(os.path.join(HERE, 'plan-payhip.json' if PAYHIP_ONLY else 'plan.json'), 'w'), indent=1, ensure_ascii=False)
     # PLAN.md
     by = {}
     for r in rows:
@@ -624,7 +635,7 @@ def main():
     L += ['', 'Payhip pins per set: ' + ', '.join(f'{k} ×{sum(1 for r in rows if r["_key"] == k)}' for k in SETS), '',
           'jalina.art pins per URL: ' + ', '.join(f'`{k}` ×{v}' for k, v in sorted(
               ((k, sum(1 for r in rows if r['_key'] == k)) for k in {r['_key'] for r in rows if r['_type'] != 'payhip'}), key=lambda x: -x[1]))]
-    open(os.path.join(HERE, 'PLAN-body.md'), 'w').write('\n'.join(L) + '\n')  # per-day table, pasted into PLAN.md
+    open(os.path.join(HERE, 'PLAN-payhip-body.md' if PAYHIP_ONLY else 'PLAN-body.md'), 'w').write('\n'.join(L) + '\n')  # per-day table, pasted into PLAN.md
 
 
 if __name__ == '__main__':
