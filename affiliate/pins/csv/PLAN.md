@@ -73,7 +73,7 @@ jalina.art pins per URL: `/tools/print-size-calculator/` ×11, `/tools/png-trans
 ## Payhip-only version (Alina, 19.11.2026)
 Pinterest blocks every jalina.art link ("may lead to spam") since 10.11. All Metricool pins with jalina.art links for 19.11–02.12 (25) were moved to draft on 19.11.
 New files (built with `PAYHIP_ONLY=1 python3 build_csv.py`, checked with `PAYHIP_ONLY=1 python3 check_csv.py`):
-- `jalina-payhip-2026-11-20_12-02.csv` — 44 pins, 20.11–02.12, 2–4/day
+- `jalina-payhip-2026-11-22_12-02.csv` — 37 pins, 22.11–02.12, 2–4/day (rebuilt 21.11 with PAYHIP_START=2026-11-22: the 20.11 file was never uploaded)
 - `jalina-payhip-2026-12-03_12-18.csv` — 46 pins, 03.12–18.12, 2–4/day
 Only own sets → payhip.com/b/<code> (utm_campaign=own-payhip), board "Watercolor Birthday & Holiday Clipart"; 6 in-season sets; one link ≤1/day and ≤4 per 7 days. Images stay on jalina.art/pins/csv/ (images from jalina.art pass; the test pins on 17–18.11 worked).
 The original files with jalina.art article pins are kept for after the block is lifted (dates will need rebuilding).

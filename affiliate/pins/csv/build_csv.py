@@ -43,7 +43,7 @@ EXISTING = {
 PAYHIP_ONLY = os.environ.get('PAYHIP_ONLY') == '1'  # Alina 19.11: jalina.art blocked by Pinterest (spam) -> Payhip pins only
 if PAYHIP_ONLY:
     EXISTING = {}  # all Metricool jalina.art pins 19.11-02.12 moved to draft on 19.11.2026
-    D0 = dt.date(2026, 11, 20)
+    D0 = dt.date.fromisoformat(os.environ.get('PAYHIP_START', '2026-11-20'))
 
 
 def jal_cap(day):
@@ -606,9 +606,9 @@ def build():
 
 def main():
     rows = build()
-    pre = 'jalina-payhip-2026-11-20' if PAYHIP_ONLY else 'jalina-2026-11-19'
+    pre = ('jalina-payhip-' + D0.isoformat()) if PAYHIP_ONLY else 'jalina-2026-11-19'
     files = {pre + '_12-02.csv': [r for r in rows if r['Publish date'] < SPLIT.isoformat()],
-             pre.replace('11-20', '12-03').replace('11-19', '12-03') + '_12-18.csv': [r for r in rows if r['Publish date'] >= SPLIT.isoformat()]}
+             ('jalina-payhip-2026-12-03' if PAYHIP_ONLY else 'jalina-2026-12-03') + '_12-18.csv': [r for r in rows if r['Publish date'] >= SPLIT.isoformat()]}
     for name, rs in files.items():
         with open(os.path.join(HERE, name), 'w', newline='', encoding='utf-8') as f:
             w = csv.DictWriter(f, fieldnames=COLS, extrasaction='ignore', lineterminator='\n')

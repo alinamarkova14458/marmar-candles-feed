@@ -4,21 +4,19 @@ Built by `build_csv.py`, checked by `check_csv.py`. Times in the CSV are UTC (Ri
 
 | Date | Metricool | CSV jalina.art | CSV Payhip | Total | jalina.art URLs in CSV (Riga time) |
 |---|---|---|---|---|---|
-| 20.11 | 0 | 0 | 4 | 4 | — |
-| 21.11 | 0 | 0 | 3 | 3 | — |
 | 22.11 | 0 | 0 | 4 | 4 | — |
 | 23.11 | 0 | 0 | 3 | 3 | — |
 | 24.11 | 0 | 0 | 4 | 4 | — |
 | 25.11 | 0 | 0 | 3 | 3 | — |
-| 26.11 | 0 | 0 | 2 | 2 | — |
+| 26.11 | 0 | 0 | 4 | 4 | — |
 | 27.11 | 0 | 0 | 3 | 3 | — |
-| 28.11 | 0 | 0 | 4 | 4 | — |
+| 28.11 | 0 | 0 | 2 | 2 | — |
 | 29.11 | 0 | 0 | 3 | 3 | — |
 | 30.11 | 0 | 0 | 4 | 4 | — |
 | 01.12 | 0 | 0 | 3 | 3 | — |
 | 02.12 | 0 | 0 | 4 | 4 | — |
 | 03.12 | 0 | 0 | 3 | 3 | — |
-| 04.12 | 0 | 0 | 3 | 3 | — |
+| 04.12 | 0 | 0 | 4 | 4 | — |
 | 05.12 | 0 | 0 | 3 | 3 | — |
 | 06.12 | 0 | 0 | 3 | 3 | — |
 | 07.12 | 0 | 0 | 3 | 3 | — |
@@ -28,12 +26,12 @@ Built by `build_csv.py`, checked by `check_csv.py`. Times in the CSV are UTC (Ri
 | 11.12 | 0 | 0 | 3 | 3 | — |
 | 12.12 | 0 | 0 | 4 | 4 | — |
 | 13.12 | 0 | 0 | 2 | 2 | — |
-| 14.12 | 0 | 0 | 2 | 2 | — |
+| 14.12 | 0 | 0 | 3 | 3 | — |
 | 15.12 | 0 | 0 | 3 | 3 | — |
-| 16.12 | 0 | 0 | 2 | 2 | — |
+| 16.12 | 0 | 0 | 1 | 1 | — |
 | 17.12 | 0 | 0 | 2 | 2 | — |
-| 18.12 | 0 | 0 | 2 | 2 | — |
+| 18.12 | 0 | 0 | 1 | 1 | — |
 
-Payhip pins per set: 05-pastel-christmas ×14, 14-moody-florals ×16, 15-vintage-christmas ×15, 17-cozy-winter-wonderland ×17, 25-new-years-eve ×15, 26-hanukkah ×13
+Payhip pins per set: 05-pastel-christmas ×13, 14-moody-florals ×15, 15-vintage-christmas ×14, 17-cozy-winter-wonderland ×15, 25-new-years-eve ×14, 26-hanukkah ×12
 
 jalina.art pins per URL: 
