@@ -77,3 +77,5 @@ New files (built with `PAYHIP_ONLY=1 python3 build_csv.py`, checked with `PAYHIP
 - `jalina-payhip-2026-12-03_12-18.csv` — 46 pins, 03.12–18.12, 2–4/day
 Only own sets → payhip.com/b/<code> (utm_campaign=own-payhip), board "Watercolor Birthday & Holiday Clipart"; 6 in-season sets; one link ≤1/day and ≤4 per 7 days. Images stay on jalina.art/pins/csv/ (images from jalina.art pass; the test pins on 17–18.11 worked).
 The original files with jalina.art article pins are kept for after the block is lifted (dates will need rebuilding).
+
+**22.11.2026:** Pinterest imported 18 of 34 rows of `jalina-payhip-2026-11-23_12-02.csv`; 16 were rejected with "Multiple rows with the same title" (Pinterest requires unique titles within a file). `fix_titles.py` rebuilt the rejected rows as `jalina-payhip-retry-2026-11-26_12-02.csv` (16) and rewrote file 2 (46) so all 80 titles are unique (also vs the 18 accepted). Pinterest's error file: `pinterest-errors-2026-11-23.csv`.
