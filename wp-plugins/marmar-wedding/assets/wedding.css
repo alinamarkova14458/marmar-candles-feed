@@ -1,5 +1,5 @@
 /* MarMar Wedding */
-.mmw { --mmw-accent: #c88a85; --mmw-dark: #a96f6a; --mmw-soft: #f8f2f1; --mmw-line: #eee3e1; --mmw-muted: #8a7f83;
+.mmw, .mmw-product { --mmw-accent: #c88a85; --mmw-dark: #a96f6a; --mmw-soft: #f8f2f1; --mmw-line: #eee3e1; --mmw-muted: #8a7f83;
 	margin: 0 0 24px; display: grid; gap: 22px; width: 100%; }
 .mmw-intro, .mmw-after { margin: 0; color: var(--mmw-muted); font-size: 14px; }
 .mmw-step { border: 0; margin: 0; padding: 0; min-width: 0; }
@@ -70,3 +70,31 @@
 .mmw-card-label { display: flex; align-items: center; gap: 8px; padding: 0 4px 2px; }
 .mmw-option-text { flex: 1; }
 .mmw-option-img { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; flex: 0 0 56px; }
+
+/* 1.3.0 — подписи, подсказка о цене, свадебные сроки, отзывы */
+.mmw-card-note { display: block; padding: 0 4px 4px; font-size: 12.5px; line-height: 1.35; color: var(--mmw-muted); }
+.mmw-next { margin: 10px 0 0; font-size: 14px; font-weight: 600; color: var(--mmw-dark); }
+.mmw-next:empty { display: none; }
+.mmw-ship { margin: 8px 0 0; padding: 8px 12px; border-radius: 10px; background: var(--mmw-soft); font-size: 13.5px; }
+/* Общие сроки магазина (5–7 дней) и срочный заказ к свадебным заказам не относятся. */
+.mmw-product .mmd-eta, .mmw-product .mmd-fast { display: none !important; }
+.mmw-terms { flex: 1 1 100%; list-style: none; margin: 14px 0 0; padding: 14px 16px; border: 1px solid var(--mmw-line); border-radius: 12px; background: #fff; display: grid; gap: 6px; font-size: 14px; }
+.mmw-terms li { position: relative; padding-left: 22px; }
+.mmw-terms li::before { content: "✓"; position: absolute; left: 0; color: var(--mmw-accent); font-weight: 700; }
+.mmw-ask { flex: 1 1 100%; margin: 10px 0 0; font-size: 14px; }
+.mmw-ask a { font-weight: 600; text-decoration: underline; }
+.mmw-reviews { margin: 22px 0 0; display: grid; gap: 10px; }
+.mmw-reviews-title { margin: 0; font-weight: 600; }
+.mmw-review { margin: 0; padding: 12px 16px; border: 0; border-left: 3px solid var(--mmw-accent); border-radius: 0 12px 12px 0; background: #fff; font-size: 14px; font-style: normal; line-height: 1.5; }
+/* Телефон: миниатюры галереи — одной прокручиваемой строкой, чтобы конструктор был ближе. */
+@media (max-width: 689px) {
+	.mmw-product .flexy-pills[data-type="thumbs"] ol { flex-wrap: nowrap !important; overflow-x: auto; scrollbar-width: none; }
+	.mmw-product .flexy-pills[data-type="thumbs"] ol::-webkit-scrollbar { display: none; }
+	.mmw-product .flexy-pills[data-type="thumbs"] li { flex: 0 0 22% !important; }
+}
+
+/* 1.4.0 — свечи для свадебного торта под конструктором */
+.mmw-cross { clear: both; margin: 40px 0 10px; }
+.mmw-cross-title { text-align: center; margin: 0 0 20px; }
+.mmw-cross-more { text-align: center; margin: 16px 0 0; }
+.mmw-cross-more a { font-weight: 600; text-decoration: underline; }
