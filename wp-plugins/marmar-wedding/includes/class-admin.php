@@ -16,13 +16,25 @@ class MarMar_Wedding_Admin {
 			array(
 				'id'          => MarMar_Wedding_Settings::META,
 				'label'       => 'Kāzu konstruktors',
-				'description' => 'Показать на странице товара свадебный конструктор (цены по количеству — в «Настройки → MarMar Wedding»).',
+				'description' => 'Показать на странице товара конструктор персонализированных свечей (цены по количеству — в «Настройки → MarMar Wedding»).',
+			)
+		);
+		woocommerce_wp_select(
+			array(
+				'id'          => MarMar_Wedding_Settings::PROFILE_META,
+				'label'       => 'Повод конструктора',
+				'options'     => MarMar_Wedding_Settings::profiles(),
+				'description' => 'Подписи полей, ленты и сроки для свадьбы, крестин или корпоративных подарков.',
 			)
 		);
 	}
 
 	public static function save_product( $product ) {
 		$product->update_meta_data( MarMar_Wedding_Settings::META, isset( $_POST[ MarMar_Wedding_Settings::META ] ) ? 'yes' : 'no' ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_POST[ MarMar_Wedding_Settings::PROFILE_META ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$p = sanitize_key( wp_unslash( $_POST[ MarMar_Wedding_Settings::PROFILE_META ] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+			$product->update_meta_data( MarMar_Wedding_Settings::PROFILE_META, array_key_exists( $p, MarMar_Wedding_Settings::profiles() ) ? $p : 'kazas' );
+		}
 	}
 
 	/** Ссылки на файлы пары под строкой заказа (только в админке). */

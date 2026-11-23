@@ -26,7 +26,11 @@ class MarMar_Wedding_Product {
 			return null;
 		}
 		$p = wc_get_product( get_queried_object_id() );
-		return ( $p && MarMar_Wedding_Settings::is_wedding( $p ) ) ? $p : null;
+		if ( $p && MarMar_Wedding_Settings::is_wedding( $p ) ) {
+			MarMar_Wedding_Settings::use_product( $p );
+			return $p;
+		}
+		return null;
 	}
 
 	public static function assets() {
@@ -124,6 +128,7 @@ class MarMar_Wedding_Product {
 		if ( ! $product || ! MarMar_Wedding_Settings::is_wedding( $product ) ) {
 			return;
 		}
+		MarMar_Wedding_Settings::use_product( $product );
 		$s      = MarMar_Wedding_Settings::all();
 		$types  = MarMar_Wedding_Settings::types();
 		$tiers  = MarMar_Wedding_Settings::tiers();
@@ -222,17 +227,17 @@ class MarMar_Wedding_Product {
 				</div>
 				<div class="mmw-pers-fields" data-for="tag sticker">
 					<p class="mmw-field">
-						<label for="mmw_names">Teksts (piem., vārdi)</label>
-						<input type="text" id="mmw_names" name="mmw_names" maxlength="80" placeholder="Anna &amp; Jānis" value="<?php echo esc_attr( $posted( 'mmw_names' ) ); ?>">
+						<label for="mmw_names"><?php echo esc_html( $s['name_label'] ); ?></label>
+						<input type="text" id="mmw_names" name="mmw_names" maxlength="80" placeholder="<?php echo esc_attr( $s['name_ph'] ); ?>" value="<?php echo esc_attr( $posted( 'mmw_names' ) ); ?>">
 					</p>
 					<p class="mmw-field">
-						<label for="mmw_text_date">Datums uz birkas/uzlīmes</label>
-						<input type="text" id="mmw_text_date" name="mmw_text_date" maxlength="40" placeholder="12.06.2027" value="<?php echo esc_attr( $posted( 'mmw_text_date' ) ); ?>">
+						<label for="mmw_text_date"><?php echo esc_html( $s['date2_label'] ); ?></label>
+						<input type="text" id="mmw_text_date" name="mmw_text_date" maxlength="40" data-copy="<?php echo 'korporativs' === MarMar_Wedding_Settings::profile() ? '0' : '1'; ?>" placeholder="<?php echo esc_attr( $s['date2_ph'] ); ?>" value="<?php echo esc_attr( $posted( 'mmw_text_date' ) ); ?>">
 					</p>
 				</div>
 				<div class="mmw-pers-fields" data-for="sticker">
 					<p class="mmw-field">
-						<span class="mmw-label">Ielūgums, gatavs dizains vai iedvesmas attēls</span>
+						<span class="mmw-label"><?php echo esc_html( $s['upload_label'] ); ?></span>
 						<span class="mmw-upload">
 							<input type="file" id="mmw_file" accept=".jpg,.jpeg,.png,.webp,.heic,.pdf" multiple>
 							<label for="mmw_file" class="mmw-upload-btn">＋ Pievienot failu</label>
@@ -247,7 +252,7 @@ class MarMar_Wedding_Product {
 			<fieldset class="mmw-step">
 				<legend><span class="mmw-n">5</span> Datumi un vēlmes</legend>
 				<p class="mmw-field">
-					<label for="mmw_wedding_date">Kāzu datums</label>
+					<label for="mmw_wedding_date"><?php echo esc_html( $s['event_label'] ); ?></label>
 					<input type="date" id="mmw_wedding_date" name="mmw_wedding_date" min="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" value="<?php echo esc_attr( $posted( 'mmw_wedding_date' ) ); ?>" required>
 				</p>
 				<p class="mmw-field">
@@ -286,6 +291,7 @@ class MarMar_Wedding_Product {
 		if ( ! $product || ! MarMar_Wedding_Settings::is_wedding( $product ) ) {
 			return;
 		}
+		MarMar_Wedding_Settings::use_product( $product );
 		$terms = MarMar_Wedding_Settings::list_of( 'terms' );
 		if ( $terms ) {
 			echo '<ul class="mmw-terms">';
@@ -296,7 +302,7 @@ class MarMar_Wedding_Product {
 		}
 		$wa = preg_replace( '/\D+/', '', (string) MarMar_Wedding_Settings::get( 'whatsapp' ) );
 		if ( $wa ) {
-			$text = 'Labdien! Man ir jautājums par kāzu svecēm viesiem.';
+			$text = (string) MarMar_Wedding_Settings::get( 'wa_text' );
 			echo '<p class="mmw-ask">Neesat pārliecināti? <a href="' . esc_url( 'https://wa.me/' . $wa . '?text=' . rawurlencode( $text ) ) . '" target="_blank" rel="noopener">Uzrakstiet mums WhatsApp</a> — atsūtīsim piemērus un palīdzēsim izvēlēties.</p>';
 		}
 	}
@@ -307,11 +313,12 @@ class MarMar_Wedding_Product {
 		if ( ! $product || ! MarMar_Wedding_Settings::is_wedding( $product ) ) {
 			return;
 		}
+		MarMar_Wedding_Settings::use_product( $product );
 		$reviews = MarMar_Wedding_Settings::list_of( 'reviews' );
 		if ( ! $reviews ) {
 			return;
 		}
-		echo '<div class="mmw-reviews"><p class="mmw-reviews-title">Ko saka līgavas, saņemot pasūtījumu</p>';
+		echo '<div class="mmw-reviews"><p class="mmw-reviews-title">' . esc_html( (string) MarMar_Wedding_Settings::get( 'reviews_title' ) ) . '</p>';
 		foreach ( $reviews as $r ) {
 			echo '<blockquote class="mmw-review">«' . esc_html( $r ) . '»</blockquote>';
 		}
@@ -350,7 +357,7 @@ class MarMar_Wedding_Product {
 		if ( false === strpos( $grid, 'product' ) ) {
 			return;
 		}
-		echo '<section class="mmw-cross"><h2 class="mmw-cross-title">Sveces kāzu tortei</h2>' . $grid; // phpcs:ignore WordPress.Security.EscapeOutput
+		echo '<section class="mmw-cross"><h2 class="mmw-cross-title">' . esc_html( (string) MarMar_Wedding_Settings::get( 'cross_title' ) ) . '</h2>' . $grid; // phpcs:ignore WordPress.Security.EscapeOutput
 		echo '<p class="mmw-cross-more"><a href="' . esc_url( home_url( '/product-category/tortes-sveces/' ) ) . '">Visas tortes sveces →</a></p></section>';
 	}
 }

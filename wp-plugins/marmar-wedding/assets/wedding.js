@@ -72,7 +72,7 @@
 
 	// Дату свадьбы подставляем в текст на бирке, если поле ещё пустое.
 	var wd = root.querySelector('#mmw_wedding_date'), td = root.querySelector('#mmw_text_date');
-	if (wd && td) {
+	if (wd && td && td.dataset.copy !== '0') {
 		wd.addEventListener('change', function () {
 			var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(wd.value);
 			if (m && (!td.value || td.dataset.auto === '1')) { td.value = m[3] + '.' + m[2] + '.' + m[1]; td.dataset.auto = '1'; }

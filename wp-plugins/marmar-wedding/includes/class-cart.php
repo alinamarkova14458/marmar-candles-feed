@@ -37,9 +37,10 @@ class MarMar_Wedding_Cart {
 		if ( ! MarMar_Wedding_Settings::is_wedding( $product_id ) ) {
 			return $passed;
 		}
+		MarMar_Wedding_Settings::use_product( $product_id );
 		$min = MarMar_Wedding_Settings::min_qty();
 		if ( (int) $qty < $min ) {
-			wc_add_notice( sprintf( 'Minimālais kāzu svecīšu daudzums ir %d gab.', $min ), 'error' );
+			wc_add_notice( sprintf( (string) MarMar_Wedding_Settings::get( 'min_msg' ), $min ), 'error' );
 			return false;
 		}
 		if ( ! in_array( sanitize_text_field( self::field( 'type' ) ), MarMar_Wedding_Settings::types(), true ) ) {
@@ -57,7 +58,7 @@ class MarMar_Wedding_Cart {
 		}
 		$date = sanitize_text_field( self::field( 'wedding_date' ) );
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) ) {
-			wc_add_notice( 'Lūdzu, norādiet kāzu datumu.', 'error' );
+			wc_add_notice( (string) MarMar_Wedding_Settings::get( 'date_err' ), 'error' );
 			return false;
 		}
 		return $passed;
@@ -67,6 +68,7 @@ class MarMar_Wedding_Cart {
 		if ( ! MarMar_Wedding_Settings::is_wedding( $product_id ) ) {
 			return $data;
 		}
+		MarMar_Wedding_Settings::use_product( $product_id );
 		$pers  = sanitize_key( self::field( 'pers' ) );
 		$pers  = array_key_exists( $pers, MarMar_Wedding_Settings::personalisations() ) ? $pers : 'none';
 		$files = array();
@@ -88,6 +90,7 @@ class MarMar_Wedding_Cart {
 			'delivery_date' => preg_match( '/^\d{4}-\d{2}-\d{2}$/', sanitize_text_field( self::field( 'delivery_date' ) ) ) ? sanitize_text_field( self::field( 'delivery_date' ) ) : '',
 			'comment'      => sanitize_textarea_field( self::field( 'comment' ) ),
 			'files'        => $files,
+			'profile'      => MarMar_Wedding_Settings::profile(),
 		);
 		$data['unique_key'] = md5( wp_json_encode( $data['marmar_wedding'] ) . microtime() ); // каждая конфигурация — отдельная строка корзины
 		return $data;
@@ -108,7 +111,18 @@ class MarMar_Wedding_Cart {
 		}
 	}
 
+	/** Подписи строк заказа для повода. */
+	private static function labels( $w ) {
+		MarMar_Wedding_Settings::set_profile( $w['profile'] ?? 'kazas' );
+		$l                 = self::LABELS;
+		$l['wedding_date'] = (string) MarMar_Wedding_Settings::get( 'event_label' );
+		$l['names']        = 'kazas' === MarMar_Wedding_Settings::profile() ? $l['names'] : 'Teksts';
+		$l['text_date']    = (string) MarMar_Wedding_Settings::get( 'date2_label' );
+		return $l;
+	}
+
 	private static function pretty( $w ) {
+		MarMar_Wedding_Settings::set_profile( $w['profile'] ?? 'kazas' );
 		$out = array(
 			'type'   => $w['type'],
 			'ribbon' => $w['ribbon'],
@@ -138,15 +152,16 @@ class MarMar_Wedding_Cart {
 		if ( empty( $item['marmar_wedding'] ) ) {
 			return $data;
 		}
+		$labels = self::labels( $item['marmar_wedding'] );
 		foreach ( self::pretty( $item['marmar_wedding'] ) as $k => $v ) {
-			$data[] = array( 'key' => self::LABELS[ $k ], 'value' => wp_trim_words( $v, 25 ) );
+			$data[] = array( 'key' => $labels[ $k ], 'value' => wp_trim_words( $v, 25 ) );
 		}
 		return $data;
 	}
 
 	public static function validate_update( $passed, $key, $values, $qty ) {
 		if ( ! empty( $values['marmar_wedding'] ) && (int) $qty < MarMar_Wedding_Settings::min_qty() && (int) $qty > 0 ) {
-			wc_add_notice( sprintf( 'Minimālais kāzu svecīšu daudzums ir %d gab.', MarMar_Wedding_Settings::min_qty() ), 'error' );
+			wc_add_notice( sprintf( 'Minimālais daudzums ir %d gab.', MarMar_Wedding_Settings::min_qty() ), 'error' );
 			return false;
 		}
 		return $passed;
@@ -160,7 +175,7 @@ class MarMar_Wedding_Cart {
 	public static function check_cart() {
 		foreach ( WC()->cart->get_cart() as $item ) {
 			if ( ! empty( $item['marmar_wedding'] ) && (int) $item['quantity'] < MarMar_Wedding_Settings::min_qty() ) {
-				wc_add_notice( sprintf( 'Minimālais kāzu svecīšu daudzums ir %d gab.', MarMar_Wedding_Settings::min_qty() ), 'error' );
+				wc_add_notice( sprintf( 'Minimālais daudzums ir %d gab.', MarMar_Wedding_Settings::min_qty() ), 'error' );
 			}
 		}
 	}
@@ -169,12 +184,13 @@ class MarMar_Wedding_Cart {
 		if ( empty( $values['marmar_wedding'] ) ) {
 			return;
 		}
-		$w = $values['marmar_wedding'];
+		$w      = $values['marmar_wedding'];
+		$labels = self::labels( $w );
 		foreach ( self::pretty( $w ) as $k => $v ) {
 			if ( 'files' === $k ) {
 				continue; // файлы в заказе показываются ссылками (MarMar_Wedding_Admin::order_files)
 			}
-			$item->add_meta_data( self::LABELS[ $k ], $v );
+			$item->add_meta_data( $labels[ $k ], $v );
 		}
 		$item->add_meta_data( '_marmar_wedding', $w );
 		foreach ( $w['files'] as $f ) {
