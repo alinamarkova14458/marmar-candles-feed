@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.13.12
+ * Version:           1.14.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.13.12';
+	const VER = '1.14.1';
 
 	/** Preces, kuras nerādām blokā “Bieži pērk kopā” (pakalpojumi, papildinājumi). */
 	const TOGETHER_EXCLUDE = array( 11691, 11024 ); // Dzintara putekļi, Individuālā dizaina izstrāde
@@ -28,6 +28,8 @@ final class MarMar_Design {
 		// Sīkdatņu josla (Blocksy) — kartīte zīmola krāsās, «Nē, paldies» kā saite (14.11.2026).
 		add_action( 'wp_footer', array( __CLASS__, 'cookie_banner' ), 999 );
 		add_filter( 'gettext', array( __CLASS__, 'blocksy_lv' ), 20, 3 );
+		// Dalīšanās pogas blogā (23.11.2026): bez ārējiem skriptiem.
+		add_filter( 'the_content', array( __CLASS__, 'share_buttons' ), 30 );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'theme_mod_header_placements', array( __CLASS__, 'one_logo' ), 20 );
 		add_action( 'woocommerce_before_add_to_cart_button', array( __CLASS__, 'express_checkbox' ), 30 );
@@ -258,6 +260,42 @@ final class MarMar_Design {
 
 	/** WhatsApp poga (aizstāj veco čatu). Produkta lapā ziņā jau ir preces nosaukums. */
 	const WHATSAPP = '37129710414';
+
+	/** Kopīgot rakstu: Facebook, WhatsApp, Pinterest, Messenger (telefonā — sistēmas dalīšanās), kopēt saiti. */
+	public static function share_buttons( $content ) {
+		if ( ! is_singular( 'post' ) || ! in_the_loop() || ! is_main_query() ) {
+			return $content;
+		}
+		$link  = get_permalink();
+		$link  = class_exists( 'MarMar_SEO' ) ? MarMar_SEO::lv_url( $link ) : $link;
+		$url   = rawurlencode( $link );
+		$title = rawurlencode( wp_strip_all_tags( get_the_title() ) );
+		$img   = rawurlencode( (string) get_the_post_thumbnail_url( null, 'large' ) );
+		$ic    = array(
+			'fb' => '<path d="M14 8h2V5h-2.5C10.9 5 10 6.6 10 8.7V11H8v3h2v7h3v-7h2.4l.6-3h-3V9c0-.6.3-1 1-1z" fill="currentColor"/>',
+			'wa' => '<path d="M12 3.5a8.4 8.4 0 0 0-7.2 12.8L3.7 20.5l4.3-1.1A8.4 8.4 0 1 0 12 3.5zm0 15.2c-1.3 0-2.6-.4-3.7-1l-.3-.2-2.5.7.7-2.4-.2-.3a6.8 6.8 0 1 1 6 3.2zm3.7-5.1c-.2-.1-1.2-.6-1.4-.7s-.3-.1-.5.1l-.6.8c-.1.1-.2.2-.4.1a5.6 5.6 0 0 1-2.8-2.4c-.2-.4.2-.4.6-1.2.1-.1 0-.3 0-.4l-.6-1.5c-.2-.4-.3-.3-.5-.3h-.4a.8.8 0 0 0-.6.3 2.4 2.4 0 0 0-.8 1.8 4.3 4.3 0 0 0 .9 2.2 9.6 9.6 0 0 0 3.7 3.3c1.4.6 1.9.6 2.6.5a2.2 2.2 0 0 0 1.4-1c.2-.5.2-.9.1-1z" fill="currentColor"/>',
+			'pin' => '<path d="M12 3a9 9 0 0 0-3.3 17.4c-.1-.7-.1-1.8 0-2.6l1.1-4.6s-.3-.6-.3-1.4c0-1.3.8-2.3 1.7-2.3.8 0 1.2.6 1.2 1.3 0 .8-.5 2-.8 3.1-.2.9.5 1.7 1.4 1.7 1.7 0 3-1.8 3-4.4 0-2.3-1.6-3.9-4-3.9a4.1 4.1 0 0 0-4.3 4.1c0 .8.3 1.7.7 2.2l.1.3-.3 1.1c0 .2-.2.2-.4.1-1.2-.6-2-2.4-2-3.8 0-3.1 2.3-6 6.6-6 3.5 0 6.2 2.5 6.2 5.8 0 3.4-2.2 6.2-5.2 6.2-1 0-2-.5-2.3-1.1l-.6 2.4c-.2.9-.9 2-1.3 2.7A9 9 0 1 0 12 3z" fill="currentColor"/>',
+			'ln' => '<path d="M10 14l4-4M8.5 11.5l-2 2a3 3 0 0 0 4.2 4.2l2-2M15.5 12.5l2-2a3 3 0 0 0-4.2-4.2l-2 2" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/>',
+			'sh' => '<path d="M12 4v11M8 8l4-4 4 4M6 13v5a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+		);
+		$svg = function ( $k ) use ( $ic ) {
+			return '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">' . $ic[ $k ] . '</svg>';
+		};
+		$links = array(
+			array( 'fb', 'Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' . $url ),
+			array( 'wa', 'WhatsApp', 'https://wa.me/?text=' . $title . '%20' . $url ),
+			array( 'pin', 'Pinterest', 'https://pinterest.com/pin/create/button/?url=' . $url . '&media=' . $img . '&description=' . $title ),
+		);
+		$h  = '<div class="mmd-share" role="group" aria-label="Dalīties"><span class="mmd-share-t">Patika raksts? Padalieties:</span>';
+		$h .= '<button type="button" class="mmd-share-b mmd-share-native" hidden aria-label="Dalīties">' . $svg( 'sh' ) . '<span>Dalīties</span></button>';
+		foreach ( $links as $l ) {
+			$h .= '<a class="mmd-share-b mmd-share-' . $l[0] . '" href="' . esc_url( $l[2] ) . '" target="_blank" rel="noopener nofollow" aria-label="' . esc_attr( $l[1] ) . '">' . $svg( $l[0] ) . '<span>' . esc_html( $l[1] ) . '</span></a>';
+		}
+		$h .= '<button type="button" class="mmd-share-b mmd-share-copy" aria-label="Kopēt saiti">' . $svg( 'ln' ) . '<span>Kopēt saiti</span></button></div>';
+		$h .= '<style>.mmd-share{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:32px 0 8px;padding:16px;border-radius:14px;background:#FAF3F0}.mmd-share-t{flex-basis:100%;font-size:14px;color:#735360;font-weight:600}.mmd-share-b{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid #e8d8d2;background:#fff;color:#504E4A;font-size:14px;line-height:1;text-decoration:none;cursor:pointer}.mmd-share-b:hover{border-color:#B9605F;color:#B9605F}.mmd-share-b[hidden]{display:none}.mmd-share-native{background:#B9605F;border-color:#B9605F;color:#fff}.mmd-share-native:hover{color:#fff}</style>';
+		$h .= '<script>(function(){var w=document.currentScript.previousElementSibling.previousElementSibling;var n=w.querySelector(".mmd-share-native");if(navigator.share&&matchMedia("(max-width:999px)").matches){n.hidden=false;n.addEventListener("click",function(){navigator.share({title:document.title,url:location.href}).catch(function(){});});}var c=w.querySelector(".mmd-share-copy");c.addEventListener("click",function(){var u=location.href;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){c.querySelector("span").textContent="Saite nokopēta ✓";setTimeout(function(){c.querySelector("span").textContent="Kopēt saiti";},2500);}).catch(function(){prompt("Kopējiet saiti:",u);});});})();</script>';
+		return $content . $h;
+	}
 
 	public static function cookie_banner() {
 		$flame = '<svg class="mm-ck-flame" viewBox="0 0 18 24" aria-hidden="true"><path d="M9 1C11 6 15 8 15 14a6 6 0 0 1-12 0c0-3 2-5 3-6 0 3 1 4 2 4C8 9 7 5 9 1z" fill="#D68684"/><path d="M9 11c1 2 3 3 3 5a3 3 0 0 1-6 0c0-1.5 1-2.5 1.5-3 .3 1 .8 1.5 1.5 1.5-.3-1.3-.5-2.3 0-3.5z" fill="#FAF3F0"/></svg>';
