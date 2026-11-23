@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.15.0
+ * Version:           1.15.1
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -33,6 +33,7 @@ final class MarMar_Design {
 		// Instagram plāksne (23.11.2026): [marmar_instagram] sākumlapā + paldies lapā.
 		add_shortcode( 'marmar_instagram', array( __CLASS__, 'ig_tile' ) );
 		add_action( 'woocommerce_thankyou', array( __CLASS__, 'ig_tile_echo' ), 30 );
+		add_action( 'blocksy:footer:before', array( __CLASS__, 'ig_footer' ) );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'theme_mod_header_placements', array( __CLASS__, 'one_logo' ), 20 );
 		add_action( 'woocommerce_before_add_to_cart_button', array( __CLASS__, 'express_checkbox' ), 30 );
@@ -302,6 +303,14 @@ final class MarMar_Design {
 
 	public static function ig_svg( $size = 24 ) {
 		return '<svg viewBox="0 0 24 24" width="' . (int) $size . '" height="' . (int) $size . '" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>';
+	}
+
+	/** Plāksne virs kājenes visās lapās (izņemot sākumlapu/paldies lapu, kur tā jau ir, un grozu/noformēšanu). */
+	public static function ig_footer() {
+		if ( is_front_page() || ( function_exists( 'is_cart' ) && ( is_cart() || is_checkout() ) ) ) {
+			return;
+		}
+		echo '<div class="mmd-ig-foot" style="padding:0 16px">' . self::ig_tile() . '</div>'; // phpcs:ignore
 	}
 
 	public static function ig_tile_echo() {
