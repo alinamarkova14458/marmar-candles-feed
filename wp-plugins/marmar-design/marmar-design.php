@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.14.1
+ * Version:           1.15.0
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -30,6 +30,9 @@ final class MarMar_Design {
 		add_filter( 'gettext', array( __CLASS__, 'blocksy_lv' ), 20, 3 );
 		// Dalīšanās pogas blogā (23.11.2026): bez ārējiem skriptiem.
 		add_filter( 'the_content', array( __CLASS__, 'share_buttons' ), 30 );
+		// Instagram plāksne (23.11.2026): [marmar_instagram] sākumlapā + paldies lapā.
+		add_shortcode( 'marmar_instagram', array( __CLASS__, 'ig_tile' ) );
+		add_action( 'woocommerce_thankyou', array( __CLASS__, 'ig_tile_echo' ), 30 );
 		add_filter( 'body_class', array( __CLASS__, 'body_class' ) );
 		add_filter( 'theme_mod_header_placements', array( __CLASS__, 'one_logo' ), 20 );
 		add_action( 'woocommerce_before_add_to_cart_button', array( __CLASS__, 'express_checkbox' ), 30 );
@@ -291,10 +294,36 @@ final class MarMar_Design {
 		foreach ( $links as $l ) {
 			$h .= '<a class="mmd-share-b mmd-share-' . $l[0] . '" href="' . esc_url( $l[2] ) . '" target="_blank" rel="noopener nofollow" aria-label="' . esc_attr( $l[1] ) . '">' . $svg( $l[0] ) . '<span>' . esc_html( $l[1] ) . '</span></a>';
 		}
-		$h .= '<button type="button" class="mmd-share-b mmd-share-copy" aria-label="Kopēt saiti">' . $svg( 'ln' ) . '<span>Kopēt saiti</span></button></div>';
-		$h .= '<style>.mmd-share{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:32px 0 8px;padding:16px;border-radius:14px;background:#FAF3F0}.mmd-share-t{flex-basis:100%;font-size:14px;color:#735360;font-weight:600}.mmd-share-b{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid #e8d8d2;background:#fff;color:#504E4A;font-size:14px;line-height:1;text-decoration:none;cursor:pointer}.mmd-share-b:hover{border-color:#B9605F;color:#B9605F}.mmd-share-b[hidden]{display:none}.mmd-share-native{background:#B9605F;border-color:#B9605F;color:#fff}.mmd-share-native:hover{color:#fff}</style>';
+		$h .= '<button type="button" class="mmd-share-b mmd-share-copy" aria-label="Kopēt saiti">' . $svg( 'ln' ) . '<span>Kopēt saiti</span></button><a class="mmd-share-ig" href="https://www.instagram.com/marmar.candles/" target="_blank" rel="noopener">' . self::ig_svg( 18 ) . '<span>Sekojiet mums Instagram → <b>@marmar.candles</b></span></a></div>';
+		$h .= '<style>.mmd-share{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:32px 0 8px;padding:16px;border-radius:14px;background:#FAF3F0}.mmd-share-t{flex-basis:100%;font-size:14px;color:#735360;font-weight:600}.mmd-share-b{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid #e8d8d2;background:#fff;color:#504E4A;font-size:14px;line-height:1;text-decoration:none;cursor:pointer}.mmd-share-b:hover{border-color:#B9605F;color:#B9605F}.mmd-share-b[hidden]{display:none}.mmd-share-native{background:#B9605F;border-color:#B9605F;color:#fff}.mmd-share-native:hover{color:#fff}.mmd-share-ig{flex-basis:100%;display:flex;align-items:center;gap:8px;margin-top:6px;padding-top:12px;border-top:1px solid #ecdcd6;color:#735360;font-size:14px;text-decoration:none}.mmd-share-ig:hover{color:#B9605F}</style>';
 		$h .= '<script>(function(){var w=document.currentScript.previousElementSibling.previousElementSibling;var n=w.querySelector(".mmd-share-native");if(navigator.share&&matchMedia("(max-width:999px)").matches){n.hidden=false;n.addEventListener("click",function(){navigator.share({title:document.title,url:location.href}).catch(function(){});});}var c=w.querySelector(".mmd-share-copy");c.addEventListener("click",function(){var u=location.href;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){c.querySelector("span").textContent="Saite nokopēta ✓";setTimeout(function(){c.querySelector("span").textContent="Kopēt saiti";},2500);}).catch(function(){prompt("Kopējiet saiti:",u);});});})();</script>';
 		return $content . $h;
+	}
+
+	public static function ig_svg( $size = 24 ) {
+		return '<svg viewBox="0 0 24 24" width="' . (int) $size . '" height="' . (int) $size . '" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>';
+	}
+
+	public static function ig_tile_echo() {
+		echo self::ig_tile(); // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+
+	/** Plāksne «Sekojiet mums Instagram» ar 3 produktu foto. */
+	public static function ig_tile() {
+		$imgs = '';
+		foreach ( array( 24565, 20440, 26097 ) as $pid ) {
+			$u = get_the_post_thumbnail_url( $pid, 'woocommerce_thumbnail' );
+			if ( $u ) {
+				$imgs .= '<img src="' . esc_url( $u ) . '" alt="" width="300" height="300" loading="lazy" decoding="async">';
+			}
+		}
+		$ig = 'https://www.instagram.com/marmar.candles/';
+		$h  = '<div class="mmd-ig"><a class="mmd-ig-pics" href="' . $ig . '" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">' . $imgs . '</a>';
+		$h .= '<div class="mmd-ig-txt"><span class="mmd-ig-ic">' . self::ig_svg( 28 ) . '</span><p class="mmd-ig-h">Sekojiet mums Instagram</p>';
+		$h .= '<p class="mmd-ig-p">Jaunas sveces, aizkulises no darbnīcas, idejas tortēm un konkursi — <b>@marmar.candles</b></p>';
+		$h .= '<a class="mmd-ig-btn" href="' . $ig . '" target="_blank" rel="noopener">Sekot Instagram →</a></div></div>';
+		$h .= '<style>.mmd-ig{display:flex;gap:24px;align-items:center;max-width:980px;margin:40px auto;padding:22px;border-radius:20px;background:#FAF3F0;box-sizing:border-box}.mmd-ig-pics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;flex:1 1 55%}.mmd-ig-pics img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:14px;display:block}.mmd-ig-txt{flex:1 1 45%;text-align:center}.mmd-ig-ic{color:#B9605F}.mmd-ig-h{font-family:Marcellus,serif;text-transform:uppercase;letter-spacing:.06em;font-size:22px;color:#735360;margin:6px 0 8px}.mmd-ig-p{font-size:15px;color:#504E4A;margin:0 0 16px}.mmd-ig-btn{display:inline-block;padding:12px 24px;border-radius:999px;background:#B9605F;color:#fff!important;text-decoration:none;font-weight:600}.mmd-ig-btn:hover{opacity:.9}@media(max-width:689px){.mmd-ig{flex-direction:column-reverse;gap:16px;margin:28px 0;padding:18px}.mmd-ig-pics{width:100%}}</style>';
+		return $h;
 	}
 
 	public static function cookie_banner() {
