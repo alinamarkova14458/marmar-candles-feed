@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.40
+ * Version:           1.9.41
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -27,7 +27,7 @@ final class MarMar_QA_Fixes {
 	);
 
 	const REDIRECTS = array(
-		'product/piparkuku-cilvecina-formas-svece' => '/lv/product-category/ziemassvetku-sveces/', // 19.11 figūriņas izņemtas
+		// 'product/piparkuku-cilvecina-formas-svece' — 24.11 atgriezta pārdošanā (Alina)
 		'product/ziemassvetku-svece-ziemelbrieza-forma' => '/lv/product-category/ziemassvetku-sveces/', // 19.11 figūriņas izņemtas
 		'product/ziemassvetku-eglites-formas-svece' => '/lv/product-category/ziemassvetku-sveces/', // 19.11 figūriņas izņemtas
 		'product/stavsvece-ar-smalku-fakturu-bruna' => '/lv/product-category/tortes-sveces/', // 18.11 sortiments samazināts
