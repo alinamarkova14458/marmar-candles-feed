@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Design {
 
-	const VER = '1.14.1';
+	const VER = '1.15.2';
 
 	/** Preces, kuras nerādām blokā “Bieži pērk kopā” (pakalpojumi, papildinājumi). */
 	const TOGETHER_EXCLUDE = array( 11691, 11024 ); // Dzintara putekļi, Individuālā dizaina izstrāde
