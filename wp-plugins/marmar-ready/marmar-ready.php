@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Pieejams uzreiz
  * Description:       Gatavās sveces bez atsevišķām kartītēm: administratore atzīmē variantu un daudzumu → prece automātiski nonāk sadaļā «Pieejams uzreiz» ar plāksnīti; kad izpārdots — pazūd no sadaļas, bet paliek pārdošanā pēc pasūtījuma. Plāksnītes: «Pieejams uzreiz», «Populārs», «Dažādas krāsas».
- * Version:           1.3.11
+ * Version:           1.3.12
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -304,6 +304,12 @@ final class MarMar_Ready {
 	public static function eta_line() {
 		global $product;
 		if ( ! $product instanceof WC_Product ) {
+			return;
+		}
+		// Personalizētās sveces (konstruktori): makets + ap 2 nedēļām, nevis 5–7 d. (24.11.2026).
+		$pid = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();
+		if ( '' !== (string) get_post_meta( $pid, '_marmar_wedding_profile', true ) || 25078 === (int) $pid || has_term( 'personalizetas-sveces', 'product_cat', $pid ) ) {
+			echo '<div class="mm-eta-line">Izgatavošana līdz 2 ned.</div>';
 			return;
 		}
 		echo self::is_ready_now( $product )

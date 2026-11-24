@@ -1,2 +1,2 @@
 # Job files from tools/site/jobs/ to run on the next push (one per line).
-corp3-cat.js
+deploy-ready.js
