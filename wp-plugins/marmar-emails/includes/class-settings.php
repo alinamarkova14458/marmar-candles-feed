@@ -71,7 +71,15 @@ class MarMar_Emails_Settings {
 		return array_values( array_unique( array_filter( $list ) ) );
 	}
 
+	/** Domains we never write to (payment provider test checkouts, 24.11.2026). */
+	const EXCLUDED_DOMAINS = array( 'paysera.lt', 'paysera.com', 'paysera.lv' );
+
 	public static function is_excluded( $email ) {
-		return in_array( strtolower( trim( $email ) ), self::excluded_emails(), true );
+		$email = strtolower( trim( $email ) );
+		$domain = substr( strrchr( $email, '@' ), 1 );
+		if ( $domain && in_array( $domain, self::EXCLUDED_DOMAINS, true ) ) {
+			return true;
+		}
+		return in_array( $email, self::excluded_emails(), true );
 	}
 }

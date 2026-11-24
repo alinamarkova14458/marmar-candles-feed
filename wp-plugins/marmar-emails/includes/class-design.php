@@ -10,11 +10,12 @@ defined( 'ABSPATH' ) || exit;
  */
 class MarMar_Emails_Design {
 
-	const LOGO = 'https://marmarcandles.com/wp-content/uploads/2026/04/marmar-candles-logo1-1.png';
+	const LOGO = 'https://marmarcandles.com/wp-content/uploads/2026/11/marmar-candles-logo-e-pasts.png'; // logo on a cream plate — readable in dark mode (24.11.2026)
+	const OLD_LOGO = 'https://marmarcandles.com/wp-content/uploads/2026/04/marmar-candles-logo1-1.png';
 
 	const SETTINGS = array(
 		'woocommerce_email_header_image'          => self::LOGO,
-		'woocommerce_email_header_image_width'    => '230',
+		'woocommerce_email_header_image_width'    => '250',
 		'woocommerce_email_header_alignment'      => 'center',
 		'woocommerce_email_base_color'            => '#B9605F',
 		'woocommerce_email_background_color'      => '#FAF3F0',
@@ -28,9 +29,17 @@ class MarMar_Emails_Design {
 
 	public static function init() {
 		add_filter( 'woocommerce_email_styles', array( __CLASS__, 'css' ), 99 );
+		add_action( 'admin_init', array( __CLASS__, 'upgrade_logo' ) );
 		add_action( 'admin_post_marmar_emails_design_apply', array( __CLASS__, 'apply' ) );
 		add_action( 'admin_post_marmar_emails_design_restore', array( __CLASS__, 'restore' ) );
 		add_action( 'admin_post_marmar_emails_test_all', array( __CLASS__, 'test_all' ) );
+	}
+
+	/** One-time switch of the e-mail header to the dark-mode friendly logo (only if the old logo is in use). */
+	public static function upgrade_logo() {
+		if ( get_option( 'woocommerce_email_header_image' ) === self::OLD_LOGO ) {
+			update_option( 'woocommerce_email_header_image', self::LOGO );
+		}
 	}
 
 	public static function css( $css ) {
@@ -38,7 +47,7 @@ class MarMar_Emails_Design {
 #wrapper{background-color:#FAF3F0!important;padding:28px 12px!important}
 #template_header_image,#template_header_image p,#template_header_image td{padding:4px 0 22px!important;text-align:center!important}
 #template_header_image img{margin:0 auto!important;display:inline-block!important}
-#template_header_image img{width:230px;max-width:70%;height:auto}
+#template_header_image img{width:250px;max-width:75%;height:auto}
 #template_container{background-color:#FFFFFF!important;border:1px solid #F0D9D6!important;border-radius:22px!important;box-shadow:none!important;overflow:hidden}
 #template_header{background-color:#FFFFFF!important;color:#735360!important;border-radius:22px 22px 0 0!important;border-bottom:0!important}
 #template_header_inner,#header_wrapper{padding:30px 30px 4px!important;text-align:center!important}
