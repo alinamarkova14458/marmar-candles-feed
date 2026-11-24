@@ -1,4 +1,4 @@
-// Deploy MarMar Design 1.15.2 (no «Bieži pērk kopā» on personalised constructors) and re-check width on phone.
+// Deploy MarMar Design 1.15.3 (gallery thumbnails never wider than the phone) and re-check width on phone.
 const login = require('../login'); const deploy = require('../deploy');
 const { chromium, devices } = require('playwright');
 (async () => { const { b, p, api } = await login();
