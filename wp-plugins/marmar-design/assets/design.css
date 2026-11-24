@@ -417,7 +417,9 @@ body.mmd-has-sticky .mmd-wa { bottom: 84px; }
 @media (max-width: 689px) {
 	body.mmd.single-product .woocommerce-product-gallery, body.mmd.single-product .ct-product-gallery-container { min-width: 0 !important; max-width: 100% !important; }
 	body.mmd.single-product .flexy-pills { height: auto !important; max-height: none !important; max-width: 100% !important; min-width: 0 !important; overflow: hidden; }
-	body.mmd.single-product .flexy-pills > ol { max-width: 100% !important; }
+	body.mmd.single-product .flexy-container { min-width: 0 !important; max-width: 100% !important; }
+	body.mmd.single-product .flexy-container > * { min-width: 0 !important; max-width: 100% !important; }
+	body.mmd.single-product .flexy-pills > ol { max-width: 100% !important; width: 100% !important; box-sizing: border-box; }
 	body.mmd.single-product .flexy-pills > ol { display: flex !important; flex-wrap: nowrap !important; gap: 8px !important; overflow-x: auto !important; overflow-y: hidden; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; grid-template-columns: none !important; padding: 2px 0 6px !important; margin: 10px 0 0 !important; scrollbar-width: none; }
 	body.mmd.single-product .flexy-pills > ol::-webkit-scrollbar { display: none; }
 	body.mmd.single-product .flexy-pills > ol > li { flex: 0 0 62px !important; width: 62px !important; max-width: 62px !important; height: 62px !important; margin: 0 !important; scroll-snap-align: start; }
