@@ -232,7 +232,7 @@ class MarMar_Wedding_Product {
 					</p>
 					<p class="mmw-field">
 						<label for="mmw_text_date"><?php echo esc_html( $s['date2_label'] ); ?></label>
-						<input type="text" id="mmw_text_date" name="mmw_text_date" maxlength="40" data-copy="<?php echo 'korporativs' === MarMar_Wedding_Settings::profile() ? '0' : '1'; ?>" placeholder="<?php echo esc_attr( $s['date2_ph'] ); ?>" value="<?php echo esc_attr( $posted( 'mmw_text_date' ) ); ?>">
+						<input type="text" id="mmw_text_date" name="mmw_text_date" maxlength="40" data-copy="<?php echo in_array( MarMar_Wedding_Settings::profile(), array( 'korporativs', 'dzimsanas' ), true ) ? '0' : '1'; ?>" placeholder="<?php echo esc_attr( $s['date2_ph'] ); ?>" value="<?php echo esc_attr( $posted( 'mmw_text_date' ) ); ?>">
 					</p>
 				</div>
 				<div class="mmw-pers-fields" data-for="sticker">
