@@ -10,7 +10,6 @@ _Страница обновляется сама при каждом запус
 
 | Когда (Рига) | Фото | Тип | Подпись | Статус |
 |---|---|---|---|---|
-| вт 24.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-bumbas-reel.mp4" width="90"> | рилс | Šī nav eglīšu bumba. Tā ir svece 🕯️ Katru leju pati un rotāju ar zelta foliju — 4 krāsas, ⌀ 6 cm, 9 €. Nāk ka… | ⏳ запланирован |
 | ср 25.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-vac-post.jpg" width="90"> | фото | Atvaļinājumā no 26.11 līdz 3.12 🕯 Arī svecīšu meistarei reizēm vajag atpūsties 😊 Pasūtījumus mājaslapā pieņem… | ⏳ запланирован |
 | чт 26.11 09:30 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-vac-story.jpg" width="90"> | сторис |  | ⏳ запланирован |
 | вс 29.11 12:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-atg-2.jpg" width="90"> | сторис |  | ⏳ запланирован |
@@ -47,6 +46,7 @@ _Страница обновляется сама при каждом запус
 
 | Когда (Рига) | Фото | Тип | Подпись | Статус |
 |---|---|---|---|---|
+| вт 24.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-bumbas-reel.mp4" width="90"> | рилс | Šī nav eglīšu bumba. Tā ir svece 🕯️ Katru leju pati un rotāju ar zelta foliju — 4 krāsas, ⌀ 6 cm, 9 €. Nāk ka… | ✅ [опубликован](https://www.instagram.com/reel/DgIVZH3jfCp/) |
 | пн 23.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-konditori-katalogs2-01.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-konditori-katalogs2-02.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-konditori-katalogs2-03.jpg" width="90"> +7 | карусель (10) | Torte un sveces vienuviet 🎂🕯 Mans konditoru katalogs aug! Šie meistari jau ir pievienojušies, un es par to ļo… | ✅ [опубликован](https://www.instagram.com/p/DgFwp7LFyY2/) |
 | пн 23.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-charity-st-a5.jpg" width="90"> | сторис |  | ✅ [опубликован](https://www.instagram.com/stories/marmar.candles/4036846969582759666) |
 | вс 22.11 18:00 | <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gift-1.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gift-2.jpg" width="90"> <img src="https://raw.githubusercontent.com/alinamarkova14458/marmar-candles-feed/master/social/instagram/media/mm-gift-3.jpg" width="90"> +2 | карусель (5) | Dāvanu ceļvedis 🎁 Nezini, ko dāvināt? Es savācu idejas — katram savu sveci: audzinātājai, kolēģei, mammai vai… | ✅ [опубликован](https://www.instagram.com/p/DgDL1vHIfHC/) |
