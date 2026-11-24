@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar QA labojumi
  * Description:       Testēšanā atrasto kļūdu labojumi: latviski teksti meklēšanā, 404 lapā un kases kļūdu paziņojumos; video galerijas faili tikai produktiem ar video; 301 no demo lapas «About Us»; grozs, kase un konts netiek iekļauti sitemap.
- * Version:           1.9.39
+ * Version:           1.9.40
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -676,6 +676,10 @@ if(document.readyState!=='loading')setTimeout(run,300);else document.addEventLis
 
 	/** WooCommerce e-pastu teksti, kam latviešu tulkojuma vēl nav (WC 9.8+ „email improvements"). */
 	const MAIL_LV = array(
+		// Grozs: prece mainīta pēc pievienošanas (24.11.2026 — bumbas sadalītas pa krāsām).
+		'%s has been removed from your cart because it has since been modified. You can add it back to your cart <a href="%s">here</a>.' => '%s mēs nedaudz atjauninājām, tāpēc tā vairs nav grozā. Lūdzu, pievienojiet to vēlreiz <a href="%s">šeit</a> — atvainojamies par neērtībām!',
+		'%1$s has been removed from your cart because it has since been modified. You can add it back to your cart <a href="%2$s">here</a>.' => '%1$s mēs nedaudz atjauninājām, tāpēc tā vairs nav grozā. Lūdzu, pievienojiet to vēlreiz <a href="%2$s">šeit</a> — atvainojamies par neērtībām!',
+		'%s has been removed from your cart because it can no longer be purchased. Please contact us if you need assistance.' => '%s vairs nav pieejama, tāpēc to izņēmām no groza. Ja nepieciešama palīdzība, rakstiet mums uz info@marmarcandles.lv.',
 		// Konts, parole (WooCommerce lv tulkojumā trūkst; pievienots 11.11.2026).
 		'This password reset key is for a different user account. Please log out and try again.' => 'Šī paroles atjaunošanas saite ir citam kontam. Lūdzu, izrakstieties un mēģiniet vēlreiz.',
 		'Please wait a moment before requesting another link to change your password.' => 'Lūdzu, pagaidiet brīdi, pirms pieprasāt jaunu paroles maiņas saiti.',
