@@ -1,0 +1,60 @@
+name: Site jobs (marmarcandles.com via GitHub)
+
+# Claude's cloud IPs are blocked by the hosting's Imunify360 bot protection,
+# so site changes run here instead. Claude edits tools/site/RUN (list of job
+# files from tools/site/jobs/) and pushes; this workflow runs them.
+# Job output can contain customer data and this repo is public, so the output
+# is encrypted (CMS, tools/site/result-cert.pem) before it is printed.
+on:
+  push:
+    branches: [claude/pensive-cannon-gfru3g]
+    paths: ['tools/site/RUN']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-jobs
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Save requested secrets (sealed-box encrypted values)
+        env:
+          GH_TOKEN: ${{ secrets.GH_SECRETS_PAT }}
+        run: |
+          set -euo pipefail
+          echo "== repo secrets public key (not secret) =="
+          gh api "repos/$GITHUB_REPOSITORY/actions/secrets/public-key"
+          echo
+          if [ -f tools/site/set-secrets.json ]; then
+            python3 - <<'EOF'
+          import json, subprocess, os
+          reqs = json.load(open('tools/site/set-secrets.json'))
+          for r in reqs:
+              subprocess.run(['gh', 'api', '-X', 'PUT', f"repos/{os.environ['GITHUB_REPOSITORY']}/actions/secrets/{r['name']}",
+                              '-f', f"encrypted_value={r['encrypted_value']}", '-f', f"key_id={r['key_id']}"], check=True)
+              print('secret saved:', r['name'])
+          EOF
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm i --no-save --no-audit --no-fund playwright@1.63.0
+          npx playwright install --with-deps chromium
+
+      - name: Run jobs
+        env:
+          WP_ADMIN_USER: ${{ secrets.WP_ADMIN_USER }}
+          WP_ADMIN_PASSWORD: ${{ secrets.WP_ADMIN_PASSWORD }}
+        run: bash tools/site/run.sh
