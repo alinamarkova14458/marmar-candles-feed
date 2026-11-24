@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Design
  * Description:       Jaunais MarMar Candles dizains virs Blocksy tēmas: krāsas, šrifti Marcellus + Figtree (no sava servera), pogas, liesmiņas, augšējā josla, produkta lapas termiņu bloks un lipīgā “Ielikt grozā” josla. Izslēdzot spraudni — atgriežas iepriekšējais izskats.
- * Version:           1.15.1
+ * Version:           1.15.2
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  */
@@ -148,7 +148,14 @@ final class MarMar_Design {
 		if ( ! $product ) {
 			return;
 		}
-		$key = 'mmd_together2_' . $product->get_id();
+		// Personalizētajiem konstruktoriem savs bloks (MarMar Wedding); tos arī neiesakām citur (24.11.2026).
+		$is_pers = function ( $id ) {
+			return has_term( 'personalizetas-sveces', 'product_cat', $id ) || '' !== (string) get_post_meta( $id, '_marmar_wedding_profile', true );
+		};
+		if ( $is_pers( $product->get_id() ) ) {
+			return;
+		}
+		$key = 'mmd_together3_' . $product->get_id();
 		$ids = get_transient( $key );
 		if ( ! is_array( $ids ) ) {
 			$ids = array_slice( array_values( array_diff( array_map( 'intval', $product->get_cross_sell_ids() ), self::TOGETHER_EXCLUDE ) ), 0, 3 );
@@ -166,7 +173,7 @@ final class MarMar_Design {
 						'return'       => 'ids',
 					)
 				);
-				$ids = array_slice( array_values( array_diff( array_merge( $ids, $more ), self::TOGETHER_EXCLUDE ) ), 0, 3 );
+				$ids = array_slice( array_values( array_filter( array_diff( array_merge( $ids, $more ), self::TOGETHER_EXCLUDE ), function ( $id ) use ( $is_pers ) { return ! $is_pers( $id ); } ) ), 0, 3 );
 			}
 			set_transient( $key, $ids, 12 * HOUR_IN_SECONDS );
 		}
