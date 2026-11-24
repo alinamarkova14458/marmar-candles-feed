@@ -61,18 +61,19 @@
 		var n = cartNumbers();
 		var total = parseInt(t.total_price, 10) / Math.pow(10, t.currency_minor_unit || 2);
 		var range = n && n.express ? C.estimateFast : C.estimate;
-		var html = C.i18n.total + ' <strong>' + money(total) + '</strong><span class="mmco-dot" aria-hidden="true">·</span>' + C.i18n.eta.replace('%s', range);
+		var html = C.i18n.total + ' <strong>' + money(total) + '</strong><span class="mmco-dot" aria-hidden="true">·</span>' + (C.personal ? C.i18n.etaPersonal : C.i18n.eta.replace('%s', range));
 		if (sum.innerHTML !== html) sum.innerHTML = html;
 	}
 	function updateEta() {
 		var n = cartNumbers();
 		var range = n && n.express ? C.estimateFast : C.estimate;
-		eta.innerHTML = '<span aria-hidden="true">🚚</span> <span><strong>' + C.i18n.eta.replace('%s', range) + '</strong> <small>' + C.i18n.etaNote + '</small></span>';
+		eta.innerHTML = C.personal ? '<span aria-hidden="true">🚚</span> <span><strong>' + C.i18n.etaPersonal + '</strong></span>' : '<span aria-hidden="true">🚚</span> <span><strong>' + C.i18n.eta.replace('%s', range) + '</strong> <small>' + C.i18n.etaNote + '</small></span>';
 	}
 	// Срочный заказ на оформлении (в корзине он уже есть через шорткод).
 	var fast = el('label', 'mmco-fast', '<input type="checkbox" class="mmco-fast-input"><span class="mmco-fast-text"><strong></strong><small></small></span>');
 	var fastInput = fast.querySelector('input');
 	var fastBusy = false;
+	if (C.personal) fast.style.display = 'none'; // personalizētām svecēm steidzams pasūtījums nav iespējams
 	fastInput.addEventListener('change', function () {
 		var api = window.wc && wc.blocksCheckout && wc.blocksCheckout.extensionCartUpdate;
 		if (!api || fastBusy) return;

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       MarMar Checkout
  * Description:       Аккуратная корзина и оформление: условия карточками вместо стены текста, срочный заказ над кнопкой «Tālāk», полоска до бесплатной доставки, ориентировочная дата получения, строка доверия у кнопки заказа, латышские переводы недостающих фраз WooCommerce.
- * Version:           1.4.7
+ * Version:           1.4.8
  * Author:            MarMar CANDLES
  * Requires PHP:      7.4
  * WC requires at least: 8.0
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class MarMar_Checkout {
 
-	const VERSION = '1.4.7';
+	const VERSION = '1.4.8';
 
 	/** Настройки (позже можно вынести в админку). */
 	public static function cfg() {
@@ -328,6 +328,20 @@ final class MarMar_Checkout {
 	}
 
 	/** @return array{from:string,to:string,express:bool} */
+	/** Vai grozā ir personalizētas sveces (konstruktors) — tām cits termiņš (24.11.2026). */
+	public static function cart_has_personal() {
+		if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+			return false;
+		}
+		foreach ( WC()->cart->get_cart() as $item ) {
+			$pid = (int) ( $item['product_id'] ?? 0 );
+			if ( ! empty( $item['marmar_wedding'] ) || '' !== (string) get_post_meta( $pid, '_marmar_wedding_profile', true ) || 25078 === $pid || has_term( 'personalizetas-sveces', 'product_cat', $pid ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static function estimate( $express ) {
 		$c    = self::cfg();
 		$make = $express ? $c['make_days_express'] : $c['make_days'];
@@ -400,6 +414,7 @@ final class MarMar_Checkout {
 				'feeName'     => $c['express_fee_name'],
 				'estimate'    => self::lv_range( $normal['from'], $normal['to'] ),
 				'estimateFast'=> self::lv_range( $fast['from'], $fast['to'] ),
+				'personal'    => self::cart_has_personal(),
 				'rating'      => $rating ? array( 'score' => number_format( round( $rating['rating'], 1 ), 1, ',', '' ), 'count' => (int) $rating['count'] ) : null,
 				'i18n'        => array(
 					'left'      => 'Vēl %s līdz bezmaksas piegādei',
@@ -407,6 +422,7 @@ final class MarMar_Checkout {
 					'free'      => 'Piegāde pakomātā — bez maksas! 🎉',
 					'eta'       => 'Saņemsiet ~%s',
 					'etaNote'   => 'pēc apmaksas saņemšanas',
+					'etaPersonal' => 'Makets 3 darba dienās, izgatavošana līdz 2 ned. pēc apstiprināšanas',
 					'handmade'  => 'Roku darbs Latvijā',
 					'total'     => 'Kopā apmaksai:',
 					'invoice'   => 'Apmaksa ar rēķinu',

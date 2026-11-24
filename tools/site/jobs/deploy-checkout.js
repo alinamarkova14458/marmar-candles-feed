@@ -1,0 +1,21 @@
+// Deploy MarMar Checkout 1.4.8 and test: personalised item in cart → checkout shows the 2-week text, no express.
+const login = require('../login'); const deploy = require('../deploy');
+(async () => { const { b, p, api } = await login();
+  await deploy(p, api, 'marmar-checkout', 'marmar-checkout.php');
+  await p.setViewportSize({ width: 412, height: 900 });
+  await p.goto('https://marmarcandles.com/lv/product/personalizetas-svecites-berna-dzimsanas-dienai/', { waitUntil: 'domcontentloaded', timeout: 90000 }); await p.waitForTimeout(3000);
+  await p.check('input[name=mmw_type] >> nth=1', { force: true });
+  await p.check('input[name=mmw_ribbon] >> nth=0', { force: true });
+  await p.check('input[name=mmw_pers][value=sticker]', { force: true }).catch(() => p.check('input[name=mmw_pers] >> nth=0', { force: true }));
+  await p.fill('#mmw_names', 'Kārlim');
+  await p.fill('#mmw_wedding_date', '2027-01-20').catch(() => {});
+  await p.fill('#mmw_text_date', '3').catch(() => {});
+  await p.click('button.single_add_to_cart_button'); await p.waitForTimeout(5000);
+  await p.goto('https://marmarcandles.com/lv/checkout/', { waitUntil: 'domcontentloaded', timeout: 90000 }); await p.waitForTimeout(8000);
+  console.log('items', await p.$$eval('.wc-block-components-order-summary-item__description, .wc-block-components-product-name', e => e.map(x => x.innerText.slice(0, 60)).join(' | ')).catch(() => '?'));
+  console.log('sum:', await p.$eval('.mmco-sum', e => e.innerText).catch(() => '-'));
+  console.log('eta:', await p.$eval('.mmco-eta', e => e.innerText).catch(() => '-'));
+  console.log('fast visible:', await p.$eval('.mmco-fast', e => getComputedStyle(e).display).catch(() => 'none/absent'));
+  await p.evaluate(async () => { const r = await fetch('/wp-json/wc/store/v1/cart', { credentials: 'include' }); const c = await r.json(); for (const it of c.items) { await fetch('/wp-json/wc/store/v1/cart/remove-item', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json', Nonce: r.headers.get('Nonce') }, body: JSON.stringify({ key: it.key }) }); } });
+  console.log('cart cleaned');
+  await b.close(); })();
