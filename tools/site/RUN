@@ -1,3 +1,2 @@
 # Job files from tools/site/jobs/ to run on the next push (one per line).
-check.js
-who-email.js
+email-logo.js
