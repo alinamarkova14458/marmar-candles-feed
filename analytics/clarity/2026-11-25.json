@@ -1,0 +1,689 @@
+{
+ "date": "2026-11-25",
+ "window_days": 3,
+ "total": {
+  "DeadClickCount": {
+   "sessionsCount": 233,
+   "sessionsWithMetricPercentage": 4.29,
+   "sessionsWithoutMetricPercentage": 95.71,
+   "pagesViews": 10,
+   "subTotal": 13
+  },
+  "ExcessiveScroll": {
+   "sessionsCount": 233,
+   "sessionsWithMetricPercentage": 0,
+   "sessionsWithoutMetricPercentage": 100,
+   "pagesViews": 0,
+   "subTotal": 0
+  },
+  "RageClickCount": {
+   "sessionsCount": 233,
+   "sessionsWithMetricPercentage": 0,
+   "sessionsWithoutMetricPercentage": 100,
+   "pagesViews": 0,
+   "subTotal": 0
+  },
+  "QuickbackClick": {
+   "sessionsCount": 233,
+   "sessionsWithMetricPercentage": 15.45,
+   "sessionsWithoutMetricPercentage": 84.55,
+   "pagesViews": 60,
+   "subTotal": 60
+  },
+  "ScriptErrorCount": {
+   "sessionsCount": 233,
+   "sessionsWithMetricPercentage": 4.72,
+   "sessionsWithoutMetricPercentage": 95.28,
+   "pagesViews": 11,
+   "subTotal": 12
+  },
+  "ErrorClickCount": {
+   "sessionsCount": 233,
+   "sessionsWithMetricPercentage": 0,
+   "sessionsWithoutMetricPercentage": 100,
+   "pagesViews": 0,
+   "subTotal": 0
+  },
+  "ScrollDepth": {
+   "averageScrollDepth": 48.61
+  },
+  "Traffic": {
+   "totalSessionCount": 233,
+   "totalBotSessionCount": 117,
+   "distinctUserCount": 195,
+   "pagesPerSessionPercentage": 1.648068669527897
+  },
+  "EngagementTime": {
+   "totalTime": 91,
+   "activeTime": 30
+  },
+  "Browser": {
+   "sessionsCount": 88
+  },
+  "Device": {
+   "sessionsCount": 187
+  },
+  "OS": {
+   "sessionsCount": 96
+  },
+  "Country": {
+   "sessionsCount": 220
+  },
+  "PageTitle": {
+   "sessionsCount": 81
+  },
+  "ReferrerUrl": {
+   "sessionsCount": 106
+  },
+  "PopularPages": {
+   "url": "https://marmarcandles.com/lv/product/ziemassvetku-bumbas-formas-svece/",
+   "visitsCount": 81
+  }
+ },
+ "device": {
+  "Mobile": {
+   "DeadClickCount": {
+    "sessionsCount": 187,
+    "sessionsWithMetricPercentage": 3.74,
+    "sessionsWithoutMetricPercentage": 96.26,
+    "pagesViews": 7,
+    "subTotal": 10
+   },
+   "ExcessiveScroll": {
+    "sessionsCount": 187,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "RageClickCount": {
+    "sessionsCount": 187,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "QuickbackClick": {
+    "sessionsCount": 187,
+    "sessionsWithMetricPercentage": 16.58,
+    "sessionsWithoutMetricPercentage": 83.42,
+    "pagesViews": 47,
+    "subTotal": 47
+   },
+   "ScriptErrorCount": {
+    "sessionsCount": 187,
+    "sessionsWithMetricPercentage": 5.88,
+    "sessionsWithoutMetricPercentage": 94.12,
+    "pagesViews": 11,
+    "subTotal": 12
+   },
+   "ErrorClickCount": {
+    "sessionsCount": 187,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "ScrollDepth": {
+    "averageScrollDepth": 46.51
+   },
+   "Traffic": {
+    "totalSessionCount": 187,
+    "totalBotSessionCount": 90,
+    "distinctUserCount": 152,
+    "pagesPerSessionPercentage": 1.5561497326203209
+   },
+   "EngagementTime": {
+    "totalTime": 87,
+    "activeTime": 23
+   }
+  },
+  "PC": {
+   "DeadClickCount": {
+    "sessionsCount": 46,
+    "sessionsWithMetricPercentage": 6.52,
+    "sessionsWithoutMetricPercentage": 93.48,
+    "pagesViews": 3,
+    "subTotal": 3
+   },
+   "ExcessiveScroll": {
+    "sessionsCount": 46,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "RageClickCount": {
+    "sessionsCount": 46,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "QuickbackClick": {
+    "sessionsCount": 46,
+    "sessionsWithMetricPercentage": 10.87,
+    "sessionsWithoutMetricPercentage": 89.13,
+    "pagesViews": 13,
+    "subTotal": 13
+   },
+   "ScriptErrorCount": {
+    "sessionsCount": 46,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "ErrorClickCount": {
+    "sessionsCount": 46,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "ScrollDepth": {
+    "averageScrollDepth": 55.17
+   },
+   "Traffic": {
+    "totalSessionCount": 46,
+    "totalBotSessionCount": 21,
+    "distinctUserCount": 43,
+    "pagesPerSessionPercentage": 2.0217391304347827
+   },
+   "EngagementTime": {
+    "totalTime": 111,
+    "activeTime": 56
+   }
+  },
+  "Other": {
+   "Traffic": {
+    "totalSessionCount": 0,
+    "totalBotSessionCount": 6,
+    "distinctUserCount": 0,
+    "pagesPerSessionPercentage": null
+   }
+  }
+ },
+ "pages": {
+  "/lv/product/ziemassvetku-bumbas-formas-svece/": {
+   "DeadClickCount": 2.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 6.0,
+   "ScriptErrorCount": 10.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 100.0,
+   "sessions": 81.0,
+   "bots": 19.0,
+   "active_s": 223.0
+  },
+  "/lv/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 9.0,
+   "ScriptErrorCount": 2.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 85.0,
+   "sessions": 38.0,
+   "bots": 21.0,
+   "active_s": 27.0
+  },
+  "/lv/product-category/ziemassvetku-sveces/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 9.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 100.0,
+   "sessions": 35.0,
+   "bots": 0.0,
+   "active_s": 61.0
+  },
+  "/lv/ziemassvetku-davanas-skolotajam/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 95.0,
+   "sessions": 17.0,
+   "bots": 0.0,
+   "active_s": 84.0
+  },
+  "/lv/product-category/sveces-pieejamas-uzreiz/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 2.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 60.4,
+   "sessions": 9.0,
+   "bots": 0.0,
+   "active_s": 75.0
+  },
+  "/lv/product-category/kuku-toperi/page/2/": {
+   "DeadClickCount": 2.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 7.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 47.7,
+   "sessions": 8.0,
+   "bots": 0.0,
+   "active_s": 15.0
+  },
+  "/lv/product-category/tortes-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 63.8,
+   "sessions": 7.0,
+   "bots": 4.0,
+   "active_s": 15.0
+  },
+  "/lv/product-category/personalizetas-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 59.8,
+   "sessions": 6.0,
+   "bots": 0.0,
+   "active_s": 10.0
+  },
+  "/lv/blogs/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 33.0,
+   "sessions": 6.0,
+   "bots": 0.0,
+   "active_s": 8.0
+  },
+  "/lv/product/serkocini-stikla-burcina/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 89.0,
+   "sessions": 5.0,
+   "bots": 0.0,
+   "active_s": 54.0
+  },
+  "/lv/product-category/interjera-sveces/galda-sveces/": {
+   "DeadClickCount": 3.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 2.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 93.0,
+   "sessions": 5.0,
+   "bots": 0.0,
+   "active_s": 50.0
+  },
+  "/lv/kontakti/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 76.4,
+   "sessions": 5.0,
+   "bots": 0.0,
+   "active_s": 13.0
+  },
+  "/lv/product-category/tortes-sveces/page/2/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 77.4,
+   "sessions": 5.0,
+   "bots": 0.0,
+   "active_s": 22.0
+  },
+  "/lv/cart/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 3.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 65.6,
+   "sessions": 5.0,
+   "bots": 1.0,
+   "active_s": 12.0
+  },
+  "/lv/product-category/tortes-sveces/page/3/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 73.0,
+   "sessions": 4.0,
+   "bots": 0.0,
+   "active_s": 12.0
+  },
+  "/lv/product/dekorativa-svece-vintage-kruzite-ar-apakstasiti/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 99.0,
+   "sessions": 4.0,
+   "bots": 0.0,
+   "active_s": 33.0
+  },
+  "/lv/product-category/kuku-toperi/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 76.2,
+   "sessions": 4.0,
+   "bots": 0.0,
+   "active_s": 17.0
+  },
+  "/lv/product/ziemassvetku-svecu-davanu-komplekts/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 43.3,
+   "sessions": 3.0,
+   "bots": 0.0,
+   "active_s": 171.0
+  },
+  "/lv/product/personalizetas-kazu-sveces-viesiem-izveidojiet-savas/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 52.0,
+   "sessions": 3.0,
+   "bots": 19.0,
+   "active_s": 30.0
+  },
+  "/en/product-category/sveces-pieejamas-uzreiz/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 40.7,
+   "sessions": 3.0,
+   "bots": 0.0,
+   "active_s": 15.0
+  },
+  "/lv/product/sojas-vaska-svece-bez-aromata-200-ml/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 61.5,
+   "sessions": 3.0,
+   "bots": 4.0,
+   "active_s": 22.0
+  },
+  "/lv/kazu-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 65.0,
+   "sessions": 3.0,
+   "bots": 1.0,
+   "active_s": 28.0
+  },
+  "/lv/product/korporativas-davanas-sveces-ar-logo/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 27.0,
+   "sessions": 3.0,
+   "bots": 10.0,
+   "active_s": 16.0
+  },
+  "/lv/product/dabiga-vaska-galda-svece-18-cm-rievota-balts-ar-zeltu/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 56.0,
+   "sessions": 3.0,
+   "bots": 0.0,
+   "active_s": 26.0
+  },
+  "/lv/apmaksa/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 94.7,
+   "sessions": 3.0,
+   "bots": 0.0,
+   "active_s": 9.0
+  },
+  "/lv/ziemassvetku-davanas-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 45.0,
+   "sessions": 3.0,
+   "bots": 0.0,
+   "active_s": 21.0
+  },
+  "/lv/product/dabiga-vaska-galda-svece-18-cm-rievota-melns-ar-zelta-foliju/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 52.5,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 4.0
+  },
+  "/en/product-category/tortes-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 14.0,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 10.0
+  },
+  "/lv/product-category/davanas/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 33.0,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 4.0
+  },
+  "/lv/product-category/davanas/sveces-davanai/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 56.0,
+   "sessions": 2.0,
+   "bots": 1.0,
+   "active_s": 15.0
+  },
+  "/lv/product/svecites-kukam-un-tortem-serkocins-10-cm/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 80.0,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 18.0
+  },
+  "/lv/konditori/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 74.0,
+   "sessions": 2.0,
+   "bots": 2.0,
+   "active_s": 28.0
+  },
+  "/lv/piegade/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 60.0,
+   "sessions": 2.0,
+   "bots": 1.0,
+   "active_s": 21.0
+  },
+  "/lv/product/lodveida-dekorativa-svece-davanu-iepakojuma-6-cm/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 30.0,
+   "sessions": 2.0,
+   "bots": 2.0,
+   "active_s": 44.0
+  },
+  "/lv/product/bento-svecu-veidne-20-svecem-2/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 72.0,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 1.0
+  },
+  "/lv/product-category/tortes-sveces/dzimsanas-dienas-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 56.0,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 17.0
+  },
+  "/en/product-category/ziemassvetku-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 2.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 52.7,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 31.0
+  },
+  "/en/product-category/tortes-sveces/ciparu-sveces/page/3/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 82.0,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 4.0
+  },
+  "/lv/product/aromatiska-sojas-vaska-svece-karusela-kastite/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 43.0,
+   "sessions": 2.0,
+   "bots": 4.0,
+   "active_s": 9.0
+  },
+  "/lv/product/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-3-2/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 19.0,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 7.0
+  }
+ }
+}
