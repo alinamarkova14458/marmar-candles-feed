@@ -1,0 +1,746 @@
+{
+ "date": "2026-11-27",
+ "window_days": 3,
+ "total": {
+  "DeadClickCount": {
+   "sessionsCount": 142,
+   "sessionsWithMetricPercentage": 9.15,
+   "sessionsWithoutMetricPercentage": 90.85,
+   "pagesViews": 13,
+   "subTotal": 15
+  },
+  "ExcessiveScroll": {
+   "sessionsCount": 142,
+   "sessionsWithMetricPercentage": 0,
+   "sessionsWithoutMetricPercentage": 100,
+   "pagesViews": 0,
+   "subTotal": 0
+  },
+  "RageClickCount": {
+   "sessionsCount": 142,
+   "sessionsWithMetricPercentage": 0,
+   "sessionsWithoutMetricPercentage": 100,
+   "pagesViews": 0,
+   "subTotal": 0
+  },
+  "QuickbackClick": {
+   "sessionsCount": 142,
+   "sessionsWithMetricPercentage": 16.2,
+   "sessionsWithoutMetricPercentage": 83.8,
+   "pagesViews": 32,
+   "subTotal": 32
+  },
+  "ScriptErrorCount": {
+   "sessionsCount": 142,
+   "sessionsWithMetricPercentage": 0.7,
+   "sessionsWithoutMetricPercentage": 99.3,
+   "pagesViews": 1,
+   "subTotal": 1
+  },
+  "ErrorClickCount": {
+   "sessionsCount": 142,
+   "sessionsWithMetricPercentage": 0,
+   "sessionsWithoutMetricPercentage": 100,
+   "pagesViews": 0,
+   "subTotal": 0
+  },
+  "ScrollDepth": {
+   "averageScrollDepth": 46.43
+  },
+  "Traffic": {
+   "totalSessionCount": 142,
+   "totalBotSessionCount": 101,
+   "distinctUserCount": 107,
+   "pagesPerSessionPercentage": 1.5422535211267605
+  },
+  "EngagementTime": {
+   "totalTime": 80,
+   "activeTime": 25
+  },
+  "Browser": {
+   "sessionsCount": 43
+  },
+  "Device": {
+   "sessionsCount": 89
+  },
+  "OS": {
+   "sessionsCount": 51
+  },
+  "Country": {
+   "sessionsCount": 122
+  },
+  "PageTitle": {
+   "sessionsCount": 22
+  },
+  "ReferrerUrl": {
+   "sessionsCount": 76
+  },
+  "PopularPages": {
+   "url": "https://marmarcandles.com/lv/",
+   "visitsCount": 21
+  }
+ },
+ "device": {
+  "Mobile": {
+   "DeadClickCount": {
+    "sessionsCount": 89,
+    "sessionsWithMetricPercentage": 7.87,
+    "sessionsWithoutMetricPercentage": 92.13,
+    "pagesViews": 7,
+    "subTotal": 9
+   },
+   "ExcessiveScroll": {
+    "sessionsCount": 89,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "RageClickCount": {
+    "sessionsCount": 89,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "QuickbackClick": {
+    "sessionsCount": 89,
+    "sessionsWithMetricPercentage": 21.35,
+    "sessionsWithoutMetricPercentage": 78.65,
+    "pagesViews": 26,
+    "subTotal": 26
+   },
+   "ScriptErrorCount": {
+    "sessionsCount": 89,
+    "sessionsWithMetricPercentage": 1.12,
+    "sessionsWithoutMetricPercentage": 98.88,
+    "pagesViews": 1,
+    "subTotal": 1
+   },
+   "ErrorClickCount": {
+    "sessionsCount": 89,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "ScrollDepth": {
+    "averageScrollDepth": 43.87
+   },
+   "Traffic": {
+    "totalSessionCount": 89,
+    "totalBotSessionCount": 81,
+    "distinctUserCount": 54,
+    "pagesPerSessionPercentage": 1.7303370786516854
+   },
+   "EngagementTime": {
+    "totalTime": 83,
+    "activeTime": 31
+   }
+  },
+  "Tablet": {
+   "DeadClickCount": {
+    "sessionsCount": 1,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "ExcessiveScroll": {
+    "sessionsCount": 1,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "RageClickCount": {
+    "sessionsCount": 1,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "QuickbackClick": {
+    "sessionsCount": 1,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "ScriptErrorCount": {
+    "sessionsCount": 1,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "ErrorClickCount": {
+    "sessionsCount": 1,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "ScrollDepth": {
+    "averageScrollDepth": 15
+   },
+   "Traffic": {
+    "totalSessionCount": 1,
+    "totalBotSessionCount": 0,
+    "distinctUserCount": 1,
+    "pagesPerSessionPercentage": 1
+   },
+   "EngagementTime": {
+    "totalTime": 2,
+    "activeTime": 1
+   }
+  },
+  "PC": {
+   "DeadClickCount": {
+    "sessionsCount": 52,
+    "sessionsWithMetricPercentage": 11.54,
+    "sessionsWithoutMetricPercentage": 88.46000000000001,
+    "pagesViews": 6,
+    "subTotal": 6
+   },
+   "ExcessiveScroll": {
+    "sessionsCount": 52,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "RageClickCount": {
+    "sessionsCount": 52,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "QuickbackClick": {
+    "sessionsCount": 52,
+    "sessionsWithMetricPercentage": 7.69,
+    "sessionsWithoutMetricPercentage": 92.31,
+    "pagesViews": 6,
+    "subTotal": 6
+   },
+   "ScriptErrorCount": {
+    "sessionsCount": 52,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "ErrorClickCount": {
+    "sessionsCount": 52,
+    "sessionsWithMetricPercentage": 0,
+    "sessionsWithoutMetricPercentage": 100,
+    "pagesViews": 0,
+    "subTotal": 0
+   },
+   "ScrollDepth": {
+    "averageScrollDepth": 53.05
+   },
+   "Traffic": {
+    "totalSessionCount": 52,
+    "totalBotSessionCount": 13,
+    "distinctUserCount": 52,
+    "pagesPerSessionPercentage": 1.2307692307692308
+   },
+   "EngagementTime": {
+    "totalTime": 75,
+    "activeTime": 16
+   }
+  },
+  "Other": {
+   "Traffic": {
+    "totalSessionCount": 0,
+    "totalBotSessionCount": 7,
+    "distinctUserCount": 0,
+    "pagesPerSessionPercentage": null
+   }
+  }
+ },
+ "pages": {
+  "/lv/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 5.0,
+   "ScriptErrorCount": 1.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 28.3,
+   "sessions": 21.0,
+   "bots": 17.0,
+   "active_s": 9.0
+  },
+  "/lv/product-category/ziemassvetku-sveces/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 2.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 47.5,
+   "sessions": 18.0,
+   "bots": 1.0,
+   "active_s": 13.0
+  },
+  "/lv/ziemassvetku-davanas-skolotajam/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 2.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 84.0,
+   "sessions": 16.0,
+   "bots": 0.0,
+   "active_s": 36.0
+  },
+  "/lv/product/ziemassvetku-bumbas-formas-svece/": {
+   "DeadClickCount": 2.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 57.8,
+   "sessions": 15.0,
+   "bots": 13.0,
+   "active_s": 33.0
+  },
+  "/lv/blogs/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 19.1,
+   "sessions": 12.0,
+   "bots": 0.0,
+   "active_s": 6.0
+  },
+  "/lv/product-category/kuku-toperi/page/2/": {
+   "DeadClickCount": 2.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 7.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 49.1,
+   "sessions": 11.0,
+   "bots": 0.0,
+   "active_s": 15.0
+  },
+  "/lv/product/mazula-menessvetku-ciparu-svecu-komplekts/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 42.3,
+   "sessions": 6.0,
+   "bots": 0.0,
+   "active_s": 44.0
+  },
+  "/lv/product-category/personalizetas-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 59.7,
+   "sessions": 5.0,
+   "bots": 0.0,
+   "active_s": 11.0
+  },
+  "/lv/product-category/sveces-pieejamas-uzreiz/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 58.2,
+   "sessions": 5.0,
+   "bots": 0.0,
+   "active_s": 9.0
+  },
+  "/lv/korporativas-ziemassvetku-davanas-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 88.0,
+   "sessions": 4.0,
+   "bots": 1.0,
+   "active_s": 31.0
+  },
+  "/lv/product-category/kuku-toperi/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 77.2,
+   "sessions": 4.0,
+   "bots": 0.0,
+   "active_s": 17.0
+  },
+  "/lv/product-category/tortes-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 73.0,
+   "sessions": 4.0,
+   "bots": 3.0,
+   "active_s": 27.0
+  },
+  "/lv/product/personalizetas-kazu-sveces-viesiem-izveidojiet-savas/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 52.0,
+   "sessions": 4.0,
+   "bots": 19.0,
+   "active_s": 30.0
+  },
+  "/lv/product/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-3-2/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 52.2,
+   "sessions": 4.0,
+   "bots": 0.0,
+   "active_s": 23.0
+  },
+  "/lv/product/korporativas-davanas-sveces-ar-logo/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 27.0,
+   "sessions": 3.0,
+   "bots": 10.0,
+   "active_s": 16.0
+  },
+  "/lv/product-category/tortes-sveces/ciparu-sveces/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 53.3,
+   "sessions": 3.0,
+   "bots": 9.0,
+   "active_s": 15.0
+  },
+  "/lv/product-category/interjera-sveces/galda-sveces/": {
+   "DeadClickCount": 3.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 52.5,
+   "sessions": 3.0,
+   "bots": 0.0,
+   "active_s": 16.0
+  },
+  "/lv/kontakti/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 69.3,
+   "sessions": 3.0,
+   "bots": 0.0,
+   "active_s": 10.0
+  },
+  "/en/product-category/sveces-pieejamas-uzreiz/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 40.7,
+   "sessions": 3.0,
+   "bots": 0.0,
+   "active_s": 15.0
+  },
+  "/lv/cart/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 56.7,
+   "sessions": 3.0,
+   "bots": 1.0,
+   "active_s": 20.0
+  },
+  "/lv/product-category/tortes-sveces/page/2/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 64.0,
+   "sessions": 3.0,
+   "bots": 0.0,
+   "active_s": 27.0
+  },
+  "/lv/product/ziemassvetku-davanu-komplekts-dabiga-vaska-svecem/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 30.0,
+   "sessions": 2.0,
+   "bots": 1.0,
+   "active_s": 31.0
+  },
+  "/en/product/personalizetas-kazu-sveces-viesiem-izveidojiet-savas/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 50.0,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 56.0
+  },
+  "/lv/product-category/davanas/sveces-davanai/": {
+   "DeadClickCount": 1.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 83.0,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 18.0
+  },
+  "/lv/product/pirma-gada-ciparu-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 25.0,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 15.0
+  },
+  "/lv/product-category/tortes-sveces/page/3/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 50.5,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 11.0
+  },
+  "/en/kazu-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 9.7,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 5.0
+  },
+  "/lv/product-category/tortes-sveces/ciparu-sveces/page/2/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 75.7,
+   "sessions": 2.0,
+   "bots": 0.0,
+   "active_s": 27.0
+  },
+  "/lv/product-category/materiali-svecu-izgatavosanai/svecu-veidnes/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 69.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 8.0
+  },
+  "/lv/product/spiralveida-bisu-vaska-kuku-svece/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 73.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 81.0
+  },
+  "/lv/product/piparkuku-cilvecina-formas-svece/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 34.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 8.0
+  },
+  "/lv/checkout/order-received/28395/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 46.0,
+   "sessions": 1.0,
+   "bots": 1.0,
+   "active_s": 20.0
+  },
+  "/lv/adventes-ziemassvetku-galda-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 94.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 39.0
+  },
+  "/lv/product/melnas-dabiga-vaska-sveces-ar-foliju-8-cm/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 48.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 3.0
+  },
+  "/lv/personalizetas-sveces-kristibu-viesiem/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 93.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 39.0
+  },
+  "/lv/bernu-dzimsanas-dienas-torte-idejas-pa-vecumiem/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 86.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 63.0
+  },
+  "/lv/product/dabiga-vaska-kuku-toperis-svecite-ar-ciparu-6/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 1.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 39.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 14.0
+  },
+  "/en/dzimsanas-dienas-sveces/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 56.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 24.0
+  },
+  "/lv/product/dabiga-vaska-ciparu-svece-3-tortem/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 37.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 23.0
+  },
+  "/lv/product/svecite-toperis-cipars-4-lavandas-ar-sudraba-foliju-1-gab/": {
+   "DeadClickCount": 0.0,
+   "ExcessiveScroll": 0.0,
+   "RageClickCount": 0.0,
+   "QuickbackClick": 0.0,
+   "ScriptErrorCount": 0.0,
+   "ErrorClickCount": 0.0,
+   "scroll": 100.0,
+   "sessions": 1.0,
+   "bots": 0.0,
+   "active_s": 18.0
+  }
+ }
+}
